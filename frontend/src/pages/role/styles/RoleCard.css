@@ -1,0 +1,21 @@
+/* RoleCard styles */
+
+.role-card {
+  @apply w-full rounded-2xl border-2 p-8 text-left transition hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.role-card-selected {
+  @apply border-blue-600 bg-blue-50;
+}
+
+.role-card-unselected {
+  @apply border-neutral-200 bg-white hover:border-neutral-300;
+}
+
+.role-card-title {
+  @apply mb-1 text-xl font-semibold text-neutral-900;
+}
+
+.role-card-description {
+  @apply text-sm text-neutral-600;
+}

@@ -1,0 +1,29 @@
+/* DashboardPage styles */
+
+.dashboard-wrapper {
+  @apply mx-auto max-w-5xl px-4 py-10;
+}
+
+.dashboard-container {
+  @apply mx-auto max-w-3xl;
+}
+
+.dashboard-header {
+  @apply mb-8 flex items-center justify-between;
+}
+
+.dashboard-heading {
+  @apply text-3xl font-bold tracking-tight text-neutral-900;
+}
+
+.dashboard-sign-out {
+  @apply rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 transition hover:bg-neutral-100;
+}
+
+.dashboard-welcome {
+  @apply rounded-lg bg-neutral-50 px-6 py-4 text-neutral-700;
+}
+
+.dashboard-loading {
+  @apply text-center text-neutral-500;
+}

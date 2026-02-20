@@ -1,0 +1,21 @@
+/* Navbar styles */
+
+.navbar {
+  @apply sticky top-0 z-50 flex items-center justify-between border-b border-neutral-200 bg-white/80 px-6 py-3 backdrop-blur;
+}
+
+.navbar-brand {
+  @apply text-xl font-bold tracking-tight text-neutral-900;
+}
+
+.navbar-links {
+  @apply flex gap-6 text-sm font-medium;
+}
+
+.navbar-link {
+  @apply text-neutral-600 hover:text-neutral-900;
+}
+
+.navbar-link-active {
+  @apply text-blue-600 underline underline-offset-4;
+}

@@ -1,0 +1,21 @@
+/* AuthForm styles */
+
+.auth-form {
+  @apply flex flex-col gap-4;
+}
+
+.auth-form-error {
+  @apply rounded-lg bg-red-50 px-4 py-3 text-sm font-medium text-red-700;
+}
+
+.auth-form-label {
+  @apply mb-1 block text-sm font-medium text-neutral-700;
+}
+
+.auth-form-input {
+  @apply w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.auth-form-submit {
+  @apply mt-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50;
+}

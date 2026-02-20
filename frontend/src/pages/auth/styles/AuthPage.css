@@ -1,0 +1,29 @@
+/* AuthPage styles */
+
+.auth-container {
+  @apply mx-auto max-w-md;
+}
+
+.auth-back-link {
+  @apply mb-6 inline-block text-sm font-medium text-blue-600 hover:underline;
+}
+
+.auth-heading {
+  @apply mb-6 text-3xl font-bold tracking-tight text-neutral-900;
+}
+
+.auth-tabs {
+  @apply mb-6 flex rounded-lg border border-neutral-200 bg-neutral-100 p-1;
+}
+
+.auth-tab {
+  @apply flex-1 rounded-md px-4 py-2 text-sm font-medium transition;
+}
+
+.auth-tab-active {
+  @apply bg-white text-neutral-900 shadow-sm;
+}
+
+.auth-tab-inactive {
+  @apply text-neutral-500 hover:text-neutral-700;
+}

@@ -1,0 +1,29 @@
+/* LandingPage styles */
+
+.landing-container {
+  @apply flex flex-col items-center text-center;
+}
+
+.landing-title {
+  @apply mt-8 text-5xl font-extrabold tracking-tight text-neutral-900;
+}
+
+.landing-tagline {
+  @apply mt-4 max-w-xl text-lg text-neutral-600;
+}
+
+.landing-description {
+  @apply mt-6 max-w-2xl text-sm leading-relaxed text-neutral-500;
+}
+
+.landing-cta {
+  @apply mt-8 flex gap-4;
+}
+
+.landing-cta-primary {
+  @apply rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-blue-700;
+}
+
+.landing-features {
+  @apply mt-16 grid w-full gap-6 sm:grid-cols-3;
+}

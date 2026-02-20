@@ -1,0 +1,29 @@
+/* RolePage styles */
+
+.role-container {
+  @apply mx-auto max-w-lg;
+}
+
+.role-heading {
+  @apply mb-8 text-3xl font-bold tracking-tight text-neutral-900;
+}
+
+.role-list {
+  @apply flex flex-col gap-4;
+}
+
+.role-error {
+  @apply mb-4 rounded-lg bg-red-50 px-4 py-3 text-sm font-medium text-red-700;
+}
+
+.role-loading {
+  @apply text-center text-neutral-500;
+}
+
+.role-confirmation {
+  @apply mt-6 rounded-lg bg-green-50 px-4 py-3 text-sm font-medium text-green-800;
+}
+
+.role-back-link {
+  @apply mt-8 inline-block text-sm font-medium text-blue-600 hover:underline;
+}
