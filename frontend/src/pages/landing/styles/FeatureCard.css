@@ -1,13 +1,24 @@
-/* FeatureCard styles */
-
+/* ── Feature card (used inside 1px-gap grid) ──────── */
 .feature-card {
-  @apply rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm transition hover:shadow-md;
+  padding: 2rem;
+  background: var(--bg);
+  transition: background var(--duration-fast) var(--ease);
+}
+
+.feature-card:hover {
+  background: var(--muted);
 }
 
 .feature-card-title {
-  @apply mb-2 text-lg font-semibold text-neutral-900;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--fg);
+  letter-spacing: var(--tracking-tight);
 }
 
 .feature-card-description {
-  @apply text-sm leading-relaxed text-neutral-600;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--muted-fg);
 }

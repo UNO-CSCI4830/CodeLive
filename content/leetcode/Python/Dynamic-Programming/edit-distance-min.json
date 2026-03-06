@@ -1,0 +1,80 @@
+{
+  "id": "edit-distance-min",
+  "title": "Minimum Edit Distance",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2. Operations are insert, delete, and replace a character.\n\n    \n\nConstraints:\n    - 0 ≤ |word1|, |word2| ≤ 500",
+  "leetcodeUrl": "https://leetcode.com/problems/edit-distance/",
+  "complexity": {
+    "time": "O(nm)",
+    "space": "O(nm)"
+  },
+  "explanation": "Intuition\nLet dp[i][j] be edits to transform word1[:i] to word2[:j]. If last characters equal, dp[i][j]=dp[i-1][j-1]; else take 1+min(replace, delete, insert).\n\nApproach\n1. Initial Setup: Initialize first row/col as converting to/from empty\n2. Main Algorithm: Fill table using character comparisons and the three operations\n3. Return Result: Return dp[n][m]\n\nComplexity Analysis\n- Time Complexity: O(nm)\n- Space Complexity: O(nm)\n\nKey Insights\n- Three neighbors correspond to insert, delete, replace\n- Diagonal move when chars equal\n\nCommon Pitfalls\n- Mixing operation directions yields off-by-one\n- Not initializing base cases correctly",
+  "solutionCode": "def min_edit_distance(a: str, b: str) -> int:\n    n, m = len(a), len(b)\n    dp = [[0]*(m+1) for _ in range(n+1)]\n    for i in range(n+1):\n        dp[i][0] = i\n    for j in range(m+1):\n        dp[0][j] = j\n    for i in range(1, n+1):\n        for j in range(1, m+1):\n            if a[i-1] == b[j-1]:\n                dp[i][j] = dp[i-1][j-1]\n            else:\n                dp[i][j] = 1 + min(\n                    dp[i-1][j],\n                    dp[i][j-1],\n                    dp[i-1][j-1]\n                )\n    return dp[n][m]",
+  "testCases": [
+    {
+      "input": {
+        "a": "horse",
+        "b": "ros"
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "replace h→r, delete r, delete e"
+    },
+    {
+      "input": {
+        "a": "",
+        "b": "a"
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "When min_edit_distance(a=\"\", b=\"a\"), the expected result is 1"
+    },
+    {
+      "input": {
+        "a": "intention",
+        "b": "execution"
+      },
+      "expected": {
+        "result": 5
+      },
+      "explanation": "Classic example"
+    },
+    {
+      "input": {
+        "a": "abc",
+        "b": "abc"
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Already equal"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "string"
+  ],
+  "hints": [
+    "dp[i][j] considers insert, delete, replace",
+    "Equal chars copy diagonal",
+    "Initialize first row and column"
+  ],
+  "relatedProblems": [
+    "lcs-length",
+    "wildcard-matching-glob"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 49,
+    "frequency": "high",
+    "importance": 10
+  },
+  "starterCode": "def min_edit_distance(a: str, b: str) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def min_edit_distance(a: str, b: str) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string a, string b}\n * @return {number}\n */\nfunction min_edit_distance(a, b) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int min_edit_distance(String a, String b) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint min_edit_distance(char* a, char* b) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int min_edit_distance(string& a, string& b) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

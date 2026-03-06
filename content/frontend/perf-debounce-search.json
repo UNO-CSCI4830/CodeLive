@@ -1,0 +1,49 @@
+{
+  "id": "perf-debounce-search",
+  "title": "Debounced Search Input",
+  "category": "frontend",
+  "difficulty": "easy",
+  "description": "Optimize a search component that currently triggers a heavy filter on every keystroke by adding debounce.\n\n### Requirements\n\n- Debounce the search input so filtering only runs after the user stops typing for 300ms\n- Show a \"Searching…\" indicator while the debounce is pending\n- Display the number of results found after filtering completes\n- The input should update immediately (controlled input) — only the filtering is debounced\n- Clearing the input should immediately clear results (no debounce delay)\n- Clean up the timeout on unmount\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Search input | `search-input` |\n| Searching indicator | `searching` |\n| Results count | `result-count` |\n| Result item | `result-{index}` |",
+  "constraints": "- Must use setTimeout/clearTimeout (not a library)\n- Input value updates immediately on typing\n- Only the filter/display updates are debounced\n- Clearing the input resets instantly\n- Timeout must be cleaned up on unmount",
+  "hints": [
+    "Use two pieces of state: one for the input value (updates immediately) and one for the debounced value (updates after delay).",
+    "Use useEffect with the input value as dependency. Inside, set a timeout. Return a cleanup function that clears it.",
+    "Check if the input is empty and skip the debounce — set results immediately."
+  ],
+  "tags": ["react", "performance", "debounce", "optimization"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { Search } from './Search';\nimport './styles.css';\n\nconst items = [\n  'React Hooks', 'React Context', 'React Router', 'React Memo',\n  'Redux Toolkit', 'Redux Saga', 'Redux Thunk',\n  'TypeScript Generics', 'TypeScript Unions', 'TypeScript Interfaces',\n  'Node.js Express', 'Node.js Fastify', 'Node.js Koa',\n  'CSS Grid', 'CSS Flexbox', 'CSS Variables',\n  'GraphQL Queries', 'GraphQL Mutations', 'GraphQL Subscriptions',\n  'Jest Testing', 'Vitest Testing', 'Cypress E2E',\n];\n\nexport default function App() {\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif', maxWidth: '28rem' }}>\n      <h1 style={{ marginBottom: '1.5rem' }}>Tech Search</h1>\n      <Search items={items} debounceMs={300} />\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "Search.tsx",
+      "content": "import React, { useState, useEffect, useRef } from 'react';\nimport './styles.css';\n\ninterface SearchProps {\n  items: string[];\n  debounceMs: number;\n}\n\n// TODO: Add debounce to the search\n// Currently filters on every keystroke — fix this\n\nexport const Search: React.FC<SearchProps> = ({ items, debounceMs }) => {\n  const [query, setQuery] = useState('');\n  const [results, setResults] = useState<string[]>(items);\n  const [isSearching, setIsSearching] = useState(false);\n\n  // BUG: Filtering happens on every keystroke — no debounce!\n  useEffect(() => {\n    if (!query) {\n      setResults(items);\n      return;\n    }\n    // This should be debounced\n    const filtered = items.filter(item =>\n      item.toLowerCase().includes(query.toLowerCase())\n    );\n    setResults(filtered);\n  }, [query, items]);\n\n  return (\n    <div className=\"search\">\n      <input\n        data-testid=\"search-input\"\n        className=\"search__input\"\n        value={query}\n        onChange={e => setQuery(e.target.value)}\n        placeholder=\"Search technologies…\"\n      />\n\n      {isSearching && (\n        <p data-testid=\"searching\" className=\"search__status\">Searching…</p>\n      )}\n\n      <p data-testid=\"result-count\" className=\"search__count\">\n        {results.length} results\n      </p>\n\n      <div className=\"search__results\">\n        {results.map((item, i) => (\n          <div key={item} data-testid={`result-${i}`} className=\"search__item\">\n            {item}\n          </div>\n        ))}\n      </div>\n    </div>\n  );\n};\n",
+      "language": "tsx",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": ".search {\n  display: flex;\n  flex-direction: column;\n  gap: 0.5rem;\n}\n\n.search__input {\n  width: 100%;\n  padding: 0.5rem 0.75rem;\n  border: 1px solid #d1d5db;\n  border-radius: 0.375rem;\n  font-size: 0.875rem;\n}\n\n.search__input:focus {\n  outline: 2px solid #3b82f6;\n  outline-offset: 1px;\n}\n\n.search__status {\n  font-size: 0.8125rem;\n  color: #f59e0b;\n  font-style: italic;\n}\n\n.search__count {\n  font-size: 0.8125rem;\n  color: #6b7280;\n}\n\n.search__results {\n  display: flex;\n  flex-direction: column;\n  gap: 0.25rem;\n}\n\n.search__item {\n  padding: 0.5rem 0.75rem;\n  border-radius: 0.25rem;\n  font-size: 0.875rem;\n  color: #374151;\n  background: #f9fafb;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent, act } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport React from 'react';\nimport App from './App';\n\ndescribe('Debounced Search', () => {\n  beforeEach(() => {\n    jest.useFakeTimers();\n  });\n\n  afterEach(() => {\n    jest.useRealTimers();\n  });\n\n  it('shows all items initially', () => {\n    render(<App />);\n    expect(screen.getByTestId('result-count')).toHaveTextContent('22 results');\n  });\n\n  it('shows searching indicator while debounce pending', () => {\n    render(<App />);\n    fireEvent.change(screen.getByTestId('search-input'), { target: { value: 'react' } });\n    expect(screen.getByTestId('searching')).toBeInTheDocument();\n  });\n\n  it('filters after debounce delay', () => {\n    render(<App />);\n    fireEvent.change(screen.getByTestId('search-input'), { target: { value: 'react' } });\n    act(() => { jest.advanceTimersByTime(300); });\n    expect(screen.getByTestId('result-count')).toHaveTextContent('4 results');\n  });\n\n  it('hides searching indicator after debounce', () => {\n    render(<App />);\n    fireEvent.change(screen.getByTestId('search-input'), { target: { value: 'react' } });\n    act(() => { jest.advanceTimersByTime(300); });\n    expect(screen.queryByTestId('searching')).not.toBeInTheDocument();\n  });\n\n  it('clearing input resets instantly', () => {\n    render(<App />);\n    fireEvent.change(screen.getByTestId('search-input'), { target: { value: 'react' } });\n    act(() => { jest.advanceTimersByTime(300); });\n    fireEvent.change(screen.getByTestId('search-input'), { target: { value: '' } });\n    expect(screen.getByTestId('result-count')).toHaveTextContent('22 results');\n  });\n\n  it('resets debounce timer on continued typing', () => {\n    render(<App />);\n    fireEvent.change(screen.getByTestId('search-input'), { target: { value: 'r' } });\n    act(() => { jest.advanceTimersByTime(200); });\n    fireEvent.change(screen.getByTestId('search-input'), { target: { value: 're' } });\n    act(() => { jest.advanceTimersByTime(200); });\n    // still pending\n    expect(screen.getByTestId('searching')).toBeInTheDocument();\n    act(() => { jest.advanceTimersByTime(100); });\n    // now 300ms since last change\n    expect(screen.queryByTestId('searching')).not.toBeInTheDocument();\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "Search.tsx",
+      "content": "import React, { useState, useEffect, useRef } from 'react';\nimport './styles.css';\n\ninterface SearchProps {\n  items: string[];\n  debounceMs: number;\n}\n\nexport const Search: React.FC<SearchProps> = ({ items, debounceMs }) => {\n  const [query, setQuery] = useState('');\n  const [results, setResults] = useState<string[]>(items);\n  const [isSearching, setIsSearching] = useState(false);\n  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  useEffect(() => {\n    // Immediate clear\n    if (!query) {\n      setResults(items);\n      setIsSearching(false);\n      if (timerRef.current) clearTimeout(timerRef.current);\n      return;\n    }\n\n    setIsSearching(true);\n\n    timerRef.current = setTimeout(() => {\n      const filtered = items.filter(item =>\n        item.toLowerCase().includes(query.toLowerCase())\n      );\n      setResults(filtered);\n      setIsSearching(false);\n    }, debounceMs);\n\n    return () => {\n      if (timerRef.current) clearTimeout(timerRef.current);\n    };\n  }, [query, items, debounceMs]);\n\n  // Cleanup on unmount\n  useEffect(() => {\n    return () => {\n      if (timerRef.current) clearTimeout(timerRef.current);\n    };\n  }, []);\n\n  return (\n    <div className=\"search\">\n      <input\n        data-testid=\"search-input\"\n        className=\"search__input\"\n        value={query}\n        onChange={e => setQuery(e.target.value)}\n        placeholder=\"Search technologies…\"\n      />\n\n      {isSearching && (\n        <p data-testid=\"searching\" className=\"search__status\">Searching…</p>\n      )}\n\n      <p data-testid=\"result-count\" className=\"search__count\">\n        {results.length} results\n      </p>\n\n      <div className=\"search__results\">\n        {results.map((item, i) => (\n          <div key={item} data-testid={`result-${i}`} className=\"search__item\">\n            {item}\n          </div>\n        ))}\n      </div>\n    </div>\n  );\n};\n",
+      "language": "tsx"
+    }
+  ],
+  "sort_order": 601
+}

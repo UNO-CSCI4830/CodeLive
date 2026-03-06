@@ -13,12 +13,18 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/api": {
-        target: "http://localhost:5000",
+        target: process.env.VITE_BACKEND_URL || "http://localhost:5000",
         changeOrigin: true,
+        secure: true,
       },
       "/health": {
-        target: "http://localhost:5000",
+        target: process.env.VITE_BACKEND_URL || "http://localhost:5000",
         changeOrigin: true,
+        secure: true,
+      },
+      "/ws": {
+        target: (process.env.VITE_BACKEND_URL || "http://localhost:5000").replace("https://", "wss://").replace("http://", "ws://"),
+        ws: true,
       },
     },
   },

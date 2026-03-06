@@ -1,0 +1,77 @@
+{
+  "id": "clone-undirected-graph",
+  "title": "Clone an Undirected Graph",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a reference to a node in a connected undirected graph, return a deep copy of the graph. Each node contains a value and a list of neighbors. Node values are unique.\n\nConstraints:\n- 1 ≤ nodes ≤ 100",
+  "leetcodeUrl": "https://leetcode.com/problems/clone-graph/",
+  "complexity": {
+    "time": "O(V+E)",
+    "space": "O(V)"
+  },
+  "explanation": "Intuition\nCreate a mapping from original nodes to cloned nodes. Traverse the graph with BFS/DFS and clone neighbors on demand using the map.\n\nApproach\n1. Initial Setup: If input is None return None\n2. Main Algorithm: Initialize map with the first node\n3. Return Result: Traverse; for each edge (u,v), create clones if missing and connect\n\nComplexity Analysis\n- Time Complexity: O(V+E)\n- Space Complexity: O(V) for hashmap\n\nKey Insights\n- Hash map prevents duplicating clones\n- Any traversal order works for undirected graphs\n\nCommon Pitfalls\n- Reusing original nodes in the clone breaks deep copy\n- Forgetting to handle None input",
+  "solutionCode": "class Node:\n    def __init__(self, val=0, neighbors=None):\n        self.val = val\n        self.neighbors = neighbors or []\ndef clone_graph(node):\n    if not node:\n        return None\n    old_to_new = {}\n    def dfs(x):\n        if x in old_to_new:\n            return old_to_new[x]\n        copy = Node(x.val)\n        old_to_new[x] = copy\n        for nei in x.neighbors:\n            copy.neighbors.append(dfs(nei))\n        return copy\n    return dfs(node)",
+  "testCases": [
+    {
+      "input": {
+        "graph": "triangle 1-2-3-1"
+      },
+      "expected": {
+        "result": "isomorphic copy"
+      },
+      "explanation": "Structure preserved"
+    },
+    {
+      "input": {
+        "graph": "single node 1"
+      },
+      "expected": {
+        "result": "single copy"
+      },
+      "explanation": "No neighbors"
+    },
+    {
+      "input": {
+        "graph": "line 1-2-3"
+      },
+      "expected": {
+        "result": "isomorphic copy"
+      },
+      "explanation": "Linear chain"
+    },
+    {
+      "input": {
+        "graph": null
+      },
+      "expected": {
+        "result": null
+      },
+      "explanation": "Empty input"
+    }
+  ],
+  "tags": [
+    "graph",
+    "dfs",
+    "bfs"
+  ],
+  "hints": [
+    "Use a map from original to cloned node",
+    "Clone neighbors lazily while traversing",
+    "Return the clone of the starting node"
+  ],
+  "relatedProblems": [
+    "count-connected-components",
+    "course-plan-feasible"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 64,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def __init__(self: any, val: any, neighbors: any) -> str:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, neighbors: any) -> str:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any neighbors}\n * @return {any}\n */\nfunction __init__(self, val, neighbors) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public str __init__(any self, any val, any neighbors) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nstr __init__(any self, any val, any neighbors) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    str __init__(any& self, any& val, any& neighbors) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

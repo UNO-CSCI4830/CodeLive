@@ -1,0 +1,49 @@
+{
+  "id": "component-star-rating",
+  "title": "Star Rating",
+  "category": "frontend",
+  "difficulty": "easy",
+  "description": "Build an interactive **Star Rating** component.\n\n### Requirements\n\n- Render a row of clickable star buttons (default: 5 stars)\n- All stars start **unfilled** (rating = 0)\n- Clicking star N sets the rating to N — stars 1 through N become **filled**\n- Clicking the **same star** again resets the rating to 0 (deselect)\n- Support a `maxStars` prop to control how many stars render\n- Support an `onChange` callback that receives the new rating number\n- Filled stars must have the CSS class `star-rating__star--filled`\n- Display the current rating as text: `\"{rating} / {maxStars}\"`\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Star button N | `star-{N}` (1-indexed) |\n| Rating display | `rating-value` |",
+  "constraints": "- Use React functional components with hooks\n- Do not use any external icon libraries — the ★ character is pre-styled for you\n- Stars must be `<button>` elements for accessibility",
+  "hints": [
+    "Use useState to track the selected rating (0 means no selection).",
+    "Map over Array.from({ length: maxStars }) to render the correct number of stars.",
+    "Compare each star's index+1 to the current rating to decide whether it should be filled."
+  ],
+  "tags": ["react", "state", "interactive", "lists"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { StarRating } from './StarRating';\n\nexport default function App() {\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>\n      <h1 style={{ marginBottom: '1.5rem' }}>Star Rating</h1>\n      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>\n        <div>\n          <p style={{ marginBottom: '0.5rem', color: '#6b7280' }}>Rate this course:</p>\n          <StarRating />\n        </div>\n        <div>\n          <p style={{ marginBottom: '0.5rem', color: '#6b7280' }}>10-star scale:</p>\n          <StarRating maxStars={10} />\n        </div>\n      </div>\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "StarRating.tsx",
+      "content": "import React from 'react';\nimport './styles.css';\n\ninterface StarRatingProps {\n  /** Maximum number of stars */\n  maxStars?: number;\n  /** Called when the user selects a rating */\n  onChange?: (rating: number) => void;\n}\n\nexport const StarRating: React.FC<StarRatingProps> = ({\n  maxStars = 5,\n  onChange,\n}) => {\n  // TODO: Track selected rating\n\n  return (\n    <div className=\"star-rating\" data-testid=\"star-rating\">\n      {Array.from({ length: maxStars }, (_, i) => (\n        <button\n          key={i}\n          data-testid={`star-${i + 1}`}\n          className=\"star-rating__star\"\n          aria-label={`Rate ${i + 1} out of ${maxStars}`}\n        >\n          &#9733;\n        </button>\n      ))}\n      <span data-testid=\"rating-value\" className=\"star-rating__value\">\n        0 / {maxStars}\n      </span>\n    </div>\n  );\n};\n\nexport default StarRating;\n",
+      "language": "tsx",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": ".star-rating {\n  display: flex;\n  align-items: center;\n  gap: 0.25rem;\n}\n\n.star-rating__star {\n  background: none;\n  border: none;\n  cursor: pointer;\n  font-size: 1.75rem;\n  color: #d1d5db;\n  transition: color 0.15s ease, transform 0.1s ease;\n  padding: 0.125rem;\n  line-height: 1;\n}\n\n.star-rating__star:hover {\n  transform: scale(1.15);\n}\n\n.star-rating__star--filled {\n  color: #f59e0b;\n}\n\n.star-rating__value {\n  margin-left: 0.75rem;\n  font-size: 0.875rem;\n  color: #6b7280;\n  font-variant-numeric: tabular-nums;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport { StarRating } from './StarRating';\n\ndescribe('StarRating', () => {\n  it('renders 5 stars by default', () => {\n    render(<StarRating />);\n    for (let i = 1; i <= 5; i++) {\n      expect(screen.getByTestId(`star-${i}`)).toBeInTheDocument();\n    }\n  });\n\n  it('shows 0 rating initially', () => {\n    render(<StarRating />);\n    expect(screen.getByTestId('rating-value')).toHaveTextContent('0 / 5');\n  });\n\n  it('selects rating when a star is clicked', () => {\n    render(<StarRating />);\n    fireEvent.click(screen.getByTestId('star-3'));\n    expect(screen.getByTestId('rating-value')).toHaveTextContent('3 / 5');\n  });\n\n  it('fills stars up to the selected rating', () => {\n    render(<StarRating />);\n    fireEvent.click(screen.getByTestId('star-3'));\n    expect(screen.getByTestId('star-1')).toHaveClass('star-rating__star--filled');\n    expect(screen.getByTestId('star-2')).toHaveClass('star-rating__star--filled');\n    expect(screen.getByTestId('star-3')).toHaveClass('star-rating__star--filled');\n    expect(screen.getByTestId('star-4')).not.toHaveClass('star-rating__star--filled');\n    expect(screen.getByTestId('star-5')).not.toHaveClass('star-rating__star--filled');\n  });\n\n  it('deselects when clicking the same star', () => {\n    render(<StarRating />);\n    fireEvent.click(screen.getByTestId('star-3'));\n    fireEvent.click(screen.getByTestId('star-3'));\n    expect(screen.getByTestId('rating-value')).toHaveTextContent('0 / 5');\n  });\n\n  it('calls onChange with the selected rating', () => {\n    const spy = jest.fn();\n    render(<StarRating onChange={spy} />);\n    fireEvent.click(screen.getByTestId('star-4'));\n    expect(spy).toHaveBeenCalledWith(4);\n  });\n\n  it('supports custom maxStars', () => {\n    render(<StarRating maxStars={3} />);\n    expect(screen.getByTestId('star-1')).toBeInTheDocument();\n    expect(screen.getByTestId('star-2')).toBeInTheDocument();\n    expect(screen.getByTestId('star-3')).toBeInTheDocument();\n    expect(screen.queryByTestId('star-4')).not.toBeInTheDocument();\n    expect(screen.getByTestId('rating-value')).toHaveTextContent('0 / 3');\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "StarRating.tsx",
+      "content": "import React, { useState } from 'react';\nimport './styles.css';\n\ninterface StarRatingProps {\n  maxStars?: number;\n  onChange?: (rating: number) => void;\n}\n\nexport const StarRating: React.FC<StarRatingProps> = ({\n  maxStars = 5,\n  onChange,\n}) => {\n  const [rating, setRating] = useState(0);\n\n  const handleClick = (value: number) => {\n    const next = value === rating ? 0 : value;\n    setRating(next);\n    onChange?.(next);\n  };\n\n  return (\n    <div className=\"star-rating\" data-testid=\"star-rating\">\n      {Array.from({ length: maxStars }, (_, i) => {\n        const value = i + 1;\n        const filled = value <= rating;\n        return (\n          <button\n            key={i}\n            data-testid={`star-${value}`}\n            className={`star-rating__star${filled ? ' star-rating__star--filled' : ''}`}\n            aria-label={`Rate ${value} out of ${maxStars}`}\n            onClick={() => handleClick(value)}\n          >\n            &#9733;\n          </button>\n        );\n      })}\n      <span data-testid=\"rating-value\" className=\"star-rating__value\">\n        {rating} / {maxStars}\n      </span>\n    </div>\n  );\n};\n\nexport default StarRating;\n",
+      "language": "tsx"
+    }
+  ],
+  "sort_order": 102
+}

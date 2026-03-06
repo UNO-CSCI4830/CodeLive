@@ -1,0 +1,112 @@
+{
+  "id": "schedule-max-compatible",
+  "title": "Schedule Maximum Compatible Meetings",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "You are given a list of half-open time intervals [start, end). Choose the maximum number of non-overlapping meetings you can attend. Two meetings are compatible if one ends at or before the other starts. Return the count of meetings selected.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 10^5\n- -10^9 ≤ start < end ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/non-overlapping-intervals/",
+  "complexity": {
+    "time": "O(n log n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nTo maximize the number of compatible intervals, pick meetings with the earliest finishing time first. Finishing early frees more room for the future. Sorting by end time and greedily accepting non-conflicting intervals yields an optimal schedule.\n\nApproach\n1. Initial Setup: Sort intervals by end time ascending\n2. Main Algorithm: Iterate intervals, accept an interval if its start ≥ time_of_last_end; update last_end\n3. Return Result: Return accepted count\n\nComplexity Analysis\n- Time Complexity: O(n log n) for sorting\n- Space Complexity: O(1) extra aside from sort\n\nKey Insights\n- Earliest finish greedy is a classic exchange argument\n- Half-open intervals allow equality at endpoints\n\nCommon Pitfalls\n- Sorting by start time fails in counterexamples\n- Forgetting that start can equal last_end is allowed",
+  "solutionCode": "def max_compatible_meetings(intervals):\n    intervals.sort(key=lambda x: x[1])\n    count = 0\n    last_end = -10**19\n    for s, e in intervals:\n        if s >= last_end:\n            count += 1\n            last_end = e\n    return count",
+  "testCases": [
+    {
+      "input": {
+        "intervals": [
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            5
+          ]
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Pick [1,3] and [3,5]"
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single interval"
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Greedy picks end times 2,3,4"
+    },
+    {
+      "input": {
+        "intervals": []
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "No meetings"
+    }
+  ],
+  "tags": [
+    "greedy",
+    "intervals",
+    "sorting"
+  ],
+  "hints": [
+    "Try sorting by end time",
+    "Accept if current start ≥ last accepted end",
+    "Half-open intervals allow touching"
+  ],
+  "relatedProblems": [
+    "burst-balloons-min-arrows",
+    "merge-intervals-min-removals"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 55,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def max_compatible_meetings(intervals: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def max_compatible_meetings(intervals: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] intervals}\n * @return {number}\n */\nfunction max_compatible_meetings(intervals) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int max_compatible_meetings(int[][] intervals) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint max_compatible_meetings(int[][] intervals) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int max_compatible_meetings(vector<vector<int>>& intervals) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

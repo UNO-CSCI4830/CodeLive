@@ -1,0 +1,186 @@
+{
+  "id": "reconstruct-line-by-height",
+  "title": "Reconstruct Line by Height and K-Count",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Find You have people described by pairs (h, k) where h is height and k is the number of people in front of this person who have height ≥ h. Reconstruct the queue and return the final ordering.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 2000\n- 0 ≤ h ≤ 10^9\n- 0 ≤ k < n",
+  "leetcodeUrl": "https://leetcode.com/problems/queue-reconstruction-by-height/",
+  "complexity": {
+    "time": "O(n log n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nSort by height descending and k ascending. Insert each person at index k. Taller people are fixed first so shorter insertions do not violate their k-counts.\n\nApproach\n1. Initial Setup: Sort people by (-h, k)\n2. Main Algorithm: Initialize empty list; for each person insert at position k\n3. Return Result: Return the list\n\nComplexity Analysis\n- Time Complexity: O(n log n) for sorting; insertion is O(n) making O(n^2) worst-case\n- Space Complexity: O(n)\n\nKey Insights\n- Taller-first ensures correct relative positions\n- Python list insert handles placement\n\nCommon Pitfalls\n- If you sort ascending height, k-logic breaks\n- Large n makes O(n^2) inserts; acceptable for constraints",
+  "solutionCode": "def reconstruct_queue(people):\n    people.sort(key=lambda x: (-x[0], x[1]))\n    res = []\n    for h, k in people:\n        res.insert(k, [h, k])\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "people": [
+          [
+            7,
+            0
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            7,
+            1
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            5,
+            2
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            5,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            6,
+            1
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            7,
+            1
+          ]
+        ]
+      },
+      "explanation": "Greedy insertion"
+    },
+    {
+      "input": {
+        "people": [
+          [
+            6,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            1,
+            4
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            6,
+            0
+          ]
+        ]
+      },
+      "explanation": "Example variant"
+    },
+    {
+      "input": {
+        "people": []
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Empty list"
+    },
+    {
+      "input": {
+        "people": [
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "explanation": "Single person"
+    }
+  ],
+  "tags": [
+    "greedy",
+    "sorting"
+  ],
+  "hints": [
+    "Sort by height descending, k ascending",
+    "Insert at index k",
+    "Taller first prevents violations"
+  ],
+  "relatedProblems": [
+    "assign-cookies-to-children",
+    "schedule-max-compatible"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 64,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def reconstruct_queue(people: List[List[int]]) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def reconstruct_queue(people: List[List[int]]) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] people}\n * @return {any}\n */\nfunction reconstruct_queue(people) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<List<Integer>> reconstruct_queue(int[][] people) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[List[int]] reconstruct_queue(int[][] people) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[List[int]] reconstruct_queue(vector<vector<int>>& people) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

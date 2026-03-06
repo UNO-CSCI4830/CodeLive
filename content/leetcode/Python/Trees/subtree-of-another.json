@@ -1,0 +1,106 @@
+{
+  "id": "subtree-of-another",
+  "title": "Subtree of Another Tree",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given two binary trees root and subRoot, determine if subRoot is a subtree of root.\n\nConstraints:\n- 0 ≤ nodes ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/subtree-of-another-tree/",
+  "complexity": {
+    "time": "O(n * s) worst-case",
+    "space": "O(h)"
+  },
+  "explanation": "Intuition\nAt each node of root, check if the subtree rooted there equals subRoot. Short‑circuit when a match is found.\n\nApproach\n1. Initial Setup: Define an equality checker\n2. Main Algorithm: Traverse root and test equality at each node\n3. Return Result: Return True on first match\n\nComplexity Analysis\n- Time Complexity: O(n * s) worst-case\n- Space Complexity: O(h)\n\nKey Insights\n- Early exit when found\n- Hashing or serialization can optimize average case\n\nCommon Pitfalls\n- Confusing subtree with subsequence\n- Not handling empty subRoot as True",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef is_subtree(root: TreeNode, sub: TreeNode) -> bool:\n    def eq(x, y):\n        if not x and not y:\n            return True\n        if not x or not y or x.val != y.val:\n            return False\n        return eq(x.left, y.left) and eq(x.right, y.right)\n    if not sub:\n        return True\n    if not root:\n        return False\n    if eq(root, sub):\n        return True\n    return is_subtree(root.left, sub) or is_subtree(root.right, sub)",
+  "testCases": [
+    {
+      "input": {
+        "root": [
+          3,
+          4,
+          5,
+          1,
+          2
+        ],
+        "sub": [
+          4,
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Subtree matches at node 4"
+    },
+    {
+      "input": {
+        "root": [
+          3,
+          4,
+          5,
+          1,
+          2,
+          null,
+          null,
+          null,
+          null,
+          0
+        ],
+        "sub": [
+          4,
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Extra node breaks match"
+    },
+    {
+      "input": {
+        "root": [],
+        "sub": []
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Empty is subtree of empty"
+    },
+    {
+      "input": {
+        "root": [
+          1
+        ],
+        "sub": []
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Empty is subtree of any tree"
+    }
+  ],
+  "tags": [
+    "tree",
+    "dfs"
+  ],
+  "hints": [
+    "Write a robust equality check",
+    "Traverse root with early return"
+  ],
+  "relatedProblems": [
+    "same-tree-check",
+    "serialize-deserialize-binary-tree"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 48.7,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {boolean}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

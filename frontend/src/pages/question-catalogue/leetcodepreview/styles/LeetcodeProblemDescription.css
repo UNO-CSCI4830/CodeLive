@@ -1,0 +1,302 @@
+/* ── LeetCode problem description panel — Bold Typography theme ── */
+
+.lpd-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+  height: 100%;
+}
+
+.lpd-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem;
+}
+
+/* ── Title row ────────────────────────────────────── */
+.lpd-title-row {
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lpd-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--fg);
+  letter-spacing: var(--tracking-tight);
+}
+
+/* ── Tags ─────────────────────────────────────────── */
+.lpd-tags {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.lpd-tag {
+  border-radius: 0.25rem;
+  background: var(--border);
+  padding: 0.125rem 0.625rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--muted-fg);
+}
+
+/* ── Complexity badges ────────────────────────────── */
+.lpd-complexity {
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.lpd-complexity-item {
+  font-size: 0.75rem;
+  color: var(--muted-fg);
+}
+
+.lpd-complexity-item strong {
+  color: var(--fg);
+}
+
+/* ── Markdown body ────────────────────────────────── */
+.lpd-markdown {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--fg);
+}
+
+.lpd-markdown h3 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.lpd-markdown p {
+  margin-bottom: 0.75rem;
+}
+
+.lpd-markdown ul,
+.lpd-markdown ol {
+  margin-left: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.lpd-markdown li {
+  margin-bottom: 0.25rem;
+}
+
+.lpd-markdown code {
+  border-radius: 0.25rem;
+  background: var(--border);
+  padding: 0.125rem 0.25rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--accent);
+}
+
+.lpd-markdown pre {
+  margin: 0.75rem 0;
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  background: var(--card);
+  padding: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--fg);
+}
+
+.lpd-markdown pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+.lpd-markdown--sm {
+  font-size: 0.75rem;
+}
+
+/* ── LeetCode link ────────────────────────────────── */
+.lpd-leetcode-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+  transition: opacity var(--duration-fast) var(--ease);
+}
+
+.lpd-leetcode-link:hover {
+  opacity: 0.7;
+}
+
+.lpd-link-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* ── Examples (LeetCode-style) ────────────────────── */
+.lpd-examples {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lpd-examples p strong {
+  font-size: 0.875rem;
+  color: var(--fg);
+}
+
+.lpd-examples pre {
+  margin-top: 0.25rem;
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  background: var(--card);
+  padding: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--fg);
+  line-height: 1.6;
+}
+
+.lpd-examples pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-family: var(--font-mono);
+}
+
+/* ── Constraints ──────────────────────────────────── */
+.lpd-constraints {
+  margin: 1rem 0;
+  border-radius: 0.5rem;
+  background: var(--muted);
+  padding: 0.75rem 1rem;
+}
+
+.lpd-constraints p,
+.lpd-constraints ul,
+.lpd-constraints li {
+  font-size: 0.75rem;
+  color: var(--muted-fg);
+  line-height: 1.6;
+}
+
+.lpd-constraints ul {
+  margin-left: 1rem;
+}
+
+.lpd-constraints code {
+  border-radius: 0.25rem;
+  background: var(--border);
+  padding: 0.125rem 0.25rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--accent);
+}
+
+/* ── Sections ─────────────────────────────────────── */
+.lpd-section {
+  margin-top: 1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+/* ── Hints ────────────────────────────────────────── */
+.lpd-hints-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fbbf24;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  transition: background var(--duration-fast) var(--ease);
+}
+
+.lpd-hints-toggle:hover {
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.lpd-hints-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.lpd-hints-chevron {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.lpd-hints-body {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lpd-hints-prompt {
+  font-size: 0.75rem;
+  color: var(--muted-fg);
+  font-style: italic;
+  padding-inline: 0.5rem;
+}
+
+.lpd-hint {
+  border-radius: 0.375rem;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  background: rgba(251, 191, 36, 0.05);
+  padding: 0.5rem 0.75rem;
+}
+
+.lpd-hint-num {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fbbf24;
+  margin-bottom: 0.25rem;
+}
+
+.lpd-hint-text {
+  font-size: 0.875rem;
+  color: var(--fg);
+  line-height: 1.6;
+}
+
+.lpd-hint-reveal-btn {
+  align-self: flex-start;
+  border-radius: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  background: transparent;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease);
+}
+
+.lpd-hint-reveal-btn:hover {
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.lpd-hints-exhausted {
+  font-size: 0.75rem;
+  color: var(--muted-fg);
+  font-style: italic;
+  padding-inline: 0.5rem;
+}

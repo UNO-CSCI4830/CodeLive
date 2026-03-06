@@ -1,0 +1,95 @@
+{
+  "id": "compress-sorted-stream",
+  "title": "Compress Sorted Stream",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given a nondecreasing array, remove duplicates in place so that each unique value appears once. Return the new length. The first part of the array should contain the deduplicated values in order.\n\n    \n\nConstraints:\n    - 0 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/remove-duplicates-from-sorted-array/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nA write pointer tracks the next position to place a new unique value. Scan with a read pointer and copy values when they differ from the previous item.\n\nApproach\n1. Initial Setup: Handle empty input as length 0.\n2. Main Algorithm: Set write to 1 and scan read from 1 to end, copying on changes.\n3. Return Result: Return write as the new length.\n\nComplexity Analysis\n- Time Complexity: O(n) because the scan adjusts pointers a limited\n  number of times and avoids nested loops.\n- Space Complexity: O(1) since only a few variables or an output\n  list are used.\n\nKey Insights\n- Two pointers separate read and write roles\n- Only copies when a new value appears\n\nCommon Pitfalls\n- Overwriting before reading can lose values\n- Forgetting empty case handling",
+  "solutionCode": "def compress_sorted_stream(nums):\n    if not nums:\n        return 0\n    write = 1\n    for read in range(1, len(nums)):\n        if nums[read] != nums[read - 1]:\n            nums[write] = nums[read]\n            write += 1\n    return write",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Array becomes [1,2,?]"
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0,
+          1,
+          1,
+          1,
+          2,
+          2,
+          3,
+          3,
+          4
+        ]
+      },
+      "expected": {
+        "result": 5
+      },
+      "explanation": "Unique values are 0,1,2,3,4"
+    },
+    {
+      "input": {
+        "nums": []
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "No elements"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Already unique"
+    }
+  ],
+  "tags": [
+    "array",
+    "two-pointers"
+  ],
+  "hints": [
+    "Keep a write pointer for the next unique slot",
+    "Copy only when nums[read] differs from nums[read-1]",
+    "Return the count of unique values"
+  ],
+  "relatedProblems": [
+    "sorted-squares-rebuilder",
+    "stable-zero-push"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 72,
+    "frequency": "high",
+    "importance": 6
+  },
+  "starterCode": "def compress_sorted_stream(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def compress_sorted_stream(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {number}\n */\nfunction compress_sorted_stream(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int compress_sorted_stream(int[] nums) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint compress_sorted_stream(int* nums) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int compress_sorted_stream(vector<int>& nums) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

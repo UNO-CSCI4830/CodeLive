@@ -1,0 +1,115 @@
+{
+  "id": "add-two-numbers",
+  "title": "Add Two Numbers as Lists",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "You are given two nonempty linked lists representing two nonnegative integers where the digits are stored in reverse order. Add the two numbers and return the sum as a linked list.\n\n    \n\nConstraints:\n    - 1 ≤ length of each list ≤ 10^5\n- Each node contains a single digit 0..9",
+  "leetcodeUrl": "https://leetcode.com/problems/add-two-numbers/",
+  "complexity": {
+    "time": "O(n+m)",
+    "space": "O(1) extra"
+  },
+  "explanation": "Intuition\nSimulate grade school addition with a carry, advancing through both lists in lockstep. Create new nodes for the sum digits.\n\nApproach\n1. Initial Setup: Initialize carry=0 and a dummy head.\n2. Main Algorithm: Add digits along with carry, append a new node with sum%10, update carry to sum//10.\n3. Return Result: Append a final carry if nonzero and return dummy.next.\n\nComplexity Analysis\n- Time Complexity: O(n+m) due to a single pass or divide-and-conquer\n  over the list where each node is visited a bounded number of times.\n- Space Complexity: O(1) extra accounting for pointers and, when needed,\n  recursion depth or extra structures.\n\nKey Insights\n- Linked lists let us add digits without converting to integers\n- Carrying over ensures proper base-10 arithmetic\n\nCommon Pitfalls\n- Forgetting the final carry loses a digit\n- Assuming same length without checks",
+  "solutionCode": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\ndef add_two_numbers(l1, l2):\n    carry = 0\n    dummy = ListNode(0)\n    tail = dummy\n    while l1 or l2 or carry:\n        v1 = l1.val if l1 else 0\n        v2 = l2.val if l2 else 0\n        s = v1 + v2 + carry\n        carry = s // 10\n        tail.next = ListNode(s % 10)\n        tail = tail.next\n        l1 = l1.next if l1 else None\n        l2 = l2.next if l2 else None\n    return dummy.next",
+  "testCases": [
+    {
+      "input": {
+        "l1": [
+          2,
+          4,
+          3
+        ],
+        "l2": [
+          5,
+          6,
+          4
+        ]
+      },
+      "expected": {
+        "result": [
+          7,
+          0,
+          8
+        ]
+      },
+      "explanation": "342 + 465 = 807"
+    },
+    {
+      "input": {
+        "l1": [
+          0
+        ],
+        "l2": [
+          0
+        ]
+      },
+      "expected": {
+        "result": [
+          0
+        ]
+      },
+      "explanation": "Zero plus zero"
+    },
+    {
+      "input": {
+        "l1": [
+          9,
+          9,
+          9
+        ],
+        "l2": [
+          1
+        ]
+      },
+      "expected": {
+        "result": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "explanation": "999 + 1 = 1000"
+    },
+    {
+      "input": {
+        "l1": [
+          5
+        ],
+        "l2": [
+          5
+        ]
+      },
+      "expected": {
+        "result": [
+          0,
+          1
+        ]
+      },
+      "explanation": "10 with carry"
+    }
+  ],
+  "tags": [
+    "linked-list"
+  ],
+  "hints": [
+    "Iterate while either list remains or carry is nonzero",
+    "Use dummy head to simplify appending",
+    "Carry is sum // 10"
+  ],
+  "relatedProblems": [
+    "reverse-linked-list",
+    "rotate-linked-list"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 39,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any next}\n * @return {any}\n */\nfunction __init__(self, val, next) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> __init__(any self, any val, any next) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] __init__(any self, any val, any next) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] __init__(any& self, any& val, any& next) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

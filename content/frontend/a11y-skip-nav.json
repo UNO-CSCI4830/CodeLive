@@ -1,0 +1,54 @@
+{
+  "id": "a11y-skip-nav",
+  "title": "Skip Navigation Link",
+  "category": "frontend",
+  "difficulty": "easy",
+  "description": "Build a **skip navigation** component that lets keyboard users bypass the navigation and jump straight to the main content.\n\n### Requirements\n\n- A visually hidden link that says \"Skip to main content\"\n- The link becomes visible when it receives focus (keyboard Tab)\n- Clicking the link moves focus to the `<main>` element (identified by `id=\"main-content\"`)\n- The skip link is the first focusable element on the page\n- When visible, the link is styled as a fixed banner at the top of the viewport\n- After clicking, the main element receives focus (use `tabIndex=\"-1\"` on `<main>`)\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Skip link | `skip-link` |\n| Nav | `nav` |\n| Main content | `main-content` |",
+  "constraints": "- The skip link must be hidden from sighted users until focused\n- Must use proper HTML semantics (anchor element with href)\n- The link must function with keyboard-only navigation\n- Do not use display:none or visibility:hidden (screen readers must still access it)",
+  "hints": [
+    "Use the 'visually hidden' CSS pattern: position absolute, clip, overflow hidden. Then undo it on :focus.",
+    "Set href='#main-content' and add id='main-content' to the <main> element with tabIndex={-1}.",
+    "In the onClick handler, call document.getElementById('main-content')?.focus() for reliable focus management."
+  ],
+  "tags": ["react", "accessibility", "keyboard-navigation", "a11y"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { SkipNav } from './SkipNav';\nimport './styles.css';\n\nexport default function App() {\n  return (\n    <div>\n      <SkipNav />\n      <nav data-testid=\"nav\" className=\"navbar\">\n        <a href=\"#\" className=\"navbar__brand\">MySite</a>\n        <ul className=\"navbar__links\">\n          <li><a href=\"#\">Home</a></li>\n          <li><a href=\"#\">About</a></li>\n          <li><a href=\"#\">Products</a></li>\n          <li><a href=\"#\">Contact</a></li>\n        </ul>\n      </nav>\n      <main id=\"main-content\" data-testid=\"main-content\" tabIndex={-1} className=\"main\">\n        <h1>Welcome to MySite</h1>\n        <p>This is the main content area. Keyboard users can skip the navigation above.</p>\n        <button>Interactive Element</button>\n      </main>\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "SkipNav.tsx",
+      "content": "import React from 'react';\nimport './styles.css';\n\n// TODO: Build a skip navigation link\n// - Visually hidden by default\n// - Visible when focused\n// - Clicking jumps focus to #main-content\nexport const SkipNav: React.FC = () => {\n  return (\n    <a\n      data-testid=\"skip-link\"\n      href=\"#main-content\"\n      className=\"skip-link\"\n    >\n      {/* TODO: Add link text and click handler */}\n    </a>\n  );\n};\n",
+      "language": "tsx",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": "* {\n  margin: 0;\n  box-sizing: border-box;\n}\n\n.skip-link {\n  /* TODO: Visually hidden styles */\n}\n\n.skip-link:focus {\n  /* TODO: Make visible on focus */\n}\n\n.navbar {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 0.75rem 1.5rem;\n  background: #1f2937;\n  color: white;\n}\n\n.navbar__brand {\n  color: white;\n  text-decoration: none;\n  font-weight: 700;\n  font-size: 1.125rem;\n}\n\n.navbar__links {\n  display: flex;\n  gap: 1.5rem;\n  list-style: none;\n  padding: 0;\n}\n\n.navbar__links a {\n  color: #d1d5db;\n  text-decoration: none;\n  font-size: 0.875rem;\n}\n\n.navbar__links a:hover {\n  color: white;\n}\n\n.main {\n  padding: 2rem 1.5rem;\n  font-family: system-ui, sans-serif;\n  outline: none;\n}\n\n.main h1 {\n  margin-bottom: 0.75rem;\n}\n\n.main p {\n  margin-bottom: 1rem;\n  color: #4b5563;\n  line-height: 1.6;\n}\n\n.main button {\n  padding: 0.5rem 1rem;\n  border: 1px solid #d1d5db;\n  border-radius: 0.375rem;\n  background: #f9fafb;\n  cursor: pointer;\n}\n",
+      "language": "css",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport React from 'react';\nimport App from './App';\n\ndescribe('Skip Navigation', () => {\n  it('renders the skip link', () => {\n    render(<App />);\n    expect(screen.getByTestId('skip-link')).toBeInTheDocument();\n  });\n\n  it('skip link has correct href', () => {\n    render(<App />);\n    const link = screen.getByTestId('skip-link');\n    expect(link).toHaveAttribute('href', '#main-content');\n  });\n\n  it('skip link has text content', () => {\n    render(<App />);\n    const link = screen.getByTestId('skip-link');\n    expect(link.textContent?.toLowerCase()).toContain('skip');\n  });\n\n  it('main content has tabIndex for focus', () => {\n    render(<App />);\n    const main = screen.getByTestId('main-content');\n    expect(main).toHaveAttribute('tabindex', '-1');\n  });\n\n  it('skip link is visually hidden by default', () => {\n    render(<App />);\n    const link = screen.getByTestId('skip-link');\n    const style = window.getComputedStyle(link);\n    // Should be positioned off-screen or clipped\n    expect(style.position).toBe('absolute');\n  });\n\n  it('clicking the skip link moves focus to main', () => {\n    render(<App />);\n    const link = screen.getByTestId('skip-link');\n    fireEvent.click(link);\n    // The main element should be focusable\n    const main = screen.getByTestId('main-content');\n    expect(main).toHaveAttribute('id', 'main-content');\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "SkipNav.tsx",
+      "content": "import React from 'react';\nimport './styles.css';\n\nexport const SkipNav: React.FC = () => {\n  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {\n    e.preventDefault();\n    const main = document.getElementById('main-content');\n    if (main) {\n      main.focus();\n      main.scrollIntoView();\n    }\n  };\n\n  return (\n    <a\n      data-testid=\"skip-link\"\n      href=\"#main-content\"\n      className=\"skip-link\"\n      onClick={handleClick}\n    >\n      Skip to main content\n    </a>\n  );\n};\n",
+      "language": "tsx"
+    },
+    {
+      "path": "styles.css",
+      "content": "* {\n  margin: 0;\n  box-sizing: border-box;\n}\n\n.skip-link {\n  position: absolute;\n  top: -100%;\n  left: 0;\n  width: 1px;\n  height: 1px;\n  overflow: hidden;\n  clip: rect(0, 0, 0, 0);\n  white-space: nowrap;\n  z-index: 9999;\n  padding: 0.75rem 1.5rem;\n  background: #3b82f6;\n  color: white;\n  text-decoration: none;\n  font-weight: 600;\n  font-size: 0.875rem;\n}\n\n.skip-link:focus {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: auto;\n  height: auto;\n  clip: auto;\n  overflow: visible;\n}\n\n.navbar {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 0.75rem 1.5rem;\n  background: #1f2937;\n  color: white;\n}\n\n.navbar__brand {\n  color: white;\n  text-decoration: none;\n  font-weight: 700;\n  font-size: 1.125rem;\n}\n\n.navbar__links {\n  display: flex;\n  gap: 1.5rem;\n  list-style: none;\n  padding: 0;\n}\n\n.navbar__links a {\n  color: #d1d5db;\n  text-decoration: none;\n  font-size: 0.875rem;\n}\n\n.navbar__links a:hover {\n  color: white;\n}\n\n.main {\n  padding: 2rem 1.5rem;\n  font-family: system-ui, sans-serif;\n  outline: none;\n}\n\n.main h1 {\n  margin-bottom: 0.75rem;\n}\n\n.main p {\n  margin-bottom: 1rem;\n  color: #4b5563;\n  line-height: 1.6;\n}\n\n.main button {\n  padding: 0.5rem 1rem;\n  border: 1px solid #d1d5db;\n  border-radius: 0.375rem;\n  background: #f9fafb;\n  cursor: pointer;\n}\n",
+      "language": "css"
+    }
+  ],
+  "sort_order": 500
+}

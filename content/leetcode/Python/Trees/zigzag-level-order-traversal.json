@@ -1,0 +1,125 @@
+{
+  "id": "zigzag-level-order-traversal",
+  "title": "Zigzag Level Order Traversal",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Return level order traversal of a binary tree, but reverse the node order on every other level to produce a zigzag pattern. The root level is left-to-right, the next is right-to-left, and so on. Use a queue and avoid extra per-node allocations to keep it fast for typing practice.\n\n    \n\nConstraints:\n    - 0 ≤ nodes ≤ 10^5\n- Node values are 32-bit signed",
+  "leetcodeUrl": "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(w)"
+  },
+  "explanation": "Intuition\nBFS groups nodes by level. Reversing every other level yields the zigzag without altering child enqueue order. A boolean flag toggles the direction after each level.\n\nApproach\n1. Initial Setup: Initialize a deque with root if present.\n2. Main Algorithm: Process level by fixed size, append children, reverse list when direction is right-to-left.\n3. Return Result: Append level to result and flip the flag.\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(w) where w is max width\n\nKey Insights\n- Direction flag avoids complex double-ended logic\n- Level-size snapshot preserves boundaries\n\nCommon Pitfalls\n- Reversing the queue instead of the level list is wasteful\n- Forgetting to toggle flag breaks zigzag pattern",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef zigzag_level_order(root: TreeNode):\n    from collections import deque\n    if not root:\n        return []\n    res = []\n    q = deque([root])\n    left_to_right = True\n    while q:\n        size = len(q)\n        level = []\n        for _ in range(size):\n            node = q.popleft()\n            level.append(node.val)\n            if node.left:\n                q.append(node.left)\n            if node.right:\n                q.append(node.right)\n        if not left_to_right:\n            level.reverse()\n        res.append(level)\n        left_to_right = not left_to_right\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "tree": [
+          3,
+          9,
+          20,
+          null,
+          null,
+          15,
+          7
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            3
+          ],
+          [
+            20,
+            9
+          ],
+          [
+            15,
+            7
+          ]
+        ]
+      },
+      "explanation": "Alternate direction each level"
+    },
+    {
+      "input": {
+        "tree": []
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Empty tree"
+    },
+    {
+      "input": {
+        "tree": [
+          1
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            1
+          ]
+        ]
+      },
+      "explanation": "Single level only"
+    },
+    {
+      "input": {
+        "tree": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            1
+          ],
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            5,
+            6,
+            7
+          ]
+        ]
+      },
+      "explanation": "Balanced complete tree"
+    }
+  ],
+  "tags": [
+    "tree",
+    "bfs",
+    "queue"
+  ],
+  "hints": [
+    "Use BFS with a queue",
+    "Record level size before iteration",
+    "Reverse the collected level on odd depths"
+  ],
+  "relatedProblems": [
+    "level-order-traversal",
+    "right-side-view"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 54.8,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {any}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<List<Integer>> __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[List[int]] __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[List[int]] __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

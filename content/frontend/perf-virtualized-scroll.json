@@ -1,0 +1,49 @@
+{
+  "id": "perf-virtualized-scroll",
+  "title": "Virtualized Scrolling List",
+  "category": "frontend",
+  "difficulty": "medium",
+  "description": "Implement **windowed/virtualized rendering** for a list of 10,000 items, so only visible items are in the DOM.\n\n### Requirements\n\n- Render a scrollable container with a fixed height of 400px\n- Each row has a fixed height of 40px\n- Only render rows that are visible in the viewport (plus a small overscan buffer of 5 rows above/below)\n- Use a \"spacer\" div to maintain correct scroll height (10,000 × 40px)\n- Scrolling should feel smooth and correct\n- Display the visible row range (e.g., \"Showing 1–10 of 10,000\") above the list\n- Each row displays its index and a label\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Scroll container | `scroll-container` |\n| Row item | `row-{index}` |\n| Range display | `range-display` |\n| Total count | `total-count` |",
+  "constraints": "- Must NOT render all 10,000 items into the DOM\n- Visible items + overscan buffer only\n- Must use absolute positioning or translateY for row placement\n- The scroll container must maintain correct total scroll height\n- Row height is fixed at 40px",
+  "hints": [
+    "Calculate the start index from scrollTop / rowHeight. The end index is start + Math.ceil(containerHeight / rowHeight). Add overscan to both.",
+    "Create an inner div whose height is totalItems × rowHeight. Position each visible row with `position: absolute; top: index * rowHeight`.",
+    "Attach an onScroll handler to the container. Use Math.floor(scrollTop / rowHeight) to find the first visible row."
+  ],
+  "tags": ["react", "performance", "virtualization", "optimization"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { VirtualList } from './VirtualList';\nimport './styles.css';\n\nconst items = Array.from({ length: 10000 }, (_, i) => ({\n  id: i,\n  label: `Item #${i + 1} — ${['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon'][i % 5]} Group`,\n}));\n\nexport default function App() {\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif', maxWidth: '32rem' }}>\n      <h1 style={{ marginBottom: '1.5rem' }}>Virtual List (10K items)</h1>\n      <VirtualList items={items} rowHeight={40} containerHeight={400} overscan={5} />\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "VirtualList.tsx",
+      "content": "import React, { useState, useRef, useCallback } from 'react';\nimport './styles.css';\n\ninterface Item {\n  id: number;\n  label: string;\n}\n\ninterface VirtualListProps {\n  items: Item[];\n  rowHeight: number;\n  containerHeight: number;\n  overscan: number;\n}\n\n// TODO: Implement virtualized rendering\n// Only render items visible in the scroll viewport + overscan buffer\n\nexport const VirtualList: React.FC<VirtualListProps> = ({\n  items,\n  rowHeight,\n  containerHeight,\n  overscan,\n}) => {\n  const [scrollTop, setScrollTop] = useState(0);\n  // TODO: calculate start/end indices from scrollTop\n  // TODO: only render visible items + overscan\n\n  return (\n    <div>\n      <p data-testid=\"total-count\" className=\"vlist__meta\">\n        Total: {items.length} items\n      </p>\n      <p data-testid=\"range-display\" className=\"vlist__meta\">\n        {/* TODO: Show visible range */}\n        Showing all\n      </p>\n\n      <div\n        data-testid=\"scroll-container\"\n        className=\"vlist__container\"\n        style={{ height: containerHeight }}\n        // TODO: onScroll handler\n      >\n        {/* TODO: Inner spacer div with total height */}\n        {/* TODO: Only render visible rows with absolute positioning */}\n        {items.map((item, index) => (\n          <div\n            key={item.id}\n            data-testid={`row-${index}`}\n            className=\"vlist__row\"\n            style={{ height: rowHeight }}\n          >\n            <span className=\"vlist__index\">{index + 1}</span>\n            <span>{item.label}</span>\n          </div>\n        ))}\n      </div>\n    </div>\n  );\n};\n",
+      "language": "tsx",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": ".vlist__meta {\n  font-size: 0.8125rem;\n  color: #6b7280;\n  margin-bottom: 0.25rem;\n}\n\n.vlist__container {\n  overflow-y: auto;\n  border: 1px solid #e5e7eb;\n  border-radius: 0.5rem;\n  position: relative;\n}\n\n.vlist__inner {\n  position: relative;\n}\n\n.vlist__row {\n  display: flex;\n  align-items: center;\n  gap: 0.75rem;\n  padding: 0 1rem;\n  font-size: 0.875rem;\n  color: #374151;\n  box-sizing: border-box;\n  position: absolute;\n  left: 0;\n  right: 0;\n  border-bottom: 1px solid #f3f4f6;\n}\n\n.vlist__row:hover {\n  background: #f9fafb;\n}\n\n.vlist__index {\n  min-width: 3rem;\n  font-size: 0.75rem;\n  color: #9ca3af;\n  font-variant-numeric: tabular-nums;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport React from 'react';\nimport App from './App';\n\ndescribe('Virtualized Scrolling List', () => {\n  it('renders total count', () => {\n    render(<App />);\n    expect(screen.getByTestId('total-count')).toHaveTextContent('10000');\n  });\n\n  it('does NOT render all 10,000 rows', () => {\n    render(<App />);\n    // row-9999 should NOT be in the DOM if virtualization works\n    expect(screen.queryByTestId('row-9999')).not.toBeInTheDocument();\n  });\n\n  it('renders first visible rows', () => {\n    render(<App />);\n    expect(screen.getByTestId('row-0')).toBeInTheDocument();\n  });\n\n  it('shows range display', () => {\n    render(<App />);\n    const range = screen.getByTestId('range-display');\n    expect(range.textContent).toMatch(/Showing/);\n  });\n\n  it('scroll container has correct height', () => {\n    render(<App />);\n    const container = screen.getByTestId('scroll-container');\n    expect(container.style.height).toBe('400px');\n  });\n\n  it('renders rows with absolute positioning', () => {\n    render(<App />);\n    const row = screen.getByTestId('row-0');\n    expect(row.style.position).toBe('absolute');\n  });\n\n  it('inner spacer has total height', () => {\n    render(<App />);\n    const container = screen.getByTestId('scroll-container');\n    const inner = container.firstElementChild as HTMLElement;\n    expect(parseInt(inner.style.height)).toBe(400000);\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "VirtualList.tsx",
+      "content": "import React, { useState, useRef, useCallback } from 'react';\nimport './styles.css';\n\ninterface Item {\n  id: number;\n  label: string;\n}\n\ninterface VirtualListProps {\n  items: Item[];\n  rowHeight: number;\n  containerHeight: number;\n  overscan: number;\n}\n\nexport const VirtualList: React.FC<VirtualListProps> = ({\n  items,\n  rowHeight,\n  containerHeight,\n  overscan,\n}) => {\n  const [scrollTop, setScrollTop] = useState(0);\n\n  const totalHeight = items.length * rowHeight;\n  const startIndex = Math.max(0, Math.floor(scrollTop / rowHeight) - overscan);\n  const visibleCount = Math.ceil(containerHeight / rowHeight);\n  const endIndex = Math.min(items.length - 1, startIndex + visibleCount + overscan * 2);\n\n  const visibleItems = [];\n  for (let i = startIndex; i <= endIndex; i++) {\n    visibleItems.push({ item: items[i], index: i });\n  }\n\n  const displayStart = Math.floor(scrollTop / rowHeight) + 1;\n  const displayEnd = Math.min(displayStart + visibleCount - 1, items.length);\n\n  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {\n    setScrollTop(e.currentTarget.scrollTop);\n  }, []);\n\n  return (\n    <div>\n      <p data-testid=\"total-count\" className=\"vlist__meta\">\n        Total: {items.length} items\n      </p>\n      <p data-testid=\"range-display\" className=\"vlist__meta\">\n        Showing {displayStart}–{displayEnd} of {items.length}\n      </p>\n\n      <div\n        data-testid=\"scroll-container\"\n        className=\"vlist__container\"\n        style={{ height: containerHeight }}\n        onScroll={handleScroll}\n      >\n        <div className=\"vlist__inner\" style={{ height: totalHeight }}>\n          {visibleItems.map(({ item, index }) => (\n            <div\n              key={item.id}\n              data-testid={`row-${index}`}\n              className=\"vlist__row\"\n              style={{\n                height: rowHeight,\n                position: 'absolute',\n                top: index * rowHeight,\n              }}\n            >\n              <span className=\"vlist__index\">{index + 1}</span>\n              <span>{item.label}</span>\n            </div>\n          ))}\n        </div>\n      </div>\n    </div>\n  );\n};\n",
+      "language": "tsx"
+    }
+  ],
+  "sort_order": 610
+}

@@ -1,0 +1,116 @@
+{
+  "id": "grid-min-path-sum",
+  "title": "Minimum Cost Path in a Grid",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a grid of nonnegative integers, find a path from top-left to bottom-right which minimizes the sum of all numbers along its path. You may only move right or down.\n\n    \n\nConstraints:\n    - 1 ≤ m, n ≤ 200\n- 0 ≤ grid[r][c] ≤ 100",
+  "leetcodeUrl": "https://leetcode.com/problems/minimum-path-sum/",
+  "complexity": {
+    "time": "O(mn)",
+    "space": "O(mn)"
+  },
+  "explanation": "Intuition\nLet dp[r][c] be the minimal cost to reach (r,c). Transition is cell value plus min of top and left. Initialize top row and left column by cumulative sums.\n\nApproach\n1. Initial Setup: Initialize dp with grid values\n2. Main Algorithm: Fill first row/column cumulatively; for other cells take min of up/left plus grid[r][c]\n3. Return Result: Answer at bottom-right\n\nComplexity Analysis\n- Time Complexity: O(mn)\n- Space Complexity: O(mn) or O(n) rolling\n\nKey Insights\n- Classic 2-D DP over directions\n- Nonnegative values ensure optimal substructure\n\nCommon Pitfalls\n- Forgetting borders causes index errors\n- Mixing up row and column order",
+  "solutionCode": "def min_path_sum(grid):\n    m, n = len(grid), len(grid[0])\n    dp = [[0]*n for _ in range(m)]\n    for r in range(m):\n        for c in range(n):\n            if r == 0 and c == 0:\n                dp[r][c] = grid[r][c]\n            elif r == 0:\n                dp[r][c] = dp[r][c-1] + grid[r][c]\n            elif c == 0:\n                dp[r][c] = dp[r-1][c] + grid[r][c]\n            else:\n                dp[r][c] = min(dp[r-1][c], dp[r][c-1]) + grid[r][c]\n    return dp[m-1][n-1]",
+  "testCases": [
+    {
+      "input": {
+        "grid": [
+          [
+            1,
+            3,
+            1
+          ],
+          [
+            1,
+            5,
+            1
+          ],
+          [
+            4,
+            2,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 7
+      },
+      "explanation": "Right, down, down, right"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ]
+        ]
+      },
+      "expected": {
+        "result": 12
+      },
+      "explanation": "Monotone path sum"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            5
+          ]
+        ]
+      },
+      "expected": {
+        "result": 5
+      },
+      "explanation": "Single cell grid"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "When min_path_sum(grid=[[0,0],[0,0]]), the expected result is 0"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "matrix"
+  ],
+  "hints": [
+    "dp[r][c] = grid[r][c] + min(up, left)",
+    "Fill borders first",
+    "Rolling 1-D array is possible"
+  ],
+  "relatedProblems": [
+    "grid-unique-paths-with-blocks",
+    "triangle-minimum-path"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 62,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def min_path_sum(grid: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def min_path_sum(grid: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] grid}\n * @return {number}\n */\nfunction min_path_sum(grid) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int min_path_sum(int[][] grid) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint min_path_sum(int[][] grid) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int min_path_sum(vector<vector<int>>& grid) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

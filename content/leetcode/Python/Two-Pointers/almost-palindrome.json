@@ -1,0 +1,76 @@
+{
+  "id": "almost-palindrome",
+  "title": "Almost Palindrome",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a string s, return True if s can become a palindrome after removing at most one character. Only alphanumeric characters are considered if you prefilter, but here we treat the string as is.\n\n    \n\nConstraints:\n    - 1 ≤ len(s) ≤ 10^5\n- ASCII input",
+  "leetcodeUrl": "https://leetcode.com/problems/valid-palindrome-ii/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nTwo pointers compare characters. On the first mismatch, we may delete either the left or the right character and verify if the remainder is a palindrome. Only one deletion is allowed.\n\nApproach\n1. Initial Setup: Write a helper that checks palindrome on a range.\n2. Main Algorithm: Scan with l and r. On mismatch, test skipping l or skipping r.\n3. Return Result: Return True if either path works, else False.\n\nComplexity Analysis\n- Time Complexity: O(n) because the scan adjusts pointers a limited\n  number of times and avoids nested loops.\n- Space Complexity: O(1) since only a few variables or an output\n  list are used.\n\nKey Insights\n- At most one skip keeps checks linear\n- A helper avoids duplicating logic\n\nCommon Pitfalls\n- Skipping both sides at once is not allowed\n- Confusing this with cleaning non alphanumerics",
+  "solutionCode": "def almost_palindrome(s):\n    def is_pal(l, r):\n        while l < r:\n            if s[l] != s[r]:\n                return False\n            l += 1\n            r -= 1\n        return True\n    l, r = 0, len(s) - 1\n    while l < r:\n        if s[l] == s[r]:\n            l += 1\n            r -= 1\n        else:\n            return is_pal(l + 1, r) or is_pal(l, r - 1)\n    return True",
+  "testCases": [
+    {
+      "input": {
+        "s": "aba"
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Already a palindrome"
+    },
+    {
+      "input": {
+        "s": "abca"
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Remove c to get aba"
+    },
+    {
+      "input": {
+        "s": "abc"
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Requires more than one deletion"
+    },
+    {
+      "input": {
+        "s": "deeee"
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Remove the first d"
+    }
+  ],
+  "tags": [
+    "string",
+    "two-pointers"
+  ],
+  "hints": [
+    "Compare from both ends",
+    "Allow a single skip on mismatch",
+    "Use a helper to check the remainder"
+  ],
+  "relatedProblems": [
+    "vowel-mirror",
+    "pair-with-target-in-sorted"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 62,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def almost_palindrome(s: str) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def almost_palindrome(s: str) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s}\n * @return {boolean}\n */\nfunction almost_palindrome(s) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean almost_palindrome(String s) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool almost_palindrome(char* s) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool almost_palindrome(string& s) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

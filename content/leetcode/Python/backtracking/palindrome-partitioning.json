@@ -1,0 +1,97 @@
+{
+  "id": "palindrome-partitioning",
+  "title": "Partition a String into Palindromes",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given Split a string into all possible lists of substrings where every substring is a palindrome. Use backtracking with two pointers to test palindromes on the fly or precompute a DP table of palindromic ranges.\n\nConstraints:\n- 1 ≤ |s| ≤ 16",
+  "leetcodeUrl": "https://leetcode.com/problems/palindrome-partitioning/",
+  "complexity": {
+    "time": "O(n·2^n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nAt each index, try all end positions that form palindromes and recurse from the next index. The structure is a partition tree across all cuts.\n\nApproach\n1. Initial Setup: Optionally precompute pal[i][j]\n2. Main Algorithm: DFS from start; if s[start..end] is palindrome, append and recurse at end+1\n3. Return Result: Push path when start hits n\n\nComplexity Analysis\n- Time Complexity: Exponential in number of partitions\n- Space Complexity: O(n) recursion + optional O(n^2) DP\n\nKey Insights\n- Checking palindromes in O(1) with DP speeds recursion\n- Backtracking explores partition choices\n\nCommon Pitfalls\n- Not copying path yields aliasing\n- Off-by-one in substring slicing is common",
+  "solutionCode": "def partition_palindromes(s: str):\n    n = len(s)\n    pal = [[False]*n for _ in range(n)]\n    for i in range(n - 1, -1, -1):\n        for j in range(i, n):\n            if s[i] == s[j] and (j - i < 2 or pal[i + 1][j - 1]):\n                pal[i][j] = True\n    res, path = [], []\n    def dfs(i):\n        if i == n:\n            res.append(path[:])\n            return\n        for j in range(i, n):\n            if pal[i][j]:\n                path.append(s[i:j+1])\n                dfs(j + 1)\n                path.pop()\n    dfs(0)\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "s": "aab"
+      },
+      "expected": {
+        "result": [
+          [
+            "a",
+            "a",
+            "b"
+          ],
+          [
+            "aa",
+            "b"
+          ]
+        ]
+      },
+      "explanation": "Two partitions"
+    },
+    {
+      "input": {
+        "s": "a"
+      },
+      "expected": {
+        "result": [
+          [
+            "a"
+          ]
+        ]
+      },
+      "explanation": "Single letter"
+    },
+    {
+      "input": {
+        "s": "abba"
+      },
+      "expected": {
+        "result": "includes ['abba'] and ['a','bb','a']"
+      },
+      "explanation": "Multiple cuts"
+    },
+    {
+      "input": {
+        "s": "abc"
+      },
+      "expected": {
+        "result": [
+          [
+            "a",
+            "b",
+            "c"
+          ]
+        ]
+      },
+      "explanation": "Only single letters"
+    }
+  ],
+  "tags": [
+    "backtracking",
+    "string",
+    "dynamic-programming"
+  ],
+  "hints": [
+    "Precompute palindromes with DP",
+    "Recurse on next index after a cut",
+    "Copy path on completion"
+  ],
+  "relatedProblems": [
+    "restore-ip-addresses",
+    "generate-parentheses"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 64,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def partition_palindromes(s: str) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def partition_palindromes(s: str) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s}\n * @return {any}\n */\nfunction partition_palindromes(s) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<List<Integer>> partition_palindromes(String s) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[List[int]] partition_palindromes(char* s) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[List[int]] partition_palindromes(string& s) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

@@ -1,0 +1,169 @@
+{
+  "id": "interval-list-intersection",
+  "title": "Intersect Two Schedules",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "You are given two lists of disjoint, sorted closed intervals. Return their intersection as a list of closed intervals. If no overlap exists for a pair, skip it.\n\n    \n\nConstraints:\n    - 0 ≤ n,m ≤ 10^5\n- -10^9 ≤ start ≤ end ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/interval-list-intersections/",
+  "complexity": {
+    "time": "O(n+m)",
+    "space": "O(1) extra"
+  },
+  "explanation": "Intuition\nWith both lists sorted and disjoint internally, only the current heads can intersect. At each step compute the overlap between A[i] and B[j]; if it is nonempty, append it. Then advance the interval that finishes first to discover new potential intersections.\n\nApproach\n1. Initial Setup: Use two pointers i and j\n2. Main Algorithm: At each step let lo=max(starts) and hi=min(ends); if lo ≤ hi append [lo,hi]; advance the pointer whose end equals hi\n3. Return Result: Return the collected intersections\n\nComplexity Analysis\n- Time Complexity: O(n+m) linear scan\n- Space Complexity: O(1) aside from output\n\nKey Insights\n- Only one pointer moves per step\n- Closed intervals use ≤ to accept touching points\n\nCommon Pitfalls\n- Forgetting to advance the correct pointer may loop\n- Using '<' instead of '≤' loses single-point intersections",
+  "solutionCode": "def interval_intersection(A, B):\n    i = j = 0\n    res = []\n    while i < len(A) and j < len(B):\n        a1, a2 = A[i]\n        b1, b2 = B[j]\n        lo = max(a1, b1)\n        hi = min(a2, b2)\n        if lo <= hi:\n            res.append([lo, hi])\n        if a2 < b2:\n            i += 1\n        else:\n            j += 1\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "A": [
+          [
+            0,
+            2
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            13,
+            23
+          ],
+          [
+            24,
+            25
+          ]
+        ],
+        "B": [
+          [
+            1,
+            5
+          ],
+          [
+            8,
+            12
+          ],
+          [
+            15,
+            24
+          ],
+          [
+            25,
+            26
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            1,
+            2
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            8,
+            10
+          ],
+          [
+            15,
+            23
+          ],
+          [
+            24,
+            24
+          ],
+          [
+            25,
+            25
+          ]
+        ]
+      },
+      "explanation": "Two-pointer intersections"
+    },
+    {
+      "input": {
+        "A": [],
+        "B": [
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Empty first list"
+    },
+    {
+      "input": {
+        "A": [
+          [
+            1,
+            3
+          ]
+        ],
+        "B": [
+          [
+            4,
+            6
+          ]
+        ]
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Disjoint intervals"
+    },
+    {
+      "input": {
+        "A": [
+          [
+            1,
+            5
+          ]
+        ],
+        "B": [
+          [
+            5,
+            7
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            5,
+            5
+          ]
+        ]
+      },
+      "explanation": "Touching at a point"
+    }
+  ],
+  "tags": [
+    "intervals",
+    "two-pointers"
+  ],
+  "hints": [
+    "Compare only current heads",
+    "Append overlap [lo, hi] when lo ≤ hi",
+    "Advance the interval that ends first"
+  ],
+  "relatedProblems": [
+    "merge-intervals-consolidate",
+    "insert-interval-position"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 74,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def interval_intersection(A: List[List[int]], B: List[List[int]]) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def interval_intersection(A: List[List[int]], B: List[List[int]]) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] A, number[] B}\n * @return {any}\n */\nfunction interval_intersection(A, B) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<List<Integer>> interval_intersection(int[][] A, int[][] B) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[List[int]] interval_intersection(int[][] A, int[][] B) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[List[int]] interval_intersection(vector<vector<int>>& A, vector<vector<int>>& B) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

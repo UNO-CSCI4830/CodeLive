@@ -1,0 +1,90 @@
+{
+  "id": "detect-cycle-in-list",
+  "title": "Detect Cycle in List",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given the head of a linked list, determine if the list contains a cycle. A cycle means the next pointer of some node points back to a previous node. Use O(1) memory.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5\n- Values arbitrary 32-bit signed",
+  "leetcodeUrl": "https://leetcode.com/problems/linked-list-cycle/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nFloyd's algorithm advances one pointer twice as fast as the other. If a cycle exists, they must eventually meet. If the fast pointer reaches None, no cycle exists.\n\nApproach\n1. Initial Setup: Initialize slow and fast at head.\n2. Main Algorithm: Advance slow by one, fast by two. If they meet, return True. If fast hits None, return False.\n3. Return Result: End.\n\nComplexity Analysis\n- Time Complexity: O(n) due to a single pass or divide-and-conquer\n  over the list where each node is visited a bounded number of times.\n- Space Complexity: O(1) accounting for pointers and, when needed,\n  recursion depth or extra structures.\n\nKey Insights\n- Relative speed guarantees a meeting in a finite cycle\n- No extra memory is required\n\nCommon Pitfalls\n- Moving only one pointer fails to detect cycles\n- Dereferencing fast.next without checking can crash",
+  "solutionCode": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\ndef has_cycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow is fast:\n            return True\n    return False",
+  "testCases": [
+    {
+      "input": {
+        "list": [
+          3,
+          2,
+          0,
+          -4
+        ],
+        "pos": 1
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Cycle linking tail to index 1"
+    },
+    {
+      "input": {
+        "list": [
+          1,
+          2
+        ],
+        "pos": 0
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Short cycle"
+    },
+    {
+      "input": {
+        "list": [
+          1
+        ],
+        "pos": -1
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "When __init__(list=[1], pos=-1), the expected result is false"
+    },
+    {
+      "input": {
+        "list": [],
+        "pos": -1
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Empty list has no cycle"
+    }
+  ],
+  "tags": [
+    "linked-list",
+    "two-pointers"
+  ],
+  "hints": [
+    "Move one pointer twice as fast",
+    "Check for meeting point",
+    "Guard null checks for fast and fast.next"
+  ],
+  "relatedProblems": [
+    "cycle-start-node",
+    "rotate-linked-list"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 48,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def __init__(self: any, val: any, next: any) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, next: any) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any next}\n * @return {boolean}\n */\nfunction __init__(self, val, next) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean __init__(any self, any val, any next) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool __init__(any self, any val, any next) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool __init__(any& self, any& val, any& next) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

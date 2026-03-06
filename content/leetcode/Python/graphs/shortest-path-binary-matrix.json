@@ -1,0 +1,120 @@
+{
+  "id": "shortest-path-binary-matrix",
+  "title": "Shortest Path in a Binary Matrix (8 Directions)",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an n×n binary matrix grid where 0 means empty and 1 means blocked, return the length of the shortest clear path from (0,0) to (n-1,n-1) moving in 8 directions. Return -1 if no such path exists.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 200",
+  "leetcodeUrl": "https://leetcode.com/problems/shortest-path-in-binary-matrix/",
+  "complexity": {
+    "time": "O(n^2)",
+    "space": "O(n^2)"
+  },
+  "explanation": "Intuition\nUnweighted shortest path on a grid is solved with BFS. Each step expands neighbors in all 8 directions.\n\nApproach\n1. Initial Setup: Check start and end are open\n2. Main Algorithm: BFS from (0,0) marking distance\n3. Return Result: Return distance at first arrival to target else -1\n\nComplexity Analysis\n- Time Complexity: O(n^2)\n- Space Complexity: O(n^2)\n\nKey Insights\n- Push neighbors only if inside bounds and zero\n- Mark visited when enqueuing to avoid repeats\n\nCommon Pitfalls\n- Forgetting diagonals leads to wrong path length\n- Not handling blocked start or end",
+  "solutionCode": "from collections import deque\ndef shortest_path_binary_matrix(grid):\n    n = len(grid)\n    if grid[0][0] or grid[n-1][n-1]:\n        return -1\n    q = deque([(0, 0, 1)])\n    grid = [row[:] for row in grid]\n    grid[0][0] = 1\n    dirs = [(1,0),(-1,0),(0,1),(0,-1),(1,1),(1,-1),(-1,1),(-1,-1)]\n    while q:\n        x, y, d = q.popleft()\n        if x == n-1 and y == n-1:\n            return d\n        for dx, dy in dirs:\n            i, j = x + dx, y + dy\n            if 0 <= i < n and 0 <= j < n and grid[i][j] == 0:\n                grid[i][j] = 1\n                q.append((i, j, d + 1))\n    return -1",
+  "testCases": [
+    {
+      "input": {
+        "grid": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Diagonal move allowed"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Right-right-down-down-like"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": -1
+      },
+      "explanation": "Start blocked"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": -1
+      },
+      "explanation": "End blocked"
+    }
+  ],
+  "tags": [
+    "graph",
+    "bfs",
+    "matrix"
+  ],
+  "hints": [
+    "BFS explores by distance layers",
+    "8-direction neighbors",
+    "Mark visited upon enqueue"
+  ],
+  "relatedProblems": [
+    "rotting-oranges",
+    "pacific-atlantic-flow"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 42,
+    "frequency": "medium",
+    "importance": 8
+  },
+  "starterCode": "from typing import List\n\n\ndef shortest_path_binary_matrix(grid: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "from typing import List\n\n\ndef shortest_path_binary_matrix(grid: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[][]} grid\n * @return {number}\n */\nfunction shortest_path_binary_matrix(grid) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int shortest_path_binary_matrix(int[][] grid) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdio.h>\n#include <stdbool.h>\n#include <stdlib.h>\n\nint shortest_path_binary_matrix(int** grid, int gridSize, int* gridColSize) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int shortest_path_binary_matrix(vector<vector<int>>& grid) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

@@ -1,0 +1,80 @@
+{
+  "id": "paint-fence-two-colors",
+  "title": "Ways to Paint Fence with No 3 Adjacent Same",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given There are n posts and k colors. You must paint each post so that no three adjacent posts have the same color. Return the number of ways. Answer fits in 64-bit integer for given constraints.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 50\n- 1 ≤ k ≤ 50",
+  "leetcodeUrl": "https://leetcode.com/problems/paint-fence/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nTrack two states: same (last two equal) and diff (last two different). For next post: new_same = diff*(1) since it must match previous color; new_diff = (same+diff)*(k-1). Initialize for first post.\n\nApproach\n1. Initial Setup: Base for n=1 is k; for n=2, same=k and diff=k*(k-1)\n2. Main Algorithm: Iterate 3..n to update states\n3. Return Result: Return same+diff\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(1)\n\nKey Insights\n- State compression keeps O(1) memory\n- Transitions come from counting choices\n\nCommon Pitfalls\n- Confusing with 'no two adjacent same' variant\n- Initialize same and diff carefully",
+  "solutionCode": "def num_ways_paint_fence(n: int, k: int) -> int:\n    if n == 0:\n        return 0\n    if n == 1:\n        return k\n    same = k\n    diff = k * (k - 1)\n    for _ in range(3, n + 1):\n        new_same = diff\n        new_diff = (same + diff) * (k - 1)\n        same, diff = new_same, new_diff\n    return same + diff",
+  "testCases": [
+    {
+      "input": {
+        "n": 1,
+        "k": 2
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Two choices"
+    },
+    {
+      "input": {
+        "n": 2,
+        "k": 2
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Same or different"
+    },
+    {
+      "input": {
+        "n": 3,
+        "k": 2
+      },
+      "expected": {
+        "result": 6
+      },
+      "explanation": "Enumerate via DP states"
+    },
+    {
+      "input": {
+        "n": 0,
+        "k": 3
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "When num_ways_paint_fence(n=0, k=3), the expected result is 0"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "math"
+  ],
+  "hints": [
+    "Two states: same, diff",
+    "Initialize for first two posts",
+    "Update iteratively"
+  ],
+  "relatedProblems": [
+    "min-cost-stairs",
+    "climb-stairs-ways"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 62,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def num_ways_paint_fence(n: int, k: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def num_ways_paint_fence(n: int, k: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number n, number k}\n * @return {number}\n */\nfunction num_ways_paint_fence(n, k) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int num_ways_paint_fence(int n, int k) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint num_ways_paint_fence(int n, int k) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int num_ways_paint_fence(int& n, int& k) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

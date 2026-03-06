@@ -1,0 +1,104 @@
+{
+  "id": "subsets-without-duplicates",
+  "title": "All Subsets of Distinct Elements",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given a list of distinct integers, return all possible subsets including the empty set. The subsets can be returned in any order. Use backtracking that decides include or skip for each element.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 15\n- All elements are distinct",
+  "leetcodeUrl": "https://leetcode.com/problems/subsets/",
+  "complexity": {
+    "time": "O(n·2^n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nEach element has a binary decision. The recursion tree has 2^n leaves. Collect a copy of the current path at every node.\n\nApproach\n1. Initial Setup: Sort optional for stable output\n2. Main Algorithm: Recurse with include, then exclude\n3. Return Result: Push to result at each state\n\nComplexity Analysis\n- Time Complexity: O(n·2^n)\n- Space Complexity: O(n) recursion\n\nKey Insights\n- Build subsets incrementally\n- Order does not matter for correctness\n\nCommon Pitfalls\n- Forgetting to copy path stores references\n- Not exploring both choices reduces output",
+  "solutionCode": "def subsets(nums):\n    res, path = [], []\n    n = len(nums)\n    def dfs(i):\n        if i == n:\n            res.append(path[:])\n            return\n        path.append(nums[i])\n        dfs(i + 1)\n        path.pop()\n        dfs(i + 1)\n    dfs(0)\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": {
+        "result": "size 8"
+      },
+      "explanation": "2^3 subsets"
+    },
+    {
+      "input": {
+        "nums": []
+      },
+      "expected": {
+        "result": [
+          []
+        ]
+      },
+      "explanation": "Only empty set"
+    },
+    {
+      "input": {
+        "nums": [
+          5
+        ]
+      },
+      "expected": {
+        "result": [
+          [],
+          [
+            5
+          ]
+        ]
+      },
+      "explanation": "Single element"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "result": [
+          [],
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "explanation": "Basic check"
+    }
+  ],
+  "tags": [
+    "backtracking",
+    "array"
+  ],
+  "hints": [
+    "Each element is include or skip",
+    "Append a copy of path",
+    "Depth equals number of elements seen"
+  ],
+  "relatedProblems": [
+    "subsets-with-duplicates",
+    "choose-k-from-n"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 79,
+    "frequency": "high",
+    "importance": 6
+  },
+  "starterCode": "def subsets(nums: List[int]) -> str:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def subsets(nums: List[int]) -> str:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {any}\n */\nfunction subsets(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public str subsets(int[] nums) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nstr subsets(int* nums) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    str subsets(vector<int>& nums) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

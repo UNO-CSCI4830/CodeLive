@@ -1,0 +1,99 @@
+{
+  "id": "min-cost-stairs",
+  "title": "Minimum Cost to Reach the Top",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given an array cost where cost[i] is the cost of step i, once paid you can climb one or two steps. You may start at step 0 or 1. Return the minimum cost to reach beyond the last step (the top).\n\n    \n\nConstraints:\n    - 2 ≤ n ≤ 1000\n- 0 ≤ cost[i] ≤ 1000",
+  "leetcodeUrl": "https://leetcode.com/problems/min-cost-climbing-stairs/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nLet dp[i] be the min cost to stand on step i. Transition is dp[i]=cost[i]+min(dp[i-1], dp[i-2]). The answer is min(dp[n-1],dp[n-2]) because you can jump from either to the top. Use two variables.\n\nApproach\n1. Initial Setup: Initialize a=cost[0], b=cost[1]\n2. Main Algorithm: For i≥2 compute c=cost[i]+min(a,b); shift a,b\n3. Return Result: Return min(a,b)\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(1)\n\nKey Insights\n- Top is beyond last index\n- Rolling variables suffice\n\nCommon Pitfalls\n- Do not add cost for the top\n- Watch indices for n=2",
+  "solutionCode": "def min_cost_climbing_stairs(cost):\n    a, b = cost[0], cost[1]\n    for i in range(2, len(cost)):\n        a, b = b, cost[i] + min(a, b)\n    return min(a, b)",
+  "testCases": [
+    {
+      "input": {
+        "cost": [
+          10,
+          15,
+          20
+        ]
+      },
+      "expected": {
+        "result": 15
+      },
+      "explanation": "Start at index 1"
+    },
+    {
+      "input": {
+        "cost": [
+          1,
+          100,
+          1,
+          1,
+          1,
+          100,
+          1,
+          1,
+          100,
+          1
+        ]
+      },
+      "expected": {
+        "result": 6
+      },
+      "explanation": "Greedy-looking but DP proven"
+    },
+    {
+      "input": {
+        "cost": [
+          0,
+          0
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Free climb"
+    },
+    {
+      "input": {
+        "cost": [
+          5,
+          1,
+          1,
+          5
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Pick 1,1 then jump"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "array"
+  ],
+  "hints": [
+    "State is min cost to land on i",
+    "Answer comes from last two states",
+    "Use O(1) space rolling"
+  ],
+  "relatedProblems": [
+    "climb-stairs-ways",
+    "paint-fence-two-colors"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 79,
+    "frequency": "high",
+    "importance": 6
+  },
+  "starterCode": "def min_cost_climbing_stairs(cost: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def min_cost_climbing_stairs(cost: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] cost}\n * @return {number}\n */\nfunction min_cost_climbing_stairs(cost) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int min_cost_climbing_stairs(int[] cost) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint min_cost_climbing_stairs(int* cost) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int min_cost_climbing_stairs(vector<int>& cost) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

@@ -1,0 +1,80 @@
+{
+  "id": "wildcard-matching-glob",
+  "title": "Wildcard Pattern Matching",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Implement wildcard matching with support for '?' and '*' where '?' matches any single character and '*' matches any sequence (including empty). Return True if the pattern matches the full string.\n\n    \n\nConstraints:\n    - 0 ≤ |s|,|p| ≤ 2000",
+  "leetcodeUrl": "https://leetcode.com/problems/wildcard-matching/",
+  "complexity": {
+    "time": "O(nm)",
+    "space": "O(nm)"
+  },
+  "explanation": "Intuition\ndp[i][j] is whether s[:i] matches p[:j]. If p[j-1] is '*', dp[i][j] is OR of dp[i][j-1] (use '*' as empty) and dp[i-1][j] (consume one char). If p[j-1] is '?' or equals s[i-1], inherit diagonal.\n\nApproach\n1. Initial Setup: Initialize dp[0][0]=True; first row depends on consecutive '*' in p\n2. Main Algorithm: Fill table by cases for '*', '?', or exact match\n3. Return Result: Return dp[n][m]\n\nComplexity Analysis\n- Time Complexity: O(nm)\n- Space Complexity: O(nm)\n\nKey Insights\n- Compress leading '*' in the pattern row\n- Star can represent empty or many characters\n\nCommon Pitfalls\n- Mixing roles of i and j breaks indices\n- Forgetting dp[i][j-1] path for empty star",
+  "solutionCode": "def is_match_wildcard(s: str, p: str) -> bool:\n    n, m = len(s), len(p)\n    dp = [[False]*(m+1) for _ in range(n+1)]\n    dp[0][0] = True\n    for j in range(1, m+1):\n        dp[0][j] = dp[0][j-1] if p[j-1] == '*' else False\n    for i in range(1, n+1):\n        for j in range(1, m+1):\n            if p[j-1] == '*':\n                dp[i][j] = dp[i][j-1] or dp[i-1][j]\n            elif p[j-1] == '?' or p[j-1] == s[i-1]:\n                dp[i][j] = dp[i-1][j-1]\n            else:\n                dp[i][j] = False\n    return dp[n][m]",
+  "testCases": [
+    {
+      "input": {
+        "s": "aa",
+        "p": "a"
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Single 'a' doesn't cover two chars"
+    },
+    {
+      "input": {
+        "s": "aa",
+        "p": "*"
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Star covers all"
+    },
+    {
+      "input": {
+        "s": "cb",
+        "p": "?a"
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Second char mismatch"
+    },
+    {
+      "input": {
+        "s": "adceb",
+        "p": "*a*b"
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Star segments"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "string"
+  ],
+  "hints": [
+    "Star has two transitions",
+    "Diagonal on match or '?'",
+    "Initialize first row for leading stars"
+  ],
+  "relatedProblems": [
+    "regular-expression-matching",
+    "edit-distance-min"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 28,
+    "frequency": "medium",
+    "importance": 9
+  },
+  "starterCode": "def is_match_wildcard(s: str, p: str) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def is_match_wildcard(s: str, p: str) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s, string p}\n * @return {boolean}\n */\nfunction is_match_wildcard(s, p) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean is_match_wildcard(String s, String p) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool is_match_wildcard(char* s, char* p) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool is_match_wildcard(string& s, string& p) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

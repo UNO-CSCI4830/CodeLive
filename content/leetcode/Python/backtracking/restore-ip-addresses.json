@@ -1,0 +1,83 @@
+{
+  "id": "restore-ip-addresses",
+  "title": "Restore Valid IP Addresses",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a string containing only digits, return all possible valid IP addresses that can be obtained by inserting three dots. Each segment must be between 0 and 255 and no leading zeros unless the segment is exactly '0'.\n\nConstraints:\n- 1 ≤ |s| ≤ 20",
+  "leetcodeUrl": "https://leetcode.com/problems/restore-ip-addresses/",
+  "complexity": {
+    "time": "O(1) bounded",
+    "space": "O(1) recursion"
+  },
+  "explanation": "Intuition\nThere are only at most 3^4 ways to cut the string into four parts. Validate each candidate segment during recursion to prune early.\n\nApproach\n1. Initial Setup: DFS with segment count and index\n2. Main Algorithm: At each step, try 1..3 chars if valid segment and recurse\n3. Return Result: When 4 segments used and index at end, record\n\nComplexity Analysis\n- Time Complexity: Constant upper bound\n- Space Complexity: O(depth 4)\n\nKey Insights\n- Leading zero rule is critical\n- Pruning invalid segments saves time\n\nCommon Pitfalls\n- Allowing '00' or '01' is invalid\n- Out-of-range >255 must be rejected",
+  "solutionCode": "def restore_ip(s: str):\n    res = []\n    def valid(seg: str) -> bool:\n        if len(seg) == 0 or len(seg) > 3:\n            return False\n        if seg[0] == '0' and len(seg) > 1:\n            return False\n        return int(seg) <= 255\n    def dfs(i, parts, path):\n        if parts == 4 and i == len(s):\n            res.append(path[:-1])\n            return\n        if parts == 4 or i == len(s):\n            return\n        for l in range(1, 4):\n            if i + l <= len(s) and valid(s[i:i+l]):\n                dfs(i + l, parts + 1, path + s[i:i+l] + \".\")\n    dfs(0, 0, \"\")\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "s": "25525511135"
+      },
+      "expected": {
+        "result": [
+          "255.255.11.135",
+          "255.255.111.35"
+        ]
+      },
+      "explanation": "Two valid restorations"
+    },
+    {
+      "input": {
+        "s": "0000"
+      },
+      "expected": {
+        "result": [
+          "0.0.0.0"
+        ]
+      },
+      "explanation": "All zeros with single-digit segments"
+    },
+    {
+      "input": {
+        "s": "101023"
+      },
+      "expected": {
+        "result": "includes '1.0.10.23' and '1.01.0.23' invalid"
+      },
+      "explanation": "Leading zeros matter"
+    },
+    {
+      "input": {
+        "s": "1111"
+      },
+      "expected": {
+        "result": [
+          "1.1.1.1"
+        ]
+      },
+      "explanation": "Simple case"
+    }
+  ],
+  "tags": [
+    "backtracking",
+    "string"
+  ],
+  "hints": [
+    "Try segment lengths 1..3",
+    "Reject leading zeros",
+    "Check ≤ 255"
+  ],
+  "relatedProblems": [
+    "palindrome-partitioning",
+    "generate-parentheses"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 58,
+    "frequency": "medium",
+    "importance": 8
+  },
+  "starterCode": "def restore_ip(s: str) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def restore_ip(s: str) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s}\n * @return {boolean}\n */\nfunction restore_ip(s) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean restore_ip(String s) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool restore_ip(char* s) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool restore_ip(string& s) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

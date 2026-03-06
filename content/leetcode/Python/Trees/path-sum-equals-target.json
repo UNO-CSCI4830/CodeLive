@@ -1,0 +1,100 @@
+{
+  "id": "path-sum-equals-target",
+  "title": "Root-to-Leaf Path Sum",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given a binary tree and a target sum, determine if any root‑to‑leaf path has node values summing to target.\n\n    \n\nConstraints:\n    - 0 ≤ nodes ≤ 10^5\n- Node values are 32‑bit signed",
+  "leetcodeUrl": "https://leetcode.com/problems/path-sum/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(h)"
+  },
+  "explanation": "Intuition\nAs we descend, subtract the current value from the remaining target. At a leaf, check if the remaining equals the leaf value.\n\nApproach\n1. Initial Setup: If node is None, return False\n2. Main Algorithm: If leaf, compare value to target\n3. Return Result: Recurse on children with target - node.val\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(h)\n\nKey Insights\n- Top‑down accumulation matches root‑to‑leaf constraint\n- Leaf means both children are None\n\nCommon Pitfalls\n- Accepting non‑leaf partial sums as success is wrong\n- Forgetting negative values are valid",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef path_sum_equals(root: TreeNode, target: int) -> bool:\n    if not root:\n        return False\n    if not root.left and not root.right:\n        return root.val == target\n    remaining = target - root.val\n    return path_sum_equals(root.left, remaining) or            path_sum_equals(root.right, remaining)",
+  "testCases": [
+    {
+      "input": {
+        "tree": [
+          5,
+          4,
+          8,
+          11,
+          null,
+          13,
+          4,
+          7,
+          2,
+          null,
+          null,
+          null,
+          1
+        ],
+        "target": 22
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "5→4→11→2 sums to 22"
+    },
+    {
+      "input": {
+        "tree": [],
+        "target": 0
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Empty tree has no path"
+    },
+    {
+      "input": {
+        "tree": [
+          1,
+          2,
+          3
+        ],
+        "target": 5
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "No matching root‑to‑leaf path"
+    },
+    {
+      "input": {
+        "tree": [
+          1,
+          2
+        ],
+        "target": 1
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Not a leaf at root"
+    }
+  ],
+  "tags": [
+    "tree",
+    "dfs"
+  ],
+  "hints": [
+    "Check leaves only",
+    "Pass down remaining sum"
+  ],
+  "relatedProblems": [
+    "diameter-of-binary-tree",
+    "maximum-depth-of-tree"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 43.4,
+    "frequency": "medium",
+    "importance": 6
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {boolean}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

@@ -1,0 +1,80 @@
+{
+  "id": "fast-power-exponent",
+  "title": "Power Function with Fast Exponentiation",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Implement pow(x, n), which calculates x raised to the power n. Support negative n by returning 1/(x^|n|). Handle edge cases like x=0 and n=0 correctly.\n\n    \n\nConstraints:\n    - -10^4 ≤ x ≤ 10^4\n- -2^31 ≤ n ≤ 2^31-1",
+  "leetcodeUrl": "https://leetcode.com/problems/powx-n/",
+  "complexity": {
+    "time": "O(log |n|)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nExponentiation by squaring halves the exponent each step. If the current exponent is odd, multiply the result by the base and decrement the exponent. Square the base each iteration and shift n right by one bit. Negative exponents invert the base at the start.\n\nApproach\n1. Initial Setup: Handle n<0 by inverting x and negating n\n2. Main Algorithm: Iterate while n>0: if n is odd multiply result by x; square x; n//=2\n3. Return Result: Return result with float math\n\nComplexity Analysis\n- Time Complexity: O(log |n|)\n- Space Complexity: O(1) iterative variables\n\nKey Insights\n- Bit operations or parity checks detect odd exponents\n- Invert once for negative powers to avoid repeating division\n\nCommon Pitfalls\n- Forgetting n can be negative\n- Multiplying result after squaring base is order-sensitive",
+  "solutionCode": "def my_pow(x: float, n: int) -> float:\n    if n == 0:\n        return 1.0\n    neg = n < 0\n    if neg:\n        x = 1.0 / x\n        n = -n\n    res = 1.0\n    base = x\n    while n > 0:\n        if n & 1:\n            res *= base\n        base *= base\n        n >>= 1\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "x": 2,
+        "n": 10
+      },
+      "expected": {
+        "result": 1024
+      },
+      "explanation": "Fast exponentiation"
+    },
+    {
+      "input": {
+        "x": 2,
+        "n": -2
+      },
+      "expected": {
+        "result": 0.25
+      },
+      "explanation": "Invert base for negative power"
+    },
+    {
+      "input": {
+        "x": 1,
+        "n": 123456
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Neutral base"
+    },
+    {
+      "input": {
+        "x": 0,
+        "n": 0
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Define 0^0 as 1 in this implementation"
+    }
+  ],
+  "tags": [
+    "math",
+    "divide-and-conquer"
+  ],
+  "hints": [
+    "Exponentiate by squaring",
+    "Use bit checks for odd exponents",
+    "Invert base when n is negative"
+  ],
+  "relatedProblems": [
+    "integer-sqrt-floor",
+    "count-primes-sieve"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 60,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def my_pow(x: float, n: int) -> float:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def my_pow(x: float, n: int) -> float:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number x, number n}\n * @return {number}\n */\nfunction my_pow(x, n) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public float my_pow(float x, int n) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nfloat my_pow(float x, int n) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    float my_pow(float& x, int& n) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

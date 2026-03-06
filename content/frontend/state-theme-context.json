@@ -1,0 +1,49 @@
+{
+  "id": "state-theme-context",
+  "title": "Theme Context Provider",
+  "category": "frontend",
+  "difficulty": "easy",
+  "description": "Create a **Theme Context** using React Context API that provides light/dark theme switching to descendant components.\n\n### Requirements\n\n- Create a `ThemeContext` using `React.createContext`\n- Create a `ThemeProvider` component that wraps children and provides theme state\n- Create a `useTheme()` custom hook that returns `{ theme, toggleTheme, setTheme }`\n- Support three modes: `'light'`, `'dark'`, `'system'`\n- `toggleTheme()` cycles: light → dark → light\n- `setTheme(mode)` sets the theme directly\n- The provider should apply a `data-theme` attribute on a wrapper div\n- Default theme is `'light'`\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Theme display | `theme-display` |\n| Toggle button | `toggle-theme` |\n| Set light button | `set-light` |\n| Set dark button | `set-dark` |\n| Themed container | `themed-container` |",
+  "constraints": "- Must use React.createContext and a custom provider component\n- useTheme must throw an error if used outside ThemeProvider\n- Do not use any external theming libraries",
+  "hints": [
+    "Create the context with createContext<ThemeContextType | null>(null) and check for null in useTheme to throw a helpful error.",
+    "Use useState in the ThemeProvider to hold the current theme value.",
+    "toggleTheme just flips between 'light' and 'dark': setTheme(prev => prev === 'light' ? 'dark' : 'light')."
+  ],
+  "tags": ["react", "context", "state-management", "theme"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { ThemeProvider, useTheme } from './ThemeContext';\nimport './styles.css';\n\nfunction ThemeDemo() {\n  const { theme, toggleTheme, setTheme } = useTheme();\n\n  return (\n    <div className={`themed themed--${theme}`} data-testid=\"themed-container\" data-theme={theme}>\n      <h1>Theme Context</h1>\n      <p>Current theme: <strong data-testid=\"theme-display\">{theme}</strong></p>\n      <div className=\"themed__actions\">\n        <button data-testid=\"toggle-theme\" onClick={toggleTheme}>Toggle Theme</button>\n        <button data-testid=\"set-light\" onClick={() => setTheme('light')}>Light</button>\n        <button data-testid=\"set-dark\" onClick={() => setTheme('dark')}>Dark</button>\n      </div>\n    </div>\n  );\n}\n\nexport default function App() {\n  return (\n    <ThemeProvider>\n      <ThemeDemo />\n    </ThemeProvider>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "ThemeContext.tsx",
+      "content": "import React, { createContext, useContext, useState, useCallback } from 'react';\n\n// --- Types ---\nexport type Theme = 'light' | 'dark';\n\ninterface ThemeContextType {\n  theme: Theme;\n  toggleTheme: () => void;\n  setTheme: (theme: Theme) => void;\n}\n\n// TODO: Create the ThemeContext with createContext\n// Use null as default and check in useTheme\n\n// TODO: Create the ThemeProvider component\n// It should use useState to track the theme\n// and provide { theme, toggleTheme, setTheme } via context\nexport const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {\n  // TODO: Implement provider\n  return <>{children}</>;\n};\n\n// TODO: Create the useTheme hook\n// It should throw an error if used outside ThemeProvider\nexport function useTheme(): ThemeContextType {\n  // TODO: Implement\n  return { theme: 'light', toggleTheme: () => {}, setTheme: () => {} };\n}\n",
+      "language": "tsx",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": ".themed {\n  padding: 2rem;\n  min-height: 100vh;\n  font-family: system-ui, sans-serif;\n  transition: background-color 0.3s ease, color 0.3s ease;\n}\n\n.themed--light {\n  background-color: #ffffff;\n  color: #111827;\n}\n\n.themed--dark {\n  background-color: #111827;\n  color: #f9fafb;\n}\n\n.themed__actions {\n  display: flex;\n  gap: 0.5rem;\n  margin-top: 1rem;\n}\n\n.themed__actions button {\n  padding: 0.5rem 1rem;\n  border: 1px solid currentColor;\n  border-radius: 0.375rem;\n  background: transparent;\n  color: inherit;\n  cursor: pointer;\n  font-size: 0.875rem;\n}\n\n.themed__actions button:hover {\n  opacity: 0.8;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport React from 'react';\nimport { ThemeProvider, useTheme } from './ThemeContext';\n\nfunction TestConsumer() {\n  const { theme, toggleTheme, setTheme } = useTheme();\n  return (\n    <div>\n      <span data-testid=\"theme-display\">{theme}</span>\n      <button data-testid=\"toggle-theme\" onClick={toggleTheme}>Toggle</button>\n      <button data-testid=\"set-light\" onClick={() => setTheme('light')}>Light</button>\n      <button data-testid=\"set-dark\" onClick={() => setTheme('dark')}>Dark</button>\n    </div>\n  );\n}\n\ndescribe('ThemeContext', () => {\n  it('provides light theme by default', () => {\n    render(<ThemeProvider><TestConsumer /></ThemeProvider>);\n    expect(screen.getByTestId('theme-display')).toHaveTextContent('light');\n  });\n\n  it('toggles to dark theme', () => {\n    render(<ThemeProvider><TestConsumer /></ThemeProvider>);\n    fireEvent.click(screen.getByTestId('toggle-theme'));\n    expect(screen.getByTestId('theme-display')).toHaveTextContent('dark');\n  });\n\n  it('toggles back to light', () => {\n    render(<ThemeProvider><TestConsumer /></ThemeProvider>);\n    fireEvent.click(screen.getByTestId('toggle-theme'));\n    fireEvent.click(screen.getByTestId('toggle-theme'));\n    expect(screen.getByTestId('theme-display')).toHaveTextContent('light');\n  });\n\n  it('setTheme sets dark directly', () => {\n    render(<ThemeProvider><TestConsumer /></ThemeProvider>);\n    fireEvent.click(screen.getByTestId('set-dark'));\n    expect(screen.getByTestId('theme-display')).toHaveTextContent('dark');\n  });\n\n  it('setTheme sets light directly', () => {\n    render(<ThemeProvider><TestConsumer /></ThemeProvider>);\n    fireEvent.click(screen.getByTestId('set-dark'));\n    fireEvent.click(screen.getByTestId('set-light'));\n    expect(screen.getByTestId('theme-display')).toHaveTextContent('light');\n  });\n\n  it('useTheme throws outside provider', () => {\n    const spy = jest.spyOn(console, 'error').mockImplementation(() => {});\n    expect(() => render(<TestConsumer />)).toThrow();\n    spy.mockRestore();\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "ThemeContext.tsx",
+      "content": "import React, { createContext, useContext, useState, useCallback } from 'react';\n\nexport type Theme = 'light' | 'dark';\n\ninterface ThemeContextType {\n  theme: Theme;\n  toggleTheme: () => void;\n  setTheme: (theme: Theme) => void;\n}\n\nconst ThemeContext = createContext<ThemeContextType | null>(null);\n\nexport const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {\n  const [theme, setThemeState] = useState<Theme>('light');\n\n  const toggleTheme = useCallback(() => {\n    setThemeState(prev => (prev === 'light' ? 'dark' : 'light'));\n  }, []);\n\n  const setTheme = useCallback((newTheme: Theme) => {\n    setThemeState(newTheme);\n  }, []);\n\n  return (\n    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>\n      {children}\n    </ThemeContext.Provider>\n  );\n};\n\nexport function useTheme(): ThemeContextType {\n  const context = useContext(ThemeContext);\n  if (!context) {\n    throw new Error('useTheme must be used within a ThemeProvider');\n  }\n  return context;\n}\n",
+      "language": "tsx"
+    }
+  ],
+  "sort_order": 402
+}

@@ -1,0 +1,101 @@
+{
+  "id": "subarrays-with-exactly-k-distinct",
+  "title": "Subarrays With Exactly K Distinct",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Given an integer array nums and an integer k, return the number of subarrays that contain exactly k distinct integers. Solve in linear time using the at most trick.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- 1 ≤ k ≤ len(nums)",
+  "leetcodeUrl": "https://leetcode.com/problems/subarrays-with-k-different-integers/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nCounting exactly k distinct directly is difficult. It is easier to count the number of subarrays with at most k distinct and subtract the number with at most k-1 distinct. Each at most function can be computed in O(n) using a frequency map and a sliding window that contracts when the distinct count exceeds the limit.\n\nApproach\n1. Initial Setup: Define a helper to count subarrays with at most K distinct.\n2. Main Algorithm: Scan with a frequency map. When distinct exceeds K, move left and decrement until valid. Add the window size to the result at each step.\n3. Return Result: Compute atMost(k) - atMost(k-1) to get the exact count.\n\nComplexity Analysis\n- Time Complexity: O(n) because the window grows and shrinks in a\n  single pass without revisiting elements more than a constant number of\n  times.\n- Space Complexity: O(n) to maintain counts, sets, or running\n  aggregates needed to validate the window.\n\nKey Insights\n- Exactly equals can be expressed as the difference of two at most counts\n- Each element is added and removed from the window a constant number of times\n\nCommon Pitfalls\n- Forgetting to add window length to the accumulator\n- Not resetting counts when they reach zero",
+  "solutionCode": "def subarrays_with_exactly_k_distinct(nums, k):\n    from collections import defaultdict\n    def at_most(K):\n        count = defaultdict(int)\n        left = 0\n        res = 0\n        distinct = 0\n        for right, x in enumerate(nums):\n            if count[x] == 0:\n                distinct += 1\n            count[x] += 1\n            while distinct > K:\n                count[nums[left]] -= 1\n                if count[nums[left]] == 0:\n                    distinct -= 1\n                left += 1\n            res += right - left + 1\n        return res\n    return at_most(k) - at_most(k - 1)",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          1,
+          2,
+          3
+        ],
+        "k": 2
+      },
+      "expected": {
+        "result": 7
+      },
+      "explanation": "There are 7 subarrays with exactly 2 distinct"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          1,
+          3,
+          4
+        ],
+        "k": 3
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Three subarrays: [1,2,1,3], [2,1,3], [1,3,4]"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1
+        ],
+        "k": 1
+      },
+      "expected": {
+        "result": 6
+      },
+      "explanation": "All subarrays since only one value"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ],
+        "k": 4
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Cannot have 4 distinct in length 3"
+    }
+  ],
+  "tags": [
+    "array",
+    "sliding-window",
+    "hash-table"
+  ],
+  "hints": [
+    "Compute at most K distinct with a window and counts",
+    "Use exactly K = atMost(K) - atMost(K-1)",
+    "Remember to add the current window length at each step"
+  ],
+  "relatedProblems": [
+    "collecting-two-types",
+    "longest-window-without-repeats"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 36,
+    "frequency": "medium",
+    "importance": 9
+  },
+  "starterCode": "def subarrays_with_exactly_k_distinct(nums: List[int], k: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def subarrays_with_exactly_k_distinct(nums: List[int], k: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number k}\n * @return {number}\n */\nfunction subarrays_with_exactly_k_distinct(nums, k) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int subarrays_with_exactly_k_distinct(int[] nums, int k) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint subarrays_with_exactly_k_distinct(int* nums, int k) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int subarrays_with_exactly_k_distinct(vector<int>& nums, int& k) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

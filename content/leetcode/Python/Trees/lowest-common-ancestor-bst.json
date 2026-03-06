@@ -1,0 +1,109 @@
+{
+  "id": "lowest-common-ancestor-bst",
+  "title": "Lowest Common Ancestor in BST",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a BST and two node values p and q that exist in the tree, return the value of their lowest common ancestor.\n\n    \n\nConstraints:\n    - 1 ≤ nodes ≤ 10^5\n- All values unique\n- p and q are present",
+  "leetcodeUrl": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/",
+  "complexity": {
+    "time": "O(h)",
+    "space": "O(1) iterative"
+  },
+  "explanation": "Intuition\nBST ordering guides the search. If both targets are less than current, move left; if both greater, move right; otherwise current is the split point.\n\nApproach\n1. Initial Setup: Normalize p≤q\n2. Main Algorithm: Walk down from root following BST directions\n3. Return Result: Return first node where p≤node≤q\n\nComplexity Analysis\n- Time Complexity: O(h)\n- Space Complexity: O(1) iterative\n\nKey Insights\n- Split point property characterizes the LCA\n- Iterative walk keeps space constant\n\nCommon Pitfalls\n- Not normalizing order of p and q complicates compares\n- Confusing equality handling at ancestor",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef lca_in_bst(root: TreeNode, p: int, q: int) -> int:\n    cur = root\n    lo, hi = (p, q) if p < q else (q, p)\n    while cur:\n        if hi < cur.val:\n            cur = cur.left\n        elif lo > cur.val:\n            cur = cur.right\n        else:\n            return cur.val\n    return None",
+  "testCases": [
+    {
+      "input": {
+        "tree": [
+          6,
+          2,
+          8,
+          0,
+          4,
+          7,
+          9,
+          null,
+          null,
+          3,
+          5
+        ],
+        "p": 2,
+        "q": 8
+      },
+      "expected": {
+        "result": 6
+      },
+      "explanation": "Split at 6"
+    },
+    {
+      "input": {
+        "tree": [
+          2,
+          1
+        ],
+        "p": 2,
+        "q": 1
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "One is ancestor of the other"
+    },
+    {
+      "input": {
+        "tree": [
+          5,
+          3,
+          6,
+          2,
+          4,
+          null,
+          null,
+          1
+        ],
+        "p": 1,
+        "q": 4
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "LCA value 3"
+    },
+    {
+      "input": {
+        "tree": [
+          1
+        ],
+        "p": 1,
+        "q": 1
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Root is LCA"
+    }
+  ],
+  "tags": [
+    "tree",
+    "dfs"
+  ],
+  "hints": [
+    "Use ordering to steer",
+    "Stop when split occurs"
+  ],
+  "relatedProblems": [
+    "validate-bst",
+    "kth-smallest-in-bst"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 66,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {number}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

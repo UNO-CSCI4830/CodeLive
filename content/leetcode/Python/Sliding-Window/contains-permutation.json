@@ -1,0 +1,81 @@
+{
+  "id": "contains-permutation",
+  "title": "String Contains Scrambled Pattern",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given two strings pattern and s, return True if s contains a substring that is a permutation of pattern. Use a fixed-size sliding window of length len(pattern) and compare frequency counts.\n\n    \n\nConstraints:\n    - 1 ≤ len(pattern) ≤ 10^4\n- 1 ≤ len(s) ≤ 10^5\n- s and pattern are lowercase English letters",
+  "leetcodeUrl": "https://leetcode.com/problems/permutation-in-string/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1) for fixed alphabet"
+  },
+  "explanation": "Intuition\nIf a window has the same multiset of characters as pattern, it is a valid permutation. A frequency counter for the current window can be updated in O(1) per step by adding the new character on the right and removing the leftmost character.\n\nApproach\n1. Initial Setup: Compute counts of pattern and of the first window.\n2. Main Algorithm: Slide the window by one character at a time and update counts. If counts match at any step, return True.\n3. Return Result: If the scan finishes, return False.\n\nComplexity Analysis\n- Time Complexity: O(n) because the window grows and shrinks in a\n  single pass without revisiting elements more than a constant number of\n  times.\n- Space Complexity: O(1) to maintain counts, sets, or running\n  aggregates needed to validate the window.\n\nKey Insights\n- Fixed-size windows allow constant time updates\n- Counter equality succinctly encodes permutation equivalence\n\nCommon Pitfalls\n- Forgetting to delete zero count keys skews equality checks\n- Using sorting per window costs O(n m log m)",
+  "solutionCode": "def contains_permutation(pattern: str, s: str) -> bool:\n    from collections import Counter\n    m = len(pattern)\n    if m > len(s):\n        return False\n    need = Counter(pattern)\n    have = Counter(s[:m])\n    if have == need:\n        return True\n    for i in range(m, len(s)):\n        have[s[i]] += 1\n        left_char = s[i - m]\n        have[left_char] -= 1\n        if have[left_char] == 0:\n            del have[left_char]\n        if have == need:\n            return True\n    return False",
+  "testCases": [
+    {
+      "input": {
+        "pattern": "ab",
+        "s": "eidbaooo"
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Contains 'ba'"
+    },
+    {
+      "input": {
+        "pattern": "ab",
+        "s": "eidboaoo"
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "No permutation present"
+    },
+    {
+      "input": {
+        "pattern": "adc",
+        "s": "dcda"
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Window 'cda' matches"
+    },
+    {
+      "input": {
+        "pattern": "a",
+        "s": "a"
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Single character match"
+    }
+  ],
+  "tags": [
+    "string",
+    "sliding-window",
+    "hash-table"
+  ],
+  "hints": [
+    "Compare character counts over a fixed window",
+    "Update by adding one and removing one character",
+    "Stop early when counts match"
+  ],
+  "relatedProblems": [
+    "all-anagram-start-indices",
+    "longest-window-without-repeats"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 44,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def contains_permutation(pattern: str, s: str) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def contains_permutation(pattern: str, s: str) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string pattern, string s}\n * @return {boolean}\n */\nfunction contains_permutation(pattern, s) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean contains_permutation(String pattern, String s) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool contains_permutation(char* pattern, char* s) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool contains_permutation(string& pattern, string& s) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

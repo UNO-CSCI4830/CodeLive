@@ -1,21 +1,37 @@
-/* RoleCard styles */
+/* RoleCard — Bold Typography */
 
 .role-card {
-  @apply w-full rounded-2xl border-2 p-8 text-left transition hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50;
+  width: 100%;
+  padding: 2rem;
+  text-align: left;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease);
+  border-radius: 0;
 }
+.role-card:hover { border-color: var(--border-hover); }
+.role-card:disabled { cursor: not-allowed; opacity: 0.5; }
 
 .role-card-selected {
-  @apply border-blue-600 bg-blue-50;
+  border-color: var(--accent);
+  border-width: 2px;
 }
 
 .role-card-unselected {
-  @apply border-neutral-200 bg-white hover:border-neutral-300;
+  border-color: var(--border);
 }
 
 .role-card-title {
-  @apply mb-1 text-xl font-semibold text-neutral-900;
+  margin-bottom: 0.25rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--fg);
+  letter-spacing: var(--tracking-tight);
 }
 
 .role-card-description {
-  @apply text-sm text-neutral-600;
+  font-size: 0.875rem;
+  color: var(--muted-fg);
+  line-height: 1.6;
 }

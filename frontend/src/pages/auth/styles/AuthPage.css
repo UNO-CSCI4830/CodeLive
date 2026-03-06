@@ -1,29 +1,59 @@
-/* AuthPage styles */
+/* AuthPage — Bold Typography */
 
 .auth-container {
-  @apply mx-auto max-w-md;
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
 }
 
 .auth-back-link {
-  @apply mb-6 inline-block text-sm font-medium text-blue-600 hover:underline;
+  display: inline-block;
+  margin-bottom: 2rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--muted-fg);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease);
 }
+.auth-back-link:hover { color: var(--fg); }
 
 .auth-heading {
-  @apply mb-6 text-3xl font-bold tracking-tight text-neutral-900;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
 }
 
 .auth-tabs {
-  @apply mb-6 flex rounded-lg border border-neutral-200 bg-neutral-100 p-1;
+  display: flex;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border);
 }
 
 .auth-tab {
-  @apply flex-1 rounded-md px-4 py-2 text-sm font-medium transition;
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--muted-fg);
+  transition: all var(--duration-fast) var(--ease);
 }
 
 .auth-tab-active {
-  @apply bg-white text-neutral-900 shadow-sm;
+  background: var(--fg);
+  color: var(--bg);
 }
 
 .auth-tab-inactive {
-  @apply text-neutral-500 hover:text-neutral-700;
+  color: var(--muted-fg);
 }
+.auth-tab-inactive:hover { color: var(--fg); }

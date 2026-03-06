@@ -1,0 +1,111 @@
+{
+  "id": "choose-k-from-n",
+  "title": "Choose K from 1..N",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given Generate all size-k combinations drawn from numbers 1..n in ascending lexicographic order. Return a list of lists. Use backtracking with an index and early pruning when remaining numbers are insufficient to fill the current path.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 20\n- 0 ≤ k ≤ n",
+  "leetcodeUrl": "https://leetcode.com/problems/combinations/",
+  "complexity": {
+    "time": "O(C(n,k))",
+    "space": "O(k) recursion"
+  },
+  "explanation": "Intuition\nEach choice fixes the next number and recurses on the remainder of the range. Prune branches when not enough elements remain to complete a combination.\n\nApproach\n1. Initial Setup: Track current path and next start index\n2. Main Algorithm: Choose i in [start..n], append, recurse, then pop\n3. Return Result: Add a copy of path when size hits k\n\nComplexity Analysis\n- Time Complexity: O(C(n,k))\n- Space Complexity: O(k) recursion\n\nKey Insights\n- Upper bound pruning reduces calls\n- Paths are built in ascending order naturally\n\nCommon Pitfalls\n- Forgetting to pop after recursion corrupts state\n- Not handling k=0 should return [[]]",
+  "solutionCode": "def combine(n: int, k: int):\n    res, path = [], []\n    def dfs(start: int):\n        if len(path) + (n - start + 1) < k:\n            return\n        if len(path) == k:\n            res.append(path[:])\n            return\n        for x in range(start, n + 1):\n            path.append(x)\n            dfs(x + 1)\n            path.pop()\n    if k == 0:\n        return [[]]\n    dfs(1)\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "n": 4,
+        "k": 2
+      },
+      "expected": {
+        "result": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      },
+      "explanation": "All pairs in order"
+    },
+    {
+      "input": {
+        "n": 3,
+        "k": 0
+      },
+      "expected": {
+        "result": [
+          []
+        ]
+      },
+      "explanation": "Empty combination"
+    },
+    {
+      "input": {
+        "n": 1,
+        "k": 1
+      },
+      "expected": {
+        "result": [
+          [
+            1
+          ]
+        ]
+      },
+      "explanation": "Single choice"
+    },
+    {
+      "input": {
+        "n": 5,
+        "k": 3
+      },
+      "expected": {
+        "result": "length C(5,3)=10"
+      },
+      "explanation": "Efficiency check on pruning"
+    }
+  ],
+  "tags": [
+    "backtracking",
+    "array"
+  ],
+  "hints": [
+    "Use a start index",
+    "Prune when remaining < need",
+    "Append a copy of path on success"
+  ],
+  "relatedProblems": [
+    "subsets-without-duplicates",
+    "k-sum-pick-k"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 70,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def combine(n: int, k: int) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def combine(n: int, k: int) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number n, number k}\n * @return {any}\n */\nfunction combine(n, k) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<List<Integer>> combine(int n, int k) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[List[int]] combine(int n, int k) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[List[int]] combine(int& n, int& k) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

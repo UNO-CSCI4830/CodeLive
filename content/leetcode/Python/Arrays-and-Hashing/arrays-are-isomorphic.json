@@ -1,0 +1,106 @@
+{
+  "id": "arrays-are-isomorphic",
+  "title": "Arrays Are Isomorphic",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given Two arrays a and b are isomorphic if we can replace each distinct value in a with a unique value so that a becomes b. Determine whether the two arrays are isomorphic. This requires a one-to-one mapping in both directions to avoid collisions.\n\n    \n\nConstraints:\n    - 1 ≤ len(a), len(b) ≤ 10^5\n- Arrays can contain any integers in 32-bit range",
+  "leetcodeUrl": "https://leetcode.com/problems/isomorphic-strings/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nIsomorphism requires consistent forward and reverse mappings. We build two hash maps on the fly: from a→b and from b→a. Any mismatch in either direction proves the arrays are not isomorphic.\n\nApproach\n1. Initial Setup: Initialize two empty maps.\n2. Main Algorithm: Walk the arrays in lockstep. Assign and validate the mappings a→b and b→a. If a conflict arises, return False.\n3. Return Result: If the scan completes, the mapping is bijective and we return True.\n\nComplexity Analysis\n- Time Complexity: O(n) because the algorithm scans elements a constant\n  number of times and performs O(1) work for each update or lookup.\n- Space Complexity: O(n) due to the auxiliary structures required to\n  store counts, prefix sums, or membership sets while ensuring fast access.\n\nKey Insights\n- Bijection implies both injective and surjective conditions\n- Two maps capture both constraints in linear time\n\nCommon Pitfalls\n- Only checking a→b allows collisions in b\n- Forgetting to compare lengths first risks index errors",
+  "solutionCode": "def arrays_isomorphic(a, b):\n    if len(a) != len(b):\n        return False\n    map_ab = {}\n    map_ba = {}\n    for x, y in zip(a, b):\n        if x in map_ab and map_ab[x] != y:\n            return False\n        if y in map_ba and map_ba[y] != x:\n            return False\n        map_ab[x] = y\n        map_ba[y] = x\n    return True",
+  "testCases": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          1
+        ],
+        "b": [
+          9,
+          8,
+          9
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Simple bijection exists"
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          2
+        ],
+        "b": [
+          1,
+          1
+        ]
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Not injective"
+    },
+    {
+      "input": {
+        "a": [
+          3,
+          3,
+          2
+        ],
+        "b": [
+          4,
+          5,
+          4
+        ]
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Reverse direction fails"
+    },
+    {
+      "input": {
+        "a": [
+          0
+        ],
+        "b": [
+          7
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Trivial one-element mapping"
+    }
+  ],
+  "tags": [
+    "array",
+    "hash-table"
+  ],
+  "hints": [
+    "You need a one-to-one mapping both ways",
+    "Track assignments while scanning in O(n)",
+    "Reject as soon as a conflict appears"
+  ],
+  "relatedProblems": [
+    "group-words-by-anagram",
+    "frequency-sort-array"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 68,
+    "frequency": "medium",
+    "importance": 6
+  },
+  "starterCode": "def arrays_isomorphic(a: List[int], b: List[int]) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def arrays_isomorphic(a: List[int], b: List[int]) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] a, number[] b}\n * @return {boolean}\n */\nfunction arrays_isomorphic(a, b) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean arrays_isomorphic(int[] a, int[] b) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool arrays_isomorphic(int* a, int* b) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool arrays_isomorphic(vector<int>& a, vector<int>& b) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

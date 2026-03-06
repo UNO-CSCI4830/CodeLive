@@ -1,0 +1,105 @@
+{
+  "id": "assign-cookies-to-children",
+  "title": "Maximize Content Children with Cookies",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given Each child i has a greed factor g[i], and each cookie j has size s[j]. If s[j] ≥ g[i], the child becomes content and you cannot reuse the cookie. Return the maximum number of content children.\n\n    \n\nConstraints:\n    - 0 ≤ n,m ≤ 3·10^4\n- 1 ≤ g[i], s[j] ≤ 2·10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/assign-cookies/",
+  "complexity": {
+    "time": "O(n log n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nGreedy: sort both arrays. Use the smallest cookie that satisfies the least greedy child to keep larger cookies for larger greed values. Two-pointer sweep gives the maximum matches.\n\nApproach\n1. Initial Setup: Sort g and s ascending\n2. Main Algorithm: Use i over children and j over cookies; if s[j]≥g[i], match and advance both, else advance j\n3. Return Result: Return matches\n\nComplexity Analysis\n- Time Complexity: O(n log n + m log m)\n- Space Complexity: O(1) aside from sort\n\nKey Insights\n- Smallest-fit preserves larger resources\n- Two-pointer is linear after sorting\n\nCommon Pitfalls\n- Matching a large cookie to a small greed can hurt later\n- Forgetting to sort loses optimality",
+  "solutionCode": "def find_content_children(g, s):\n    g.sort()\n    s.sort()\n    i = j = 0\n    res = 0\n    while i < len(g) and j < len(s):\n        if s[j] >= g[i]:\n            res += 1\n            i += 1\n            j += 1\n        else:\n            j += 1\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "g": [
+          1,
+          2,
+          3
+        ],
+        "s": [
+          1,
+          1
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Only one child satisfied"
+    },
+    {
+      "input": {
+        "g": [
+          1,
+          2
+        ],
+        "s": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Both children matched"
+    },
+    {
+      "input": {
+        "g": [],
+        "s": [
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "No children"
+    },
+    {
+      "input": {
+        "g": [
+          2,
+          3
+        ],
+        "s": [
+          1,
+          1,
+          1
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Cookies too small"
+    }
+  ],
+  "tags": [
+    "greedy",
+    "two-pointers",
+    "sorting"
+  ],
+  "hints": [
+    "Sort both lists",
+    "Use smallest cookie that works",
+    "Advance pointers appropriately"
+  ],
+  "relatedProblems": [
+    "lemonade-change-cashier",
+    "reconstruct-line-by-height"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 72,
+    "frequency": "high",
+    "importance": 6
+  },
+  "starterCode": "def find_content_children(g: List[int], s: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def find_content_children(g: List[int], s: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] g, number[] s}\n * @return {number}\n */\nfunction find_content_children(g, s) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int find_content_children(int[] g, int[] s) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint find_content_children(int* g, int* s) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int find_content_children(vector<int>& g, vector<int>& s) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

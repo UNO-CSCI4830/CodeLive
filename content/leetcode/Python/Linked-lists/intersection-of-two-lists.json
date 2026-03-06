@@ -1,0 +1,114 @@
+{
+  "id": "intersection-of-two-lists",
+  "title": "Intersection of Two Lists",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given heads of two singly linked lists, return the node where the two lists intersect, or None if they do not intersect. Intersection is by reference, not value.\n\n    \n\nConstraints:\n    - 0 ≤ n,m ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/intersection-of-two-linked-lists/",
+  "complexity": {
+    "time": "O(n+m)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nTraverse A then B with one pointer, and B then A with the other. If the lists intersect, the pointers will meet at the intersection node after equalizing path lengths without extra memory.\n\nApproach\n1. Initial Setup: Initialize p=headA, q=headB.\n2. Main Algorithm: Advance each; when a pointer reaches None, redirect it to the head of the other list.\n3. Return Result: Stop when p is q and return that node (possibly None).\n\nComplexity Analysis\n- Time Complexity: O(n+m) due to a single pass or divide-and-conquer\n  over the list where each node is visited a bounded number of times.\n- Space Complexity: O(1) accounting for pointers and, when needed,\n  recursion depth or extra structures.\n\nKey Insights\n- Switching heads synchronizes remaining distances\n- Works without computing lengths\n\nCommon Pitfalls\n- Comparing by value instead of reference is incorrect\n- Forgetting to allow None equality at the end",
+  "solutionCode": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\ndef intersection_node(headA, headB):\n    if not headA or not headB:\n        return None\n    p, q = headA, headB\n    while p is not q:\n        p = p.next if p else headB\n        q = q.next if q else headA\n    return p",
+  "testCases": [
+    {
+      "input": {
+        "A": [
+          4,
+          1,
+          8,
+          4,
+          5
+        ],
+        "B": [
+          5,
+          6,
+          1,
+          8,
+          4,
+          5
+        ],
+        "intersectVal": 8
+      },
+      "expected": {
+        "result": 8
+      },
+      "explanation": "First common node value 8"
+    },
+    {
+      "input": {
+        "A": [
+          1,
+          9,
+          1,
+          2,
+          4
+        ],
+        "B": [
+          3,
+          2,
+          4
+        ],
+        "intersectVal": 2
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Intersection at value 2"
+    },
+    {
+      "input": {
+        "A": [
+          2,
+          6,
+          4
+        ],
+        "B": [
+          1,
+          5
+        ],
+        "intersectVal": null
+      },
+      "expected": {
+        "result": null
+      },
+      "explanation": "No intersection"
+    },
+    {
+      "input": {
+        "A": [],
+        "B": [],
+        "intersectVal": null
+      },
+      "expected": {
+        "result": null
+      },
+      "explanation": "Both empty"
+    }
+  ],
+  "tags": [
+    "linked-list",
+    "two-pointers"
+  ],
+  "hints": [
+    "Traverse both lists, switching heads at the end",
+    "Meet at intersection or at None",
+    "Compare by identity, not value"
+  ],
+  "relatedProblems": [
+    "rotate-linked-list",
+    "remove-nth-from-end"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 63,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def __init__(self: any, val: any, next: any) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, next: any) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any next}\n * @return {number}\n */\nfunction __init__(self, val, next) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int __init__(any self, any val, any next) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint __init__(any self, any val, any next) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int __init__(any& self, any& val, any& next) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

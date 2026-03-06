@@ -1,0 +1,100 @@
+{
+  "id": "nearby-duplicate-within-k",
+  "title": "Nearby Duplicate Within K",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Determine whether the array contains two equal values whose indices differ by at most k. Use a sliding hash window of size up to k to track the last k elements efficiently.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9\n- 0 ≤ k ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/contains-duplicate-ii/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(k)"
+  },
+  "explanation": "Intuition\nA set representing the last k elements seen allows O(1) checks for membership. As we extend the window by one element, we add the new value and remove the element that falls out of range, keeping the set size at most k.\n\nApproach\n1. Initial Setup: Maintain a set window and a left pointer.\n2. Main Algorithm: For each right index, check if nums[right] is in the set; if yes return True. Insert it, then if window size exceeds k, remove nums[left] and advance left.\n3. Return Result: Return False if no duplication within k is found.\n\nComplexity Analysis\n- Time Complexity: O(n) because the algorithm scans elements a constant\n  number of times and performs O(1) work for each update or lookup.\n- Space Complexity: O(k) due to the auxiliary structures required to\n  store counts, prefix sums, or membership sets while ensuring fast access.\n\nKey Insights\n- Sliding windows bound memory while scanning once\n- Sets provide O(1) containment checks\n\nCommon Pitfalls\n- Forgetting to remove the left element breaks the size guarantee\n- Using a list incurs O(k) checks per step",
+  "solutionCode": "def contains_nearby_duplicate(nums, k):\n    window = set()\n    left = 0\n    for right, val in enumerate(nums):\n        if val in window:\n            return True\n        window.add(val)\n        if right - left >= k:\n            window.remove(nums[left])\n            left += 1\n    return False",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          1
+        ],
+        "k": 3
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Match at distance 3"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          0,
+          1,
+          1
+        ],
+        "k": 1
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Adjacent duplicates"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          1,
+          2,
+          3
+        ],
+        "k": 2
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Repetitions are too far apart"
+    },
+    {
+      "input": {
+        "nums": [
+          99
+        ],
+        "k": 10
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Single element cannot duplicate"
+    }
+  ],
+  "tags": [
+    "array",
+    "hash-table",
+    "sliding-window"
+  ],
+  "hints": [
+    "Use a fixed-size memory window",
+    "Check membership before inserting the new value",
+    "Remove the outgoing element as the window grows"
+  ],
+  "relatedProblems": [
+    "top-k-frequent-elements",
+    "frequency-sort-array"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 63.1,
+    "frequency": "medium",
+    "importance": 6
+  },
+  "starterCode": "def contains_nearby_duplicate(nums: List[int], k: int) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def contains_nearby_duplicate(nums: List[int], k: int) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number k}\n * @return {boolean}\n */\nfunction contains_nearby_duplicate(nums, k) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean contains_nearby_duplicate(int[] nums, int k) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool contains_nearby_duplicate(int* nums, int k) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool contains_nearby_duplicate(vector<int>& nums, int& k) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

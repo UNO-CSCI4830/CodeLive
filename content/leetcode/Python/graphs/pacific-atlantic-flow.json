@@ -1,0 +1,131 @@
+{
+  "id": "pacific-atlantic-flow",
+  "title": "Cells Flowing to Both Oceans",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an m×n matrix of heights, water can flow from cell (r,c) to a neighbor if the neighbor's height is less than or equal to the current cell's height. The top and left edges touch the Pacific ocean; bottom and right edges touch the Atlantic. Return coordinates that can flow to both oceans.\n\nConstraints:\n- 1 ≤ m, n ≤ 200",
+  "leetcodeUrl": "https://leetcode.com/problems/pacific-atlantic-water-flow/",
+  "complexity": {
+    "time": "O(mn)",
+    "space": "O(mn)"
+  },
+  "explanation": "Intuition\nReverse the flow: start BFS/DFS from the oceans and move to neighbors that are higher or equal. Intersect the reachable sets.\n\nApproach\n1. Initial Setup: Run DFS/BFS from all Pacific-edge cells with non-decreasing moves\n2. Main Algorithm: Do same for Atlantic\n3. Return Result: Return intersection of visited cells\n\nComplexity Analysis\n- Time Complexity: O(mn)\n- Space Complexity: O(mn)\n\nKey Insights\n- Reverse graph makes edges monotone\n- Use two visited grids\n\nCommon Pitfalls\n- Flowing from each cell separately is too slow\n- Forgetting to allow equal heights breaks plateaus",
+  "solutionCode": "def pacific_atlantic(heights):\n    if not heights: \n        return []\n    m, n = len(heights), len(heights[0])\n    pa = [[False]*n for _ in range(m)]\n    at = [[False]*n for _ in range(m)]\n    def dfs(r, c, seen):\n        if seen[r][c]:\n            return\n        seen[r][c] = True\n        for dr, dc in [(1,0),(-1,0),(0,1),(0,-1)]:\n            i, j = r + dr, c + dc\n            if 0 <= i < m and 0 <= j < n and heights[i][j] >= heights[r][c]:\n                dfs(i, j, seen)\n    for i in range(m):\n        dfs(i, 0, pa)\n        dfs(i, n-1, at)\n    for j in range(n):\n        dfs(0, j, pa)\n        dfs(m-1, j, at)\n    ans = []\n    for i in range(m):\n        for j in range(n):\n            if pa[i][j] and at[i][j]:\n                ans.append([i, j])\n    return ans",
+  "testCases": [
+    {
+      "input": {
+        "heights": [
+          [
+            1,
+            2,
+            2,
+            3,
+            5
+          ],
+          [
+            3,
+            2,
+            3,
+            4,
+            4
+          ],
+          [
+            2,
+            4,
+            5,
+            3,
+            1
+          ],
+          [
+            6,
+            7,
+            1,
+            4,
+            5
+          ],
+          [
+            5,
+            1,
+            1,
+            2,
+            4
+          ]
+        ]
+      },
+      "expected": {
+        "result": "includes [0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]"
+      },
+      "explanation": "Standard sample"
+    },
+    {
+      "input": {
+        "heights": [
+          [
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "explanation": "Single cell touches both"
+    },
+    {
+      "input": {
+        "heights": [
+          [
+            2,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "expected": {
+        "result": "includes [0,0],[1,1]"
+      },
+      "explanation": "Corners reach both"
+    },
+    {
+      "input": {
+        "heights": []
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Empty matrix"
+    }
+  ],
+  "tags": [
+    "graph",
+    "dfs",
+    "matrix"
+  ],
+  "hints": [
+    "Reverse flow from oceans",
+    "Use two visited arrays",
+    "Equal heights allowed"
+  ],
+  "relatedProblems": [
+    "shortest-path-binary-matrix",
+    "rotting-oranges"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 57,
+    "frequency": "medium",
+    "importance": 8
+  },
+  "starterCode": "def pacific_atlantic(heights: List[List[int]]) -> str:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def pacific_atlantic(heights: List[List[int]]) -> str:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] heights}\n * @return {any}\n */\nfunction pacific_atlantic(heights) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public str pacific_atlantic(int[][] heights) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nstr pacific_atlantic(int[][] heights) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    str pacific_atlantic(vector<vector<int>>& heights) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

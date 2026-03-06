@@ -1,0 +1,107 @@
+{
+  "id": "detect-cycle-directed",
+  "title": "Detect a Cycle in a Directed Graph",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a directed graph with V nodes (0..V-1) and edges, determine whether it contains a directed cycle.\n\n    \n\nConstraints:\n    - 1 ≤ V ≤ 10^5\n- 0 ≤ E ≤ 2·10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/course-schedule/",
+  "complexity": {
+    "time": "O(V+E)",
+    "space": "O(V)"
+  },
+  "explanation": "Intuition\nUse DFS with three-color marking: 0=unvisited, 1=visiting, 2=done. Encountering an edge to a visiting node implies a cycle.\n\nApproach\n1. Initial Setup: Build adjacency list\n2. Main Algorithm: DFS each node if unvisited; on entry mark visiting, on exit mark done\n3. Return Result: If a visiting neighbor is found, cycle\n\nComplexity Analysis\n- Time Complexity: O(V+E)\n- Space Complexity: O(V) recursion/stack\n\nKey Insights\n- Three-color method is standard for directed cycles\n- Kahn's algorithm returns cycle if nodes left over\n\nCommon Pitfalls\n- Forgetting to mark done leads to false positives\n- Don't confuse undirected back-edges with directed cycles",
+  "solutionCode": "def has_cycle_directed(n, edges):\n    g = [[] for _ in range(n)]\n    for u, v in edges:\n        g[u].append(v)\n    state = [0] * n\n    def dfs(u):\n        state[u] = 1\n        for v in g[u]:\n            if state[v] == 1:\n                return True\n            if state[v] == 0 and dfs(v):\n                return True\n        state[u] = 2\n        return False\n    for i in range(n):\n        if state[i] == 0 and dfs(i):\n            return True\n    return False",
+  "testCases": [
+    {
+      "input": {
+        "n": 3,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Cycle exists"
+    },
+    {
+      "input": {
+        "n": 3,
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "When has_cycle_directed(n=3, edges=[[0,1],[1,2]]), the expected result is false"
+    },
+    {
+      "input": {
+        "n": 1,
+        "edges": []
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "When has_cycle_directed(n=1, edges=[]), the expected result is false"
+    },
+    {
+      "input": {
+        "n": 2,
+        "edges": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "When has_cycle_directed(n=2, edges=[[0,0]]), the expected result is true"
+    }
+  ],
+  "tags": [
+    "graph",
+    "dfs"
+  ],
+  "hints": [
+    "Track states per node",
+    "Edge to a visiting node implies a cycle",
+    "Also solvable by Kahn's algorithm"
+  ],
+  "relatedProblems": [
+    "course-plan-feasible",
+    "course-ordering"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 67,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def has_cycle_directed(n: int, edges: List[List[int]]) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def has_cycle_directed(n: int, edges: List[List[int]]) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number n, number[] edges}\n * @return {boolean}\n */\nfunction has_cycle_directed(n, edges) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean has_cycle_directed(int n, int[][] edges) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool has_cycle_directed(int n, int[][] edges) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool has_cycle_directed(int& n, vector<vector<int>>& edges) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

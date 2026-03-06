@@ -1,0 +1,112 @@
+{
+  "id": "gas-station-tour",
+  "title": "Complete a Circuit on Gas Stations",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given There are n gas stations arranged in a circle. You have gas[i] units of gas at station i, and cost[i] to travel from i to i+1. Find the starting station index from which you can complete the circuit once in the clockwise direction. Return -1 if impossible. If a solution exists, it is unique.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 10^5\n- 0 ≤ gas[i], cost[i] ≤ 10^4",
+  "leetcodeUrl": "https://leetcode.com/problems/gas-station/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nIf total gas < total cost there is no solution. Otherwise the unique start is found by a single pass: maintain a tank, and whenever tank drops negative at i, the next index must be the new candidate start.\n\nApproach\n1. Initial Setup: Check total sum feasibility\n2. Main Algorithm: Traverse stations, accumulate tank+=gas[i]-cost[i]; if tank<0, reset start=i+1 and tank=0\n3. Return Result: Return start\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(1)\n\nKey Insights\n- Greedy reset works because any start within a failed segment fails\n- Uniqueness follows from total surplus property\n\nCommon Pitfalls\n- Forgetting feasibility check leads to wrong answers\n- Reset start only when tank goes negative",
+  "solutionCode": "def can_complete_circuit(gas, cost):\n    if sum(gas) < sum(cost):\n        return -1\n    start = 0\n    tank = 0\n    for i, (g, c) in enumerate(zip(gas, cost)):\n        tank += g - c\n        if tank < 0:\n            start = i + 1\n            tank = 0\n    return start",
+  "testCases": [
+    {
+      "input": {
+        "gas": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "cost": [
+          3,
+          4,
+          5,
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Start at 3 with surplus"
+    },
+    {
+      "input": {
+        "gas": [
+          2,
+          3,
+          4
+        ],
+        "cost": [
+          3,
+          4,
+          3
+        ]
+      },
+      "expected": {
+        "result": -1
+      },
+      "explanation": "Total deficit"
+    },
+    {
+      "input": {
+        "gas": [
+          5
+        ],
+        "cost": [
+          4
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Single station feasible"
+    },
+    {
+      "input": {
+        "gas": [
+          3,
+          3,
+          4
+        ],
+        "cost": [
+          3,
+          4,
+          4
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Only start 2 works"
+    }
+  ],
+  "tags": [
+    "greedy",
+    "array"
+  ],
+  "hints": [
+    "Compare total gas and total cost first",
+    "Reset start when tank goes negative",
+    "Single pass suffices"
+  ],
+  "relatedProblems": [
+    "min-jumps-to-end",
+    "assign-cookies-to-children"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 45,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def can_complete_circuit(gas: List[int], cost: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def can_complete_circuit(gas: List[int], cost: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] gas, number[] cost}\n * @return {number}\n */\nfunction can_complete_circuit(gas, cost) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int can_complete_circuit(int[] gas, int[] cost) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint can_complete_circuit(int* gas, int* cost) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int can_complete_circuit(vector<int>& gas, vector<int>& cost) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

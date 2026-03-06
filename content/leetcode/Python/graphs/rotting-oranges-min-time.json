@@ -1,0 +1,110 @@
+{
+  "id": "rotting-oranges-min-time",
+  "title": "Minimum Time to Rot All Oranges",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given In a grid, 0 is empty, 1 is fresh orange, 2 is rotten. Every minute, a rotten orange rots adjacent fresh ones. Return the minimum minutes to rot all oranges, or -1 if impossible.\n\nConstraints:\n- 1 ≤ m, n ≤ 200",
+  "leetcodeUrl": "https://leetcode.com/problems/rotting-oranges/",
+  "complexity": {
+    "time": "O(mn)",
+    "space": "O(mn)"
+  },
+  "explanation": "Intuition\nMulti-source BFS seeded with all rotten oranges at time 0. Track the last time a cell becomes rotten. If any fresh remains, return -1.\n\nApproach\n1. Initial Setup: Enqueue all 2's and count 1's\n2. Main Algorithm: BFS level by level rotting neighbors; decrement fresh count\n3. Return Result: Return minutes if fresh hits 0 else -1\n\nComplexity Analysis\n- Time Complexity: O(mn)\n- Space Complexity: O(mn)\n\nKey Insights\n- Multi-source BFS is a common pattern\n- Track minutes by level size or time stamps\n\nCommon Pitfalls\n- Forgetting to handle no fresh case returns wrong time\n- Allowing diagonals would be incorrect",
+  "solutionCode": "from collections import deque\ndef oranges_rotting(grid):\n    m, n = len(grid), len(grid[0])\n    q = deque()\n    fresh = 0\n    for i in range(m):\n        for j in range(n):\n            if grid[i][j] == 2:\n                q.append((i, j))\n            elif grid[i][j] == 1:\n                fresh += 1\n    minutes = 0\n    while q and fresh > 0:\n        for _ in range(len(q)):\n            x, y = q.popleft()\n            for dx, dy in [(1,0),(-1,0),(0,1),(0,-1)]:\n                i, j = x + dx, y + dy\n                if 0 <= i < m and 0 <= j < n and grid[i][j] == 1:\n                    grid[i][j] = 2\n                    fresh -= 1\n                    q.append((i, j))\n        minutes += 1\n    return minutes if fresh == 0 else -1",
+  "testCases": [
+    {
+      "input": {
+        "grid": [
+          [
+            2,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Layered spread"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "No oranges"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": -1
+      },
+      "explanation": "Fresh cannot rot"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            2
+          ]
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "All rotten already"
+    }
+  ],
+  "tags": [
+    "graph",
+    "bfs",
+    "matrix"
+  ],
+  "hints": [
+    "Seed BFS with all rotten",
+    "Count fresh to detect impossibility",
+    "Increment minutes after each layer"
+  ],
+  "relatedProblems": [
+    "shortest-path-binary-matrix",
+    "count-islands-in-grid"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 50,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def oranges_rotting(grid: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def oranges_rotting(grid: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] grid}\n * @return {number}\n */\nfunction oranges_rotting(grid) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int oranges_rotting(int[][] grid) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint oranges_rotting(int[][] grid) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int oranges_rotting(vector<vector<int>>& grid) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

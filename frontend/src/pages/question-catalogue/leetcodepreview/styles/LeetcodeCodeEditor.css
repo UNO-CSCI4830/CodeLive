@@ -1,0 +1,8 @@
+/* ── LeetCode code editor wrapper — Bold Typography theme ── */
+.lce-wrapper {
+  flex: 1;
+  overflow: hidden;
+  background: var(--muted);
+  min-height: 0;
+  height: 100%;
+}

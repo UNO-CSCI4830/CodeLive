@@ -1,0 +1,49 @@
+{
+  "id": "hook-use-media-query",
+  "title": "useMediaQuery Hook",
+  "category": "frontend",
+  "difficulty": "medium",
+  "description": "Implement a **useMediaQuery** custom hook that listens to a CSS media query and returns whether it currently matches.\n\n### Requirements\n\n- `useMediaQuery(query: string)` returns a **boolean** indicating whether the media query matches\n- Subscribe to changes via `window.matchMedia(query).addEventListener('change', ...)`\n- Unsubscribe on unmount or when `query` changes\n- Return the **initial** match synchronously on first render (no flash of wrong value)\n- Handle SSR-like scenarios: if `window.matchMedia` is unavailable, return `false`\n\n### Usage Example\n\n```tsx\nconst isMobile = useMediaQuery('(max-width: 768px)');\nconst prefersDark = useMediaQuery('(prefers-color-scheme: dark)');\n```\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Match result display | `result` |",
+  "constraints": "- Implement in useMediaQuery.ts as a standalone hook\n- Use only React built-in hooks (useState, useEffect)\n- Must clean up the event listener when query changes or component unmounts\n- Must handle environments where window.matchMedia does not exist",
+  "hints": [
+    "Call window.matchMedia(query) and read its .matches property for the initial value.",
+    "Use the 'change' event (not the deprecated addListener/removeListener) to listen for updates.",
+    "Wrap the matchMedia call in a try-catch or check for its existence for SSR safety."
+  ],
+  "tags": ["react", "hooks", "custom-hooks", "media-query", "responsive"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { useMediaQuery } from './useMediaQuery';\nimport './styles.css';\n\nexport default function App() {\n  const isMobile = useMediaQuery('(max-width: 768px)');\n  const isTablet = useMediaQuery('(min-width: 769px) and (max-width: 1024px)');\n  const isDesktop = useMediaQuery('(min-width: 1025px)');\n  const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');\n\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>\n      <h1 style={{ marginBottom: '1rem' }}>useMediaQuery</h1>\n      <ul className=\"mq-list\">\n        <li>Mobile (≤768px): <strong data-testid=\"result\">{isMobile ? 'Yes' : 'No'}</strong></li>\n        <li>Tablet (769–1024px): <strong>{isTablet ? 'Yes' : 'No'}</strong></li>\n        <li>Desktop (≥1025px): <strong>{isDesktop ? 'Yes' : 'No'}</strong></li>\n        <li>Prefers dark: <strong>{prefersDark ? 'Yes' : 'No'}</strong></li>\n      </ul>\n      <p className=\"mq-hint\">Resize your browser to see values change.</p>\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "useMediaQuery.ts",
+      "content": "import { useState, useEffect } from 'react';\n\n/**\n * Custom hook that listens to a CSS media query.\n *\n * @param query - A valid CSS media query string, e.g. '(max-width: 768px)'\n * @returns true if the query currently matches, false otherwise\n */\nexport function useMediaQuery(query: string): boolean {\n  // TODO: Get the initial match from window.matchMedia\n  // TODO: Listen for changes and update state\n  // TODO: Clean up the listener on unmount or query change\n\n  return false; // placeholder\n}\n",
+      "language": "ts",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": ".mq-list {\n  list-style: none;\n  padding: 0;\n  margin: 0 0 1rem;\n}\n\n.mq-list li {\n  padding: 0.5rem 0;\n  border-bottom: 1px solid #f3f4f6;\n  font-size: 0.9375rem;\n  color: #374151;\n}\n\n.mq-list strong {\n  color: #3b82f6;\n}\n\n.mq-hint {\n  font-size: 0.8125rem;\n  color: #9ca3af;\n  font-style: italic;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, act } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport React from 'react';\nimport { useMediaQuery } from './useMediaQuery';\n\nfunction Harness({ query }: { query: string }) {\n  const matches = useMediaQuery(query);\n  return <span data-testid=\"result\">{matches ? 'yes' : 'no'}</span>;\n}\n\ndescribe('useMediaQuery', () => {\n  let listeners: Array<(e: { matches: boolean }) => void>;\n  let mockMql: any;\n\n  beforeEach(() => {\n    listeners = [];\n    mockMql = {\n      matches: false,\n      addEventListener: jest.fn((event: string, cb: any) => { listeners.push(cb); }),\n      removeEventListener: jest.fn((event: string, cb: any) => {\n        listeners = listeners.filter(l => l !== cb);\n      }),\n    };\n    window.matchMedia = jest.fn().mockReturnValue(mockMql);\n  });\n\n  it('returns false when query does not match', () => {\n    mockMql.matches = false;\n    render(<Harness query=\"(max-width: 768px)\" />);\n    expect(screen.getByTestId('result')).toHaveTextContent('no');\n  });\n\n  it('returns true when query matches', () => {\n    mockMql.matches = true;\n    render(<Harness query=\"(max-width: 768px)\" />);\n    expect(screen.getByTestId('result')).toHaveTextContent('yes');\n  });\n\n  it('updates when media query changes', () => {\n    mockMql.matches = false;\n    render(<Harness query=\"(max-width: 768px)\" />);\n    expect(screen.getByTestId('result')).toHaveTextContent('no');\n    act(() => {\n      listeners.forEach(cb => cb({ matches: true }));\n    });\n    expect(screen.getByTestId('result')).toHaveTextContent('yes');\n  });\n\n  it('cleans up listener on unmount', () => {\n    const { unmount } = render(<Harness query=\"(max-width: 768px)\" />);\n    expect(mockMql.addEventListener).toHaveBeenCalled();\n    unmount();\n    expect(mockMql.removeEventListener).toHaveBeenCalled();\n  });\n\n  it('re-subscribes when query changes', () => {\n    const { rerender } = render(<Harness query=\"(max-width: 768px)\" />);\n    const firstCallCount = (mockMql.addEventListener as jest.Mock).mock.calls.length;\n    rerender(<Harness query=\"(max-width: 1024px)\" />);\n    expect((mockMql.addEventListener as jest.Mock).mock.calls.length).toBeGreaterThan(firstCallCount);\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "useMediaQuery.ts",
+      "content": "import { useState, useEffect } from 'react';\n\nexport function useMediaQuery(query: string): boolean {\n  const [matches, setMatches] = useState<boolean>(() => {\n    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {\n      return false;\n    }\n    return window.matchMedia(query).matches;\n  });\n\n  useEffect(() => {\n    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {\n      return;\n    }\n\n    const mql = window.matchMedia(query);\n    setMatches(mql.matches);\n\n    const handler = (e: MediaQueryListEvent | { matches: boolean }) => {\n      setMatches(e.matches);\n    };\n\n    mql.addEventListener('change', handler as any);\n    return () => {\n      mql.removeEventListener('change', handler as any);\n    };\n  }, [query]);\n\n  return matches;\n}\n",
+      "language": "ts"
+    }
+  ],
+  "sort_order": 212
+}

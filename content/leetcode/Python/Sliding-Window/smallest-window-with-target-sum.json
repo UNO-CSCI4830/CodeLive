@@ -1,0 +1,101 @@
+{
+  "id": "smallest-window-with-target-sum",
+  "title": "Smallest Window With Target Sum",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an array of positive integers nums and a target, return the minimal length of a contiguous subarray of which the sum is greater than or equal to target. If there is none, return 0.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- 1 ≤ nums[i] ≤ 10^5\n- 1 ≤ target ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/minimum-size-subarray-sum/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nWith positive numbers, expanding the right pointer only increases the sum. Once the sum reaches the target, we can shrink from the left to try to minimize the window while keeping it valid.\n\nApproach\n1. Initial Setup: Grow the window by adding nums[right].\n2. Main Algorithm: While the window sum meets or exceeds target, update the best length and move left forward to shrink.\n3. Return Result: Return 0 if no window meets the target.\n\nComplexity Analysis\n- Time Complexity: O(n) because the window grows and shrinks in a\n  single pass without revisiting elements more than a constant number of\n  times.\n- Space Complexity: O(1) to maintain counts, sets, or running\n  aggregates needed to validate the window.\n\nKey Insights\n- Monotonicity of the sum enables a simple two phase loop\n- Always shrink as much as possible before expanding again\n\nCommon Pitfalls\n- This pattern requires nonnegative numbers\n- Forgetting to update best before shrinking loses solutions",
+  "solutionCode": "def smallest_window_with_target_sum(nums, target):\n    left = 0\n    cur = 0\n    ans = float('inf')\n    for right, x in enumerate(nums):\n        cur += x\n        while cur >= target:\n            ans = min(ans, right - left + 1)\n            cur -= nums[left]\n            left += 1\n    return 0 if ans == float('inf') else ans",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          2,
+          3,
+          1,
+          2,
+          4,
+          3
+        ],
+        "target": 7
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Window [4,3] works with length 2"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "target": 5
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "No window reaches target"
+    },
+    {
+      "input": {
+        "nums": [
+          5
+        ],
+        "target": 5
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single element meets target"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "target": 11
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Smallest is [3,4,5] length 3"
+    }
+  ],
+  "tags": [
+    "array",
+    "sliding-window",
+    "prefix-sum"
+  ],
+  "hints": [
+    "Use two pointers with a running sum",
+    "Shrink from the left while still valid",
+    "Track the minimum window length"
+  ],
+  "relatedProblems": [
+    "max-sum-window-of-size-k",
+    "longest-ones-after-flips"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 46,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def smallest_window_with_target_sum(nums: List[int], target: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def smallest_window_with_target_sum(nums: List[int], target: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number target}\n * @return {number}\n */\nfunction smallest_window_with_target_sum(nums, target) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int smallest_window_with_target_sum(int[] nums, int target) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint smallest_window_with_target_sum(int* nums, int target) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int smallest_window_with_target_sum(vector<int>& nums, int& target) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

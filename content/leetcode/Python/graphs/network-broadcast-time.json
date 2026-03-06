@@ -1,0 +1,113 @@
+{
+  "id": "network-broadcast-time",
+  "title": "Network Broadcast Time from a Source",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "You are given directed edges times[u,v,w] indicating a signal from u to v takes w time. There are n nodes labeled 1..n. Starting at node k, return the time it takes for all nodes to receive the signal. If some node is unreachable, return -1. Use Dijkstra with a min-heap.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 10^5\n- 0 ≤ |times| ≤ 2·10^5\n- 1 ≤ w ≤ 10^6",
+  "leetcodeUrl": "https://leetcode.com/problems/network-delay-time/",
+  "complexity": {
+    "time": "O((V+E) log V)",
+    "space": "O(V+E)"
+  },
+  "explanation": "Intuition\nWe need the shortest travel time from k to every node. Nonnegative weights imply Dijkstra. The answer is the maximum of the shortest distances if all nodes are reached.\n\nApproach\n1. Initial Setup: Build adjacency list of (neighbor, weight)\n2. Main Algorithm: Run Dijkstra from k to get min distances; track visited to avoid reprocessing\n3. Return Result: Return max distance or -1 if any node remains at infinity\n\nComplexity Analysis\n- Time Complexity: O((V+E) log V)\n- Space Complexity: O(V+E)\n\nKey Insights\n- A node's distance is finalized when popped from the heap\n- Use 1-based labels carefully in arrays\n\nCommon Pitfalls\n- Pushing stale entries without visited checks slows code\n- Returning sum of distances is incorrect; we need the max",
+  "solutionCode": "import heapq\nfrom collections import defaultdict\ndef network_broadcast_time(times, n, k):\n    g = defaultdict(list)\n    for u, v, w in times:\n        g[u].append((v, w))\n    INF = 10**18\n    dist = [INF] * (n + 1)\n    dist[k] = 0\n    pq = [(0, k)]\n    seen = [False] * (n + 1)\n    while pq:\n        d, u = heapq.heappop(pq)\n        if seen[u]:\n            continue\n        seen[u] = True\n        for v, w in g[u]:\n            nd = d + w\n            if nd < dist[v]:\n                dist[v] = nd\n                heapq.heappush(pq, (nd, v))\n    ans = max(dist[1:])\n    return -1 if ans >= INF else ans",
+  "testCases": [
+    {
+      "input": {
+        "times": [
+          [
+            2,
+            1,
+            1
+          ],
+          [
+            2,
+            3,
+            1
+          ],
+          [
+            3,
+            4,
+            1
+          ]
+        ],
+        "n": 4,
+        "k": 2
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "2→3→4 takes 2"
+    },
+    {
+      "input": {
+        "times": [
+          [
+            1,
+            2,
+            1
+          ]
+        ],
+        "n": 2,
+        "k": 1
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Direct edge"
+    },
+    {
+      "input": {
+        "times": [],
+        "n": 1,
+        "k": 1
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Only source node"
+    },
+    {
+      "input": {
+        "times": [
+          [
+            1,
+            2,
+            1
+          ]
+        ],
+        "n": 3,
+        "k": 1
+      },
+      "expected": {
+        "result": -1
+      },
+      "explanation": "Node 3 unreachable"
+    }
+  ],
+  "tags": [
+    "graph",
+    "dijkstra",
+    "heap"
+  ],
+  "hints": [
+    "Nonnegative weights favor Dijkstra",
+    "Max of distances is the broadcast time",
+    "Use a large INF initializer"
+  ],
+  "relatedProblems": [
+    "cheapest-flights-with-k-stops",
+    "path-with-minimum-effort"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 52,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def network_broadcast_time(times: List[List[int]], n: int, k: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def network_broadcast_time(times: List[List[int]], n: int, k: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] times, number n, number k}\n * @return {number}\n */\nfunction network_broadcast_time(times, n, k) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int network_broadcast_time(int[][] times, int n, int k) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint network_broadcast_time(int[][] times, int n, int k) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int network_broadcast_time(vector<vector<int>>& times, int& n, int& k) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

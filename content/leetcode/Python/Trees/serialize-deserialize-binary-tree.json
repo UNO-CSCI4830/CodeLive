@@ -1,0 +1,91 @@
+{
+  "id": "serialize-deserialize-binary-tree",
+  "title": "Serialize and Deserialize a Binary Tree",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Given Design algorithms to serialize a binary tree to a string and deserialize the string back to the identical tree. Use a clear format that handles nulls.\n\n    \n\nConstraints:\n    - 0 ≤ nodes ≤ 10^5\n- Values are integers",
+  "leetcodeUrl": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(n) output + O(h) recursion"
+  },
+  "explanation": "Intuition\nA preorder traversal with sentinels captures both structure and values. Deserialization consumes tokens in the same order to rebuild nodes.\n\nApproach\n1. Initial Setup: Serialize by preorder appending '#' on None\n2. Main Algorithm: Split string and build recursively\n3. Return Result: Return the rebuilt root\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(n) output + O(h) recursion\n\nKey Insights\n- Traversal with null markers uniquely identifies the tree\n- Using an iterator avoids global indices\n\nCommon Pitfalls\n- Omitting nulls makes decoding ambiguous\n- Forgetting to consume tokens in order breaks reconstruction",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef serialize(root: TreeNode) -> str:\n    vals = []\n    def pre(node):\n        if not node:\n            vals.append('#')\n            return\n        vals.append(str(node.val))\n        pre(node.left)\n        pre(node.right)\n    pre(root)\n    return ' '.join(vals)\ndef deserialize(data: str) -> TreeNode:\n    it = iter(data.split())\n    def build():\n        val = next(it)\n        if val == '#':\n            return None\n        node = TreeNode(int(val))\n        node.left = build()\n        node.right = build()\n        return node\n    return build()",
+  "testCases": [
+    {
+      "input": {
+        "tree": [
+          1,
+          2,
+          3,
+          null,
+          null,
+          4,
+          5
+        ]
+      },
+      "expected": {
+        "result": "round-trip"
+      },
+      "explanation": "Deserialize(Serialize(tree)) equals tree"
+    },
+    {
+      "input": {
+        "tree": []
+      },
+      "expected": {
+        "result": "empty"
+      },
+      "explanation": "Handles empty"
+    },
+    {
+      "input": {
+        "tree": [
+          1
+        ]
+      },
+      "expected": {
+        "result": "single"
+      },
+      "explanation": "Single node preserved"
+    },
+    {
+      "input": {
+        "tree": [
+          1,
+          null,
+          2,
+          null,
+          3
+        ]
+      },
+      "expected": {
+        "result": "chain"
+      },
+      "explanation": "Degenerate tree preserved"
+    }
+  ],
+  "tags": [
+    "tree",
+    "dfs"
+  ],
+  "hints": [
+    "Include markers for nulls",
+    "Use preorder consistently"
+  ],
+  "relatedProblems": [
+    "build-from-preorder-inorder",
+    "right-side-view"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 51,
+    "frequency": "medium",
+    "importance": 9
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> str:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> str:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {string}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public String __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return \"\";\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nchar* __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    string __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return \"\";\n    }\n};"
+}

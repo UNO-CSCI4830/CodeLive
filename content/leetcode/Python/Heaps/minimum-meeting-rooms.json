@@ -1,0 +1,112 @@
+{
+  "id": "minimum-meeting-rooms",
+  "title": "Minimum Meeting Rooms",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an array of meeting intervals where intervals[i] = [start, end], return the minimum number of conference rooms required. Use a min-heap to track the earliest finishing meeting. When the next meeting starts after or at the earliest end, reuse that room by popping; otherwise, add a new room.\n\n    \n\nConstraints:\n    - 0 ≤ len(intervals) ≤ 10^5\n- 0 ≤ start < end ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/meeting-rooms-ii/",
+  "complexity": {
+    "time": "O(n log n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nSorting by start times and greedily reusing the earliest freed room minimizes the number of rooms. The heap always holds current occupied room end times.\n\nApproach\n1. Initial Setup: Sort intervals by start time\n2. Main Algorithm: For each, pop while heap top ≤ start and then push end\n3. Return Result: The heap size is the number of rooms used at that moment\n\nComplexity Analysis\n- Time Complexity: O(n log n)\n- Space Complexity: O(n)\n\nKey Insights\n- Heap size over the sweep is the answer\n- Popping frees rooms that have ended\n\nCommon Pitfalls\n- Forgetting to sort by start time breaks the logic\n- Using < instead of ≤ miscounts back-to-back meetings",
+  "solutionCode": "import heapq\ndef min_meeting_rooms(intervals):\n    if not intervals:\n        return 0\n    intervals.sort(key=lambda x: x[0])\n    heap = []\n    for s, e in intervals:\n        if heap and heap[0] <= s:\n            heapq.heapreplace(heap, e)\n        else:\n            heapq.heappush(heap, e)\n    return len(heap)",
+  "testCases": [
+    {
+      "input": {
+        "intervals": [
+          [
+            0,
+            30
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            15,
+            20
+          ]
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Overlap requires two rooms"
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            7,
+            10
+          ],
+          [
+            2,
+            4
+          ]
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Non-overlapping"
+    },
+    {
+      "input": {
+        "intervals": []
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "No meetings"
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            1,
+            5
+          ],
+          [
+            5,
+            9
+          ],
+          [
+            9,
+            12
+          ]
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Back-to-back reuse allowed"
+    }
+  ],
+  "tags": [
+    "heap",
+    "greedy",
+    "intervals"
+  ],
+  "hints": [
+    "Sort by start time first",
+    "Keep a min-heap of current end times",
+    "Replace top when a room frees up"
+  ],
+  "relatedProblems": [
+    "task-scheduler-with-cooldown",
+    "minimum-platforms"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 56,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def min_meeting_rooms(intervals: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def min_meeting_rooms(intervals: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] intervals}\n * @return {number}\n */\nfunction min_meeting_rooms(intervals) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int min_meeting_rooms(int[][] intervals) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint min_meeting_rooms(int[][] intervals) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int min_meeting_rooms(vector<vector<int>>& intervals) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

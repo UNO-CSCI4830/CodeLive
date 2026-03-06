@@ -1,0 +1,100 @@
+{
+  "id": "closest-triplet-sum",
+  "title": "Closest Triplet Sum",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an array nums and a target, find the sum of three integers that is closest to target. Return the sum itself. There is a unique best answer assumed for simplicity.\n\n    \n\nConstraints:\n    - 3 ≤ len(nums) ≤ 10^4\n- -10^4 ≤ nums[i], target ≤ 10^4",
+  "leetcodeUrl": "https://leetcode.com/problems/3sum-closest/",
+  "complexity": {
+    "time": "O(n^2)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nSorting permits a for loop with a two pointer inner loop. We keep the best sum seen so far by absolute distance to the target.\n\nApproach\n1. Initial Setup: Sort nums.\n2. Main Algorithm: For each i, sweep with l and r adjusting toward the target by comparing the current sum with target.\n3. Return Result: Track the best sum and return it at the end.\n\nComplexity Analysis\n- Time Complexity: O(n^2) because the scan adjusts pointers a limited\n  number of times and avoids nested loops.\n- Space Complexity: O(1) since only a few variables or an output\n  list are used.\n\nKey Insights\n- Two pointers reduce search per fixed i to linear time\n- Absolute difference guides direction and updates\n\nCommon Pitfalls\n- Not updating best when exact match found\n- Forgetting that sum can be negative",
+  "solutionCode": "def closest_triplet_sum(nums, target):\n    nums.sort()\n    best = None\n    n = len(nums)\n    for i in range(n - 2):\n        l, r = i + 1, n - 1\n        while l < r:\n            s = nums[i] + nums[l] + nums[r]\n            if best is None or abs(s - target) < abs(best - target):\n                best = s\n            if s == target:\n                return s\n            if s < target:\n                l += 1\n            else:\n                r -= 1\n    return best",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          -1,
+          2,
+          1,
+          -4
+        ],
+        "target": 1
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Closest sum is 2"
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0,
+          0
+        ],
+        "target": 1
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Only possible sum is 0"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "target": 3
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Exact match exists"
+    },
+    {
+      "input": {
+        "nums": [
+          5,
+          -2,
+          -1,
+          10
+        ],
+        "target": 4
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Pick [-2,-1,7] style combo after sort"
+    }
+  ],
+  "tags": [
+    "array",
+    "two-pointers",
+    "sorting"
+  ],
+  "hints": [
+    "Sort and then fix the first index",
+    "Move the inner pointers based on the current sum",
+    "Keep track of the best absolute difference"
+  ],
+  "relatedProblems": [
+    "neutral-triplet-sum",
+    "pair-with-target-in-sorted"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 43,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def closest_triplet_sum(nums: List[int], target: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def closest_triplet_sum(nums: List[int], target: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number target}\n * @return {number}\n */\nfunction closest_triplet_sum(nums, target) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int closest_triplet_sum(int[] nums, int target) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint closest_triplet_sum(int* nums, int target) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int closest_triplet_sum(vector<int>& nums, int& target) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

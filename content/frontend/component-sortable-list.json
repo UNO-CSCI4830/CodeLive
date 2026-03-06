@@ -1,0 +1,50 @@
+{
+  "id": "component-sortable-list",
+  "title": "Sortable List",
+  "category": "frontend",
+  "difficulty": "medium",
+  "description": "Build a **Sortable List** component where items can be moved up and down using buttons.\n\n### Requirements\n\n- Render an ordered list of items passed via the `items` prop\n- Each item displays its label, a **Move Up** button, and a **Move Down** button\n- Clicking Move Up swaps the item with the one above it\n- Clicking Move Down swaps the item with the one below it\n- The Move Up button on the **first** item must be **disabled**\n- The Move Down button on the **last** item must be **disabled**\n- Support an `onChange` callback that receives the reordered array after every move\n- Items maintain their identity during reordering (use the `id` field as the key)\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| List container | `sortable-list` |\n| Item row at index N | `item-{index}` (0-indexed, position-based) |\n| Move Up for index N | `move-up-{index}` |\n| Move Down for index N | `move-down-{index}` |",
+  "constraints": "- Use React functional components with hooks\n- Do not use any drag-and-drop libraries\n- The list must re-render efficiently after each swap",
+  "hints": [
+    "Store the items array in state so you can reorder it.",
+    "To swap two items, create a copy of the array and use destructuring assignment: [arr[i], arr[j]] = [arr[j], arr[i]].",
+    "Use the position-based index for data-testid, not the item's id.",
+    "Remember to call onChange after updating the state."
+  ],
+  "tags": ["react", "state", "lists", "arrays", "interactive"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { SortableList } from './SortableList';\nimport type { ListItem } from './SortableList';\n\nconst INITIAL_ITEMS: ListItem[] = [\n  { id: '1', label: 'Learn React' },\n  { id: '2', label: 'Build a project' },\n  { id: '3', label: 'Write tests' },\n  { id: '4', label: 'Deploy to production' },\n  { id: '5', label: 'Celebrate' },\n];\n\nexport default function App() {\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>\n      <h1 style={{ marginBottom: '1.5rem' }}>Priority List</h1>\n      <SortableList items={INITIAL_ITEMS} />\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "SortableList.tsx",
+      "content": "import React from 'react';\nimport './styles.css';\n\nexport interface ListItem {\n  id: string;\n  label: string;\n}\n\ninterface SortableListProps {\n  items: ListItem[];\n  onChange?: (items: ListItem[]) => void;\n}\n\nexport const SortableList: React.FC<SortableListProps> = ({\n  items: initialItems,\n  onChange,\n}) => {\n  // TODO: Store items in state\n  // TODO: Implement moveUp and moveDown functions\n\n  return (\n    <ul data-testid=\"sortable-list\" className=\"sl\">\n      {initialItems.map((item, index) => (\n        <li key={item.id} data-testid={`item-${index}`} className=\"sl__item\">\n          <span className=\"sl__rank\">{index + 1}</span>\n          <span className=\"sl__label\">{item.label}</span>\n          <div className=\"sl__actions\">\n            <button\n              data-testid={`move-up-${index}`}\n              className=\"sl__btn\"\n              aria-label={`Move ${item.label} up`}\n            >\n              &#9650;\n            </button>\n            <button\n              data-testid={`move-down-${index}`}\n              className=\"sl__btn\"\n              aria-label={`Move ${item.label} down`}\n            >\n              &#9660;\n            </button>\n          </div>\n        </li>\n      ))}\n    </ul>\n  );\n};\n\nexport default SortableList;\n",
+      "language": "tsx",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": ".sl {\n  list-style: none;\n  padding: 0;\n  margin: 0;\n  max-width: 28rem;\n  border: 1px solid #e5e7eb;\n  border-radius: 0.5rem;\n  overflow: hidden;\n}\n\n.sl__item {\n  display: flex;\n  align-items: center;\n  gap: 0.75rem;\n  padding: 0.75rem 1rem;\n  background: white;\n  transition: background-color 0.15s ease;\n}\n\n.sl__item + .sl__item {\n  border-top: 1px solid #f3f4f6;\n}\n\n.sl__item:hover {\n  background: #f9fafb;\n}\n\n.sl__rank {\n  width: 1.5rem;\n  height: 1.5rem;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  background: #eff6ff;\n  color: #3b82f6;\n  font-size: 0.75rem;\n  font-weight: 700;\n  border-radius: 9999px;\n  flex-shrink: 0;\n}\n\n.sl__label {\n  flex: 1;\n  font-size: 0.875rem;\n  color: #1f2937;\n}\n\n.sl__actions {\n  display: flex;\n  gap: 0.25rem;\n}\n\n.sl__btn {\n  width: 1.75rem;\n  height: 1.75rem;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  border: 1px solid #d1d5db;\n  border-radius: 0.25rem;\n  background: white;\n  cursor: pointer;\n  font-size: 0.625rem;\n  color: #6b7280;\n  transition: all 0.1s ease;\n}\n\n.sl__btn:hover:not(:disabled) {\n  background: #eff6ff;\n  border-color: #93c5fd;\n  color: #2563eb;\n}\n\n.sl__btn:disabled {\n  opacity: 0.3;\n  cursor: not-allowed;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport { SortableList } from './SortableList';\n\nconst ITEMS = [\n  { id: 'a', label: 'Alpha' },\n  { id: 'b', label: 'Bravo' },\n  { id: 'c', label: 'Charlie' },\n];\n\ndescribe('SortableList', () => {\n  it('renders all items in order', () => {\n    render(<SortableList items={ITEMS} />);\n    expect(screen.getByTestId('item-0')).toHaveTextContent('Alpha');\n    expect(screen.getByTestId('item-1')).toHaveTextContent('Bravo');\n    expect(screen.getByTestId('item-2')).toHaveTextContent('Charlie');\n  });\n\n  it('disables Move Up on first item', () => {\n    render(<SortableList items={ITEMS} />);\n    expect(screen.getByTestId('move-up-0')).toBeDisabled();\n  });\n\n  it('disables Move Down on last item', () => {\n    render(<SortableList items={ITEMS} />);\n    expect(screen.getByTestId('move-down-2')).toBeDisabled();\n  });\n\n  it('moves an item up', () => {\n    render(<SortableList items={ITEMS} />);\n    fireEvent.click(screen.getByTestId('move-up-1'));\n    expect(screen.getByTestId('item-0')).toHaveTextContent('Bravo');\n    expect(screen.getByTestId('item-1')).toHaveTextContent('Alpha');\n  });\n\n  it('moves an item down', () => {\n    render(<SortableList items={ITEMS} />);\n    fireEvent.click(screen.getByTestId('move-down-0'));\n    expect(screen.getByTestId('item-0')).toHaveTextContent('Bravo');\n    expect(screen.getByTestId('item-1')).toHaveTextContent('Alpha');\n  });\n\n  it('updates disabled state after a move', () => {\n    render(<SortableList items={ITEMS} />);\n    fireEvent.click(screen.getByTestId('move-up-1'));\n    expect(screen.getByTestId('move-up-0')).toBeDisabled();\n    expect(screen.getByTestId('move-down-2')).toBeDisabled();\n  });\n\n  it('calls onChange with the reordered array', () => {\n    const spy = jest.fn();\n    render(<SortableList items={ITEMS} onChange={spy} />);\n    fireEvent.click(screen.getByTestId('move-down-0'));\n    expect(spy).toHaveBeenCalledWith([\n      { id: 'b', label: 'Bravo' },\n      { id: 'a', label: 'Alpha' },\n      { id: 'c', label: 'Charlie' },\n    ]);\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "SortableList.tsx",
+      "content": "import React, { useState } from 'react';\nimport './styles.css';\n\nexport interface ListItem {\n  id: string;\n  label: string;\n}\n\ninterface SortableListProps {\n  items: ListItem[];\n  onChange?: (items: ListItem[]) => void;\n}\n\nexport const SortableList: React.FC<SortableListProps> = ({\n  items: initialItems,\n  onChange,\n}) => {\n  const [items, setItems] = useState<ListItem[]>(initialItems);\n\n  const swap = (i: number, j: number) => {\n    const next = [...items];\n    [next[i], next[j]] = [next[j], next[i]];\n    setItems(next);\n    onChange?.(next);\n  };\n\n  return (\n    <ul data-testid=\"sortable-list\" className=\"sl\">\n      {items.map((item, index) => (\n        <li key={item.id} data-testid={`item-${index}`} className=\"sl__item\">\n          <span className=\"sl__rank\">{index + 1}</span>\n          <span className=\"sl__label\">{item.label}</span>\n          <div className=\"sl__actions\">\n            <button\n              data-testid={`move-up-${index}`}\n              className=\"sl__btn\"\n              disabled={index === 0}\n              onClick={() => swap(index, index - 1)}\n              aria-label={`Move ${item.label} up`}\n            >\n              &#9650;\n            </button>\n            <button\n              data-testid={`move-down-${index}`}\n              className=\"sl__btn\"\n              disabled={index === items.length - 1}\n              onClick={() => swap(index, index + 1)}\n              aria-label={`Move ${item.label} down`}\n            >\n              &#9660;\n            </button>\n          </div>\n        </li>\n      ))}\n    </ul>\n  );\n};\n\nexport default SortableList;\n",
+      "language": "tsx"
+    }
+  ],
+  "sort_order": 112
+}

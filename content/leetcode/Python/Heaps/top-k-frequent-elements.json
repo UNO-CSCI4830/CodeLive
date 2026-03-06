@@ -1,0 +1,115 @@
+{
+  "id": "top-k-frequent-elements",
+  "title": "Top-K Frequent Elements",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an integer array, return the k most frequent elements in any order. Use a counter to compute frequencies, then maintain a size-k min-heap keyed by frequency. This teaches combining hash maps with priority queues to keep the best k items while streaming.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- k ≥ 1",
+  "leetcodeUrl": "https://leetcode.com/problems/top-k-frequent-elements/",
+  "complexity": {
+    "time": "O(n log k)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nCounting compresses duplicates. A min-heap of size k retains the top k frequencies. Replace the root when a higher frequency appears.\n\nApproach\n1. Initial Setup: Tally counts with a hash map\n2. Main Algorithm: Iterate (num, freq) and push into a min-heap; pop when size exceeds k\n3. Return Result: Return the heap contents\n\nComplexity Analysis\n- Time Complexity: O(n log k)\n- Space Complexity: O(n)\n\nKey Insights\n- Map+heap pattern is common for streaming top-k\n- Heap stores at most k items\n\nCommon Pitfalls\n- Building a max-heap is unnecessary in Python\n- Forgetting to return values, not (freq, val) pairs",
+  "solutionCode": "import heapq\nfrom collections import Counter\ndef top_k_frequent(nums, k):\n    freq = Counter(nums)\n    heap = []\n    for val, f in freq.items():\n        if len(heap) < k:\n            heapq.heappush(heap, (f, val))\n        else:\n            if f > heap[0][0]:\n                heapq.heapreplace(heap, (f, val))\n    return [val for _, val in heap]",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          2,
+          2,
+          3
+        ],
+        "k": 2
+      },
+      "expected": {
+        "result": [
+          1,
+          2
+        ]
+      },
+      "explanation": "1 and 2 are most frequent"
+    },
+    {
+      "input": {
+        "nums": [
+          1
+        ],
+        "k": 1
+      },
+      "expected": {
+        "result": [
+          1
+        ]
+      },
+      "explanation": "Single item"
+    },
+    {
+      "input": {
+        "nums": [
+          4,
+          4,
+          4,
+          4,
+          5,
+          5,
+          6
+        ],
+        "k": 1
+      },
+      "expected": {
+        "result": [
+          4
+        ]
+      },
+      "explanation": "4 dominates"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "k": 2
+      },
+      "expected": {
+        "result": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "explanation": "Any two, frequencies equal"
+    }
+  ],
+  "tags": [
+    "heap",
+    "hash-table",
+    "array"
+  ],
+  "hints": [
+    "Count with a hash map first",
+    "Use a size-k min-heap keyed by frequency",
+    "Extract the values from the heap at the end"
+  ],
+  "relatedProblems": [
+    "kth-largest-in-array",
+    "k-closest-points"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 64,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def top_k_frequent(nums: List[int], k: int) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def top_k_frequent(nums: List[int], k: int) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number k}\n * @return {any}\n */\nfunction top_k_frequent(nums, k) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> top_k_frequent(int[] nums, int k) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] top_k_frequent(int* nums, int k) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] top_k_frequent(vector<int>& nums, int& k) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

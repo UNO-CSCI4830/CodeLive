@@ -1,0 +1,95 @@
+{
+  "id": "find-peak-element",
+  "title": "Find Peak Element",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Find A peak element is an element that is strictly greater than its neighbors. Given an array, return the index of any peak element. You may assume nums[-1] and nums[n] are negative infinity, which guarantees at least one peak exists.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/find-peak-element/",
+  "complexity": {
+    "time": "O(log n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nIf nums[mid] < nums[mid+1], a peak lies to the right. Otherwise a peak lies to the left including mid. This is a form of binary search on a discrete unimodal function.\n\nApproach\n1. Initial Setup: Use left=0, right=n-1 and compare mid with mid+1.\n2. Main Algorithm: Move toward the side that rises since a peak must exist there.\n3. Return Result: Return the final index when left meets right.\n\nComplexity Analysis\n- Time Complexity: O(log n) because the search space halves at each step.\n- Space Complexity: O(1) since only a few variables are maintained.\n\nKey Insights\n- Thinking in terms of slopes guides which half to keep\n- No need to check both neighbors every time\n\nCommon Pitfalls\n- Using while left <= right with mid+1 can index out of range\n- Forgetting that multiple peaks can exist",
+  "solutionCode": "def find_peak_element(nums):\n    left, right = 0, len(nums) - 1\n    while left < right:\n        mid = (left + right) // 2\n        if nums[mid] < nums[mid + 1]:\n            left = mid + 1\n        else:\n            right = mid\n    return left",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          1
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Peak at index 2"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          1,
+          3,
+          5,
+          6,
+          4
+        ]
+      },
+      "expected": {
+        "result": 5
+      },
+      "explanation": "Any valid peak index accepted"
+    },
+    {
+      "input": {
+        "nums": [
+          1
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Single element is a peak"
+    },
+    {
+      "input": {
+        "nums": [
+          3,
+          2,
+          1
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Peak at start"
+    }
+  ],
+  "tags": [
+    "array",
+    "binary-search"
+  ],
+  "hints": [
+    "Compare nums[mid] with nums[mid+1]",
+    "Move to the side that rises",
+    "Stop when left equals right"
+  ],
+  "relatedProblems": [
+    "find-min-in-rotated",
+    "search-in-rotated"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 54,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def find_peak_element(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def find_peak_element(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {number}\n */\nfunction find_peak_element(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int find_peak_element(int[] nums) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint find_peak_element(int* nums) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int find_peak_element(vector<int>& nums) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

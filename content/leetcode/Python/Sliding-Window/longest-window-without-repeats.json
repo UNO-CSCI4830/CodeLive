@@ -1,0 +1,77 @@
+{
+  "id": "longest-window-without-repeats",
+  "title": "Longest Window Without Repeats",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a string s, return the length of the longest substring that contains no repeated characters. The window should expand to include new characters and contract when a duplicate is encountered, ensuring a linear time solution.\n\n    \n\nConstraints:\n    - 0 ≤ len(s) ≤ 10^5\n- s consists of ASCII characters",
+  "leetcodeUrl": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(min(n, alphabet))"
+  },
+  "explanation": "Intuition\nWhen a character repeats inside the current window, any valid window must start after its previous occurrence. Tracking the most recent index of each character lets us jump the left boundary forward in constant time. Each character index enters and leaves the window at most once.\n\nApproach\n1. Initial Setup: Keep a map char→last_index and a left pointer.\n2. Main Algorithm: Iterate right across s. If s[right] was seen inside the current window, move left to one past that index. Update the character's last index and the best length.\n3. Return Result: Return the maximum window size recorded.\n\nComplexity Analysis\n- Time Complexity: O(n) because the window grows and shrinks in a\n  single pass without revisiting elements more than a constant number of\n  times.\n- Space Complexity: O(min(n, alphabet)) to maintain counts, sets, or running\n  aggregates needed to validate the window.\n\nKey Insights\n- Move the left pointer only forward to ensure linear time\n- Storing last seen positions avoids repeated deletions\n\nCommon Pitfalls\n- Moving left backward breaks correctness\n- Updating the map before adjusting left causes off by one errors",
+  "solutionCode": "def longest_window_without_repeats(s: str) -> int:\n    last = {}\n    best = 0\n    left = 0\n    for right, ch in enumerate(s):\n        if ch in last and last[ch] >= left:\n            left = last[ch] + 1\n        last[ch] = right\n        best = max(best, right - left + 1)\n    return best",
+  "testCases": [
+    {
+      "input": {
+        "s": "abcabcbb"
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Longest window is 'abc'"
+    },
+    {
+      "input": {
+        "s": "bbbbb"
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Any single 'b'"
+    },
+    {
+      "input": {
+        "s": ""
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Empty string edge case"
+    },
+    {
+      "input": {
+        "s": "pwwkew"
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Window 'wke' length 3"
+    }
+  ],
+  "tags": [
+    "string",
+    "sliding-window",
+    "hash-table"
+  ],
+  "hints": [
+    "Track last positions of characters",
+    "Shift left only when a duplicate is inside the window",
+    "Update best length after each step"
+  ],
+  "relatedProblems": [
+    "all-anagram-start-indices",
+    "contains-permutation"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 38,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def longest_window_without_repeats(s: str) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def longest_window_without_repeats(s: str) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s}\n * @return {number}\n */\nfunction longest_window_without_repeats(s) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int longest_window_without_repeats(String s) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint longest_window_without_repeats(char* s) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int longest_window_without_repeats(string& s) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

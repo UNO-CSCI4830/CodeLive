@@ -1,0 +1,90 @@
+{
+  "id": "all-anagram-start-indices",
+  "title": "All Anagram Start Indices",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Return all starting indices of substrings in s that are anagrams of pattern. Use a sliding window of length len(pattern) and record index whenever the window frequency matches the pattern frequency.\n\n    \n\nConstraints:\n    - 1 ≤ len(pattern) ≤ 10^4\n- 1 ≤ len(s) ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/find-all-anagrams-in-a-string/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1) for fixed alphabet"
+  },
+  "explanation": "Intuition\nThis extends the permutation check by collecting all matching windows. Maintain counts for the current window and compare with the target counts after each step.\n\nApproach\n1. Initial Setup: Initialize counters for pattern and the first window.\n2. Main Algorithm: Slide across s, updating counts by adding the right character and removing the left. When equal, append the current start index.\n3. Return Result: Return the list of indices after scanning.\n\nComplexity Analysis\n- Time Complexity: O(n) because the window grows and shrinks in a\n  single pass without revisiting elements more than a constant number of\n  times.\n- Space Complexity: O(1) to maintain counts, sets, or running\n  aggregates needed to validate the window.\n\nKey Insights\n- The window length equals the pattern length\n- Equality of frequency tables signals an anagram\n\nCommon Pitfalls\n- Not removing zero count entries can break equality\n- Using string slicing and sorting per step is too slow",
+  "solutionCode": "def all_anagram_start_indices(pattern: str, s: str):\n    from collections import Counter\n    m = len(pattern)\n    res = []\n    if m > len(s):\n        return res\n    need = Counter(pattern)\n    have = Counter(s[:m])\n    if have == need:\n        res.append(0)\n    for i in range(m, len(s)):\n        have[s[i]] += 1\n        left_char = s[i - m]\n        have[left_char] -= 1\n        if have[left_char] == 0:\n            del have[left_char]\n        if have == need:\n            res.append(i - m + 1)\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "pattern": "ab",
+        "s": "cbaebabacd"
+      },
+      "expected": {
+        "result": [
+          0,
+          6
+        ]
+      },
+      "explanation": "Matches at 0 and 6"
+    },
+    {
+      "input": {
+        "pattern": "abc",
+        "s": "abab"
+      },
+      "expected": {
+        "result": [
+          0,
+          1
+        ]
+      },
+      "explanation": "Windows 'aba' and 'bab' share counts"
+    },
+    {
+      "input": {
+        "pattern": "a",
+        "s": "aa"
+      },
+      "expected": {
+        "result": [
+          0,
+          1
+        ]
+      },
+      "explanation": "Every single 'a' is a match"
+    },
+    {
+      "input": {
+        "pattern": "abc",
+        "s": "def"
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "No matches at all"
+    }
+  ],
+  "tags": [
+    "string",
+    "sliding-window",
+    "hash-table"
+  ],
+  "hints": [
+    "Use fixed-size window equal to pattern length",
+    "Maintain counts incrementally",
+    "Append index when counts match"
+  ],
+  "relatedProblems": [
+    "contains-permutation",
+    "longest-window-without-repeats"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 49,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def all_anagram_start_indices(pattern: str, s: str) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def all_anagram_start_indices(pattern: str, s: str) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string pattern, string s}\n * @return {any}\n */\nfunction all_anagram_start_indices(pattern, s) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> all_anagram_start_indices(String pattern, String s) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] all_anagram_start_indices(char* pattern, char* s) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] all_anagram_start_indices(string& pattern, string& s) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

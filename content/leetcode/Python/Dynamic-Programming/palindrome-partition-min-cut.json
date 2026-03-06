@@ -1,0 +1,76 @@
+{
+  "id": "palindrome-partition-min-cut",
+  "title": "Minimum Cuts for Palindrome Partitioning",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Given Partition s into palindromic substrings such that the number of cuts is minimized. Return the minimum number of cuts required.\n\n    \n\nConstraints:\n    - 1 ≤ |s| ≤ 2000",
+  "leetcodeUrl": "https://leetcode.com/problems/palindrome-partitioning-ii/",
+  "complexity": {
+    "time": "O(n^2)",
+    "space": "O(n^2)"
+  },
+  "explanation": "Intuition\nPrecompute palindrome table pal[i][j]. Then dp[i] = min cuts to partition s[:i]. For each j<i, if pal[j][i-1] True, update dp[i] = min(dp[i], dp[j]+1). dp[0]=-1 to offset final cut.\n\nApproach\n1. Initial Setup: Expand palindromes centered or 2-D table fill\n2. Main Algorithm: Compute dp over prefix lengths using pal table\n3. Return Result: Answer is dp[n]\n\nComplexity Analysis\n- Time Complexity: O(n^2)\n- Space Complexity: O(n^2)\n\nKey Insights\n- Offset with dp[0]=-1 yields exact cut count\n- Precompute pal reduces repeated checks\n\nCommon Pitfalls\n- Skipping pal precomputation leads to O(n^3)\n- Remember empty prefix base case",
+  "solutionCode": "def min_cut_palindrome(s: str) -> int:\n    n = len(s)\n    pal = [[False]*n for _ in range(n)]\n    for i in range(n-1, -1, -1):\n        for j in range(i, n):\n            if s[i] == s[j] and (j - i < 2 or pal[i+1][j-1]):\n                pal[i][j] = True\n    dp = [10**9] * (n + 1)\n    dp[0] = -1\n    for i in range(1, n + 1):\n        for j in range(i):\n            if pal[j][i-1] and dp[j] + 1 < dp[i]:\n                dp[i] = dp[j] + 1\n    return dp[n]",
+  "testCases": [
+    {
+      "input": {
+        "s": "aab"
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "When min_cut_palindrome(s=\"aab\"), the expected result is 1"
+    },
+    {
+      "input": {
+        "s": "abba"
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Already palindrome"
+    },
+    {
+      "input": {
+        "s": "abcd"
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Cut between every char"
+    },
+    {
+      "input": {
+        "s": "a"
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Single char"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "string"
+  ],
+  "hints": [
+    "Precompute pal[i][j] in O(n^2)",
+    "dp[0]=-1 trick for cuts",
+    "dp[i] scans j<i where pal[j][i-1]"
+  ],
+  "relatedProblems": [
+    "longest-palindromic-subsequence",
+    "lcs-length"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 40,
+    "frequency": "medium",
+    "importance": 9
+  },
+  "starterCode": "def min_cut_palindrome(s: str) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def min_cut_palindrome(s: str) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s}\n * @return {number}\n */\nfunction min_cut_palindrome(s) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int min_cut_palindrome(String s) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint min_cut_palindrome(char* s) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int min_cut_palindrome(string& s) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

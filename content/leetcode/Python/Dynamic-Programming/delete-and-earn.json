@@ -1,0 +1,90 @@
+{
+  "id": "delete-and-earn",
+  "title": "Delete and Earn Points",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "You are given an array nums. When you pick a number x you earn x points for each occurrence and then all numbers x-1 and x+1 disappear. Return the maximum points you can earn.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 2*10^4\n- 1 ≤ nums[i] ≤ 10^4",
+  "leetcodeUrl": "https://leetcode.com/problems/delete-and-earn/",
+  "complexity": {
+    "time": "O(U)",
+    "space": "O(U)"
+  },
+  "explanation": "Intuition\nGroup equal numbers; picking value v conflicts only with v-1 and v+1. Reduce to House Robber on a value line where weight[v]=v*count[v].\n\nApproach\n1. Initial Setup: Build counts and compute gain for each value\n2. Main Algorithm: Run linear robber DP over increasing values considering adjacency by value\n3. Return Result: Return best earned\n\nComplexity Analysis\n- Time Complexity: O(U) where U is max value\n- Space Complexity: O(U)\n\nKey Insights\n- Sorting not required if you use frequency array\n- Same transition as house robber\n\nCommon Pitfalls\n- Make sure to skip values with zero count\n- Large U needs array sized by max(nums)",
+  "solutionCode": "def delete_and_earn(nums):\n    if not nums:\n        return 0\n    U = max(nums)\n    gain = [0] * (U + 1)\n    for x in nums:\n        gain[x] += x\n    prev2, prev1 = 0, 0\n    for v in range(U + 1):\n        prev2, prev1 = prev1, max(prev1, prev2 + gain[v])\n    return prev1",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          3,
+          4,
+          2
+        ]
+      },
+      "expected": {
+        "result": 6
+      },
+      "explanation": "Pick 4 then 2"
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          2,
+          3,
+          3,
+          3,
+          4
+        ]
+      },
+      "expected": {
+        "result": 9
+      },
+      "explanation": "Pick all 3s (9) block 2 and 4"
+    },
+    {
+      "input": {
+        "nums": [
+          1
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single value"
+    },
+    {
+      "input": {
+        "nums": []
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "When delete_and_earn(nums=[]), the expected result is 0"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "array",
+    "hash-table"
+  ],
+  "hints": [
+    "Transform to a value-indexed array",
+    "House Robber recurrence",
+    "Zero gains can be skipped implicitly"
+  ],
+  "relatedProblems": [
+    "house-robber-linear",
+    "house-robber-circle"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 61,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def delete_and_earn(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def delete_and_earn(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {number}\n */\nfunction delete_and_earn(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int delete_and_earn(int[] nums) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint delete_and_earn(int* nums) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int delete_and_earn(vector<int>& nums) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

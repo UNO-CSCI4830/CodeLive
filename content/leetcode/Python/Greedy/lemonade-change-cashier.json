@@ -1,0 +1,96 @@
+{
+  "id": "lemonade-change-cashier",
+  "title": "Lemonade Stand Change Validator",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Determine if At a lemonade stand, each lemonade costs 5. Customers pay with 5, 10, or 20. Initially you have no change. Return True if you can provide correct change to every customer in order.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 10^5\n- bills ∈ {5,10,20}",
+  "leetcodeUrl": "https://leetcode.com/problems/lemonade-change/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nGreedy: always prefer to give change using a $10 when possible for a $20 bill because $10 is harder to compose later. Maintain counts of $5 and $10 bills only.\n\nApproach\n1. Initial Setup: Keep counters for fives and tens\n2. Main Algorithm: For bill=5 inc five; for 10, need one five; for 20, prefer ten+five else three fives\n3. Return Result: If any check fails, return False; else True\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(1)\n\nKey Insights\n- Use larger denomination first for $20 change\n- Only $5 and $10 matter for state\n\nCommon Pitfalls\n- Using three fives when a ten exists may fail later\n- Forgetting to check availability before decrement",
+  "solutionCode": "def lemonade_change(bills):\n    five = ten = 0\n    for b in bills:\n        if b == 5:\n            five += 1\n        elif b == 10:\n            if five == 0:\n                return False\n            five -= 1\n            ten += 1\n        else:\n            if ten > 0 and five > 0:\n                ten -= 1\n                five -= 1\n            elif five >= 3:\n                five -= 3\n            else:\n                return False\n    return True",
+  "testCases": [
+    {
+      "input": {
+        "bills": [
+          5,
+          5,
+          5,
+          10,
+          20
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Give 10+5 for last 20"
+    },
+    {
+      "input": {
+        "bills": [
+          5,
+          5,
+          10,
+          10,
+          20
+        ]
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "No five left for last 20"
+    },
+    {
+      "input": {
+        "bills": [
+          5,
+          20
+        ]
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Cannot make change"
+    },
+    {
+      "input": {
+        "bills": [
+          5,
+          5,
+          5,
+          5
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "When lemonade_change(bills=[5,5,5,5]), the expected result is true"
+    }
+  ],
+  "tags": [
+    "greedy",
+    "array"
+  ],
+  "hints": [
+    "Track counts of fives and tens",
+    "For 20, try 10+5 else 5+5+5",
+    "Reject when change cannot be made"
+  ],
+  "relatedProblems": [
+    "assign-cookies-to-children",
+    "partition-labels-slices"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 67,
+    "frequency": "high",
+    "importance": 6
+  },
+  "starterCode": "def lemonade_change(bills: List[int]) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def lemonade_change(bills: List[int]) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] bills}\n * @return {boolean}\n */\nfunction lemonade_change(bills) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean lemonade_change(int[] bills) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool lemonade_change(int* bills) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool lemonade_change(vector<int>& bills) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

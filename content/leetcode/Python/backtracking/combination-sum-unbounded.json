@@ -1,0 +1,123 @@
+{
+  "id": "combination-sum-unbounded",
+  "title": "Combination Sum with Unlimited Picks",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given positive candidate numbers and a target, find all unique combinations where the chosen numbers sum to target. Each number may be chosen unlimited times. Return combinations in nondecreasing order.\n\n    \n\nConstraints:\n    - 1 ≤ |candidates| ≤ 30\n- 1 ≤ target ≤ 500\n- Candidates positive",
+  "leetcodeUrl": "https://leetcode.com/problems/combination-sum/",
+  "complexity": {
+    "time": "O(S)",
+    "space": "O(T)"
+  },
+  "explanation": "Intuition\nBacktracking with a start index allows reusing the same element by calling recursion with the same index. Sort to produce ordered paths and to prune when the partial sum exceeds target.\n\nApproach\n1. Initial Setup: Sort candidates\n2. Main Algorithm: DFS with (start, remain, path); loop i from start; if candidates[i] ≤ remain, choose and recurse with i, else break\n3. Return Result: Add path when remain is zero\n\nComplexity Analysis\n- Time Complexity: Pseudo-polynomial\n- Space Complexity: O(target) recursion depth\n\nKey Insights\n- Sorting enables pruning early\n- Allowing same index supports reuse\n\nCommon Pitfalls\n- Forgetting to break after exceed loses pruning\n- Allowing i+1 prevents reuse",
+  "solutionCode": "def combination_sum(candidates, target):\n    candidates.sort()\n    res, path = [], []\n    def dfs(start, remain):\n        if remain == 0:\n            res.append(path[:])\n            return\n        for i in range(start, len(candidates)):\n            x = candidates[i]\n            if x > remain:\n                break\n            path.append(x)\n            dfs(i, remain - x)\n            path.pop()\n    dfs(0, target)\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "candidates": [
+          2,
+          3,
+          6,
+          7
+        ],
+        "target": 7
+      },
+      "expected": {
+        "result": [
+          [
+            2,
+            2,
+            3
+          ],
+          [
+            7
+          ]
+        ]
+      },
+      "explanation": "Reuse 2 or pick 7"
+    },
+    {
+      "input": {
+        "candidates": [
+          2,
+          3,
+          5
+        ],
+        "target": 8
+      },
+      "expected": {
+        "result": [
+          [
+            2,
+            2,
+            2,
+            2
+          ],
+          [
+            2,
+            3,
+            3
+          ],
+          [
+            3,
+            5
+          ]
+        ]
+      },
+      "explanation": "Multiple constructions"
+    },
+    {
+      "input": {
+        "candidates": [
+          2
+        ],
+        "target": 1
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "No solution"
+    },
+    {
+      "input": {
+        "candidates": [
+          1
+        ],
+        "target": 2
+      },
+      "expected": {
+        "result": [
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      "explanation": "Single choice many times"
+    }
+  ],
+  "tags": [
+    "backtracking",
+    "array"
+  ],
+  "hints": [
+    "Sort then prune when x > remain",
+    "Pass same index to allow reuse",
+    "Append a copy on remain==0"
+  ],
+  "relatedProblems": [
+    "combination-sum-no-reuse",
+    "k-sum-pick-k"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 60,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def combination_sum(candidates: List[int], target: int) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def combination_sum(candidates: List[int], target: int) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] candidates, number target}\n * @return {any}\n */\nfunction combination_sum(candidates, target) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<List<Integer>> combination_sum(int[] candidates, int target) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[List[int]] combination_sum(int* candidates, int target) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[List[int]] combination_sum(vector<int>& candidates, int& target) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

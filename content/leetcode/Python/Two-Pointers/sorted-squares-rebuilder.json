@@ -1,0 +1,114 @@
+{
+  "id": "sorted-squares-rebuilder",
+  "title": "Sorted Squares Rebuilder",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given a nondecreasing array, return a new array of the squares of each number, also in nondecreasing order. Use two pointers to fill from the end since large absolute values sit at the extremes.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^4 ≤ nums[i] ≤ 10^4",
+  "leetcodeUrl": "https://leetcode.com/problems/squares-of-a-sorted-array/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nThe largest square at any time comes from the larger absolute value at either end. Place that into the output from right to left.\n\nApproach\n1. Initial Setup: Allocate result array.\n2. Main Algorithm: Use i and j at the ends and a k pointer at the end of output. Pick the larger square and move that side inward.\n3. Return Result: Return the filled output.\n\nComplexity Analysis\n- Time Complexity: O(n) because the scan adjusts pointers a limited\n  number of times and avoids nested loops.\n- Space Complexity: O(n) since only a few variables or an output\n  list are used.\n\nKey Insights\n- Fill from the back to avoid extra passes\n- Absolute values guide which pointer to move\n\nCommon Pitfalls\n- Forgetting to move k after placement\n- Computing square twice without storing can be slower",
+  "solutionCode": "def sorted_squares_rebuilder(nums):\n    n = len(nums)\n    res = [0] * n\n    i, j = 0, n - 1\n    k = n - 1\n    while i <= j:\n        left = nums[i] * nums[i]\n        right = nums[j] * nums[j]\n        if left > right:\n            res[k] = left\n            i += 1\n        else:\n            res[k] = right\n            j -= 1\n        k -= 1\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          -4,
+          -1,
+          0,
+          3,
+          10
+        ]
+      },
+      "expected": {
+        "result": [
+          0,
+          1,
+          9,
+          16,
+          100
+        ]
+      },
+      "explanation": "Two pointer fill from the back"
+    },
+    {
+      "input": {
+        "nums": [
+          -7,
+          -3,
+          2,
+          3,
+          11
+        ]
+      },
+      "expected": {
+        "result": [
+          4,
+          9,
+          9,
+          49,
+          121
+        ]
+      },
+      "explanation": "Handle negatives correctly"
+    },
+    {
+      "input": {
+        "nums": [
+          0
+        ]
+      },
+      "expected": {
+        "result": [
+          0
+        ]
+      },
+      "explanation": "Single element case"
+    },
+    {
+      "input": {
+        "nums": [
+          -1,
+          -1,
+          -1,
+          -1
+        ]
+      },
+      "expected": {
+        "result": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "explanation": "All equal negatives"
+    }
+  ],
+  "tags": [
+    "array",
+    "two-pointers"
+  ],
+  "hints": [
+    "The largest square sits at one extreme",
+    "Write from right to left into the output",
+    "Move the pointer that produced the placed square"
+  ],
+  "relatedProblems": [
+    "compress-sorted-stream",
+    "pair-with-target-in-sorted"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 78,
+    "frequency": "high",
+    "importance": 6
+  },
+  "starterCode": "def sorted_squares_rebuilder(nums: List[int]) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def sorted_squares_rebuilder(nums: List[int]) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {any}\n */\nfunction sorted_squares_rebuilder(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> sorted_squares_rebuilder(int[] nums) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] sorted_squares_rebuilder(int* nums) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] sorted_squares_rebuilder(vector<int>& nums) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

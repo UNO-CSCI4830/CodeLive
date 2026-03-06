@@ -1,0 +1,147 @@
+{
+  "id": "num-enclaves",
+  "title": "Number of Enclaves (Land Trapped by Sea)",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "You are given a binary matrix where 1 represents land and 0 water. A land cell can walk to another by 4-direction moves. A land cell is an enclave if it cannot walk off the boundary of the grid. Return the count of land cells that are enclaves.\n\nConstraints:\n- 1 ≤ m, n ≤ 500",
+  "leetcodeUrl": "https://leetcode.com/problems/number-of-enclaves/",
+  "complexity": {
+    "time": "O(mn)",
+    "space": "O(mn)"
+  },
+  "explanation": "Intuition\nFlood-fill from boundary land to mark all land cells that can escape. The answer is total land minus escaped land.\n\nApproach\n1. Initial Setup: Mark all boundary land with BFS/DFS\n2. Main Algorithm: Spread to connected land marking as visited\n3. Return Result: Count remaining unvisited land cells\n\nComplexity Analysis\n- Time Complexity: O(mn)\n- Space Complexity: O(mn)\n\nKey Insights\n- Reverse thinking: remove escaped land first\n- Mutating grid to 0 is convenient\n\nCommon Pitfalls\n- Be careful to only spread through land\n- Do not count boundary-connected land",
+  "solutionCode": "from collections import deque\ndef num_enclaves(grid):\n    m, n = len(grid), len(grid[0])\n    grid = [row[:] for row in grid]\n    q = deque()\n    for i in range(m):\n        for j in [0, n-1]:\n            if grid[i][j] == 1:\n                q.append((i, j)); grid[i][j] = 0\n    for j in range(n):\n        for i in [0, m-1]:\n            if grid[i][j] == 1:\n                q.append((i, j)); grid[i][j] = 0\n    while q:\n        x, y = q.popleft()\n        for dx, dy in [(1,0),(-1,0),(0,1),(0,-1)]:\n            i, j = x + dx, y + dy\n            if 0 <= i < m and 0 <= j < n and grid[i][j] == 1:\n                grid[i][j] = 0\n                q.append((i, j))\n    return sum(cell for row in grid for cell in row)",
+  "testCases": [
+    {
+      "input": {
+        "grid": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Three interior land cells"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "All land touches boundary via path"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Boundary-connected ring"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "When num_enclaves(grid=[[0]]), the expected result is 0"
+    }
+  ],
+  "tags": [
+    "graph",
+    "bfs",
+    "matrix"
+  ],
+  "hints": [
+    "Start BFS from boundary land cells",
+    "Erase reachable land",
+    "Count what's left"
+  ],
+  "relatedProblems": [
+    "count-islands-in-grid",
+    "pacific-atlantic-flow"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 53,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def num_enclaves(grid: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def num_enclaves(grid: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] grid}\n * @return {number}\n */\nfunction num_enclaves(grid) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int num_enclaves(int[][] grid) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint num_enclaves(int[][] grid) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int num_enclaves(vector<vector<int>>& grid) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

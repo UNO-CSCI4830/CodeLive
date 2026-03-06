@@ -1,0 +1,100 @@
+{
+  "id": "kokos-min-eating-speed",
+  "title": "Koko's Minimum Eating Speed",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Given a list piles of banana piles and an integer h representing hours, find the minimum integer eating speed k such that all bananas can be eaten within h hours, where eating at speed k means consuming k from a single pile per hour until it is empty before moving to the next hour. Use binary search on the answer space.\n\n    \n\nConstraints:\n    - 1 ≤ len(piles) ≤ 10^5\n- 1 ≤ piles[i] ≤ 10^9\n- 1 ≤ h ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/koko-eating-bananas/",
+  "complexity": {
+    "time": "O(n log M)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nAs k increases, the hours needed to finish all piles decreases monotonically. This monotone property allows binary search over k from 1 to max(piles). The feasibility test sums ceil(p/k) for all piles and checks if the total hours fit within h.\n\nApproach\n1. Initial Setup: Search k in [1, max(piles)].\n2. Main Algorithm: For each mid k, compute total hours using ceil division and shrink the search toward feasible speeds.\n3. Return Result: Return the smallest feasible k found.\n\nComplexity Analysis\n- Time Complexity: O(n log M) because the search space halves at each step.\n- Space Complexity: O(1) since only a few variables are maintained.\n\nKey Insights\n- Binary search on answers is powerful for monotone feasibility\n- Ceil division computes hours per pile without loops\n\nCommon Pitfalls\n- Using integer division without ceiling underestimates hours\n- Setting right to sum(piles) is unnecessary and slow",
+  "solutionCode": "def min_eating_speed(piles, h):\n    import math\n    left, right = 1, max(piles)\n    ans = right\n    while left <= right:\n        mid = (left + right) // 2\n        hours = 0\n        for p in piles:\n            hours += (p + mid - 1) // mid\n        if hours <= h:\n            ans = mid\n            right = mid - 1\n        else:\n            left = mid + 1\n    return ans",
+  "testCases": [
+    {
+      "input": {
+        "piles": [
+          3,
+          6,
+          7,
+          11
+        ],
+        "h": 8
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Speed 4 completes in 8 hours"
+    },
+    {
+      "input": {
+        "piles": [
+          30,
+          11,
+          23,
+          4,
+          20
+        ],
+        "h": 5
+      },
+      "expected": {
+        "result": 30
+      },
+      "explanation": "Must eat at least 30 per hour"
+    },
+    {
+      "input": {
+        "piles": [
+          30,
+          11,
+          23,
+          4,
+          20
+        ],
+        "h": 6
+      },
+      "expected": {
+        "result": 23
+      },
+      "explanation": "Speed 23 is minimal feasible"
+    },
+    {
+      "input": {
+        "piles": [
+          1
+        ],
+        "h": 1
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Trivial case"
+    }
+  ],
+  "tags": [
+    "binary-search",
+    "greedy",
+    "array"
+  ],
+  "hints": [
+    "The feasibility function is monotone in k",
+    "Hour count uses ceil(p/k) per pile",
+    "Search in [1, max(piles)]"
+  ],
+  "relatedProblems": [
+    "find-peak-element",
+    "find-min-in-rotated"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 52,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def min_eating_speed(piles: List[int], h: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def min_eating_speed(piles: List[int], h: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] piles, number h}\n * @return {number}\n */\nfunction min_eating_speed(piles, h) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int min_eating_speed(int[] piles, int h) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint min_eating_speed(int* piles, int h) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int min_eating_speed(vector<int>& piles, int& h) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

@@ -1,0 +1,111 @@
+{
+  "id": "min-cost-with-highway-pass",
+  "title": "Minimum Toll with Freeways and Tolls",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Given You have a directed road network with edges of two types: freeways (cost 0) and toll roads (positive cost). Given source s and target t, return the minimum total cost. Use 0-1 BFS when costs are 0 or 1; otherwise use Dijkstra that handles 0-cost edges correctly.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 10^5\n- 0 ≤ |edges| ≤ 2·10^5\n- Edge costs ≥ 0",
+  "leetcodeUrl": "https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/",
+  "complexity": {
+    "time": "O((V+E) log V)",
+    "space": "O(V+E)"
+  },
+  "explanation": "Intuition\nWhen edges have 0 cost, naive Dijkstra still works but 0-1 BFS is faster for binary weights. We implement a general Dijkstra that supports zero weights safely by not assuming strictly positive edges.\n\nApproach\n1. Initial Setup: Build adjacency list\n2. Main Algorithm: Run Dijkstra from s over nonnegative weights; push neighbors with nd = d + w even if w=0\n3. Return Result: Return distance at t or -1\n\nComplexity Analysis\n- Time Complexity: O((V+E) log V)\n- Space Complexity: O(V+E)\n\nKey Insights\n- Priority queue handles zero edges fine\n- If costs are 0/1, a deque implementation achieves O(V+E)\n\nCommon Pitfalls\n- Do not mark visited on push, only on pop or by distance check\n- Watch for unreachable target returning -1",
+  "solutionCode": "import heapq\nfrom collections import defaultdict\ndef min_toll(n, edges, s, t):\n    g = defaultdict(list)\n    for u, v, w in edges:\n        g[u].append((v, w))\n    INF = 10**18\n    dist = [INF] * n\n    dist[s] = 0\n    pq = [(0, s)]\n    while pq:\n        d, u = heapq.heappop(pq)\n        if d != dist[u]:\n            continue\n        if u == t:\n            return d\n        for v, w in g[u]:\n            nd = d + w\n            if nd < dist[v]:\n                dist[v] = nd\n                heapq.heappush(pq, (nd, v))\n    return -1 if dist[t] >= INF else dist[t]",
+  "testCases": [
+    {
+      "input": {
+        "n": 3,
+        "edges": [
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            2,
+            5
+          ],
+          [
+            0,
+            2,
+            10
+          ]
+        ],
+        "s": 0,
+        "t": 2
+      },
+      "expected": {
+        "result": 5
+      },
+      "explanation": "0→1→2 cheaper than direct"
+    },
+    {
+      "input": {
+        "n": 2,
+        "edges": [
+          [
+            0,
+            1,
+            0
+          ]
+        ],
+        "s": 0,
+        "t": 1
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Zero-cost path"
+    },
+    {
+      "input": {
+        "n": 2,
+        "edges": [],
+        "s": 0,
+        "t": 1
+      },
+      "expected": {
+        "result": -1
+      },
+      "explanation": "Unreachable"
+    },
+    {
+      "input": {
+        "n": 1,
+        "edges": [],
+        "s": 0,
+        "t": 0
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "When min_toll(n=1, edges=[], s=0, t=0), the expected result is 0"
+    }
+  ],
+  "tags": [
+    "graph",
+    "dijkstra",
+    "0-1-bfs"
+  ],
+  "hints": [
+    "Dijkstra works with zero-cost edges too",
+    "Prefer 0-1 BFS if weights are 0 or 1",
+    "Return early when target is popped"
+  ],
+  "relatedProblems": [
+    "network-broadcast-time",
+    "cheapest-flights-with-k-stops"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 44,
+    "frequency": "medium",
+    "importance": 9
+  },
+  "starterCode": "def min_toll(n: int, edges: List[List[int]], s: int, t: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def min_toll(n: int, edges: List[List[int]], s: int, t: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number n, number[] edges, number s, number t}\n * @return {number}\n */\nfunction min_toll(n, edges, s, t) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int min_toll(int n, int[][] edges, int s, int t) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint min_toll(int n, int[][] edges, int s, int t) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int min_toll(int& n, vector<vector<int>>& edges, int& s, int& t) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

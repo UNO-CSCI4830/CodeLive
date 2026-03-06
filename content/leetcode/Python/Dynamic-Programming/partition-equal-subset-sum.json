@@ -1,0 +1,94 @@
+{
+  "id": "partition-equal-subset-sum",
+  "title": "Can Partition into Equal Sum Subsets",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Determine if you can partition nums into two subsets such that the sums are equal. Return True or False.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 200\n- 1 ≤ nums[i] ≤ 100",
+  "leetcodeUrl": "https://leetcode.com/problems/partition-equal-subset-sum/",
+  "complexity": {
+    "time": "O(n·target)",
+    "space": "O(target)"
+  },
+  "explanation": "Intuition\nSubset-sum to target=sum(nums)/2 if total is even. Use 1-D boolean DP where dp[t] means achievable. Iterate numbers and update backwards to avoid reuse.\n\nApproach\n1. Initial Setup: Compute total and target=total//2\n2. Main Algorithm: Initialize dp[0]=True; for each x in nums, for t from target down to x set dp[t]\n3. Return Result: Return dp[target]\n\nComplexity Analysis\n- Time Complexity: O(n·target)\n- Space Complexity: O(target)\n\nKey Insights\n- Backward loop ensures each number used once\n- Quick reject when total odd\n\nCommon Pitfalls\n- Forward loop wrongly allows reuse\n- Early exit when dp[target] becomes True is optional",
+  "solutionCode": "def can_partition(nums) -> bool:\n    s = sum(nums)\n    if s % 2 == 1:\n        return False\n    target = s // 2\n    dp = [False] * (target + 1)\n    dp[0] = True\n    for x in nums:\n        for t in range(target, x - 1, -1):\n            if dp[t - x]:\n                dp[t] = True\n    return dp[target]",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          5,
+          11,
+          5
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "When can_partition(nums=[1,5,11,5]), the expected result is true"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          5
+        ]
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Total 11 odd"
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          2,
+          3,
+          5
+        ]
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Target 6 not reachable"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          1
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "When can_partition(nums=[1,1]), the expected result is true"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "array"
+  ],
+  "hints": [
+    "Reduce to target sum",
+    "Update dp backwards",
+    "Odd total impossible"
+  ],
+  "relatedProblems": [
+    "subset-sum-equal-target",
+    "last-stone-weight-ii"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 45,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def can_partition(nums: List[int]) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def can_partition(nums: List[int]) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {boolean}\n */\nfunction can_partition(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean can_partition(int[] nums) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool can_partition(int* nums) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool can_partition(vector<int>& nums) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

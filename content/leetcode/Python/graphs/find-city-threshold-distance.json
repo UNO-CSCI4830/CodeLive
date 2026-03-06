@@ -1,0 +1,122 @@
+{
+  "id": "find-city-threshold-distance",
+  "title": "Find City With Fewest Neighbors Within Threshold",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Find There are n cities labeled 0..n-1 with weighted undirected edges. For a distance threshold T, find the city with the smallest number of other cities that are reachable within T by shortest paths. Break ties by returning the city with the largest index. Use Floyd–Warshall for all-pairs shortest paths.\n\n    \n\nConstraints:\n    - 2 ≤ n ≤ 100\n- 0 ≤ |edges| ≤ n(n-1)/2\n- Weights nonnegative",
+  "leetcodeUrl": "https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/",
+  "complexity": {
+    "time": "O(n^3)",
+    "space": "O(n^2)"
+  },
+  "explanation": "Intuition\nCompute all-pairs distances, then count how many are ≤ T for each city. Floyd–Warshall is straightforward and fits constraints.\n\nApproach\n1. Initial Setup: Initialize dist with 0 on diagonal and edge weights elsewhere\n2. Main Algorithm: Run triple loop updating dist[i][j] = min(dist[i][j], dist[i][k]+dist[k][j])\n3. Return Result: Scan counts and apply tie-breaking\n\nComplexity Analysis\n- Time Complexity: O(n^3)\n- Space Complexity: O(n^2)\n\nKey Insights\n- Tie-breaking favors larger index on equal counts\n- Initialize missing edges to INF\n\nCommon Pitfalls\n- Forgetting symmetric assignment for undirected edges\n- Overflow if INF not large enough",
+  "solutionCode": "def find_city(n, edges, T):\n    INF = 10**12\n    dist = [[INF]*n for _ in range(n)]\n    for i in range(n):\n        dist[i][i] = 0\n    for u, v, w in edges:\n        if w < dist[u][v]:\n            dist[u][v] = dist[v][u] = w\n    for k in range(n):\n        dk = dist[k]\n        for i in range(n):\n            di = dist[i]\n            dik = di[k]\n            if dik >= INF: \n                continue\n            for j in range(n):\n                if dk[j] + dik < di[j]:\n                    di[j] = dk[j] + dik\n    best = -1\n    bestCnt = 10**9\n    for i in range(n):\n        cnt = sum(1 for j in range(n) if i != j and dist[i][j] <= T)\n        if cnt <= bestCnt:\n            bestCnt = cnt\n            best = i\n    return best",
+  "testCases": [
+    {
+      "input": {
+        "n": 4,
+        "edges": [
+          [
+            0,
+            1,
+            3
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            1,
+            3,
+            4
+          ],
+          [
+            2,
+            3,
+            1
+          ]
+        ],
+        "T": 4
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "City 3 ties with 0 but larger index"
+    },
+    {
+      "input": {
+        "n": 2,
+        "edges": [
+          [
+            0,
+            1,
+            5
+          ]
+        ],
+        "T": 4
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Both have 0 neighbors, pick larger index"
+    },
+    {
+      "input": {
+        "n": 3,
+        "edges": [],
+        "T": 100
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "No edges, all zero neighbors"
+    },
+    {
+      "input": {
+        "n": 3,
+        "edges": [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            1
+          ]
+        ],
+        "T": 2
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "All reach all; tie broken by largest index"
+    }
+  ],
+  "tags": [
+    "graph",
+    "floyd-warshall"
+  ],
+  "hints": [
+    "Initialize dist with INF and 0 on diagonal",
+    "Run Floyd–Warshall to get all shortest paths",
+    "Count neighbors ≤ threshold and break ties by index"
+  ],
+  "relatedProblems": [
+    "network-broadcast-time",
+    "cheapest-flights-with-k-stops"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 51,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def find_city(n: int, edges: List[List[int]], T: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def find_city(n: int, edges: List[List[int]], T: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number n, number[] edges, number T}\n * @return {number}\n */\nfunction find_city(n, edges, T) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int find_city(int n, int[][] edges, int T) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint find_city(int n, int[][] edges, int T) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int find_city(int& n, vector<vector<int>>& edges, int& T) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

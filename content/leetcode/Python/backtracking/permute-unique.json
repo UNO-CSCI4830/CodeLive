@@ -1,0 +1,118 @@
+{
+  "id": "permute-unique",
+  "title": "Unique Permutations with Duplicates",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Return all unique permutations of a list that may contain duplicates. Sort the list and use a used[] array. Skip choosing the same value at the same depth when its previous copy has not been used.\n\nConstraints:\n- 0 ≤ n ≤ 9",
+  "leetcodeUrl": "https://leetcode.com/problems/permutations-ii/",
+  "complexity": {
+    "time": "O(n·n!)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nSorting equal values adjacent allows a depth-level skip rule: avoid choosing nums[i] if it equals nums[i-1] and nums[i-1] was not used in this position. That prevents permutation duplicates.\n\nApproach\n1. Initial Setup: Sort nums and prepare used[]\n2. Main Algorithm: For i in range(n), skip duplicates via i>0 and nums[i]==nums[i-1] and not used[i-1]\n3. Return Result: Standard backtracking\n\nComplexity Analysis\n- Time Complexity: O(n·n!)\n- Space Complexity: O(n)\n\nKey Insights\n- Skip rule applies at each position\n- Used array records placement history\n\nCommon Pitfalls\n- Skipping without sorting fails\n- Forgetting the used[i-1] condition over-prunes",
+  "solutionCode": "def permute_unique(nums):\n    nums.sort()\n    n = len(nums)\n    used = [False] * n\n    res, path = [], []\n    def dfs():\n        if len(path) == n:\n            res.append(path[:])\n            return\n        for i in range(n):\n            if used[i]:\n                continue\n            if i > 0 and nums[i] == nums[i - 1] and not used[i - 1]:\n                continue\n            used[i] = True\n            path.append(nums[i])\n            dfs()\n            path.pop()\n            used[i] = False\n    dfs()\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            1,
+            1,
+            2
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            2,
+            1,
+            1
+          ]
+        ]
+      },
+      "explanation": "No duplicates"
+    },
+    {
+      "input": {
+        "nums": [
+          1
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            1
+          ]
+        ]
+      },
+      "explanation": "Single element"
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          2,
+          2
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            2,
+            2,
+            2
+          ]
+        ]
+      },
+      "explanation": "Only one unique permutation"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          2,
+          3
+        ]
+      },
+      "expected": {
+        "result": "unique count 12"
+      },
+      "explanation": "Check skip rule"
+    }
+  ],
+  "tags": [
+    "backtracking",
+    "array",
+    "sorting"
+  ],
+  "hints": [
+    "Sort first",
+    "Skip if equal to previous and previous is unused",
+    "Track used[]"
+  ],
+  "relatedProblems": [
+    "permute-distinct",
+    "subsets-with-duplicates"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 59,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def permute_unique(nums: List[int]) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def permute_unique(nums: List[int]) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {any}\n */\nfunction permute_unique(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<List<Integer>> permute_unique(int[] nums) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[List[int]] permute_unique(int* nums) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[List[int]] permute_unique(vector<int>& nums) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

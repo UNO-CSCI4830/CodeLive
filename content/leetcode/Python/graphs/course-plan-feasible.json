@@ -1,0 +1,104 @@
+{
+  "id": "course-plan-feasible",
+  "title": "Course Plan Feasibility",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given There are numCourses courses labeled 0..numCourses-1. Some courses have prerequisites given as pairs [a,b] meaning b must be taken before a. Determine if it is possible to finish all courses.\n\n    \n\nConstraints:\n    - 1 ≤ numCourses ≤ 10^5\n- 0 ≤ |prerequisites| ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/course-schedule/",
+  "complexity": {
+    "time": "O(V+E)",
+    "space": "O(V+E)"
+  },
+  "explanation": "Intuition\nDetect a cycle in a directed graph built from prerequisites. If a cycle exists, not all courses can be finished.\n\nApproach\n1. Initial Setup: Build adjacency list and indegree count\n2. Main Algorithm: Run Kahn's BFS: repeatedly dequeue nodes with indegree 0 and relax edges\n3. Return Result: If we processed all nodes, it's feasible\n\nComplexity Analysis\n- Time Complexity: O(V+E)\n- Space Complexity: O(V+E)\n\nKey Insights\n- Topological ordering exists iff no cycle\n- Queue starts with zero-indegree nodes\n\nCommon Pitfalls\n- Not decrementing indegrees correctly misses progress\n- DFS cycle detection also works but watch for states",
+  "solutionCode": "from collections import deque, defaultdict\ndef can_finish(numCourses, prerequisites):\n    g = defaultdict(list)\n    indeg = [0] * numCourses\n    for a, b in prerequisites:\n        g[b].append(a)\n        indeg[a] += 1\n    q = deque([i for i in range(numCourses) if indeg[i] == 0])\n    taken = 0\n    while q:\n        u = q.popleft()\n        taken += 1\n        for v in g[u]:\n            indeg[v] -= 1\n            if indeg[v] == 0:\n                q.append(v)\n    return taken == numCourses",
+  "testCases": [
+    {
+      "input": {
+        "numCourses": 2,
+        "prerequisites": [
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Linear order exists"
+    },
+    {
+      "input": {
+        "numCourses": 2,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "When can_finish(numCourses=2, prerequisites=[[1,0],[0,1]]), the expected result is false"
+    },
+    {
+      "input": {
+        "numCourses": 3,
+        "prerequisites": []
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "No constraints"
+    },
+    {
+      "input": {
+        "numCourses": 3,
+        "prerequisites": [
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "When can_finish(numCourses=3, prerequisites=[[1,0],[2,1]]), the expected result is true"
+    }
+  ],
+  "tags": [
+    "graph",
+    "bfs",
+    "topological-sort"
+  ],
+  "hints": [
+    "Think topological order",
+    "Use indegree and a queue",
+    "All nodes processed implies feasible"
+  ],
+  "relatedProblems": [
+    "course-ordering",
+    "detect-cycle-directed"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 56,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def can_finish(numCourses: int, prerequisites: List[List[int]]) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def can_finish(numCourses: int, prerequisites: List[List[int]]) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number numCourses, number[] prerequisites}\n * @return {boolean}\n */\nfunction can_finish(numCourses, prerequisites) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean can_finish(int numCourses, int[][] prerequisites) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool can_finish(int numCourses, int[][] prerequisites) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool can_finish(int& numCourses, vector<vector<int>>& prerequisites) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

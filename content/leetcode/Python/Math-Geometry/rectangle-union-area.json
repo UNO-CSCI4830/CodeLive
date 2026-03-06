@@ -1,0 +1,104 @@
+{
+  "id": "rectangle-union-area",
+  "title": "Area of Union of Two Rectangles",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given On a 2D plane, compute the total area covered by two axis-aligned rectangles A and B. Each rectangle is defined by its bottom-left and top-right corners (ax1, ay1, ax2, ay2) and (bx1, by1, bx2, by2).\n\n    \n\nConstraints:\n    - -10^4 ≤ coordinates ≤ 10^4\n- ax1 < ax2, ay1 < ay2, likewise for B",
+  "leetcodeUrl": "https://leetcode.com/problems/rectangle-area/",
+  "complexity": {
+    "time": "O(1)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nAdd the areas of both rectangles then subtract the overlap area if any. The overlap is the intersection rectangle whose width is max(0, min(ax2,bx2) - max(ax1,bx1)) and height is max(0, min(ay2,by2) - max(ay1,by1)).\n\nApproach\n1. Initial Setup: Compute areas of A and B\n2. Main Algorithm: Compute intersection width and height via clamped mins and maxes; subtract overlap from sum\n3. Return Result: Return nonnegative result\n\nComplexity Analysis\n- Time Complexity: O(1)\n- Space Complexity: O(1)\n\nKey Insights\n- Intersection sides clamp with max and min\n- No overlap when width or height is nonpositive\n\nCommon Pitfalls\n- Using negative overlap causes over-subtraction\n- Mixing x and y bounds leads to bugs",
+  "solutionCode": "def compute_area(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2):\n    area_a = (ax2 - ax1) * (ay2 - ay1)\n    area_b = (bx2 - bx1) * (by2 - by1)\n    inter_w = max(0, min(ax2, bx2) - max(ax1, bx1))\n    inter_h = max(0, min(ay2, by2) - max(ay1, by1))\n    return area_a + area_b - inter_w * inter_h",
+  "testCases": [
+    {
+      "input": {
+        "ax1": 0,
+        "ay1": 0,
+        "ax2": 2,
+        "ay2": 2,
+        "bx1": 1,
+        "by1": 1,
+        "bx2": 3,
+        "by2": 3
+      },
+      "expected": {
+        "result": 7
+      },
+      "explanation": "Overlap is 1×1"
+    },
+    {
+      "input": {
+        "ax1": 0,
+        "ay1": 0,
+        "ax2": 1,
+        "ay2": 1,
+        "bx1": 1,
+        "by1": 1,
+        "bx2": 2,
+        "by2": 2
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Touching corners overlap zero"
+    },
+    {
+      "input": {
+        "ax1": -3,
+        "ay1": -3,
+        "ax2": -1,
+        "ay2": -1,
+        "bx1": -2,
+        "by1": -2,
+        "bx2": 2,
+        "by2": 2
+      },
+      "expected": {
+        "result": 17
+      },
+      "explanation": "Compute intersection area 1×1=1"
+    },
+    {
+      "input": {
+        "ax1": 0,
+        "ay1": 0,
+        "ax2": 1,
+        "ay2": 2,
+        "bx1": 2,
+        "by1": 0,
+        "bx2": 3,
+        "by2": 2
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "No overlap"
+    }
+  ],
+  "tags": [
+    "math",
+    "geometry"
+  ],
+  "hints": [
+    "Intersection width and height clamp at zero minimum",
+    "Area union = sum - overlap",
+    "Coordinates can be negative"
+  ],
+  "relatedProblems": [
+    "erect-the-fence-convex-hull",
+    "max-points-collinear"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 71,
+    "frequency": "medium",
+    "importance": 6
+  },
+  "starterCode": "def compute_area(ax1: int, ay1: int, ax2: int, ay2: int, bx1: int, by1: int, bx2: int, by2: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def compute_area(ax1: int, ay1: int, ax2: int, ay2: int, bx1: int, by1: int, bx2: int, by2: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number ax1, number ay1, number ax2, number ay2, number bx1, number by1, number bx2, number by2}\n * @return {number}\n */\nfunction compute_area(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int compute_area(int ax1, int ay1, int ax2, int ay2, int bx1, int by1, int bx2, int by2) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint compute_area(int ax1, int ay1, int ax2, int ay2, int bx1, int by1, int bx2, int by2) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int compute_area(int& ax1, int& ay1, int& ax2, int& ay2, int& bx1, int& by1, int& bx2, int& by2) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

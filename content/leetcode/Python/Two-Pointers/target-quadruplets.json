@@ -1,0 +1,137 @@
+{
+  "id": "target-quadruplets",
+  "title": "Target Quadruplets",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Return all unique quadruplets [a,b,c,d] such that they sum to target. The result should not contain duplicates. Sorting plus two pointers in the inner loop achieves an efficient solution.\n\n    \n\nConstraints:\n    - 4 ≤ len(nums) ≤ 200\n- -10^4 ≤ nums[i], target ≤ 10^4",
+  "leetcodeUrl": "https://leetcode.com/problems/4sum/",
+  "complexity": {
+    "time": "O(n^3)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nAfter sorting, choose two indices for the first half and run a classic two pointer scan for the remaining pair. Skip duplicates at all levels to keep the output unique.\n\nApproach\n1. Initial Setup: Sort the array.\n2. Main Algorithm: Loop a and b. For each pair, sweep l and r inward and collect matches while skipping equal values.\n3. Return Result: Return the list of unique quadruplets.\n\nComplexity Analysis\n- Time Complexity: O(n^3) because the scan adjusts pointers a limited\n  number of times and avoids nested loops.\n- Space Complexity: O(1) since only a few variables or an output\n  list are used.\n\nKey Insights\n- Dedup at a, b, l, and r is essential\n- Two pointer inner loop avoids a third nested loop\n\nCommon Pitfalls\n- Not skipping duplicates leads to repeated results\n- Using sets can complicate ordering and cost extra space",
+  "solutionCode": "def target_quadruplets(nums, target):\n    nums.sort()\n    n = len(nums)\n    res = []\n    for a in range(n - 3):\n        if a > 0 and nums[a] == nums[a - 1]:\n            continue\n        for b in range(a + 1, n - 2):\n            if b > a + 1 and nums[b] == nums[b - 1]:\n                continue\n            l, r = b + 1, n - 1\n            while l < r:\n                s = nums[a] + nums[b] + nums[l] + nums[r]\n                if s == target:\n                    res.append([nums[a], nums[b], nums[l], nums[r]])\n                    l += 1\n                    r -= 1\n                    while l < r and nums[l] == nums[l - 1]:\n                        l += 1\n                    while l < r and nums[r] == nums[r + 1]:\n                        r -= 1\n                elif s < target:\n                    l += 1\n                else:\n                    r -= 1\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          0,
+          -1,
+          0,
+          -2,
+          2
+        ],
+        "target": 0
+      },
+      "expected": {
+        "result": [
+          [
+            -2,
+            -1,
+            1,
+            2
+          ],
+          [
+            -2,
+            0,
+            0,
+            2
+          ],
+          [
+            -1,
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "explanation": "All unique quads"
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "target": 8
+      },
+      "expected": {
+        "result": [
+          [
+            2,
+            2,
+            2,
+            2
+          ]
+        ]
+      },
+      "explanation": "All equal elements"
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "target": 1
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "No sum matches"
+    },
+    {
+      "input": {
+        "nums": [
+          100,
+          -50,
+          -50,
+          0
+        ],
+        "target": 0
+      },
+      "expected": {
+        "result": [
+          [
+            -50,
+            -50,
+            0,
+            100
+          ]
+        ]
+      },
+      "explanation": "Single valid quad"
+    }
+  ],
+  "tags": [
+    "array",
+    "two-pointers",
+    "sorting"
+  ],
+  "hints": [
+    "Sort first to enable skipping duplicates",
+    "Fix two indices and scan the rest with two pointers",
+    "Move pointers past equal values after a hit"
+  ],
+  "relatedProblems": [
+    "neutral-triplet-sum",
+    "closest-triplet-sum"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 37,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def target_quadruplets(nums: List[int], target: int) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def target_quadruplets(nums: List[int], target: int) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number target}\n * @return {any}\n */\nfunction target_quadruplets(nums, target) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<List<Integer>> target_quadruplets(int[] nums, int target) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[List[int]] target_quadruplets(int* nums, int target) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[List[int]] target_quadruplets(vector<int>& nums, int& target) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

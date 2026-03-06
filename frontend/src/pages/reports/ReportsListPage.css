@@ -1,0 +1,268 @@
+/* ─────────────────────────────────────────────────────────────────
+   ReportsListPage — Bold Typography data-table
+   ───────────────────────────────────────────────────────────────── */
+
+.rpl-page {
+  background: var(--bg);
+  min-height: 100vh;
+  padding: 2rem 2.5rem;
+  color: var(--fg);
+}
+
+/* ── Header ──────────────────────────────────────────────────────── */
+.rpl-header { margin-bottom: 1.75rem; }
+
+.rpl-title {
+  margin: 0 0 0.25rem;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
+}
+
+.rpl-sub {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--muted-fg);
+}
+
+/* ── Table container ─────────────────────────────────────────────── */
+.rpl-table-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.rpl-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+/* Header row */
+.rpl-table thead th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--muted-fg);
+  background: var(--muted);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.rpl-table thead th:first-child { padding-left: 1.25rem; }
+.rpl-table thead th:last-child  { padding-right: 1.25rem; }
+
+/* Body rows */
+.rpl-table tbody tr {
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease);
+  border-bottom: 1px solid var(--border);
+}
+.rpl-table tbody tr:last-child { border-bottom: none; }
+.rpl-table tbody tr:hover { background: var(--muted); }
+
+.rpl-table tbody td {
+  padding: 0.875rem 1rem;
+  vertical-align: middle;
+  color: var(--fg);
+}
+.rpl-table tbody td:first-child { padding-left: 1.25rem; }
+.rpl-table tbody td:last-child  { padding-right: 1.25rem; }
+
+/* ── Candidate cell ──────────────────────────────────────────────── */
+.rpl-candidate-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.rpl-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-fg);
+  text-transform: uppercase;
+  flex-shrink: 0;
+  background: var(--accent);
+}
+
+.rpl-candidate-name {
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.rpl-candidate-unknown {
+  color: var(--muted-fg);
+  font-style: italic;
+}
+
+/* ── Session code ────────────────────────────────────────────────── */
+.rpl-code {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--muted-fg);
+  background: var(--muted);
+  padding: 0.2rem 0.5rem;
+}
+
+/* ── Summary cell ────────────────────────────────────────────────── */
+.rpl-summary-cell {
+  max-width: 360px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--muted-fg);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+.rpl-summary-cell--muted {
+  color: var(--muted-fg);
+  font-style: italic;
+}
+
+/* ── AI Score bar ────────────────────────────────────────────────── */
+.rpl-score-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 100px;
+}
+
+.rpl-score-num {
+  font-weight: 700;
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  min-width: 28px;
+}
+.rpl-score-num--green { color: #4ade80; }
+.rpl-score-num--amber { color: #fbbf24; }
+.rpl-score-num--red   { color: #f87171; }
+.rpl-score-num--na    { color: var(--muted-fg); font-weight: 400; }
+
+.rpl-score-track {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  overflow: hidden;
+  max-width: 60px;
+}
+
+.rpl-score-fill {
+  height: 100%;
+  transition: width 0.3s;
+}
+.rpl-score-fill--green { background: #4ade80; }
+.rpl-score-fill--amber { background: #fbbf24; }
+.rpl-score-fill--red   { background: #f87171; }
+
+/* ── Date cell ───────────────────────────────────────────────────── */
+.rpl-date {
+  font-size: 0.8rem;
+  color: var(--muted-fg);
+  white-space: nowrap;
+}
+
+/* ── Chevron cell ────────────────────────────────────────────────── */
+.rpl-chevron {
+  width: 16px;
+  height: 16px;
+  color: var(--border);
+  transition: color var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+}
+.rpl-table tbody tr:hover .rpl-chevron {
+  color: var(--accent);
+  transform: translateX(2px);
+}
+
+/* ── Status pills ────────────────────────────────────────────────── */
+.rpl-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  padding: 0.2rem 0.6rem;
+  white-space: nowrap;
+}
+
+.rpl-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.rpl-pill--grey  { background: rgba(115,115,115,0.08); color: var(--muted-fg); }
+.rpl-pill--blue  { background: rgba(96,165,250,0.08);  color: #60a5fa; }
+.rpl-pill--green { background: rgba(74,222,128,0.08);  color: #4ade80; }
+.rpl-pill--red   { background: rgba(248,113,113,0.08); color: #f87171; }
+
+.rpl-pill--grey  .rpl-pill-dot { background: var(--muted-fg); }
+.rpl-pill--blue  .rpl-pill-dot { background: #60a5fa; }
+.rpl-pill--green .rpl-pill-dot { background: #4ade80; }
+.rpl-pill--red   .rpl-pill-dot { background: #f87171; }
+
+/* ── Empty / loading / error states ──────────────────────────────── */
+.rpl-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 5rem 2rem;
+  text-align: center;
+  color: var(--muted-fg);
+}
+.rpl-center p { margin: 0; font-size: 0.9rem; }
+
+.rpl-center-icon        { width: 40px; height: 40px; color: var(--border); }
+.rpl-center-icon--error { color: #ef4444; }
+.rpl-error-text { color: #f87171; }
+
+.rpl-spinner {
+  width: 32px;
+  height: 32px;
+  color: var(--accent);
+  animation: rpl-spin 1s linear infinite;
+}
+@keyframes rpl-spin { to { transform: rotate(360deg); } }
+
+.rpl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 5rem 2rem;
+  text-align: center;
+}
+.rpl-empty-icon    { width: 48px; height: 48px; color: var(--border); }
+.rpl-empty-heading { margin: 0; font-size: 1rem; font-weight: 600; color: var(--fg); }
+.rpl-empty-sub     { margin: 0; font-size: 0.875rem; color: var(--muted-fg); max-width: 340px; line-height: 1.5; }
+
+/* ── Action button ────────────────────────────────────────────────── */
+.rpl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.2rem;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity var(--duration-fast) var(--ease);
+}
+.rpl-btn:hover { opacity: 0.9; }

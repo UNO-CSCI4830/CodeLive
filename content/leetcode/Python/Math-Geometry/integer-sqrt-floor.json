@@ -1,0 +1,76 @@
+{
+  "id": "integer-sqrt-floor",
+  "title": "Floor of Square Root",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given a nonnegative integer x, return the floor of the square root of x. Do not use built-in exponentiation or floating-point routines.\n\n    \n\nConstraints:\n    - 0 ≤ x ≤ 2^31 - 1",
+  "leetcodeUrl": "https://leetcode.com/problems/sqrtx/",
+  "complexity": {
+    "time": "O(log x)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nBinary search the integer y such that y^2 ≤ x < (y+1)^2. The monotonic predicate is y^2 ≤ x, which is True for small y and False for large y. We can avoid overflow concerns in Python, but keep multiplications minimal for typing practice.\n\nApproach\n1. Initial Setup: Set lo=0, hi=x//2+1 for x≥2\n2. Main Algorithm: While lo≤hi, mid=(lo+hi)//2; compare mid*mid with x to move bounds and track best floor\n3. Return Result: Return best\n\nComplexity Analysis\n- Time Complexity: O(log x)\n- Space Complexity: O(1)\n\nKey Insights\n- Use hi=x//2+1 because sqrt(x) ≤ x/2 for x≥2\n- Keep a best variable to store latest valid mid\n\nCommon Pitfalls\n- Forgetting x=0 or 1 base cases\n- Using floats can cause precision issues",
+  "solutionCode": "def my_sqrt(x: int) -> int:\n    if x < 2:\n        return x\n    lo, hi = 1, x // 2 + 1\n    ans = 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        sq = mid * mid\n        if sq == x:\n            return mid\n        if sq < x:\n            ans = mid\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return ans",
+  "testCases": [
+    {
+      "input": {
+        "x": 8
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "2^2=4 ≤ 8 < 9"
+    },
+    {
+      "input": {
+        "x": 16
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Perfect square"
+    },
+    {
+      "input": {
+        "x": 0
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Zero base case"
+    },
+    {
+      "input": {
+        "x": 1
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Trivial square root"
+    }
+  ],
+  "tags": [
+    "math",
+    "binary-search"
+  ],
+  "hints": [
+    "Binary search on answer space",
+    "Check mid*mid against x",
+    "Track best floor"
+  ],
+  "relatedProblems": [
+    "count-primes-sieve",
+    "fast-power-exponent"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 69,
+    "frequency": "high",
+    "importance": 6
+  },
+  "starterCode": "def my_sqrt(x: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def my_sqrt(x: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number x}\n * @return {number}\n */\nfunction my_sqrt(x) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int my_sqrt(int x) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint my_sqrt(int x) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int my_sqrt(int& x) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

@@ -1,0 +1,80 @@
+{
+  "id": "distinct-subsequence-count",
+  "title": "Count Distinct Subsequences",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Given strings s and t, return the number of distinct subsequences of s which equals t. Empty string t is always one subsequence of any s.\n\n    \n\nConstraints:\n    - 1 ≤ |s| ≤ 1000\n- 1 ≤ |t| ≤ 1000",
+  "leetcodeUrl": "https://leetcode.com/problems/distinct-subsequences/",
+  "complexity": {
+    "time": "O(nm)",
+    "space": "O(nm)"
+  },
+  "explanation": "Intuition\ndp[i][j] = number of ways s[:i] forms t[:j]. If s[i-1]==t[j-1], we can match them or skip s[i-1]. Otherwise only skip s[i-1].\n\nApproach\n1. Initial Setup: Initialize dp[0][0..m] with dp[0][>0]=0 and dp[*][0]=1\n2. Main Algorithm: Fill table with character match rule\n3. Return Result: Return dp[n][m]\n\nComplexity Analysis\n- Time Complexity: O(nm)\n- Space Complexity: O(nm) or O(m) rolling\n\nKey Insights\n- When chars match: add both take and skip cases\n- Empty t has exactly 1 subsequence\n\nCommon Pitfalls\n- Using permutations instead of subsequences is incorrect\n- Beware integer growth; Python handles big ints",
+  "solutionCode": "def num_distinct(s: str, t: str) -> int:\n    n, m = len(s), len(t)\n    dp = [[0]*(m+1) for _ in range(n+1)]\n    for i in range(n+1):\n        dp[i][0] = 1\n    for i in range(1, n+1):\n        for j in range(1, m+1):\n            dp[i][j] = dp[i-1][j]\n            if s[i-1] == t[j-1]:\n                dp[i][j] += dp[i-1][j-1]\n    return dp[n][m]",
+  "testCases": [
+    {
+      "input": {
+        "s": "rabbbit",
+        "t": "rabbit"
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Three ways to drop extra b"
+    },
+    {
+      "input": {
+        "s": "babgbag",
+        "t": "bag"
+      },
+      "expected": {
+        "result": 5
+      },
+      "explanation": "Multiple choices of positions"
+    },
+    {
+      "input": {
+        "s": "abc",
+        "t": "abcd"
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "t longer than s"
+    },
+    {
+      "input": {
+        "s": "",
+        "t": ""
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Empty equals empty"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "string"
+  ],
+  "hints": [
+    "dp[i][0]=1 for all i",
+    "Match → take or skip",
+    "Else → skip only"
+  ],
+  "relatedProblems": [
+    "lcs-length",
+    "word-break-check"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 45,
+    "frequency": "medium",
+    "importance": 9
+  },
+  "starterCode": "def num_distinct(s: str, t: str) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def num_distinct(s: str, t: str) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s, string t}\n * @return {number}\n */\nfunction num_distinct(s, t) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int num_distinct(String s, String t) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint num_distinct(char* s, char* t) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int num_distinct(string& s, string& t) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

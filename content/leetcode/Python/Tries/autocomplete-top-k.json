@@ -1,0 +1,151 @@
+{
+  "id": "autocomplete-top-k",
+  "title": "Autocomplete with Top-K Frequent Suggestions",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Given Design an autocomplete function that, given a list of (term, frequency) pairs and a query prefix, returns the top-k most frequent terms that start with the prefix. Break ties lexicographically. Build a trie for prefix search and use a size-k min-heap during DFS to keep only the best candidates. Return results sorted by descending frequency then lexicographic order.\n\n    \n\nConstraints:\n    - 1 ≤ |terms| ≤ 2·10^5\n- Total characters across all terms ≤ 2·10^6\n- 1 ≤ k ≤ 50\n- Frequencies are positive integers",
+  "leetcodeUrl": "https://leetcode.com/problems/design-search-autocomplete-system/",
+  "complexity": {
+    "time": "O(P + C log k)",
+    "space": "O(T)"
+  },
+  "explanation": "Intuition\nThe trie narrows the search to the prefix subtree. A DFS enumerates candidates. Maintaining a min-heap capped at k elements ensures we never store more than k suggestions. Using negative frequencies creates a max-heap behavior with Python's min-heap.\n\nApproach\n1. Initial Setup: Insert terms with frequencies into a trie\n2. Main Algorithm: Walk down to the prefix node; if missing, return empty list\n3. Return Result: DFS and push (−freq, term) to a size-k heap; finally sort the heap for output\n\nComplexity Analysis\n- Time Complexity: O(P + C log k) where P is prefix walk and C candidates under prefix\n- Space Complexity: O(T) for the trie and heap ≤ k\n\nKey Insights\n- Heap keeps memory bounded regardless of subtree size\n- Lexicographic tie-break comes naturally in tuple order\n\nCommon Pitfalls\n- Forgetting to cap heap size grows memory with subtree\n- Sorting entire candidate list defeats the purpose of a heap",
+  "solutionCode": "import heapq\nclass TrieAuto:\n    def __init__(self):\n        self.children = {}\n        self.freq = 0\ndef top_k_suggestions(words, k, prefix):\n    root = TrieAuto()\n    for term, f in words:\n        node = root\n        for ch in term:\n            node = node.children.setdefault(ch, TrieAuto())\n        node.freq += f\n    node = root\n    for ch in prefix:\n        if ch not in node.children:\n            return []\n        node = node.children[ch]\n    heap = []\n    def dfs(n, path):\n        if n.freq > 0:\n            item = (-n.freq, path)\n            if len(heap) < k:\n                heapq.heappush(heap, item)\n            else:\n                if item < heap[0]:\n                    heapq.heapreplace(heap, item)\n        for ch, nxt in n.children.items():\n            dfs(nxt, path + ch)\n    dfs(node, prefix)\n    heap.sort()\n    return [term for _, term in heap]",
+  "testCases": [
+    {
+      "input": {
+        "terms": [
+          [
+            "apple",
+            5
+          ],
+          [
+            "app",
+            10
+          ],
+          [
+            "ape",
+            3
+          ]
+        ],
+        "prefix": "ap",
+        "k": 2
+      },
+      "expected": {
+        "result": [
+          "app",
+          "apple"
+        ]
+      },
+      "explanation": "Top 2 by frequency under 'ap'"
+    },
+    {
+      "input": {
+        "terms": [
+          [
+            "bat",
+            2
+          ],
+          [
+            "batch",
+            2
+          ],
+          [
+            "bath",
+            2
+          ]
+        ],
+        "prefix": "ba",
+        "k": 2
+      },
+      "expected": {
+        "result": [
+          "bat",
+          "batch"
+        ]
+      },
+      "explanation": "Tie by freq, lexicographic order"
+    },
+    {
+      "input": {
+        "terms": [
+          [
+            "a",
+            1
+          ],
+          [
+            "aa",
+            1
+          ],
+          [
+            "aaa",
+            1
+          ]
+        ],
+        "prefix": "aaaa",
+        "k": 3
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Prefix not found"
+    },
+    {
+      "input": {
+        "terms": [
+          [
+            "dog",
+            7
+          ],
+          [
+            "dot",
+            5
+          ],
+          [
+            "dove",
+            6
+          ],
+          [
+            "do",
+            8
+          ]
+        ],
+        "prefix": "do",
+        "k": 3
+      },
+      "expected": {
+        "result": [
+          "do",
+          "dog",
+          "dove"
+        ]
+      },
+      "explanation": "Top 3 frequencies under 'do'"
+    }
+  ],
+  "tags": [
+    "trie",
+    "heap",
+    "string"
+  ],
+  "hints": [
+    "Walk to the prefix node first",
+    "Maintain a size-k min-heap of candidates",
+    "Use (-freq, term) to order by freq then lexicographic"
+  ],
+  "relatedProblems": [
+    "add-and-search-words",
+    "implement-prefix-dictionary"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 35,
+    "frequency": "medium",
+    "importance": 9
+  },
+  "starterCode": "def __init__(self: any) -> List[str]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any) -> List[str]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self}\n * @return {any}\n */\nfunction __init__(self) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<String> __init__(any self) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[str] __init__(any self) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[str] __init__(any& self) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

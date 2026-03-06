@@ -1,0 +1,105 @@
+{
+  "id": "task-scheduler-with-cooldown",
+  "title": "Task Scheduler with Cooldown",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "You are given tasks represented by uppercase letters and a nonnegative cooldown n. Each same letter task must be separated by at least n intervals. Compute the least number of time units to finish all tasks if you can execute one task or idle each unit. Use a greedy schedule with a max-heap of remaining counts and a queue to track cooldowns.\n\n    \n\nConstraints:\n    - 1 ≤ len(tasks) ≤ 10^5\n- 0 ≤ n ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/task-scheduler/",
+  "complexity": {
+    "time": "O(n log m)",
+    "space": "O(m)"
+  },
+  "explanation": "Intuition\nAlways run the task with highest remaining count when available. Tasks rotate through cooldown tracked by time stamps. The heap selects the next candidate and the queue reactivates tasks after n units.\n\nApproach\n1. Initial Setup: Count task frequencies and build a max-heap via negatives\n2. Main Algorithm: At each time tick, pop a task if any; decrement and push into cooldown queue with release time\n3. Return Result: If front of queue is ready, push back into heap\n\nComplexity Analysis\n- Time Complexity: O(n log m) where m is unique tasks\n- Space Complexity: O(m)\n\nKey Insights\n- Greedy with a heap prevents long idle stretches\n- Cooldown queue synchronizes availability\n\nCommon Pitfalls\n- Forgetting to reinsert tasks after cooldown\n- Not advancing time when heap empty leads to infinite loop",
+  "solutionCode": "import heapq\nfrom collections import Counter, deque\ndef least_interval(tasks, n):\n    freq = Counter(tasks)\n    heap = [-c for c in freq.values()]\n    heapq.heapify(heap)\n    time = 0\n    cool = deque()\n    while heap or cool:\n        time += 1\n        if heap:\n            cnt = 1 + heapq.heappop(heap)\n            if cnt:\n                cool.append((time + n, cnt))\n        if cool and cool[0][0] == time:\n            _, cnt = cool.popleft()\n            heapq.heappush(heap, cnt)\n    return time",
+  "testCases": [
+    {
+      "input": {
+        "tasks": [
+          "A",
+          "A",
+          "A",
+          "B",
+          "B",
+          "B"
+        ],
+        "n": 2
+      },
+      "expected": {
+        "result": 8
+      },
+      "explanation": "A _ _ A _ _ A and B interleaved"
+    },
+    {
+      "input": {
+        "tasks": [
+          "A",
+          "A",
+          "A",
+          "B",
+          "B",
+          "B"
+        ],
+        "n": 0
+      },
+      "expected": {
+        "result": 6
+      },
+      "explanation": "No idle needed"
+    },
+    {
+      "input": {
+        "tasks": [
+          "A",
+          "A",
+          "A",
+          "A"
+        ],
+        "n": 3
+      },
+      "expected": {
+        "result": 13
+      },
+      "explanation": "All same letter requires idles"
+    },
+    {
+      "input": {
+        "tasks": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "n": 2
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "All unique tasks"
+    }
+  ],
+  "tags": [
+    "heap",
+    "greedy",
+    "queue"
+  ],
+  "hints": [
+    "Use negatives to simulate a max-heap",
+    "A queue can track cooldown release times",
+    "Increment time each loop iteration"
+  ],
+  "relatedProblems": [
+    "reorganize-string-no-adjacent",
+    "minimum-meeting-rooms"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 54,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def least_interval(tasks: List[str], n: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def least_interval(tasks: List[str], n: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] tasks, number n}\n * @return {number}\n */\nfunction least_interval(tasks, n) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int least_interval(String[] tasks, int n) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint least_interval(char** tasks, int n) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int least_interval(vector<string>& tasks, int& n) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

@@ -1,0 +1,92 @@
+{
+  "id": "n-queens",
+  "title": "Place N Queens on an N×N Board",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Return all distinct solutions to the n-queens puzzle. Each solution contains a board configuration where n queens do not attack each other. Use backtracking with three constraint sets tracking occupied columns and diagonals.\n\nConstraints:\n- 1 ≤ n ≤ 12",
+  "leetcodeUrl": "https://leetcode.com/problems/n-queens/",
+  "complexity": {
+    "time": "O(n!)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nQueens conflict by column and two diagonal directions. Track columns, diag r+c, and anti-diag r-c. Place queens row by row and skip squares that violate constraints.\n\nApproach\n1. Initial Setup: Initialize three sets for constraints\n2. Main Algorithm: For each row, try each column; skip if column or diagonals blocked; place and recurse\n3. Return Result: On success, format path of column indices into strings\n\nComplexity Analysis\n- Time Complexity: Exponential but pruned heavily\n- Space Complexity: O(n) for sets and path\n\nKey Insights\n- Diagonal indexing via r+c and r-c is simple\n- Row-by-row reduces state size\n\nCommon Pitfalls\n- Forgetting to remove from sets on backtrack\n- Using lists for O(n) membership slows down",
+  "solutionCode": "def solve_n_queens(n: int):\n    res, cols, diag, anti = [], set(), set(), set()\n    path = []\n    def dfs(r):\n        if r == n:\n            board = []\n            for c in path:\n                row = ['.'] * n\n                row[c] = 'Q'\n                board.append(''.join(row))\n            res.append(board)\n            return\n        for c in range(n):\n            if c in cols or (r + c) in diag or (r - c) in anti:\n                continue\n            cols.add(c); diag.add(r + c); anti.add(r - c)\n            path.append(c)\n            dfs(r + 1)\n            path.pop()\n            cols.remove(c); diag.remove(r + c); anti.remove(r - c)\n    dfs(0)\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "n": 4
+      },
+      "expected": {
+        "result": [
+          [
+            ".Q..",
+            "...Q",
+            "Q...",
+            "..Q."
+          ],
+          [
+            "..Q.",
+            "Q...",
+            "...Q",
+            ".Q.."
+          ]
+        ]
+      },
+      "explanation": "Two classic solutions"
+    },
+    {
+      "input": {
+        "n": 1
+      },
+      "expected": {
+        "result": [
+          [
+            "Q"
+          ]
+        ]
+      },
+      "explanation": "Trivial case"
+    },
+    {
+      "input": {
+        "n": 2
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "No solution"
+    },
+    {
+      "input": {
+        "n": 3
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "No solution"
+    }
+  ],
+  "tags": [
+    "backtracking"
+  ],
+  "hints": [
+    "Use sets for columns and diagonals",
+    "Try row by row",
+    "Convert column positions to strings at the end"
+  ],
+  "relatedProblems": [
+    "n-queens-ii",
+    "sudoku-solver"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 49,
+    "frequency": "medium",
+    "importance": 9
+  },
+  "starterCode": "def solve_n_queens(n: int) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def solve_n_queens(n: int) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number n}\n * @return {any}\n */\nfunction solve_n_queens(n) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<List<Integer>> solve_n_queens(int n) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[List[int]] solve_n_queens(int n) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[List[int]] solve_n_queens(int& n) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

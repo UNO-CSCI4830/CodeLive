@@ -1,0 +1,71 @@
+/* ── Sidebar shell ─────────────────────────────────── */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid var(--border);
+  background: var(--bg);
+  width: 4rem;
+  overflow: hidden;
+  transition: width var(--duration-normal) var(--ease);
+}
+
+.sidebar:hover {
+  width: 14rem;
+}
+
+/* ── Nav sections ─────────────────────────────────── */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0 0.5rem;
+}
+
+.sidebar-nav--top  { padding-top: 1rem; }
+.sidebar-nav--bottom { padding-bottom: 1rem; }
+
+/* ── Individual link ──────────────────────────────── */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  color: var(--muted-fg);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.sidebar-link:hover {
+  color: var(--fg);
+}
+
+.sidebar-link--active {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ── Icon ─────────────────────────────────────────── */
+.sidebar-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* ── Label (hidden when collapsed, shown on hover) ── */
+.sidebar-label {
+  font-size: 0.875rem;
+  letter-spacing: var(--tracking-normal);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease);
+}
+
+.sidebar:hover .sidebar-label {
+  opacity: 1;
+}

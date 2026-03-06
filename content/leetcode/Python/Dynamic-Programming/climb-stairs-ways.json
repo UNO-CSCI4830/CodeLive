@@ -1,0 +1,76 @@
+{
+  "id": "climb-stairs-ways",
+  "title": "Ways to Climb a Staircase",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given You are climbing a staircase. It takes n steps to reach the top. Each time you can climb either 1 or 2 steps. Return the number of distinct ways to reach the top. Use integer arithmetic.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 45",
+  "leetcodeUrl": "https://leetcode.com/problems/climbing-stairs/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nThis is the Fibonacci progression where f(n)=f(n-1)+f(n-2) because the last move is either a 1-step from n-1 or a 2-step from n-2. Iterative DP accumulates answers while keeping only the last two values.\n\nApproach\n1. Initial Setup: Let a=f(0)=1, b=f(1)=1\n2. Main Algorithm: Iterate i from 2..n, update a,b to next fib\n3. Return Result: Return b as f(n)\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(1)\n\nKey Insights\n- Iterative rolling variables avoid arrays\n- DP base f(0)=1, f(1)=1\n\nCommon Pitfalls\n- Off-by-one when initializing\n- Overflow not an issue within constraints",
+  "solutionCode": "def climb_stairs(n: int) -> int:\n    a, b = 1, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b if n > 0 else 1",
+  "testCases": [
+    {
+      "input": {
+        "n": 2
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Two sequences: 1+1 or 2"
+    },
+    {
+      "input": {
+        "n": 3
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Fibonacci(3)"
+    },
+    {
+      "input": {
+        "n": 1
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single step"
+    },
+    {
+      "input": {
+        "n": 5
+      },
+      "expected": {
+        "result": 8
+      },
+      "explanation": "Fibonacci sequence check"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "math"
+  ],
+  "hints": [
+    "Define f(n) using the last step",
+    "Use two rolling variables",
+    "Mind base cases for n=1"
+  ],
+  "relatedProblems": [
+    "climb-stairs-with-steps-k",
+    "min-cost-stairs"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 84,
+    "frequency": "high",
+    "importance": 6
+  },
+  "starterCode": "def climb_stairs(n: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def climb_stairs(n: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number n}\n * @return {number}\n */\nfunction climb_stairs(n) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int climb_stairs(int n) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint climb_stairs(int n) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int climb_stairs(int& n) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

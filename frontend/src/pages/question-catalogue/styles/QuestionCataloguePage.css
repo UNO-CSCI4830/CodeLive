@@ -1,0 +1,29 @@
+/* QuestionCataloguePage — Bold Typography */
+
+.catalogue-wrapper {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.catalogue-header { margin-bottom: 2.5rem; }
+
+.catalogue-heading {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
+}
+
+.catalogue-subheading {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--muted-fg);
+}
+
+.catalogue-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 640px) { .catalogue-grid { grid-template-columns: 1fr; } }

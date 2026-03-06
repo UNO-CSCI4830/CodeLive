@@ -1,0 +1,92 @@
+{
+  "id": "coin-change-min",
+  "title": "Minimum Coins to Make Amount",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given coins of different denominations and a total amount, compute the fewest number of coins needed to make that amount. If impossible, return -1. Unlimited copies of each coin are allowed.\n\n    \n\nConstraints:\n    - 1 ≤ amount ≤ 10^4\n- 1 ≤ |coins| ≤ 12\n- 1 ≤ coin ≤ 10^4",
+  "leetcodeUrl": "https://leetcode.com/problems/coin-change/",
+  "complexity": {
+    "time": "O(amount·|coins|)",
+    "space": "O(amount)"
+  },
+  "explanation": "Intuition\nClassic unbounded knapsack variant. dp[a] stores the minimum coins to make sum a. For each coin, we relax forward dp[a]=min(dp[a],dp[a-c]+1).\n\nApproach\n1. Initial Setup: Initialize dp with INF and dp[0]=0\n2. Main Algorithm: For each coin c, loop a from c..amount and update dp[a]\n3. Return Result: Return dp[amount] or -1 if INF\n\nComplexity Analysis\n- Time Complexity: O(A·C)\n- Space Complexity: O(A)\n\nKey Insights\n- Order of loops allows reuse of the same coin unlimited times\n- INF guard prevents overflow\n\nCommon Pitfalls\n- Iterating amounts backward would forbid reuse\n- Be careful when amount is small",
+  "solutionCode": "def coin_change(coins, amount):\n    INF = 10**9\n    dp = [INF] * (amount + 1)\n    dp[0] = 0\n    for c in coins:\n        for a in range(c, amount + 1):\n            if dp[a - c] + 1 < dp[a]:\n                dp[a] = dp[a - c] + 1\n    return -1 if dp[amount] >= INF else dp[amount]",
+  "testCases": [
+    {
+      "input": {
+        "coins": [
+          1,
+          2,
+          5
+        ],
+        "amount": 11
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "When coin_change(coins=[1,2,5], amount=11), the expected result is 3"
+    },
+    {
+      "input": {
+        "coins": [
+          2
+        ],
+        "amount": 3
+      },
+      "expected": {
+        "result": -1
+      },
+      "explanation": "Impossible"
+    },
+    {
+      "input": {
+        "coins": [
+          1
+        ],
+        "amount": 0
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Zero amount needs zero coins"
+    },
+    {
+      "input": {
+        "coins": [
+          2,
+          5,
+          10,
+          1
+        ],
+        "amount": 27
+      },
+      "expected": {
+        "result": 5
+      },
+      "explanation": "10+10+5+1+1"
+    }
+  ],
+  "tags": [
+    "dynamic-programming"
+  ],
+  "hints": [
+    "Unbounded knapsack over amount",
+    "Forward loop over amounts",
+    "Use a large INF sentinel"
+  ],
+  "relatedProblems": [
+    "coin-change-ways",
+    "minimum-perfect-squares"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 44,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def coin_change(coins: List[int], amount: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def coin_change(coins: List[int], amount: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] coins, number amount}\n * @return {number}\n */\nfunction coin_change(coins, amount) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int coin_change(int[] coins, int amount) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint coin_change(int* coins, int amount) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int coin_change(vector<int>& coins, int& amount) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

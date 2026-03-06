@@ -1,0 +1,81 @@
+{
+  "id": "generate-parentheses",
+  "title": "Generate Balanced Parentheses",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given Generate all combinations of n pairs of balanced parentheses. Track how many opens and closes have been placed. Close only if closes < opens to maintain validity at every step.\n\nConstraints:\n- 1 ≤ n ≤ 10",
+  "leetcodeUrl": "https://leetcode.com/problems/generate-parentheses/",
+  "complexity": {
+    "time": "O(Catalan(n))",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nValidity can be enforced locally by ensuring we never place more closing than opening parentheses, and we never exceed n opens.\n\nApproach\n1. Initial Setup: Recurse with counts (open, close)\n2. Main Algorithm: If open < n, try '('; if close < open, try ')'; add when length is 2n\n3. Return Result: Backtrack after each choice\n\nComplexity Analysis\n- Time Complexity: Catalan number count\n- Space Complexity: O(n) depth\n\nKey Insights\n- Local constraints prune invalid prefixes\n- This is a model pattern for constructive backtracking\n\nCommon Pitfalls\n- Allowing close when close==open produces invalid prefixes\n- Forgetting to stop at length 2n",
+  "solutionCode": "def generate_parentheses(n: int):\n    res = []\n    def dfs(open_cnt, close_cnt, path):\n        if len(path) == 2 * n:\n            res.append(path)\n            return\n        if open_cnt < n:\n            dfs(open_cnt + 1, close_cnt, path + \"(\")\n        if close_cnt < open_cnt:\n            dfs(open_cnt, close_cnt + 1, path + \")\")\n    dfs(0, 0, \"\")\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "n": 1
+      },
+      "expected": {
+        "result": [
+          "()"
+        ]
+      },
+      "explanation": "Single pair"
+    },
+    {
+      "input": {
+        "n": 3
+      },
+      "expected": {
+        "result": "size 5"
+      },
+      "explanation": "Catalan(3)=5"
+    },
+    {
+      "input": {
+        "n": 2
+      },
+      "expected": {
+        "result": [
+          "(())",
+          "()()"
+        ]
+      },
+      "explanation": "When generate_parentheses(n=2), the expected result is [\"(())\",\"()()\"]"
+    },
+    {
+      "input": {
+        "n": 4
+      },
+      "expected": {
+        "result": "size 14"
+      },
+      "explanation": "Catalan(4)=14"
+    }
+  ],
+  "tags": [
+    "backtracking",
+    "string"
+  ],
+  "hints": [
+    "Track used opens and closes",
+    "Close only when close < open",
+    "Stop at length 2n"
+  ],
+  "relatedProblems": [
+    "restore-ip-addresses",
+    "palindrome-partitioning"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 76,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def generate_parentheses(n: int) -> List[str]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def generate_parentheses(n: int) -> List[str]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number n}\n * @return {any}\n */\nfunction generate_parentheses(n) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<String> generate_parentheses(int n) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[str] generate_parentheses(int n) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[str] generate_parentheses(int& n) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

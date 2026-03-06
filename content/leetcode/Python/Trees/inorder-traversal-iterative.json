@@ -1,0 +1,100 @@
+{
+  "id": "inorder-traversal-iterative",
+  "title": "Iterative Inorder Traversal",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Return the inorder traversal of a binary tree without recursion using a stack.\n\n    \n\nConstraints:\n    - 0 ≤ nodes ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/binary-tree-inorder-traversal/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(h)"
+  },
+  "explanation": "Intuition\nInorder visits left, node, right. The iterative version simulates the call stack by pushing nodes while walking left.\n\nApproach\n1. Initial Setup: Push while going left\n2. Main Algorithm: Pop, record node, then go right\n3. Return Result: Repeat until stack and current are empty\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(h)\n\nKey Insights\n- Stack mirrors recursion\n- Works on any binary tree\n\nCommon Pitfalls\n- Forgetting to advance to right child\n- Infinite loop if current not updated",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef inorder_traversal_iterative(root: TreeNode):\n    res, stack = [], []\n    cur = root\n    while cur or stack:\n        while cur:\n            stack.append(cur)\n            cur = cur.left\n        cur = stack.pop()\n        res.append(cur.val)\n        cur = cur.right\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "tree": [
+          1,
+          null,
+          2,
+          3
+        ]
+      },
+      "expected": {
+        "result": [
+          1,
+          3,
+          2
+        ]
+      },
+      "explanation": "Leftmost first"
+    },
+    {
+      "input": {
+        "tree": []
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Empty traversal"
+    },
+    {
+      "input": {
+        "tree": [
+          2,
+          1,
+          3
+        ]
+      },
+      "expected": {
+        "result": [
+          1,
+          2,
+          3
+        ]
+      },
+      "explanation": "BST yields sorted order"
+    },
+    {
+      "input": {
+        "tree": [
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "result": [
+          2,
+          1
+        ]
+      },
+      "explanation": "Left child then root"
+    }
+  ],
+  "tags": [
+    "tree",
+    "stack",
+    "dfs"
+  ],
+  "hints": [
+    "Simulate recursion with a stack",
+    "Push left chain",
+    "Pop to visit"
+  ],
+  "relatedProblems": [
+    "kth-smallest-in-bst",
+    "validate-bst"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 70.2,
+    "frequency": "high",
+    "importance": 6
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {any}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

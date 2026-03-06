@@ -1,0 +1,49 @@
+{
+  "id": "hook-use-debounce",
+  "title": "useDebounce Hook",
+  "category": "frontend",
+  "difficulty": "medium",
+  "description": "Implement a **useDebounce** custom hook that delays updating a value until a specified period of inactivity has elapsed.\n\n### Requirements\n\n- `useDebounce<T>(value: T, delay: number)` returns the debounced value\n- The debounced value only updates after `delay` ms of no new changes to `value`\n- If `value` changes again before the delay expires, the timer resets\n- On unmount, any pending timeout must be cleaned up\n- Default delay should be 300ms if not specified\n\n### Behaviour Example\n\n```\nUser types:  H  e  l  l  o\nTimeline:    0  50 100 150 200 (ms)\nDebounced (500ms delay): unchanged until 700ms → \"Hello\"\n```\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Text input | `input` |\n| Debounced output | `debounced` |",
+  "constraints": "- Implement in useDebounce.ts as a standalone hook\n- Use only React built-in hooks (useState, useEffect)\n- Must properly clean up timers on unmount and on value change",
+  "hints": [
+    "Use useState to hold the debounced value and useEffect to set up the timer.",
+    "Return the cleanup function from useEffect to clear the timeout when value or delay changes.",
+    "The effect dependency array should include both value and delay."
+  ],
+  "tags": ["react", "hooks", "custom-hooks", "debounce", "performance"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React, { useState } from 'react';\nimport { useDebounce } from './useDebounce';\nimport './styles.css';\n\nexport default function App() {\n  const [text, setText] = useState('');\n  const debounced = useDebounce(text, 500);\n\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>\n      <h1 style={{ marginBottom: '1rem' }}>useDebounce</h1>\n      <input\n        data-testid=\"input\"\n        className=\"debounce-input\"\n        value={text}\n        onChange={e => setText(e.target.value)}\n        placeholder=\"Type something…\"\n      />\n      <p style={{ marginTop: '1rem', color: '#6b7280' }}>\n        Debounced (500ms): <strong data-testid=\"debounced\">{debounced || '—'}</strong>\n      </p>\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "useDebounce.ts",
+      "content": "import { useState, useEffect } from 'react';\n\n/**\n * Debounces a value by the given delay.\n * The returned value only updates after `delay` ms of inactivity.\n *\n * @param value  - The value to debounce\n * @param delay  - Milliseconds to wait (default 300)\n * @returns The debounced value\n */\nexport function useDebounce<T>(value: T, delay: number = 300): T {\n  // TODO: Hold the debounced value in state\n  // TODO: Set up a timeout that updates the debounced value after `delay` ms\n  // TODO: Clean up the timeout when value/delay changes or on unmount\n\n  return value; // placeholder — returns immediately (not debounced)\n}\n",
+      "language": "ts",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": ".debounce-input {\n  width: 100%;\n  max-width: 24rem;\n  padding: 0.625rem 0.875rem;\n  border: 1px solid #d1d5db;\n  border-radius: 0.375rem;\n  font-size: 0.9375rem;\n  outline: none;\n  transition: border-color 0.15s ease;\n}\n\n.debounce-input:focus {\n  border-color: #3b82f6;\n  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent, act } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport React, { useState } from 'react';\nimport { useDebounce } from './useDebounce';\n\nfunction Harness({ delay = 300 }: { delay?: number }) {\n  const [text, setText] = useState('');\n  const debounced = useDebounce(text, delay);\n  return (\n    <div>\n      <input data-testid=\"input\" value={text} onChange={e => setText(e.target.value)} />\n      <span data-testid=\"debounced\">{debounced}</span>\n    </div>\n  );\n}\n\ndescribe('useDebounce', () => {\n  beforeEach(() => {\n    jest.useFakeTimers();\n  });\n  afterEach(() => {\n    jest.useRealTimers();\n  });\n\n  it('returns the initial value immediately', () => {\n    render(<Harness />);\n    expect(screen.getByTestId('debounced')).toHaveTextContent('');\n  });\n\n  it('does not update the debounced value before delay', () => {\n    render(<Harness delay={500} />);\n    fireEvent.change(screen.getByTestId('input'), { target: { value: 'hello' } });\n    act(() => { jest.advanceTimersByTime(300); });\n    expect(screen.getByTestId('debounced')).toHaveTextContent('');\n  });\n\n  it('updates the debounced value after delay', () => {\n    render(<Harness delay={500} />);\n    fireEvent.change(screen.getByTestId('input'), { target: { value: 'hello' } });\n    act(() => { jest.advanceTimersByTime(500); });\n    expect(screen.getByTestId('debounced')).toHaveTextContent('hello');\n  });\n\n  it('resets the timer when value changes', () => {\n    render(<Harness delay={500} />);\n    fireEvent.change(screen.getByTestId('input'), { target: { value: 'he' } });\n    act(() => { jest.advanceTimersByTime(400); });\n    fireEvent.change(screen.getByTestId('input'), { target: { value: 'hello' } });\n    act(() => { jest.advanceTimersByTime(400); });\n    expect(screen.getByTestId('debounced')).toHaveTextContent('');\n    act(() => { jest.advanceTimersByTime(100); });\n    expect(screen.getByTestId('debounced')).toHaveTextContent('hello');\n  });\n\n  it('uses default delay of 300ms', () => {\n    render(<Harness />);\n    fireEvent.change(screen.getByTestId('input'), { target: { value: 'test' } });\n    act(() => { jest.advanceTimersByTime(299); });\n    expect(screen.getByTestId('debounced')).toHaveTextContent('');\n    act(() => { jest.advanceTimersByTime(1); });\n    expect(screen.getByTestId('debounced')).toHaveTextContent('test');\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "useDebounce.ts",
+      "content": "import { useState, useEffect } from 'react';\n\nexport function useDebounce<T>(value: T, delay: number = 300): T {\n  const [debounced, setDebounced] = useState(value);\n\n  useEffect(() => {\n    const timer = setTimeout(() => {\n      setDebounced(value);\n    }, delay);\n\n    return () => {\n      clearTimeout(timer);\n    };\n  }, [value, delay]);\n\n  return debounced;\n}\n",
+      "language": "ts"
+    }
+  ],
+  "sort_order": 210
+}

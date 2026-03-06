@@ -1,0 +1,43 @@
+{
+  "id": "css-center-card",
+  "title": "Center a Card",
+  "category": "frontend",
+  "difficulty": "easy",
+  "description": "Write CSS to **center a card** both vertically and horizontally inside its container.\n\n### Visual Target\n\nA dark-bordered card with padding, rounded corners, and a subtle shadow sits perfectly in the middle of a coloured container that fills the full viewport height.\n\n```\n┌──────────────────────────────┐\n│                              │\n│       ┌──────────────┐       │\n│       │  Card Title   │       │\n│       │  Card body…   │       │\n│       └──────────────┘       │\n│                              │\n└──────────────────────────────┘\n```\n\n### Requirements\n\n- `.container` fills the full viewport height (`100vh`)\n- `.container` uses **flexbox** to center its child both axes\n- `.card` has a max-width of `24rem`, padding of `2rem`, border-radius `0.75rem`\n- `.card` has a white background and a subtle box-shadow\n- The container has a light grey background (`#f3f4f6`)\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Outer container | `container` |\n| Card | `card` |",
+  "constraints": "- Only edit styles.css — the HTML structure is fixed\n- Use flexbox for centring (no position: absolute hack)\n- Do not use JavaScript for layout",
+  "hints": [
+    "Set display: flex on the container, then justify-content: center and align-items: center.",
+    "Make the container fill the screen with min-height: 100vh.",
+    "Use box-shadow: 0 1px 3px rgba(0,0,0,0.1) for a subtle shadow."
+  ],
+  "tags": ["css", "flexbox", "centering", "layout"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport './styles.css';\n\nexport default function App() {\n  return (\n    <div className=\"container\" data-testid=\"container\">\n      <div className=\"card\" data-testid=\"card\">\n        <h2 className=\"card__title\">Welcome</h2>\n        <p className=\"card__body\">\n          This card should be perfectly centred both horizontally and vertically\n          inside the container.\n        </p>\n      </div>\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "styles.css",
+      "content": "/* === Container ===\n * TODO: Make the container fill the viewport height\n * TODO: Use flexbox to centre the card both horizontally and vertically\n * TODO: Set the background to #f3f4f6\n */\n.container {\n\n}\n\n/* === Card ===\n * TODO: Set max-width to 24rem\n * TODO: Add 2rem padding\n * TODO: Add border-radius of 0.75rem\n * TODO: White background\n * TODO: Subtle box-shadow\n */\n.card {\n\n}\n\n/* These styles are provided — do not modify */\n.card__title {\n  margin: 0 0 0.75rem;\n  font-size: 1.25rem;\n  font-weight: 600;\n  color: #111827;\n}\n\n.card__body {\n  margin: 0;\n  font-size: 0.9375rem;\n  line-height: 1.6;\n  color: #4b5563;\n}\n",
+      "language": "css",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport App from './App';\n\ndescribe('Center Card', () => {\n  beforeEach(() => {\n    render(<App />);\n  });\n\n  it('container uses flexbox', () => {\n    const container = screen.getByTestId('container');\n    const styles = getComputedStyle(container);\n    expect(styles.display).toBe('flex');\n  });\n\n  it('container centres horizontally', () => {\n    const container = screen.getByTestId('container');\n    const styles = getComputedStyle(container);\n    expect(styles.justifyContent).toBe('center');\n  });\n\n  it('container centres vertically', () => {\n    const container = screen.getByTestId('container');\n    const styles = getComputedStyle(container);\n    expect(styles.alignItems).toBe('center');\n  });\n\n  it('container fills viewport height', () => {\n    const container = screen.getByTestId('container');\n    const styles = getComputedStyle(container);\n    expect(styles.minHeight).toBe('100vh');\n  });\n\n  it('container has grey background', () => {\n    const container = screen.getByTestId('container');\n    const styles = getComputedStyle(container);\n    expect(styles.backgroundColor).toBe('rgb(243, 244, 246)');\n  });\n\n  it('card has max-width of 24rem', () => {\n    const card = screen.getByTestId('card');\n    const styles = getComputedStyle(card);\n    expect(styles.maxWidth).toBe('24rem');\n  });\n\n  it('card has border-radius', () => {\n    const card = screen.getByTestId('card');\n    const styles = getComputedStyle(card);\n    expect(styles.borderRadius).toBe('0.75rem');\n  });\n\n  it('card has white background', () => {\n    const card = screen.getByTestId('card');\n    const styles = getComputedStyle(card);\n    expect(styles.backgroundColor).toBe('rgb(255, 255, 255)');\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "styles.css",
+      "content": ".container {\n  min-height: 100vh;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  background-color: #f3f4f6;\n}\n\n.card {\n  max-width: 24rem;\n  padding: 2rem;\n  border-radius: 0.75rem;\n  background-color: #ffffff;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n}\n\n.card__title {\n  margin: 0 0 0.75rem;\n  font-size: 1.25rem;\n  font-weight: 600;\n  color: #111827;\n}\n\n.card__body {\n  margin: 0;\n  font-size: 0.9375rem;\n  line-height: 1.6;\n  color: #4b5563;\n}\n",
+      "language": "css"
+    }
+  ],
+  "sort_order": 300
+}

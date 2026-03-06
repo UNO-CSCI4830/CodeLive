@@ -1,0 +1,90 @@
+{
+  "id": "phone-letter-combinations",
+  "title": "Phone Keypad Letter Combinations",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a string of digits 2..9, return all possible letter combinations that the number could represent using the telephone keypad mapping. Use backtracking to append letters for each digit in order.\n\nConstraints:\n- 0 ≤ |digits| ≤ 10",
+  "leetcodeUrl": "https://leetcode.com/problems/letter-combinations-of-a-phone-number/",
+  "complexity": {
+    "time": "O(3^m·4^n)",
+    "space": "O(L)"
+  },
+  "explanation": "Intuition\nThe branching factor per digit is three or four. Build strings by choosing each letter for the current digit and recursing to the next.\n\nApproach\n1. Initial Setup: Map digits to strings\n2. Main Algorithm: DFS index i; for each letter in map[digits[i]] append and recurse\n3. Return Result: Add built string at end\n\nComplexity Analysis\n- Time Complexity: Product of choices\n- Space Complexity: O(length of output string) recursion\n\nKey Insights\n- Return [] when digits empty\n- Precompute mapping for clarity\n\nCommon Pitfalls\n- Concatenating in place can be messy; use path string\n- Forgetting to advance index",
+  "solutionCode": "def letter_combinations(digits: str):\n    if not digits:\n        return []\n    mp = {\n        \"2\": \"abc\",\"3\": \"def\",\"4\": \"ghi\",\"5\": \"jkl\",\n        \"6\": \"mno\",\"7\": \"pqrs\",\"8\": \"tuv\",\"9\": \"wxyz\"\n    }\n    res = []\n    def dfs(i, path):\n        if i == len(digits):\n            res.append(path)\n            return\n        for ch in mp[digits[i]]:\n            dfs(i + 1, path + ch)\n    dfs(0, \"\")\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "digits": "23"
+      },
+      "expected": {
+        "result": [
+          "ad",
+          "ae",
+          "af",
+          "bd",
+          "be",
+          "bf",
+          "cd",
+          "ce",
+          "cf"
+        ]
+      },
+      "explanation": "Two digits expansion"
+    },
+    {
+      "input": {
+        "digits": ""
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Empty input"
+    },
+    {
+      "input": {
+        "digits": "2"
+      },
+      "expected": {
+        "result": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "explanation": "Single digit"
+    },
+    {
+      "input": {
+        "digits": "79"
+      },
+      "expected": {
+        "result": "size 16"
+      },
+      "explanation": "4×4 combinations"
+    }
+  ],
+  "tags": [
+    "backtracking",
+    "string"
+  ],
+  "hints": [
+    "Map digits to letters",
+    "Build strings recursively",
+    "Return [] for empty input"
+  ],
+  "relatedProblems": [
+    "generate-parentheses",
+    "palindrome-partitioning"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 60,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def letter_combinations(digits: str) -> List[str]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def letter_combinations(digits: str) -> List[str]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string digits}\n * @return {any}\n */\nfunction letter_combinations(digits) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<String> letter_combinations(String digits) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[str] letter_combinations(char* digits) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[str] letter_combinations(string& digits) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

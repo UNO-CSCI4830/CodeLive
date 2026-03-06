@@ -1,0 +1,131 @@
+{
+  "id": "mst-kruskal-total-cost",
+  "title": "Minimum Spanning Tree by Kruskal",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an undirected connected graph with n nodes (0..n-1) and a list of edges [u,v,w], compute the total weight of the minimum spanning tree using Kruskal's algorithm.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 2·10^5\n- n-1 ≤ |edges| ≤ 3·10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/minimum-cost-to-connect-sticks/",
+  "complexity": {
+    "time": "O(E log E)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nSort edges by weight and greedily pick edges that connect different components. Union-Find tracks connectivity efficiently.\n\nApproach\n1. Initial Setup: Sort edges ascending by w\n2. Main Algorithm: For each (u,v,w), if find(u)!=find(v), union and add w to total\n3. Return Result: Stop after n-1 edges\n\nComplexity Analysis\n- Time Complexity: O(E log E)\n- Space Complexity: O(n)\n\nKey Insights\n- Path compression and union by rank make near O(1) unions\n- Result is unique if all weights distinct\n\nCommon Pitfalls\n- Graph must be connected to form MST\n- Be careful with 0-based indexing of nodes",
+  "solutionCode": "def kruskal_mst(n, edges):\n    parent = list(range(n))\n    rank = [0] * n\n    def find(x):\n        while parent[x] != x:\n            parent[x] = parent[parent[x]]\n            x = parent[x]\n        return x\n    def union(a, b):\n        ra, rb = find(a), find(b)\n        if ra == rb:\n            return False\n        if rank[ra] < rank[rb]:\n            parent[ra] = rb\n        elif rank[ra] > rank[rb]:\n            parent[rb] = ra\n        else:\n            parent[rb] = ra\n            rank[ra] += 1\n        return True\n    total = 0\n    picked = 0\n    for u, v, w in sorted(edges, key=lambda x: x[2]):\n        if union(u, v):\n            total += w\n            picked += 1\n            if picked == n - 1:\n                break\n    return total if picked == n - 1 else None",
+  "testCases": [
+    {
+      "input": {
+        "n": 3,
+        "edges": [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            2
+          ],
+          [
+            0,
+            2,
+            3
+          ]
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Pick 1 and 2-weight edges"
+    },
+    {
+      "input": {
+        "n": 4,
+        "edges": [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            2,
+            3,
+            1
+          ],
+          [
+            0,
+            3,
+            10
+          ]
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Chain edges"
+    },
+    {
+      "input": {
+        "n": 2,
+        "edges": [
+          [
+            0,
+            1,
+            5
+          ]
+        ]
+      },
+      "expected": {
+        "result": 5
+      },
+      "explanation": "Single edge"
+    },
+    {
+      "input": {
+        "n": 3,
+        "edges": [
+          [
+            0,
+            1,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": null
+      },
+      "explanation": "Disconnected graph"
+    }
+  ],
+  "tags": [
+    "graph",
+    "kruskal",
+    "union-find",
+    "mst"
+  ],
+  "hints": [
+    "Sort edges by weight",
+    "Union components that are disjoint",
+    "Stop after picking n-1 edges"
+  ],
+  "relatedProblems": [
+    "connect-points-min-cost",
+    "redundant-connection-undirected"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 66,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def kruskal_mst(n: int, edges: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def kruskal_mst(n: int, edges: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number n, number[] edges}\n * @return {number}\n */\nfunction kruskal_mst(n, edges) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int kruskal_mst(int n, int[][] edges) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint kruskal_mst(int n, int[][] edges) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int kruskal_mst(int& n, vector<vector<int>>& edges) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

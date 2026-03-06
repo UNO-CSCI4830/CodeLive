@@ -1,0 +1,95 @@
+{
+  "id": "search-insert-position",
+  "title": "Search Insert Position",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Return the index where a target should be inserted in order in a sorted array of distinct integers. If the target is found, return its index. Otherwise return the index where it would be inserted.\n\n    \n\nConstraints:\n    - 0 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i], target ≤ 10^9\n- All elements are distinct",
+  "leetcodeUrl": "https://leetcode.com/problems/search-insert-position/",
+  "complexity": {
+    "time": "O(log n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nWe need the first index whose value is not less than the target. A lower bound binary search that maintains a half-open interval [l, r) returns this position directly.\n\nApproach\n1. Initial Setup: Set l=0, r=n.\n2. Main Algorithm: While l<r, mid=(l+r)//2. If nums[mid] < target set l=mid+1 else r=mid.\n3. Return Result: Return l as the insertion index.\n\nComplexity Analysis\n- Time Complexity: O(log n) because the search space halves at each step.\n- Space Complexity: O(1) since only a few variables are maintained.\n\nKey Insights\n- Lower bound finds the leftmost feasible position\n- Half-open intervals simplify off by one details\n\nCommon Pitfalls\n- Using closed interval needs different updates\n- Not returning l gives wrong index when absent",
+  "solutionCode": "def search_insert_position(nums, target):\n    left, right = 0, len(nums)\n    while left < right:\n        mid = (left + right) // 2\n        if nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid\n    return left",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          3,
+          5,
+          6
+        ],
+        "target": 5
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Target found"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          3,
+          5,
+          6
+        ],
+        "target": 2
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Insert between 1 and 3"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          3,
+          5,
+          6
+        ],
+        "target": 7
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Append at the end"
+    },
+    {
+      "input": {
+        "nums": [],
+        "target": 10
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Insert at start when empty"
+    }
+  ],
+  "tags": [
+    "array",
+    "binary-search"
+  ],
+  "hints": [
+    "Look for the first index where nums[i] >= target",
+    "Use a half-open interval [l, r)",
+    "Return l at the end"
+  ],
+  "relatedProblems": [
+    "index-in-sorted",
+    "first-and-last-position"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 69,
+    "frequency": "high",
+    "importance": 6
+  },
+  "starterCode": "def search_insert_position(nums: List[int], target: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def search_insert_position(nums: List[int], target: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number target}\n * @return {number}\n */\nfunction search_insert_position(nums, target) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int search_insert_position(int[] nums, int target) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint search_insert_position(int* nums, int target) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int search_insert_position(vector<int>& nums, int& target) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

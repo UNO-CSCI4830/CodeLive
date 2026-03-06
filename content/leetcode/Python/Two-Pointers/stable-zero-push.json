@@ -1,0 +1,108 @@
+{
+  "id": "stable-zero-push",
+  "title": "Stable Zero Push",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given Move all zeros to the end of the array while keeping the order of non zero elements. Do this in place and return the modified array.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/move-zeroes/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nUse a write pointer to compress non zeros to the front, then fill the tail with zeros. This preserves order and uses constant extra space.\n\nApproach\n1. Initial Setup: Scan with read and copy non zeros to write.\n2. Main Algorithm: After the pass, fill the rest with zeros.\n3. Return Result: Return the array.\n\nComplexity Analysis\n- Time Complexity: O(n) because the scan adjusts pointers a limited\n  number of times and avoids nested loops.\n- Space Complexity: O(1) since only a few variables or an output\n  list are used.\n\nKey Insights\n- Stable compression is a common two pointer use case\n- Separate reading and writing avoids extra shifts\n\nCommon Pitfalls\n- Swapping with zero can break order\n- Forgetting to fill tail zeros leaves garbage",
+  "solutionCode": "def stable_zero_push(nums):\n    write = 0\n    for read in range(len(nums)):\n        if nums[read] != 0:\n            nums[write] = nums[read]\n            write += 1\n    while write < len(nums):\n        nums[write] = 0\n        write += 1\n    return nums",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          0,
+          1,
+          0,
+          3,
+          12
+        ]
+      },
+      "expected": {
+        "result": [
+          1,
+          3,
+          12,
+          0,
+          0
+        ]
+      },
+      "explanation": "Compress then fill zeros"
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0,
+          1
+        ]
+      },
+      "expected": {
+        "result": [
+          1,
+          0,
+          0
+        ]
+      },
+      "explanation": "Single non zero moves front"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": {
+        "result": [
+          1,
+          2,
+          3
+        ]
+      },
+      "explanation": "Already correct"
+    },
+    {
+      "input": {
+        "nums": [
+          0
+        ]
+      },
+      "expected": {
+        "result": [
+          0
+        ]
+      },
+      "explanation": "Single element case"
+    }
+  ],
+  "tags": [
+    "array",
+    "two-pointers"
+  ],
+  "hints": [
+    "Use a write pointer to place non zeros",
+    "One pass to copy, one pass to fill zeros",
+    "Do not swap unless needed to preserve order"
+  ],
+  "relatedProblems": [
+    "compress-sorted-stream",
+    "sorted-squares-rebuilder"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 73,
+    "frequency": "high",
+    "importance": 6
+  },
+  "starterCode": "def stable_zero_push(nums: List[int]) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def stable_zero_push(nums: List[int]) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {any}\n */\nfunction stable_zero_push(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> stable_zero_push(int[] nums) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] stable_zero_push(int* nums) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] stable_zero_push(vector<int>& nums) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

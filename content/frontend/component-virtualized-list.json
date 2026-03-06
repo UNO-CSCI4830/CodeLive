@@ -1,0 +1,51 @@
+{
+  "id": "component-virtualized-list",
+  "title": "Virtualized List",
+  "category": "frontend",
+  "difficulty": "hard",
+  "description": "Build a **Virtualized List** component that efficiently renders only the items currently visible in the viewport.\n\n### Requirements\n\n- Accept a `items` array (potentially thousands of entries) and a fixed `rowHeight` (default 40px)\n- Only render the DOM nodes for rows that are **currently visible** in the scroll container plus a small overscan buffer of **2 rows** above and below\n- The scroll container has a fixed `height` prop (default 400px) and shows a scrollbar\n- Use an inner spacer div to maintain the correct total scroll height\n- Position visible rows absolutely using `transform: translateY(...)` so the scroll thumb tracks correctly\n- Display a total item count: `\"Showing {visibleCount} of {totalCount} items\"`\n- Each rendered item calls the `renderItem` prop with `(item, index)` to render its content\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Scroll container | `vlist-container` |\n| Inner spacer | `vlist-spacer` |\n| Row at buffer index N | `vlist-row-{index}` (original data index) |\n| Item count display | `vlist-count` |",
+  "constraints": "- Use React functional components with hooks\n- Do not use any virtualization libraries (react-window, react-virtualized, etc.)\n- Must handle scroll events efficiently",
+  "hints": [
+    "Calculate the start index by dividing scrollTop by rowHeight, then subtract the overscan buffer.",
+    "Calculate how many items fit in the viewport: Math.ceil(height / rowHeight) + 2 * overscan.",
+    "Use a wrapper div with overflow: auto and the fixed height. Inside, a spacer div with height = totalItems * rowHeight.",
+    "Absolutely position visible rows inside the spacer using top or transform: translateY().",
+    "Attach an onScroll handler that reads scrollTop and updates the start index."
+  ],
+  "tags": ["react", "performance", "virtualization", "scroll", "advanced"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { VirtualizedList } from './VirtualizedList';\n\nconst DATA = Array.from({ length: 10000 }, (_, i) => ({\n  id: i,\n  name: `Item #${i + 1}`,\n}));\n\nexport default function App() {\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>\n      <h1 style={{ marginBottom: '1rem' }}>Virtualized List</h1>\n      <p style={{ color: '#6b7280', marginBottom: '1rem' }}>\n        10,000 items — only visible rows are in the DOM\n      </p>\n      <VirtualizedList\n        items={DATA}\n        height={400}\n        rowHeight={40}\n        renderItem={(item) => (\n          <span>{(item as { name: string }).name}</span>\n        )}\n      />\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "VirtualizedList.tsx",
+      "content": "import React, { useState, useCallback } from 'react';\nimport './styles.css';\n\ninterface VirtualizedListProps<T> {\n  items: T[];\n  height?: number;\n  rowHeight?: number;\n  renderItem: (item: T, index: number) => React.ReactNode;\n}\n\nexport function VirtualizedList<T>({\n  items,\n  height = 400,\n  rowHeight = 40,\n  renderItem,\n}: VirtualizedListProps<T>) {\n  // TODO: Track scrollTop in state\n  // TODO: Calculate start/end indices with overscan\n  // TODO: Slice visible items and position them absolutely\n\n  return (\n    <div>\n      <div data-testid=\"vlist-count\" className=\"vl__count\">\n        Showing {items.length} of {items.length} items\n      </div>\n      <div\n        data-testid=\"vlist-container\"\n        className=\"vl__container\"\n        style={{ height }}\n      >\n        <div\n          data-testid=\"vlist-spacer\"\n          className=\"vl__spacer\"\n          style={{ height: items.length * rowHeight }}\n        >\n          {/* TODO: Render only visible rows here */}\n          {items.map((item, i) => (\n            <div\n              key={i}\n              data-testid={`vlist-row-${i}`}\n              className=\"vl__row\"\n              style={{ height: rowHeight }}\n            >\n              {renderItem(item, i)}\n            </div>\n          ))}\n        </div>\n      </div>\n    </div>\n  );\n}\n\nexport default VirtualizedList;\n",
+      "language": "tsx",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": ".vl__count {\n  font-size: 0.8125rem;\n  color: #6b7280;\n  margin-bottom: 0.5rem;\n  font-variant-numeric: tabular-nums;\n}\n\n.vl__container {\n  overflow: auto;\n  border: 1px solid #e5e7eb;\n  border-radius: 0.375rem;\n  background: white;\n}\n\n.vl__spacer {\n  position: relative;\n}\n\n.vl__row {\n  position: absolute;\n  left: 0;\n  right: 0;\n  display: flex;\n  align-items: center;\n  padding: 0 1rem;\n  font-size: 0.875rem;\n  color: #374151;\n  box-sizing: border-box;\n  border-bottom: 1px solid #f3f4f6;\n}\n\n.vl__row:hover {\n  background: #f9fafb;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport { VirtualizedList } from './VirtualizedList';\n\nconst makeItems = (n: number) =>\n  Array.from({ length: n }, (_, i) => ({ id: i, label: `Item ${i}` }));\n\ndescribe('VirtualizedList', () => {\n  it('does not render all items in the DOM', () => {\n    const items = makeItems(1000);\n    render(\n      <VirtualizedList\n        items={items}\n        height={200}\n        rowHeight={40}\n        renderItem={(item) => <span>{(item as any).label}</span>}\n      />\n    );\n    const rendered = screen.getAllByTestId(/^vlist-row-/);\n    expect(rendered.length).toBeLessThan(100);\n  });\n\n  it('renders rows near the top initially', () => {\n    const items = makeItems(100);\n    render(\n      <VirtualizedList\n        items={items}\n        height={200}\n        rowHeight={40}\n        renderItem={(item) => <span>{(item as any).label}</span>}\n      />\n    );\n    expect(screen.getByTestId('vlist-row-0')).toBeInTheDocument();\n    expect(screen.getByTestId('vlist-row-4')).toBeInTheDocument();\n  });\n\n  it('sets correct total height on the spacer', () => {\n    const items = makeItems(500);\n    render(\n      <VirtualizedList\n        items={items}\n        height={200}\n        rowHeight={40}\n        renderItem={(item) => <span>{(item as any).label}</span>}\n      />\n    );\n    const spacer = screen.getByTestId('vlist-spacer');\n    expect(spacer.style.height).toBe('20000px');\n  });\n\n  it('displays item count', () => {\n    const items = makeItems(500);\n    render(\n      <VirtualizedList\n        items={items}\n        height={200}\n        rowHeight={40}\n        renderItem={(item) => <span>{(item as any).label}</span>}\n      />\n    );\n    const countEl = screen.getByTestId('vlist-count');\n    expect(countEl).toHaveTextContent('500');\n  });\n\n  it('positions rows with translateY', () => {\n    const items = makeItems(100);\n    render(\n      <VirtualizedList\n        items={items}\n        height={200}\n        rowHeight={40}\n        renderItem={(item) => <span>{(item as any).label}</span>}\n      />\n    );\n    const row2 = screen.getByTestId('vlist-row-2');\n    expect(row2.style.transform).toContain('translateY');\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "VirtualizedList.tsx",
+      "content": "import React, { useState, useCallback, useMemo } from 'react';\nimport './styles.css';\n\ninterface VirtualizedListProps<T> {\n  items: T[];\n  height?: number;\n  rowHeight?: number;\n  renderItem: (item: T, index: number) => React.ReactNode;\n}\n\nconst OVERSCAN = 2;\n\nexport function VirtualizedList<T>({\n  items,\n  height = 400,\n  rowHeight = 40,\n  renderItem,\n}: VirtualizedListProps<T>) {\n  const [scrollTop, setScrollTop] = useState(0);\n\n  const totalHeight = items.length * rowHeight;\n  const visibleCount = Math.ceil(height / rowHeight);\n  const startIdx = Math.max(0, Math.floor(scrollTop / rowHeight) - OVERSCAN);\n  const endIdx = Math.min(items.length, startIdx + visibleCount + 2 * OVERSCAN);\n\n  const visibleItems = useMemo(\n    () => items.slice(startIdx, endIdx).map((item, i) => ({ item, index: startIdx + i })),\n    [items, startIdx, endIdx],\n  );\n\n  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {\n    setScrollTop((e.target as HTMLDivElement).scrollTop);\n  }, []);\n\n  return (\n    <div>\n      <div data-testid=\"vlist-count\" className=\"vl__count\">\n        Showing {visibleItems.length} of {items.length} items\n      </div>\n      <div\n        data-testid=\"vlist-container\"\n        className=\"vl__container\"\n        style={{ height }}\n        onScroll={handleScroll}\n      >\n        <div\n          data-testid=\"vlist-spacer\"\n          className=\"vl__spacer\"\n          style={{ height: totalHeight }}\n        >\n          {visibleItems.map(({ item, index }) => (\n            <div\n              key={index}\n              data-testid={`vlist-row-${index}`}\n              className=\"vl__row\"\n              style={{\n                height: rowHeight,\n                transform: `translateY(${index * rowHeight}px)`,\n              }}\n            >\n              {renderItem(item, index)}\n            </div>\n          ))}\n        </div>\n      </div>\n    </div>\n  );\n}\n\nexport default VirtualizedList;\n",
+      "language": "tsx"
+    }
+  ],
+  "sort_order": 120
+}

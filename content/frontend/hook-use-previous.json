@@ -1,0 +1,49 @@
+{
+  "id": "hook-use-previous",
+  "title": "usePrevious Hook",
+  "category": "frontend",
+  "difficulty": "easy",
+  "description": "Implement a **usePrevious** custom hook that tracks the previous value of a piece of state.\n\n### Requirements\n\n- `usePrevious<T>(value)` returns the value from the **previous** render\n- On the **first** render, it returns `undefined`\n- After a state change triggers a re-render, `usePrevious` returns the **old** value while the component shows the **new** value\n- Must work with any value type (numbers, strings, objects, etc.)\n\n### Usage Example\n\n```tsx\nconst [count, setCount] = useState(0);\nconst prevCount = usePrevious(count);\n// Render 1: count=0, prevCount=undefined\n// Render 2 (after setCount(5)): count=5, prevCount=0\n```\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Current value | `current` |\n| Previous value | `previous` |\n| Increment button | `increment` |",
+  "constraints": "- Implement as a standalone custom hook in usePrevious.ts\n- Use only React built-in hooks (useRef, useEffect)\n- Must not cause extra re-renders",
+  "hints": [
+    "Use useRef to store the previous value — refs persist across renders without causing re-renders.",
+    "Use useEffect to update the ref AFTER the render. During render, the ref still holds the old value.",
+    "The return type should be T | undefined since the first render has no previous value."
+  ],
+  "tags": ["react", "hooks", "custom-hooks", "refs"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React, { useState } from 'react';\nimport { usePrevious } from './usePrevious';\n\nexport default function App() {\n  const [count, setCount] = useState(0);\n  const prevCount = usePrevious(count);\n\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>\n      <h1 style={{ marginBottom: '1rem' }}>usePrevious</h1>\n      <p>Current: <strong data-testid=\"current\">{count}</strong></p>\n      <p>Previous: <strong data-testid=\"previous\">{prevCount ?? 'undefined'}</strong></p>\n      <button data-testid=\"increment\" onClick={() => setCount(c => c + 1)} style={{ marginTop: '1rem' }}>\n        Increment\n      </button>\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "usePrevious.ts",
+      "content": "import { useRef, useEffect } from 'react';\n\n/**\n * Custom hook that returns the previous value of a variable.\n * Returns undefined on the first render.\n *\n * @param value - The current value to track\n * @returns The value from the previous render, or undefined\n */\nexport function usePrevious<T>(value: T): T | undefined {\n  // TODO: Use useRef to store the previous value\n  // TODO: Use useEffect to update the ref after render\n\n  return undefined;\n}\n",
+      "language": "ts",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": "button {\n  padding: 0.5rem 1rem;\n  border: 1px solid #d1d5db;\n  border-radius: 0.375rem;\n  background: #f9fafb;\n  cursor: pointer;\n  font-size: 0.875rem;\n}\n\nbutton:hover {\n  background: #e5e7eb;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport React, { useState } from 'react';\nimport { usePrevious } from './usePrevious';\n\nfunction Harness() {\n  const [count, setCount] = useState(0);\n  const prev = usePrevious(count);\n  return (\n    <div>\n      <span data-testid=\"current\">{count}</span>\n      <span data-testid=\"previous\">{prev === undefined ? 'none' : String(prev)}</span>\n      <button data-testid=\"increment\" onClick={() => setCount(c => c + 1)}>+</button>\n    </div>\n  );\n}\n\nfunction StringHarness() {\n  const [name, setName] = useState('Alice');\n  const prev = usePrevious(name);\n  return (\n    <div>\n      <span data-testid=\"current\">{name}</span>\n      <span data-testid=\"previous\">{prev === undefined ? 'none' : prev}</span>\n      <button data-testid=\"change\" onClick={() => setName('Bob')}>Change</button>\n    </div>\n  );\n}\n\ndescribe('usePrevious', () => {\n  it('returns undefined on first render', () => {\n    render(<Harness />);\n    expect(screen.getByTestId('previous')).toHaveTextContent('none');\n  });\n\n  it('returns the previous value after an update', () => {\n    render(<Harness />);\n    fireEvent.click(screen.getByTestId('increment'));\n    expect(screen.getByTestId('current')).toHaveTextContent('1');\n    expect(screen.getByTestId('previous')).toHaveTextContent('0');\n  });\n\n  it('tracks multiple updates', () => {\n    render(<Harness />);\n    fireEvent.click(screen.getByTestId('increment'));\n    fireEvent.click(screen.getByTestId('increment'));\n    fireEvent.click(screen.getByTestId('increment'));\n    expect(screen.getByTestId('current')).toHaveTextContent('3');\n    expect(screen.getByTestId('previous')).toHaveTextContent('2');\n  });\n\n  it('works with string values', () => {\n    render(<StringHarness />);\n    expect(screen.getByTestId('previous')).toHaveTextContent('none');\n    fireEvent.click(screen.getByTestId('change'));\n    expect(screen.getByTestId('current')).toHaveTextContent('Bob');\n    expect(screen.getByTestId('previous')).toHaveTextContent('Alice');\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "usePrevious.ts",
+      "content": "import { useRef, useEffect } from 'react';\n\nexport function usePrevious<T>(value: T): T | undefined {\n  const ref = useRef<T | undefined>(undefined);\n\n  useEffect(() => {\n    ref.current = value;\n  }, [value]);\n\n  return ref.current;\n}\n",
+      "language": "ts"
+    }
+  ],
+  "sort_order": 202
+}

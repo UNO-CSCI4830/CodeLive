@@ -1,0 +1,129 @@
+{
+  "id": "maximal-square-area",
+  "title": "Largest Square of Ones",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a binary matrix of '0' and '1', find the area of the largest square containing only '1's.\n\n    \n\nConstraints:\n    - 1 ≤ m, n ≤ 300",
+  "leetcodeUrl": "https://leetcode.com/problems/maximal-square/",
+  "complexity": {
+    "time": "O(mn)",
+    "space": "O(mn)"
+  },
+  "explanation": "Intuition\ndp[r][c] is the side length of the largest square whose bottom-right corner is (r,c). If matrix[r][c]==1, dp[r][c]=1+min(top,left,diag).\n\nApproach\n1. Initial Setup: Initialize dp with zeros\n2. Main Algorithm: Scan cells; when see '1', compute from three neighbors; track max side\n3. Return Result: Return max_side^2\n\nComplexity Analysis\n- Time Complexity: O(mn)\n- Space Complexity: O(mn) or O(n) rolling\n\nKey Insights\n- Local rule grows squares only from three neighbors\n- Area requires squaring side length\n\nCommon Pitfalls\n- Treat chars as ints consistently\n- Borders have fewer neighbors",
+  "solutionCode": "def maximal_square(matrix):\n    m, n = len(matrix), len(matrix[0])\n    dp = [[0]*n for _ in range(m)]\n    best = 0\n    for r in range(m):\n        for c in range(n):\n            if matrix[r][c] == 1 or matrix[r][c] == '1':\n                if r == 0 or c == 0:\n                    dp[r][c] = 1\n                else:\n                    dp[r][c] = 1 + min(dp[r-1][c], dp[r][c-1], dp[r-1][c-1])\n                best = max(best, dp[r][c])\n    return best * best",
+  "testCases": [
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Max square side 2"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "When maximal_square(matrix=[[0]]), the expected result is 0"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single cell square"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 9
+      },
+      "explanation": "3×3 square"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "matrix"
+  ],
+  "hints": [
+    "Bottom-right anchored squares",
+    "Take min of three neighbors + 1",
+    "Square the side for area"
+  ],
+  "relatedProblems": [
+    "maximal-rectangle-area",
+    "grid-min-path-sum"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 69,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def maximal_square(matrix: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def maximal_square(matrix: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] matrix}\n * @return {number}\n */\nfunction maximal_square(matrix) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int maximal_square(int[][] matrix) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint maximal_square(int[][] matrix) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int maximal_square(vector<vector<int>>& matrix) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

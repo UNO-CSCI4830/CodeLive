@@ -1,0 +1,76 @@
+{
+  "id": "count-primes-sieve",
+  "title": "Count Primes Below N",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given a nonnegative integer n, return the number of prime numbers less than n. Use an efficient sieve rather than trial division. The answer should be computed using integer arithmetic.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 5·10^6",
+  "leetcodeUrl": "https://leetcode.com/problems/count-primes/",
+  "complexity": {
+    "time": "O(n log log n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nThe sieve of Eratosthenes marks multiples of each discovered prime. Start with an array of booleans representing primality. For every i from 2 up to sqrt(n), if i is prime, mark off all multiples starting from i*i. Counting the remaining True values yields the number of primes smaller than n.\n\nApproach\n1. Initial Setup: Create a boolean list is_prime of length n\n2. Main Algorithm: Iterate i from 2..⌊√n⌋, and for prime i, mark j from i*i..n-1 step i as composite\n3. Return Result: Count True from index 2 onward\n\nComplexity Analysis\n- Time Complexity: O(n log log n)\n- Space Complexity: O(n)\n\nKey Insights\n- Start crossing at i*i to avoid redundant work\n- Only iterate i up to sqrt(n)\n\nCommon Pitfalls\n- Including n itself when n is prime is wrong; we count < n\n- Using j=2*i instead of i*i wastes time",
+  "solutionCode": "def count_primes(n: int) -> int:\n    if n <= 2:\n        return 0\n    is_prime = [True] * n\n    is_prime[0] = is_prime[1] = False\n    p = 2\n    while p * p < n:\n        if is_prime[p]:\n            step = p\n            start = p * p\n            for j in range(start, n, step):\n                is_prime[j] = False\n        p += 1\n    return sum(is_prime)",
+  "testCases": [
+    {
+      "input": {
+        "n": 10
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "2,3,5,7 are <10"
+    },
+    {
+      "input": {
+        "n": 0
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "No positive primes below 0"
+    },
+    {
+      "input": {
+        "n": 2
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "2 is not counted because we count < n"
+    },
+    {
+      "input": {
+        "n": 100
+      },
+      "expected": {
+        "result": 25
+      },
+      "explanation": "Classic sieve milestone"
+    }
+  ],
+  "tags": [
+    "math",
+    "array"
+  ],
+  "hints": [
+    "You only need to mark multiples starting at i*i",
+    "Stop outer loop at sqrt(n)",
+    "Count True entries at the end"
+  ],
+  "relatedProblems": [
+    "integer-sqrt-floor",
+    "gcd-of-array"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 52,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def count_primes(n: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def count_primes(n: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number n}\n * @return {number}\n */\nfunction count_primes(n) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int count_primes(int n) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint count_primes(int n) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int count_primes(int& n) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

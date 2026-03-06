@@ -1,0 +1,102 @@
+{
+  "id": "same-tree-check",
+  "title": "Check if Two Trees are Identical",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given two binary trees, check whether they are structurally identical and have equal node values.\n\n    \n\nConstraints:\n    - 0 ≤ nodes ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/same-tree/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(h)"
+  },
+  "explanation": "Intuition\nA pairwise DFS comparing corresponding nodes verifies both structure and values.\n\nApproach\n1. Initial Setup: If both None return True\n2. Main Algorithm: If one None or values differ return False\n3. Return Result: Recurse on left and right\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(h)\n\nKey Insights\n- Structure and value must both match\n- Preorder comparison is straightforward\n\nCommon Pitfalls\n- Only comparing sets of values ignores structure\n- Stopping early is okay but logic must be correct",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef same_tree(a: TreeNode, b: TreeNode) -> bool:\n    if not a and not b:\n        return True\n    if not a or not b:\n        return False\n    if a.val != b.val:\n        return False\n    return same_tree(a.left, b.left) and same_tree(a.right, b.right)",
+  "testCases": [
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          3
+        ],
+        "b": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Perfect match"
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          2
+        ],
+        "b": [
+          1,
+          null,
+          2
+        ]
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Different structure"
+    },
+    {
+      "input": {
+        "a": [],
+        "b": []
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Both empty"
+    },
+    {
+      "input": {
+        "a": [
+          1,
+          2,
+          1
+        ],
+        "b": [
+          1,
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Same multiset, different structure/positions"
+    }
+  ],
+  "tags": [
+    "tree",
+    "dfs"
+  ],
+  "hints": [
+    "Compare nodes pairwise",
+    "Check both structure and value"
+  ],
+  "relatedProblems": [
+    "subtree-of-another",
+    "serialize-deserialize-binary-tree"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 54.2,
+    "frequency": "medium",
+    "importance": 6
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {boolean}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

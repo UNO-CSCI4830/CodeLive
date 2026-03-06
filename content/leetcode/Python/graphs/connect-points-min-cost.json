@@ -1,0 +1,125 @@
+{
+  "id": "connect-points-min-cost",
+  "title": "Connect All Points with Minimum Cost",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given n points in the plane, connect all points with edges of cost = Manhattan distance so that the total cost is minimized. Return the total cost. Use Prim's algorithm over the implicit complete graph.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 1000",
+  "leetcodeUrl": "https://leetcode.com/problems/min-cost-to-connect-all-points/",
+  "complexity": {
+    "time": "O(n^2)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nThe complete graph has O(n^2) edges, so materializing edges is heavy. Prim's can run in O(n^2) by maintaining the best edge to the current MST for each outside vertex without a heap.\n\nApproach\n1. Initial Setup: Pick an arbitrary start; keep an array best[v] as cheapest connection to the growing tree\n2. Main Algorithm: Repeatedly pick the outside vertex with minimal best[v] and update neighbors' best values via Manhattan distance\n3. Return Result: Sum the chosen costs\n\nComplexity Analysis\n- Time Complexity: O(n^2)\n- Space Complexity: O(n)\n\nKey Insights\n- Avoid building all edges explicitly\n- Manhattan distance is |x1-x2|+|y1-y2|\n\nCommon Pitfalls\n- Forgetting to skip already added vertices\n- Initializing best with infinities is necessary",
+  "solutionCode": "def min_cost_connect_points(points):\n    n = len(points)\n    if n <= 1:\n        return 0\n    INF = 10**12\n    in_mst = [False] * n\n    best = [INF] * n\n    best[0] = 0\n    total = 0\n    for _ in range(n):\n        u = -1\n        for i in range(n):\n            if not in_mst[i] and (u == -1 or best[i] < best[u]):\n                u = i\n        in_mst[u] = True\n        total += best[u]\n        x1, y1 = points[u]\n        for v in range(n):\n            if not in_mst[v]:\n                x2, y2 = points[v]\n                w = abs(x1 - x2) + abs(y1 - y2)\n                if w < best[v]:\n                    best[v] = w\n    return total",
+  "testCases": [
+    {
+      "input": {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            10
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            7,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": 20
+      },
+      "explanation": "Sample MST total"
+    },
+    {
+      "input": {
+        "points": [
+          [
+            3,
+            12
+          ],
+          [
+            -2,
+            5
+          ],
+          [
+            -4,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 18
+      },
+      "explanation": "Three points"
+    },
+    {
+      "input": {
+        "points": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Single node"
+    },
+    {
+      "input": {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Manhattan distance 2"
+    }
+  ],
+  "tags": [
+    "graph",
+    "prim",
+    "mst"
+  ],
+  "hints": [
+    "Track best connection cost per outside node",
+    "Pick the minimum best[v] each round",
+    "Manhattan distance edges are implicit"
+  ],
+  "relatedProblems": [
+    "mst-kruskal-total-cost",
+    "redundant-connection-undirected"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 63,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def min_cost_connect_points(points: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def min_cost_connect_points(points: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] points}\n * @return {number}\n */\nfunction min_cost_connect_points(points) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int min_cost_connect_points(int[][] points) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint min_cost_connect_points(int[][] points) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int min_cost_connect_points(vector<vector<int>>& points) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

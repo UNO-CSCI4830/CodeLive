@@ -1,0 +1,49 @@
+{
+  "id": "a11y-button-roles",
+  "title": "Accessible Button Roles",
+  "category": "frontend",
+  "difficulty": "easy",
+  "description": "Fix a set of **interactive elements** that are built with `<div>` and `<span>` tags instead of semantic HTML, making them inaccessible to keyboard users and screen readers.\n\n### Requirements\n\n- Convert clickable `<div>`s into proper `<button>` elements OR add `role=\"button\"`, `tabIndex={0}`, and keyboard event handlers\n- Ensure all interactive elements are keyboard-focusable (Tab key)\n- Ensure all interactive elements respond to Enter and Space key presses\n- Add appropriate `aria-label` or visible text for elements with only icon content\n- A toggle button must use `aria-pressed` to indicate its state\n- An icon-only button must have `aria-label` for screen reader text\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Action button | `action-btn` |\n| Toggle button | `toggle-btn` |\n| Icon button | `icon-btn` |\n| Delete button | `delete-btn` |\n| Output area | `output` |",
+  "constraints": "- Each interactive element must be keyboard operable (Enter + Space)\n- Each element must have an accessible name\n- Toggle button must communicate state via aria-pressed\n- Icon-only buttons must have aria-label\n- All elements must be focusable via Tab",
+  "hints": [
+    "The simplest fix: replace <div onClick={...}> with <button onClick={...}>. Buttons are natively keyboard-accessible.",
+    "If you keep a <div>, add role='button', tabIndex={0}, and an onKeyDown handler that triggers the click on Enter/Space.",
+    "For the toggle, set aria-pressed={isToggled} — the value must be a boolean, not a string."
+  ],
+  "tags": ["react", "accessibility", "keyboard-navigation", "aria", "semantic-html"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { ButtonDemo } from './ButtonDemo';\nimport './styles.css';\n\nexport default function App() {\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif', maxWidth: '28rem' }}>\n      <h1 style={{ marginBottom: '1.5rem' }}>Button Accessibility</h1>\n      <ButtonDemo />\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "ButtonDemo.tsx",
+      "content": "import React, { useState } from 'react';\nimport './styles.css';\n\nexport const ButtonDemo: React.FC = () => {\n  const [output, setOutput] = useState('Click a button');\n  const [toggled, setToggled] = useState(false);\n\n  return (\n    <div className=\"demo\">\n      {/* TODO: Fix this to be accessible.\n          Currently a <div> with just onClick — not keyboard-operable, no role, no focus */}\n      <div\n        data-testid=\"action-btn\"\n        className=\"fake-btn\"\n        onClick={() => setOutput('Action clicked!')}\n      >\n        Action\n      </div>\n\n      {/* TODO: Fix this toggle button.\n          Needs to communicate toggled state with aria-pressed */}\n      <div\n        data-testid=\"toggle-btn\"\n        className={`fake-btn${toggled ? ' fake-btn--active' : ''}`}\n        onClick={() => {\n          setToggled(!toggled);\n          setOutput(toggled ? 'Toggled OFF' : 'Toggled ON');\n        }}\n      >\n        {toggled ? '● ON' : '○ OFF'}\n      </div>\n\n      {/* TODO: Fix this icon-only button.\n          Has no accessible name — screen readers say nothing useful */}\n      <span\n        data-testid=\"icon-btn\"\n        className=\"fake-btn fake-btn--icon\"\n        onClick={() => setOutput('Settings opened!')}\n      >\n        ⚙\n      </span>\n\n      {/* TODO: Fix this delete button.\n          Not keyboard-accessible */}\n      <div\n        data-testid=\"delete-btn\"\n        className=\"fake-btn fake-btn--danger\"\n        onClick={() => setOutput('Item deleted!')}\n      >\n        🗑 Delete\n      </div>\n\n      <p data-testid=\"output\" className=\"demo__output\">{output}</p>\n    </div>\n  );\n};\n",
+      "language": "tsx",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": ".demo {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 0.75rem;\n  align-items: center;\n}\n\n.fake-btn {\n  display: inline-flex;\n  align-items: center;\n  gap: 0.25rem;\n  padding: 0.5rem 1rem;\n  border: 1px solid #d1d5db;\n  border-radius: 0.375rem;\n  background: #f9fafb;\n  cursor: pointer;\n  font-size: 0.875rem;\n  user-select: none;\n}\n\n.fake-btn:hover {\n  background: #e5e7eb;\n}\n\n.fake-btn:focus-visible {\n  outline: 2px solid #3b82f6;\n  outline-offset: 2px;\n}\n\n.fake-btn--active {\n  background: #dbeafe;\n  border-color: #93c5fd;\n  color: #1d4ed8;\n}\n\n.fake-btn--icon {\n  padding: 0.5rem;\n  font-size: 1.125rem;\n}\n\n.fake-btn--danger {\n  border-color: #fca5a5;\n  color: #dc2626;\n}\n\n.fake-btn--danger:hover {\n  background: #fef2f2;\n}\n\n.demo__output {\n  width: 100%;\n  margin-top: 0.75rem;\n  padding: 0.75rem;\n  background: #f3f4f6;\n  border-radius: 0.375rem;\n  font-size: 0.875rem;\n  color: #374151;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport React from 'react';\nimport App from './App';\n\ndescribe('Accessible Button Roles', () => {\n  it('action button is keyboard operable', () => {\n    render(<App />);\n    const btn = screen.getByTestId('action-btn');\n    // Must be focusable\n    expect(btn.tabIndex).toBeGreaterThanOrEqual(0);\n    // Must respond to keyboard\n    btn.focus();\n    fireEvent.keyDown(btn, { key: 'Enter' });\n    expect(screen.getByTestId('output')).toHaveTextContent('Action clicked!');\n  });\n\n  it('toggle button has aria-pressed', () => {\n    render(<App />);\n    const btn = screen.getByTestId('toggle-btn');\n    expect(btn).toHaveAttribute('aria-pressed');\n    fireEvent.click(btn);\n    expect(btn.getAttribute('aria-pressed')).toBe('true');\n    fireEvent.click(btn);\n    expect(btn.getAttribute('aria-pressed')).toBe('false');\n  });\n\n  it('icon button has aria-label', () => {\n    render(<App />);\n    const btn = screen.getByTestId('icon-btn');\n    expect(btn).toHaveAttribute('aria-label');\n    expect(btn.getAttribute('aria-label')).toBeTruthy();\n  });\n\n  it('icon button is keyboard operable', () => {\n    render(<App />);\n    const btn = screen.getByTestId('icon-btn');\n    expect(btn.tabIndex).toBeGreaterThanOrEqual(0);\n    btn.focus();\n    fireEvent.keyDown(btn, { key: ' ' });\n    expect(screen.getByTestId('output')).toHaveTextContent('Settings opened!');\n  });\n\n  it('delete button is keyboard operable', () => {\n    render(<App />);\n    const btn = screen.getByTestId('delete-btn');\n    expect(btn.tabIndex).toBeGreaterThanOrEqual(0);\n    btn.focus();\n    fireEvent.keyDown(btn, { key: 'Enter' });\n    expect(screen.getByTestId('output')).toHaveTextContent('Item deleted!');\n  });\n\n  it('all buttons have button role', () => {\n    render(<App />);\n    const ids = ['action-btn', 'toggle-btn', 'icon-btn', 'delete-btn'];\n    ids.forEach(id => {\n      const el = screen.getByTestId(id);\n      const tag = el.tagName.toLowerCase();\n      const role = el.getAttribute('role');\n      expect(tag === 'button' || role === 'button').toBe(true);\n    });\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "ButtonDemo.tsx",
+      "content": "import React, { useState } from 'react';\nimport './styles.css';\n\nexport const ButtonDemo: React.FC = () => {\n  const [output, setOutput] = useState('Click a button');\n  const [toggled, setToggled] = useState(false);\n\n  return (\n    <div className=\"demo\">\n      <button\n        data-testid=\"action-btn\"\n        className=\"fake-btn\"\n        onClick={() => setOutput('Action clicked!')}\n      >\n        Action\n      </button>\n\n      <button\n        data-testid=\"toggle-btn\"\n        className={`fake-btn${toggled ? ' fake-btn--active' : ''}`}\n        aria-pressed={toggled}\n        onClick={() => {\n          setToggled(!toggled);\n          setOutput(toggled ? 'Toggled OFF' : 'Toggled ON');\n        }}\n      >\n        {toggled ? '● ON' : '○ OFF'}\n      </button>\n\n      <button\n        data-testid=\"icon-btn\"\n        className=\"fake-btn fake-btn--icon\"\n        aria-label=\"Settings\"\n        onClick={() => setOutput('Settings opened!')}\n      >\n        ⚙\n      </button>\n\n      <button\n        data-testid=\"delete-btn\"\n        className=\"fake-btn fake-btn--danger\"\n        onClick={() => setOutput('Item deleted!')}\n      >\n        🗑 Delete\n      </button>\n\n      <p data-testid=\"output\" className=\"demo__output\">{output}</p>\n    </div>\n  );\n};\n",
+      "language": "tsx"
+    }
+  ],
+  "sort_order": 502
+}

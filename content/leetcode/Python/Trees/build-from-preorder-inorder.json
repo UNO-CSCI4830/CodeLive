@@ -1,0 +1,109 @@
+{
+  "id": "build-from-preorder-inorder",
+  "title": "Construct Tree from Preorder and Inorder",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given preorder and inorder traversal arrays of a binary tree with unique values, reconstruct the original tree.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 10^5\n- All values unique",
+  "leetcodeUrl": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(n) for hashmap + O(h) recursion"
+  },
+  "explanation": "Intuition\nThe first preorder value is the root. Its position in inorder splits the arrays into left and right subtrees. Recurse with index bounds.\n\nApproach\n1. Initial Setup: Build value→index map from inorder\n2. Main Algorithm: Advance a preorder index as we create roots\n3. Return Result: Split by inorder positions and recurse\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(n) for hashmap + O(h) recursion\n\nKey Insights\n- Index map makes splits O(1)\n- Preorder index advances exactly n times\n\nCommon Pitfalls\n- Slicing arrays causes O(n^2) if not careful\n- Forgetting to stop when l>r",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef build_tree_pre_in(preorder, inorder) -> TreeNode:\n    if not preorder or not inorder:\n        return None\n    pos = {}\n    for i, v in enumerate(inorder):\n        pos[v] = i\n    pre_i = 0\n    def build(l, r):\n        nonlocal pre_i\n        if l > r:\n            return None\n        val = preorder[pre_i]\n        pre_i += 1\n        root = TreeNode(val)\n        m = pos[val]\n        root.left = build(l, m - 1)\n        root.right = build(m + 1, r)\n        return root\n    return build(0, len(inorder) - 1)",
+  "testCases": [
+    {
+      "input": {
+        "preorder": [
+          3,
+          9,
+          20,
+          15,
+          7
+        ],
+        "inorder": [
+          9,
+          3,
+          15,
+          20,
+          7
+        ]
+      },
+      "expected": {
+        "result": "tree"
+      },
+      "explanation": "Rebuilt correctly"
+    },
+    {
+      "input": {
+        "preorder": [
+          1
+        ],
+        "inorder": [
+          1
+        ]
+      },
+      "expected": {
+        "result": "single"
+      },
+      "explanation": "Single node"
+    },
+    {
+      "input": {
+        "preorder": [
+          1,
+          2
+        ],
+        "inorder": [
+          2,
+          1
+        ]
+      },
+      "expected": {
+        "result": "left-skew"
+      },
+      "explanation": "Left child only"
+    },
+    {
+      "input": {
+        "preorder": [
+          1,
+          2
+        ],
+        "inorder": [
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "result": "right-skew"
+      },
+      "explanation": "Right child only"
+    }
+  ],
+  "tags": [
+    "tree",
+    "divide-and-conquer",
+    "dfs"
+  ],
+  "hints": [
+    "Avoid array slices using indices",
+    "Use hashmap for positions",
+    "Advance preorder index once"
+  ],
+  "relatedProblems": [
+    "serialize-deserialize-binary-tree",
+    "build-from-preorder-inorder"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 58.1,
+    "frequency": "medium",
+    "importance": 8
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> TreeNode:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> TreeNode:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {any}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public TreeNode __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nTreeNode __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    TreeNode __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

@@ -1,0 +1,107 @@
+{
+  "id": "lis-length",
+  "title": "Length of Longest Increasing Subsequence",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given Compute the length of the longest strictly increasing subsequence in nums. Implement the patience-sorting O(n log n) method for typing practice, though a quadratic DP exists.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 2500\n- -10^4 ≤ nums[i] ≤ 10^4",
+  "leetcodeUrl": "https://leetcode.com/problems/longest-increasing-subsequence/",
+  "complexity": {
+    "time": "O(n log n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nMaintain an array tails where tails[k] is the smallest possible tail value of an increasing subsequence of length k+1. For each x, binary search its position and replace or append.\n\nApproach\n1. Initial Setup: Initialize empty tails\n2. Main Algorithm: For each x in nums, binary search first ≥ x in tails and set tails[pos]=x else append\n3. Return Result: Length of tails is LIS length\n\nComplexity Analysis\n- Time Complexity: O(n log n)\n- Space Complexity: O(n)\n\nKey Insights\n- tails is not an actual subsequence but encodes lengths\n- Strictly increasing means lower_bound on ≥ x\n\nCommon Pitfalls\n- Using > instead of ≥ breaks duplicates handling\n- Returning sum or content of tails is incorrect",
+  "solutionCode": "import bisect\ndef length_of_lis(nums):\n    tails = []\n    for x in nums:\n        i = bisect.bisect_left(tails, x)\n        if i == len(tails):\n            tails.append(x)\n        else:\n            tails[i] = x\n    return len(tails)",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          10,
+          9,
+          2,
+          5,
+          3,
+          7,
+          101,
+          18
+        ]
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "One LIS is [2,3,7,101]"
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          1,
+          0,
+          3,
+          2,
+          3
+        ]
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "When length_of_lis(nums=[0,1,0,3,2,3]), the expected result is 4"
+    },
+    {
+      "input": {
+        "nums": [
+          7,
+          7,
+          7,
+          7
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "When length_of_lis(nums=[7,7,7,7]), the expected result is 1"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          3,
+          6,
+          7,
+          9,
+          4,
+          10,
+          5,
+          6
+        ]
+      },
+      "expected": {
+        "result": 6
+      },
+      "explanation": "Classic sample"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "binary-search"
+  ],
+  "hints": [
+    "Maintain minimal tails per length",
+    "Use bisect_left for strict increase",
+    "Answer is len(tails)"
+  ],
+  "relatedProblems": [
+    "max-subarray-sum",
+    "longest-common-subsequence"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 54,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def length_of_lis(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def length_of_lis(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {number}\n */\nfunction length_of_lis(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int length_of_lis(int[] nums) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint length_of_lis(int* nums) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int length_of_lis(vector<int>& nums) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

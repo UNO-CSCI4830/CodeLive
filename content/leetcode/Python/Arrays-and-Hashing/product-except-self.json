@@ -1,0 +1,115 @@
+{
+  "id": "product-except-self",
+  "title": "Array of Products Except Self",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an integer array nums, return an array answer such that answer[i] is the product of all elements of nums except nums[i]. The solution must run in O(n) time without using division, and with O(1) extra space beyond the output array.\n\n    \n\nConstraints:\n    - 2 ≤ len(nums) ≤ 10^5\n- -30 ≤ nums[i] ≤ 30\n- At least one non-zero element exists",
+  "leetcodeUrl": "https://leetcode.com/problems/product-of-array-except-self/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nMultiplying all but the current element equals the product of prefix elements times the product of suffix elements. By first storing the prefix products into the output and then scanning from the end while multiplying a running suffix product, we obtain each answer in place without division.\n\nApproach\n1. Initial Setup: Prepare output as prefix products.\n2. Main Algorithm: Scan from right, maintaining a suffix product; multiply it into each slot to incorporate right side.\n3. Return Result: Return the filled array that now holds prefix×suffix for each index.\n\nComplexity Analysis\n- Time Complexity: O(n) because the algorithm scans elements a constant\n  number of times and performs O(1) work for each update or lookup.\n- Space Complexity: O(1) due to the auxiliary structures required to\n  store counts, prefix sums, or membership sets while ensuring fast access.\n\nKey Insights\n- Two passes are enough when you can precompute left and right products\n- Reusing the output array keeps auxiliary space constant\n\nCommon Pitfalls\n- Forgetting to reset the suffix accumulator yields incorrect results\n- Using division fails when zeros appear",
+  "solutionCode": "def product_except_self(nums):\n    n = len(nums)\n    out = [1] * n\n    prefix = 1\n    for i in range(n):\n        out[i] = prefix\n        prefix *= nums[i]\n    suffix = 1\n    for i in range(n - 1, -1, -1):\n        out[i] *= suffix\n        suffix *= nums[i]\n    return out",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "expected": {
+        "result": [
+          24,
+          12,
+          8,
+          6
+        ]
+      },
+      "explanation": "Basic multiplication without division"
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": {
+        "result": [
+          6,
+          0,
+          0,
+          0
+        ]
+      },
+      "explanation": "Zero handling via prefix and suffix splits"
+    },
+    {
+      "input": {
+        "nums": [
+          -1,
+          1,
+          -1,
+          1
+        ]
+      },
+      "expected": {
+        "result": [
+          -1,
+          1,
+          -1,
+          1
+        ]
+      },
+      "explanation": "Signs alternate but logic is unchanged"
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          3,
+          0,
+          4
+        ]
+      },
+      "expected": {
+        "result": [
+          0,
+          0,
+          24,
+          0
+        ]
+      },
+      "explanation": "Single zero positions all other outputs as zero"
+    }
+  ],
+  "tags": [
+    "array"
+  ],
+  "hints": [
+    "Think prefix on the left and suffix on the right",
+    "Store left products, then walk from the end with a running suffix",
+    "Multiply in place to keep extra space constant"
+  ],
+  "relatedProblems": [
+    "find-balance-pivot",
+    "first-missing-positive"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 64,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def product_except_self(nums: List[int]) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def product_except_self(nums: List[int]) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {any}\n */\nfunction product_except_self(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> product_except_self(int[] nums) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] product_except_self(int* nums) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] product_except_self(vector<int>& nums) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

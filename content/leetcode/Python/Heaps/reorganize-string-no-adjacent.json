@@ -1,0 +1,77 @@
+{
+  "id": "reorganize-string-no-adjacent",
+  "title": "Reorganize String to Avoid Adjacent Duplicates",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a string s, rearrange the characters so that no two adjacent characters are the same. If such an arrangement is impossible, return an empty string. Use a max-heap of character counts and always pick the two most frequent remaining characters to place next.\n\n    \n\nConstraints:\n    - 1 ≤ len(s) ≤ 10^5\n- s contains lowercase letters",
+  "leetcodeUrl": "https://leetcode.com/problems/reorganize-string/",
+  "complexity": {
+    "time": "O(n log m)",
+    "space": "O(m)"
+  },
+  "explanation": "Intuition\nPlacing the most frequent remaining characters greedily avoids early collisions. Keep the previous character aside for one step so it is not reused immediately.\n\nApproach\n1. Initial Setup: Build max-heap by pushing (-count, char)\n2. Main Algorithm: Pop top two, append to answer, decrement counts, and push them back if still positive\n3. Return Result: If one char remains with count>1, impossible\n\nComplexity Analysis\n- Time Complexity: O(n log m)\n- Space Complexity: O(m)\n\nKey Insights\n- Greedy on counts ensures spacing of frequent chars\n- Using a held-back previous choice avoids adjacency\n\nCommon Pitfalls\n- Forgetting to reinsert decremented counts loses characters\n- Emitting the same char twice consecutively violates constraint",
+  "solutionCode": "import heapq\nfrom collections import Counter\ndef reorganize_string(s: str) -> str:\n    freq = Counter(s)\n    heap = [(-c, ch) for ch, c in freq.items()]\n    heapq.heapify(heap)\n    res = []\n    prev = (0, '')\n    while heap:\n        cnt1, ch1 = heapq.heappop(heap)\n        res.append(ch1)\n        cnt1 += 1\n        if prev[0] < 0:\n            heapq.heappush(heap, prev)\n        prev = (cnt1, ch1)\n    if prev[0] < 0:\n        return \"\"\n    return \"\".join(res)",
+  "testCases": [
+    {
+      "input": {
+        "s": "aab"
+      },
+      "expected": {
+        "result": "aba"
+      },
+      "explanation": "Possible arrangement"
+    },
+    {
+      "input": {
+        "s": "aaab"
+      },
+      "expected": {
+        "result": ""
+      },
+      "explanation": "Impossible due to frequency"
+    },
+    {
+      "input": {
+        "s": "vvvlo"
+      },
+      "expected": {
+        "result": "vlvov"
+      },
+      "explanation": "One valid output; exact order may vary"
+    },
+    {
+      "input": {
+        "s": "a"
+      },
+      "expected": {
+        "result": "a"
+      },
+      "explanation": "Trivial single char"
+    }
+  ],
+  "tags": [
+    "heap",
+    "greedy",
+    "string"
+  ],
+  "hints": [
+    "Pick the two most frequent remaining each step",
+    "Hold back the previous choice for one step",
+    "If one char remains with count > ceil(n/2), impossible"
+  ],
+  "relatedProblems": [
+    "task-scheduler-with-cooldown",
+    "top-k-frequent-elements"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 46,
+    "frequency": "medium",
+    "importance": 8
+  },
+  "starterCode": "def reorganize_string(s: str) -> str:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def reorganize_string(s: str) -> str:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s}\n * @return {string}\n */\nfunction reorganize_string(s) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public String reorganize_string(String s) {\n        // Write your solution here\n        return \"\";\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nchar* reorganize_string(char* s) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    string reorganize_string(string& s) {\n        // Write your solution here\n        return \"\";\n    }\n};"
+}

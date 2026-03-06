@@ -1,0 +1,92 @@
+{
+  "id": "house-robber-circle",
+  "title": "House Robber on a Ring",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given Like House Robber, but houses are in a circle. Adjacent houses and the first and last are adjacent. Return the maximum amount.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 1000\n- 0 ≤ nums[i] ≤ 10^4",
+  "leetcodeUrl": "https://leetcode.com/problems/house-robber-ii/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nWe cannot take both first and last. Solve two linear robberies: exclude last (0..n-2) or exclude first (1..n-1). Return the maximum.\n\nApproach\n1. Initial Setup: Define helper rob_line for linear case\n2. Main Algorithm: Compute max(rob_line(nums[:-1]), rob_line(nums[1:])) with singleton special-case\n3. Return Result: Return result\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(1)\n\nKey Insights\n- Reduction to two linear problems\n- Handle n=1 separately\n\nCommon Pitfalls\n- Accidentally including both first and last\n- Empty slices must be treated as zero",
+  "solutionCode": "def rob_ring(nums):\n    if len(nums) == 1:\n        return nums[0]\n    def rob_line(arr):\n        prev2, prev1 = 0, 0\n        for x in arr:\n            prev2, prev1 = prev1, max(prev1, prev2 + x)\n        return prev1\n    return max(rob_line(nums[:-1]), rob_line(nums[1:]))",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          2,
+          3,
+          2
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Pick the middle"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          1
+        ]
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Avoid taking 1st and last together"
+    },
+    {
+      "input": {
+        "nums": [
+          1
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single house"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Take every other avoiding wrap"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "array"
+  ],
+  "hints": [
+    "Split into two linear cases",
+    "Edge case n=1",
+    "Use rolling DP for each case"
+  ],
+  "relatedProblems": [
+    "house-robber-linear",
+    "delete-and-earn"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 66,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def rob_ring(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def rob_ring(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {number}\n */\nfunction rob_ring(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int rob_ring(int[] nums) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint rob_ring(int* nums) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int rob_ring(vector<int>& nums) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

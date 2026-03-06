@@ -1,0 +1,104 @@
+{
+  "id": "collecting-two-types",
+  "title": "Collecting Two Types",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an array representing item types, return the length of the longest subarray that contains at most two distinct values. This captures scenarios like carrying two basket types while walking along a line of trees.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- 0 ≤ nums[i] ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/fruit-into-baskets/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1) average"
+  },
+  "explanation": "Intuition\nMaintain counts for values in the current window and ensure the number of distinct values is at most two. When it exceeds two, shrink from the left until the constraint is met again.\n\nApproach\n1. Initial Setup: Use a hash map for counts.\n2. Main Algorithm: Expand right and update counts. If distinct types exceed two, move left and decrement counts until back to two.\n3. Return Result: Track the longest valid window length.\n\nComplexity Analysis\n- Time Complexity: O(n) because the window grows and shrinks in a\n  single pass without revisiting elements more than a constant number of\n  times.\n- Space Complexity: O(min(n, distinct)) to maintain counts, sets, or running\n  aggregates needed to validate the window.\n\nKey Insights\n- At most two distinct means the window can be validated by a size-2 set\n- Shrinking only when necessary keeps it linear\n\nCommon Pitfalls\n- Forgetting to decrement and delete zero counts\n- Using a set alone loses frequency information needed to shrink",
+  "solutionCode": "def collecting_two_types(nums):\n    from collections import defaultdict\n    count = defaultdict(int)\n    left = 0\n    best = 0\n    distinct = 0\n    for right, x in enumerate(nums):\n        if count[x] == 0:\n            distinct += 1\n        count[x] += 1\n        while distinct > 2:\n            count[nums[left]] -= 1\n            if count[nums[left]] == 0:\n                distinct -= 1\n            left += 1\n        best = max(best, right - left + 1)\n    return best",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          1
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Whole array fits"
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          1,
+          2,
+          2
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Longest is [1,2,2]"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          2,
+          2
+        ]
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Pick [2,3,2,2]"
+    },
+    {
+      "input": {
+        "nums": [
+          3,
+          3,
+          3,
+          1,
+          2,
+          1,
+          1,
+          2,
+          3,
+          3,
+          4
+        ]
+      },
+      "expected": {
+        "result": 5
+      },
+      "explanation": "Best run length 5 near the middle"
+    }
+  ],
+  "tags": [
+    "array",
+    "sliding-window",
+    "hash-table"
+  ],
+  "hints": [
+    "Count items in the window",
+    "Shrink while you have more than two types",
+    "Keep the best length seen"
+  ],
+  "relatedProblems": [
+    "subarrays-with-exactly-k-distinct",
+    "longest-window-without-repeats"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 57,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def collecting_two_types(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def collecting_two_types(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {number}\n */\nfunction collecting_two_types(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int collecting_two_types(int[] nums) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint collecting_two_types(int* nums) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int collecting_two_types(vector<int>& nums) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

@@ -1,0 +1,122 @@
+{
+  "id": "path-with-minimum-effort",
+  "title": "Path with Minimum Effort in a Grid",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a matrix heights, the cost of a path is the maximum absolute difference in heights between adjacent cells along the path. Return the minimal possible cost from top-left to bottom-right. Use Dijkstra on edges weighted by height differences, combining the path's cost via max aggregation.\n\n    \n\nConstraints:\n    - 1 ≤ m, n ≤ 100",
+  "leetcodeUrl": "https://leetcode.com/problems/path-with-minimum-effort/",
+  "complexity": {
+    "time": "O(mn log mn)",
+    "space": "O(mn)"
+  },
+  "explanation": "Intuition\nThis is a minimax path problem. Dijkstra works if we define the distance to a cell as the minimal possible maximum edge cost seen so far. The relaxation uses max(current_cost, edge_cost).\n\nApproach\n1. Initial Setup: Initialize dist[0][0]=0 and push in heap\n2. Main Algorithm: Pop smallest effort cell; for neighbors compute nd = max(cur, |h-nh|)\n3. Return Result: Return dist[m-1][n-1]\n\nComplexity Analysis\n- Time Complexity: O(mn log mn)\n- Space Complexity: O(mn)\n\nKey Insights\n- Monotone relaxation preserves optimal substructure\n- Binary search + BFS is an alternative\n\nCommon Pitfalls\n- Summing edges would be wrong; use max\n- Forgetting to use absolute difference",
+  "solutionCode": "import heapq\ndef minimum_effort_path(heights):\n    m, n = len(heights), len(heights[0])\n    INF = 10**9\n    dist = [[INF]*n for _ in range(m)]\n    dist[0][0] = 0\n    pq = [(0, 0, 0)]\n    dirs = [(1,0),(-1,0),(0,1),(0,-1)]\n    while pq:\n        d, r, c = heapq.heappop(pq)\n        if (r, c) == (m-1, n-1):\n            return d\n        if d != dist[r][c]:\n            continue\n        for dr, dc in dirs:\n            i, j = r + dr, c + dc\n            if 0 <= i < m and 0 <= j < n:\n                w = abs(heights[i][j] - heights[r][c])\n                nd = max(d, w)\n                if nd < dist[i][j]:\n                    dist[i][j] = nd\n                    heapq.heappush(pq, (nd, i, j))\n    return -1",
+  "testCases": [
+    {
+      "input": {
+        "heights": [
+          [
+            1,
+            2,
+            2
+          ],
+          [
+            3,
+            8,
+            2
+          ],
+          [
+            5,
+            3,
+            5
+          ]
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Optimal path limits max edge to 2"
+    },
+    {
+      "input": {
+        "heights": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            3,
+            8,
+            4
+          ],
+          [
+            5,
+            3,
+            5
+          ]
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "There exists a gentle path"
+    },
+    {
+      "input": {
+        "heights": [
+          [
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "No movement"
+    },
+    {
+      "input": {
+        "heights": [
+          [
+            1,
+            10
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 9
+      },
+      "explanation": "Must step across height 9 once"
+    }
+  ],
+  "tags": [
+    "graph",
+    "dijkstra",
+    "matrix"
+  ],
+  "hints": [
+    "Use Dijkstra with max-aggregation relaxation",
+    "Edge weight is abs height diff",
+    "Return as soon as bottom-right is popped"
+  ],
+  "relatedProblems": [
+    "network-broadcast-time",
+    "swim-in-rising-water"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 59,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def minimum_effort_path(heights: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def minimum_effort_path(heights: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] heights}\n * @return {number}\n */\nfunction minimum_effort_path(heights) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int minimum_effort_path(int[][] heights) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint minimum_effort_path(int[][] heights) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int minimum_effort_path(vector<vector<int>>& heights) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

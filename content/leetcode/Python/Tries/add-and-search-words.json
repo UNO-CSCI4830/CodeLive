@@ -1,0 +1,151 @@
+{
+  "id": "add-and-search-words",
+  "title": "Add and Search with '.' Wildcards",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given Build a data structure that supports adding lowercase words and searching where the query string may contain '.' characters that match any single letter. The design should use a trie and a depth-first search when a wildcard is encountered. Focus on writing a clean DFS that branches only when needed and terminates early when the path cannot lead to a full match.\n\n    \n\nConstraints:\n    - 1 ≤ total characters added ≤ 2·10^6\n- 0 ≤ number of searches ≤ 2·10^5\n- Words are lowercase 'a'..'z'",
+  "leetcodeUrl": "https://leetcode.com/problems/add-and-search-word-data-structure-design/",
+  "complexity": {
+    "time": "O(L·B)",
+    "space": "O(total characters)"
+  },
+  "explanation": "Intuition\nExact characters follow a single path, while '.' requires exploring all children at that position. The branching factor B is at most 26, but early pruning keeps typical queries fast.\n\nApproach\n1. Initial Setup: Store words in a trie\n2. Main Algorithm: On search, use DFS: if char is '.', try all children; else follow the exact child\n3. Return Result: Accept only if we end at an end node after consuming all characters\n\nComplexity Analysis\n- Time Complexity: O(L·B) worst case\n- Space Complexity: O(total characters)\n\nKey Insights\n- Wildcards trigger branching only at those positions\n- Returning early when a branch succeeds is key\n\nCommon Pitfalls\n- Accepting partial paths without checking end flag\n- Exploring all children even after a match is wasteful",
+  "solutionCode": "class Node:\n    def __init__(self):\n        self.children = {}\n        self.end = False\nclass WordDictionary:\n    def __init__(self):\n        self.root = Node()\n    def addWord(self, word: str) -> None:\n        node = self.root\n        for ch in word:\n            if ch not in node.children:\n                node.children[ch] = Node()\n            node = node.children[ch]\n        node.end = True\n    def search(self, word: str) -> bool:\n        def dfs(i, node):\n            if i == len(word):\n                return node.end\n            ch = word[i]\n            if ch == '.':\n                for nxt in node.children.values():\n                    if dfs(i+1, nxt):\n                        return True\n                return False\n            if ch not in node.children:\n                return False\n            return dfs(i+1, node.children[ch])\n        return dfs(0, self.root)",
+  "testCases": [
+    {
+      "input": {
+        "ops": [
+          "addWord",
+          "addWord",
+          "addWord",
+          "search",
+          "search",
+          "search",
+          "search"
+        ],
+        "args": [
+          [
+            "bad"
+          ],
+          [
+            "dad"
+          ],
+          [
+            "mad"
+          ],
+          [
+            "pad"
+          ],
+          [
+            "bad"
+          ],
+          [
+            ".ad"
+          ],
+          [
+            "b.."
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          null,
+          false,
+          true,
+          true,
+          true
+        ]
+      },
+      "explanation": "Wildcard and exact matches"
+    },
+    {
+      "input": {
+        "ops": [
+          "addWord",
+          "search"
+        ],
+        "args": [
+          [
+            "a"
+          ],
+          [
+            "."
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          null,
+          true
+        ]
+      },
+      "explanation": "Single character wildcard"
+    },
+    {
+      "input": {
+        "ops": [
+          "addWord",
+          "search"
+        ],
+        "args": [
+          [
+            "a"
+          ],
+          [
+            ".."
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          null,
+          false
+        ]
+      },
+      "explanation": "Length mismatch fails"
+    },
+    {
+      "input": {
+        "ops": [
+          "search"
+        ],
+        "args": [
+          [
+            "."
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          false
+        ]
+      },
+      "explanation": "No words present yet"
+    }
+  ],
+  "tags": [
+    "trie",
+    "dfs",
+    "string"
+  ],
+  "hints": [
+    "DFS only branches on '.'",
+    "Stop early when a branch succeeds",
+    "Require node.end at query end"
+  ],
+  "relatedProblems": [
+    "implement-prefix-dictionary",
+    "autocomplete-top-k"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 46,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def __init__(self: any) -> None:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any) -> None:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self}\n * @return {any}\n */\nfunction __init__(self) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public None __init__(any self) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nNone __init__(any self) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    None __init__(any& self) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

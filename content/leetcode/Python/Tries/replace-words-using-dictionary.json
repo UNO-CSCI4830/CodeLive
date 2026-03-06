@@ -1,0 +1,91 @@
+{
+  "id": "replace-words-using-dictionary",
+  "title": "Replace Words Using a Dictionary of Roots",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a dictionary of root words and a sentence, replace each word in the sentence with the shortest root from the dictionary that is a prefix of the word. If no root applies, leave the word unchanged. Use a trie to find the minimum-length matching root in O(L) time per word where L is the word length.\n\n    \n\nConstraints:\n    - 1 ≤ |dictionary| ≤ 10^5\n- Total characters in dictionary ≤ 2·10^6\n- Sentence length ≤ 10^5 characters",
+  "leetcodeUrl": "https://leetcode.com/problems/replace-words/",
+  "complexity": {
+    "time": "O(T + S)",
+    "space": "O(T)"
+  },
+  "explanation": "Intuition\nA shortest-root match corresponds to the first trie node marked as an end while walking a word. Building the trie from all roots allows each replacement to be computed on the fly without scanning the dictionary.\n\nApproach\n1. Initial Setup: Insert all roots into a trie with end flags\n2. Main Algorithm: For each word in the sentence, walk the trie, returning the path up to the first end\n3. Return Result: Join the possibly replaced tokens back into a sentence\n\nComplexity Analysis\n- Time Complexity: O(T + S) where T is total root chars and S is sentence chars\n- Space Complexity: O(T) for the trie\n\nKey Insights\n- Stopping at the first end ensures minimal root\n- Processing is linear in input size\n\nCommon Pitfalls\n- Failing to stop at the first end uses longer-than-necessary roots\n- Splitting and joining incorrectly may change whitespace",
+  "solutionCode": "class TNode:\n    def __init__(self):\n        self.children = {}\n        self.end = False\nclass RootReplacer:\n    def __init__(self, dictionary):\n        self.root = TNode()\n        for w in dictionary:\n            self.insert(w)\n    def insert(self, word):\n        node = self.root\n        for ch in word:\n            if ch not in node.children:\n                node.children[ch] = TNode()\n            node = node.children[ch]\n        node.end = True\n    def replace_sentence(self, sentence: str) -> str:\n        def shortest_root(word):\n            node = self.root\n            prefix = []\n            for ch in word:\n                if ch not in node.children:\n                    return word\n                node = node.children[ch]\n                prefix.append(ch)\n                if node.end:\n                    return ''.join(prefix)\n            return word\n        parts = sentence.split()\n        for i, w in enumerate(parts):\n            parts[i] = shortest_root(w)\n        return ' '.join(parts)",
+  "testCases": [
+    {
+      "input": {
+        "dictionary": [
+          "cat",
+          "bat",
+          "rat"
+        ],
+        "sentence": "the cattle was rattled by the battery"
+      },
+      "expected": {
+        "result": "the cat was rat by the bat"
+      },
+      "explanation": "Each word replaced by shortest root"
+    },
+    {
+      "input": {
+        "dictionary": [
+          "a",
+          "aa",
+          "aaa"
+        ],
+        "sentence": "aaaa aaaa"
+      },
+      "expected": {
+        "result": "a a"
+      },
+      "explanation": "Stop at first end"
+    },
+    {
+      "input": {
+        "dictionary": [],
+        "sentence": "alone"
+      },
+      "expected": {
+        "result": "alone"
+      },
+      "explanation": "No replacements applied"
+    },
+    {
+      "input": {
+        "dictionary": [
+          "blue",
+          "bl"
+        ],
+        "sentence": "blueish blip"
+      },
+      "expected": {
+        "result": "bl bl"
+      },
+      "explanation": "Shortest root wins"
+    }
+  ],
+  "tags": [
+    "trie",
+    "string"
+  ],
+  "hints": [
+    "Insert roots, not full words",
+    "Return at the first end flag while walking",
+    "Split sentence by spaces only"
+  ],
+  "relatedProblems": [
+    "implement-prefix-dictionary",
+    "longest-buildable-word"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 62,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def __init__(self: any) -> str:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any) -> str:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self}\n * @return {string}\n */\nfunction __init__(self) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public String __init__(any self) {\n        // Write your solution here\n        return \"\";\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nchar* __init__(any self) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    string __init__(any& self) {\n        // Write your solution here\n        return \"\";\n    }\n};"
+}

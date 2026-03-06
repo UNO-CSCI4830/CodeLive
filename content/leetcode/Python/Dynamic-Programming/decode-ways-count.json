@@ -1,0 +1,76 @@
+{
+  "id": "decode-ways-count",
+  "title": "Number of Ways to Decode",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given A string s containing only digits maps '1'→'A' ... '26'→'Z'. Return how many ways to decode s. Leading zeros are invalid and '0' can only appear as part of '10' or '20'.\n\n    \n\nConstraints:\n    - 1 ≤ |s| ≤ 100",
+  "leetcodeUrl": "https://leetcode.com/problems/decode-ways/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nLet dp[i] be ways for prefix s[:i]. One-step decode uses s[i-1]; two-step uses s[i-2:i] if in 10..26. Rolling two variables suffice.\n\nApproach\n1. Initial Setup: Set a=1 for empty, b=1 if s[0]!='0' else 0\n2. Main Algorithm: For each i from 2..n, compute new using valid single and double digit checks\n3. Return Result: Return b\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(1)\n\nKey Insights\n- Carefully handle zeros\n- Use integer parsing for two-digit check\n\nCommon Pitfalls\n- Allowing '06' would be invalid\n- Empty string base must be 1",
+  "solutionCode": "def num_decodings(s: str) -> int:\n    if not s or s[0] == '0':\n        return 0\n    prev2, prev1 = 1, 1\n    for i in range(1, len(s)):\n        cur = 0\n        if s[i] != '0':\n            cur += prev1\n        two = int(s[i-1:i+1])\n        if 10 <= two <= 26:\n            cur += prev2\n        prev2, prev1 = prev1, cur\n    return prev1",
+  "testCases": [
+    {
+      "input": {
+        "s": "12"
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "When num_decodings(s=\"12\"), the expected result is 2"
+    },
+    {
+      "input": {
+        "s": "226"
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "BZ, VF, BBF"
+    },
+    {
+      "input": {
+        "s": "0"
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Invalid start"
+    },
+    {
+      "input": {
+        "s": "10"
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "When num_decodings(s=\"10\"), the expected result is 1"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "string"
+  ],
+  "hints": [
+    "dp[i] depends on single and pair decodes",
+    "Zero can only appear in 10 or 20",
+    "Use rolling variables"
+  ],
+  "relatedProblems": [
+    "decode-ways-ii",
+    "word-break-check"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 39,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def num_decodings(s: str) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def num_decodings(s: str) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s}\n * @return {number}\n */\nfunction num_decodings(s) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int num_decodings(String s) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint num_decodings(char* s) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int num_decodings(string& s) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

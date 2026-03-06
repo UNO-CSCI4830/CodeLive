@@ -1,0 +1,96 @@
+{
+  "id": "count-subarrays-sum-to-k",
+  "title": "Count Subarrays with Exact Sum",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an integer array nums and an integer k, return the number of continuous subarrays whose sum equals k. Values may be negative or zero. The approach should run in O(n) using prefix sum counts.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i], k ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/subarray-sum-equals-k/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nIf prefix[j] − prefix[i] = k, then the subarray (i, j] sums to k. For each running prefix sum, we need to know how many prior prefixes equal current − k. A hash map from prefix to its count gives constant-time access, and a single pass counts all solutions.\n\nApproach\n1. Initial Setup: Initialize map with {0:1} to count subarrays starting at index 0.\n2. Main Algorithm: Scan the array, updating the running sum s. Increment answer by the count of (s − k) seen so far. Then record s in the map.\n3. Return Result: Return the accumulated count of matching subarrays.\n\nComplexity Analysis\n- Time Complexity: O(n) because the algorithm scans elements a constant\n  number of times and performs O(1) work for each update or lookup.\n- Space Complexity: O(n) due to the auxiliary structures required to\n  store counts, prefix sums, or membership sets while ensuring fast access.\n\nKey Insights\n- Prefix sums convert range-sum constraints to equalities among prefixes\n- Storing counts handles multiple occurrences cleanly\n\nCommon Pitfalls\n- Forgetting to seed prefix 0 omits subarrays starting at index 0\n- Updating the map before reading (s − k) changes results",
+  "solutionCode": "def count_subarrays_sum_to_k(nums, k):\n    seen = {0: 1}\n    total = 0\n    ans = 0\n    for x in nums:\n        total += x\n        ans += seen.get(total - k, 0)\n        seen[total] = seen.get(total, 0) + 1\n    return ans",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1
+        ],
+        "k": 2
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Two overlapping subarrays sum to 2"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ],
+        "k": 3
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Subarrays [1,2] and [3]"
+    },
+    {
+      "input": {
+        "nums": [
+          -1,
+          -1,
+          1
+        ],
+        "k": 0
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single subarray sums to zero"
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0,
+          0
+        ],
+        "k": 0
+      },
+      "expected": {
+        "result": 6
+      },
+      "explanation": "All subarrays count via combinatorics"
+    }
+  ],
+  "tags": [
+    "array",
+    "hash-table"
+  ],
+  "hints": [
+    "Express subarray sums using prefix sums",
+    "How many prior prefixes equal current_sum - k",
+    "Seed the map with prefix 0 appearing once"
+  ],
+  "relatedProblems": [
+    "find-balance-pivot",
+    "min-subarray-to-make-sum-divisible"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 51.9,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def count_subarrays_sum_to_k(nums: List[int], k: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def count_subarrays_sum_to_k(nums: List[int], k: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number k}\n * @return {number}\n */\nfunction count_subarrays_sum_to_k(nums, k) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int count_subarrays_sum_to_k(int[] nums, int k) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint count_subarrays_sum_to_k(int* nums, int k) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int count_subarrays_sum_to_k(vector<int>& nums, int& k) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

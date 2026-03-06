@@ -1,0 +1,43 @@
+{
+  "id": "css-tooltip",
+  "title": "CSS Tooltip with Arrow",
+  "category": "frontend",
+  "difficulty": "medium",
+  "description": "Write CSS to create a **hover tooltip** with a triangular arrow, using only CSS (no JavaScript).\n\n### Visual Target\n\n```\n         ┌───────────────────┐\n         │  Tooltip content  │\n         └────────┬──────────┘\n                  ▼\n           [Hover me]\n```\n\n### Requirements\n\n- `.tooltip` is the wrapper and positioned `relative`\n- `.tooltip__content` is hidden by default (`opacity: 0`, `visibility: hidden`)\n- On `.tooltip:hover`, the content becomes visible (`opacity: 1`, `visibility: visible`)\n- Content is positioned above the trigger, centred horizontally\n- Tooltip has background `#1f2937`, white text, `0.5rem 0.75rem` padding, `0.375rem` border-radius\n- Tooltip has a small downward-pointing **CSS triangle arrow** (using `::after` pseudo-element)\n- Arrow is `6px` borders with `border-top-color: #1f2937`\n- Tooltip transitions smoothly (`opacity 0.2s ease`)\n- Font size `0.8125rem`, white-space `nowrap`\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Tooltip wrapper | `tooltip` |\n| Tooltip content | `tooltip-content` |\n| Trigger button | `trigger` |",
+  "constraints": "- Only edit styles.css\n- Use only CSS for showing/hiding — no JavaScript event handlers\n- The arrow must be a CSS triangle (borders technique)\n- Must use a pseudo-element (::after) for the arrow",
+  "hints": [
+    "Position .tooltip__content with position: absolute, bottom: 100%, left: 50%, transform: translateX(-50%) to centre it above the trigger.",
+    "For the arrow, use ::after with content: '', position: absolute, border-width: 6px, border-style: solid, border-color: #1f2937 transparent transparent transparent.",
+    "Add a small margin-bottom (e.g. 0.5rem) to the content so there's a gap between the arrow and trigger. Position the arrow at top: 100% of the content."
+  ],
+  "tags": ["css", "tooltip", "pseudo-elements", "hover", "positioning"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport './styles.css';\n\nexport default function App() {\n  return (\n    <div style={{ padding: '6rem 2rem', display: 'flex', justifyContent: 'center', gap: '2rem', fontFamily: 'system-ui, sans-serif' }}>\n      <div className=\"tooltip\" data-testid=\"tooltip\">\n        <button className=\"tooltip__trigger\" data-testid=\"trigger\">Hover me</button>\n        <div className=\"tooltip__content\" data-testid=\"tooltip-content\" role=\"tooltip\">\n          This is a tooltip!\n        </div>\n      </div>\n      <div className=\"tooltip\">\n        <button className=\"tooltip__trigger\">Another tip</button>\n        <div className=\"tooltip__content\" role=\"tooltip\">\n          More helpful info here.\n        </div>\n      </div>\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "styles.css",
+      "content": "/* === Tooltip Wrapper ===\n * TODO: position relative, display inline-block\n */\n.tooltip {\n\n}\n\n/* === Trigger Button ===\n * Provided — no changes needed\n */\n.tooltip__trigger {\n  padding: 0.5rem 1rem;\n  border: 1px solid #d1d5db;\n  border-radius: 0.375rem;\n  background: #f9fafb;\n  cursor: pointer;\n  font-size: 0.875rem;\n}\n\n.tooltip__trigger:hover {\n  background: #e5e7eb;\n}\n\n/* === Tooltip Content ===\n * TODO: position absolute, centred above trigger\n * TODO: Hidden by default (opacity 0, visibility hidden)\n * TODO: Dark background, white text, padding, border-radius\n * TODO: Transition for smooth show/hide\n * TODO: white-space nowrap, font-size 0.8125rem\n */\n.tooltip__content {\n\n}\n\n/* TODO: Arrow using ::after pseudo-element\n * position absolute, at bottom of tooltip content\n * CSS triangle: border-width 6px, border-style solid\n * border-color: #1f2937 transparent transparent transparent\n * Centred horizontally with left: 50%, transform: translateX(-50%)\n */\n.tooltip__content::after {\n\n}\n\n/* === Show on Hover ===\n * TODO: On .tooltip:hover .tooltip__content → opacity 1, visibility visible\n */\n",
+      "language": "css",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport App from './App';\n\ndescribe('CSS Tooltip', () => {\n  beforeEach(() => {\n    render(<App />);\n  });\n\n  it('tooltip wrapper is positioned relative', () => {\n    expect(getComputedStyle(screen.getByTestId('tooltip')).position).toBe('relative');\n  });\n\n  it('tooltip content is hidden by default', () => {\n    const content = screen.getByTestId('tooltip-content');\n    const styles = getComputedStyle(content);\n    expect(styles.opacity).toBe('0');\n    expect(styles.visibility).toBe('hidden');\n  });\n\n  it('tooltip content is positioned absolutely', () => {\n    expect(getComputedStyle(screen.getByTestId('tooltip-content')).position).toBe('absolute');\n  });\n\n  it('tooltip has dark background', () => {\n    expect(getComputedStyle(screen.getByTestId('tooltip-content')).backgroundColor).toBe('rgb(31, 41, 55)');\n  });\n\n  it('tooltip has white text', () => {\n    expect(getComputedStyle(screen.getByTestId('tooltip-content')).color).toBe('rgb(255, 255, 255)');\n  });\n\n  it('tooltip has border-radius', () => {\n    expect(getComputedStyle(screen.getByTestId('tooltip-content')).borderRadius).toBe('0.375rem');\n  });\n\n  it('tooltip has nowrap', () => {\n    expect(getComputedStyle(screen.getByTestId('tooltip-content')).whiteSpace).toBe('nowrap');\n  });\n\n  it('tooltip has transition', () => {\n    const transition = getComputedStyle(screen.getByTestId('tooltip-content')).transition;\n    expect(transition).toMatch(/opacity/);\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "styles.css",
+      "content": ".tooltip {\n  position: relative;\n  display: inline-block;\n}\n\n.tooltip__trigger {\n  padding: 0.5rem 1rem;\n  border: 1px solid #d1d5db;\n  border-radius: 0.375rem;\n  background: #f9fafb;\n  cursor: pointer;\n  font-size: 0.875rem;\n}\n\n.tooltip__trigger:hover {\n  background: #e5e7eb;\n}\n\n.tooltip__content {\n  position: absolute;\n  bottom: 100%;\n  left: 50%;\n  transform: translateX(-50%);\n  margin-bottom: 0.5rem;\n  padding: 0.5rem 0.75rem;\n  background-color: #1f2937;\n  color: #ffffff;\n  font-size: 0.8125rem;\n  white-space: nowrap;\n  border-radius: 0.375rem;\n  opacity: 0;\n  visibility: hidden;\n  transition: opacity 0.2s ease;\n  pointer-events: none;\n}\n\n.tooltip__content::after {\n  content: '';\n  position: absolute;\n  top: 100%;\n  left: 50%;\n  transform: translateX(-50%);\n  border-width: 6px;\n  border-style: solid;\n  border-color: #1f2937 transparent transparent transparent;\n}\n\n.tooltip:hover .tooltip__content {\n  opacity: 1;\n  visibility: visible;\n}\n",
+      "language": "css"
+    }
+  ],
+  "sort_order": 312
+}

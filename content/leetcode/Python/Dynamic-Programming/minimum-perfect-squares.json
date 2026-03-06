@@ -1,0 +1,76 @@
+{
+  "id": "minimum-perfect-squares",
+  "title": "Fewest Perfect Squares to Sum",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a positive integer n, find the least number of perfect square numbers that sum to n.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 10^4",
+  "leetcodeUrl": "https://leetcode.com/problems/perfect-squares/",
+  "complexity": {
+    "time": "O(n√n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nStandard unbounded knapsack over perfect squares. Precompute all squares ≤ n and run min-coin DP similar to Coin Change.\n\nApproach\n1. Initial Setup: Generate squares ≤ n\n2. Main Algorithm: dp[0]=0; for a in 1..n set dp[a]=1+min(dp[a-s]) for all squares s≤a\n3. Return Result: Return dp[n]\n\nComplexity Analysis\n- Time Complexity: O(n√n)\n- Space Complexity: O(n)\n\nKey Insights\n- Precomputing squares reduces work\n- Same recurrence as coin change minimum\n\nCommon Pitfalls\n- Beware 1-based vs 0-based off-by-one\n- Large n needs optimized inner loop",
+  "solutionCode": "def num_squares(n: int) -> int:\n    squares = []\n    i = 1\n    while i * i <= n:\n        squares.append(i * i)\n        i += 1\n    INF = 10**9\n    dp = [0] + [INF] * n\n    for a in range(1, n + 1):\n        best = INF\n        for s in squares:\n            if s > a:\n                break\n            if dp[a - s] + 1 < best:\n                best = dp[a - s] + 1\n        dp[a] = best\n    return dp[n]",
+  "testCases": [
+    {
+      "input": {
+        "n": 12
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "When num_squares(n=12), the expected result is 3"
+    },
+    {
+      "input": {
+        "n": 13
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "When num_squares(n=13), the expected result is 2"
+    },
+    {
+      "input": {
+        "n": 1
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "When num_squares(n=1), the expected result is 1"
+    },
+    {
+      "input": {
+        "n": 43
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Example with larger n"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "math"
+  ],
+  "hints": [
+    "Precompute square numbers",
+    "Min-coin style recurrence",
+    "dp[0]=0 is the base"
+  ],
+  "relatedProblems": [
+    "coin-change-min",
+    "climb-stairs-ways"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 49,
+    "frequency": "medium",
+    "importance": 8
+  },
+  "starterCode": "def num_squares(n: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def num_squares(n: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number n}\n * @return {number}\n */\nfunction num_squares(n) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int num_squares(int n) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint num_squares(int n) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int num_squares(int& n) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

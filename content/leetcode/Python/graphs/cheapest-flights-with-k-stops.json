@@ -1,0 +1,141 @@
+{
+  "id": "cheapest-flights-with-k-stops",
+  "title": "Cheapest Flight with Stop Limit",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "You are given flights[u,v,w] with cost w between cities u and v (directed). Find the cheapest price from src to dst with at most K stops. Return -1 if unreachable under the constraint. Use K+1 rounds of Bellman-Ford style relaxation to limit path length by edges.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 300\n- 0 ≤ |flights| ≤ 10^4\n- 0 ≤ K ≤ n-1",
+  "leetcodeUrl": "https://leetcode.com/problems/cheapest-flights-within-k-stops/",
+  "complexity": {
+    "time": "O(K·E)",
+    "space": "O(V)"
+  },
+  "explanation": "Intuition\nBellman-Ford with exactly K+1 relaxations restricts to paths of at most K+1 edges, equating to at most K stops. Copy distances each round to prevent chaining within the same round.\n\nApproach\n1. Initial Setup: Initialize dist[src]=0 and others INF\n2. Main Algorithm: Repeat K+1 times: new=dist copy, relax edges (u,v,w) via new[v] = min(new[v], dist[u]+w)\n3. Return Result: Set dist=new\n\nComplexity Analysis\n- Time Complexity: O(K·E)\n- Space Complexity: O(V)\n\nKey Insights\n- Copy-on-iteration enforces edge count limit\n- Return dist[dst] if finite\n\nCommon Pitfalls\n- Relaxing into dist directly allows longer paths\n- Stops vs edges off-by-one errors are common",
+  "solutionCode": "def cheapest_price_k_stops(n, flights, src, dst, K):\n    INF = 10**15\n    dist = [INF] * n\n    dist[src] = 0\n    for _ in range(K + 1):\n        new = dist[:]\n        for u, v, w in flights:\n            if dist[u] + w < new[v]:\n                new[v] = dist[u] + w\n        dist = new\n    return -1 if dist[dst] >= INF else dist[dst]",
+  "testCases": [
+    {
+      "input": {
+        "n": 3,
+        "flights": [
+          [
+            0,
+            1,
+            100
+          ],
+          [
+            1,
+            2,
+            100
+          ],
+          [
+            0,
+            2,
+            500
+          ]
+        ],
+        "src": 0,
+        "dst": 2,
+        "K": 1
+      },
+      "expected": {
+        "result": 200
+      },
+      "explanation": "0→1→2 allowed with 1 stop"
+    },
+    {
+      "input": {
+        "n": 3,
+        "flights": [
+          [
+            0,
+            1,
+            100
+          ],
+          [
+            1,
+            2,
+            100
+          ],
+          [
+            0,
+            2,
+            500
+          ]
+        ],
+        "src": 0,
+        "dst": 2,
+        "K": 0
+      },
+      "expected": {
+        "result": 500
+      },
+      "explanation": "Direct flight only"
+    },
+    {
+      "input": {
+        "n": 4,
+        "flights": [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            2,
+            3,
+            1
+          ]
+        ],
+        "src": 0,
+        "dst": 3,
+        "K": 1
+      },
+      "expected": {
+        "result": -1
+      },
+      "explanation": "Needs 2 stops"
+    },
+    {
+      "input": {
+        "n": 1,
+        "flights": [],
+        "src": 0,
+        "dst": 0,
+        "K": 0
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "When cheapest_price_k_stops(n=1, flights=[], src=0, dst=0, K=0), the expected result is 0"
+    }
+  ],
+  "tags": [
+    "graph",
+    "bellman-ford",
+    "dynamic-programming"
+  ],
+  "hints": [
+    "Bellman-Ford caps path length by iterations",
+    "Copy distances per round",
+    "Stops relate to edges as K stops → K+1 edges"
+  ],
+  "relatedProblems": [
+    "network-broadcast-time",
+    "find-city-threshold-distance"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 47,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def cheapest_price_k_stops(n: int, flights: List[List[int]], src: int, dst: int, K: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def cheapest_price_k_stops(n: int, flights: List[List[int]], src: int, dst: int, K: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number n, number[] flights, number src, number dst, number K}\n * @return {number}\n */\nfunction cheapest_price_k_stops(n, flights, src, dst, K) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int cheapest_price_k_stops(int n, int[][] flights, int src, int dst, int K) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint cheapest_price_k_stops(int n, int[][] flights, int src, int dst, int K) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int cheapest_price_k_stops(int& n, vector<vector<int>>& flights, int& src, int& dst, int& K) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

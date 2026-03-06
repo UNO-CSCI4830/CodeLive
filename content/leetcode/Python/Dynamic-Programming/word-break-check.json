@@ -1,0 +1,94 @@
+{
+  "id": "word-break-check",
+  "title": "Segment String into Dictionary Words",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a string s and a dictionary wordDict, determine if s can be segmented into a space-separated sequence of one or more dictionary words.\n\n    \n\nConstraints:\n    - 1 ≤ |s| ≤ 300\n- 1 ≤ |wordDict| ≤ 10^3\n- 1 ≤ word length ≤ 20",
+  "leetcodeUrl": "https://leetcode.com/problems/word-break/",
+  "complexity": {
+    "time": "O(n·L)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nLet dp[i] indicate whether s[:i] is segmentable. For each i, check any word length L where s[i-L:i] is in the dictionary and dp[i-L] is True.\n\nApproach\n1. Initial Setup: Put dictionary in a set and track max word length\n2. Main Algorithm: dp[0]=True; for i in 1..n check j from max(0,i-L)..i and probe substrings\n3. Return Result: Return dp[n]\n\nComplexity Analysis\n- Time Complexity: O(n·L)\n- Space Complexity: O(n)\n\nKey Insights\n- Limit j by max word length for efficiency\n- Set membership gives O(1) lookups\n\nCommon Pitfalls\n- Forgetting dp[0]=True blocks all segments\n- Slicing too broadly increases cost",
+  "solutionCode": "def word_break(s: str, wordDict) -> bool:\n    words = set(wordDict)\n    maxL = max((len(w) for w in words), default=0)\n    n = len(s)\n    dp = [False] * (n + 1)\n    dp[0] = True\n    for i in range(1, n + 1):\n        for L in range(1, min(maxL, i) + 1):\n            if dp[i - L] and s[i - L:i] in words:\n                dp[i] = True\n                break\n    return dp[n]",
+  "testCases": [
+    {
+      "input": {
+        "s": "leetcode",
+        "wordDict": [
+          "leet",
+          "code"
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Split at 4"
+    },
+    {
+      "input": {
+        "s": "catsandog",
+        "wordDict": [
+          "cats",
+          "dog",
+          "sand",
+          "and",
+          "cat"
+        ]
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Missing 'og'"
+    },
+    {
+      "input": {
+        "s": "applepenapple",
+        "wordDict": [
+          "apple",
+          "pen"
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Multiple segments"
+    },
+    {
+      "input": {
+        "s": "a",
+        "wordDict": [
+          "b"
+        ]
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Not in dict"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "string"
+  ],
+  "hints": [
+    "dp[i] checks previous true positions",
+    "Bound checks by max word length",
+    "Use a set for O(1) lookup"
+  ],
+  "relatedProblems": [
+    "word-break-count",
+    "decode-ways-count"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 49,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def word_break(s: str, wordDict: List[str]) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def word_break(s: str, wordDict: List[str]) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s, number[] wordDict}\n * @return {boolean}\n */\nfunction word_break(s, wordDict) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean word_break(String s, String[] wordDict) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool word_break(char* s, char** wordDict) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool word_break(string& s, vector<string>& wordDict) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

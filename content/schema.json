@@ -1,0 +1,145 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Vaera Sandbox Problem",
+  "description": "Schema for problems across all four sandbox categories: frontend, backend, database, leetcode",
+  "type": "object",
+  "required": ["id", "title", "category", "difficulty", "description", "starter_files", "test_config"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "URL-friendly slug for the problem"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "category": {
+      "type": "string",
+      "enum": ["frontend", "backend", "database", "leetcode"],
+      "description": "Which sandbox category this problem belongs to"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["easy", "medium", "hard"]
+    },
+    "description": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Markdown-formatted problem description"
+    },
+    "constraints": {
+      "type": "string",
+      "default": "",
+      "description": "Constraints or notes shown below the problem description"
+    },
+    "hints": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "starter_files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "content", "language"],
+        "properties": {
+          "path": { "type": "string" },
+          "content": { "type": "string" },
+          "language": { "type": "string" },
+          "readonly": { "type": "boolean", "default": false }
+        }
+      },
+      "description": "Files given to the user. For leetcode: single file. For frontend: multiple .tsx/.css files."
+    },
+    "test_config": {
+      "type": "object",
+      "description": "Category-specific test configuration",
+      "oneOf": [
+        {
+          "title": "LeetCode test config",
+          "properties": {
+            "test_cases": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["input", "expected"],
+                "properties": {
+                  "input": { "type": "object" },
+                  "expected": { "type": "object" },
+                  "is_public": { "type": "boolean", "default": true }
+                }
+              }
+            },
+            "time_limit_ms": { "type": "integer", "default": 5000 },
+            "memory_limit_mb": { "type": "integer", "default": 256 },
+            "function_name": { "type": "string" }
+          },
+          "required": ["test_cases", "function_name"]
+        },
+        {
+          "title": "Database test config",
+          "properties": {
+            "schema_sql": { "type": "string" },
+            "seed_sql": { "type": "string" },
+            "expected_output": { "type": "array" },
+            "check_explain": { "type": "boolean", "default": false },
+            "column_names": { "type": "array", "items": { "type": "string" } }
+          },
+          "required": ["schema_sql", "seed_sql", "expected_output"]
+        },
+        {
+          "title": "Backend test config",
+          "properties": {
+            "language": { "type": "string", "enum": ["python", "go"] },
+            "test_requests": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["method", "path", "expected_status"],
+                "properties": {
+                  "method": { "type": "string" },
+                  "path": { "type": "string" },
+                  "body": { "type": "object" },
+                  "expected_status": { "type": "integer" },
+                  "expected_body": { "type": "object" }
+                }
+              }
+            }
+          },
+          "required": ["language", "test_requests"]
+        },
+        {
+          "title": "Frontend test config",
+          "properties": {
+            "test_file": { "type": "string" },
+            "dependencies": { "type": "object" }
+          },
+          "required": ["test_file"]
+        }
+      ]
+    },
+    "solution_files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "content", "language"],
+        "properties": {
+          "path": { "type": "string" },
+          "content": { "type": "string" },
+          "language": { "type": "string" }
+        }
+      },
+      "default": []
+    },
+    "sort_order": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

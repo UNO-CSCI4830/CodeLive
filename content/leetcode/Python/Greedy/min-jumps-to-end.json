@@ -1,0 +1,95 @@
+{
+  "id": "min-jumps-to-end",
+  "title": "Fewest Jumps to Reach the End",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an array nums where nums[i] is the maximum jump length from position i, return the minimum number of jumps to reach the last index. You can assume you can always reach the last index.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 10^5\n- 0 ≤ nums[i] ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/jump-game-ii/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nGreedy layers: maintain the current furthest index reachable within the current number of jumps and the furthest reach for the next jump. When you exit the current layer, you commit to a new jump.\n\nApproach\n1. Initial Setup: Initialize jumps=0, cur_end=0, cur_farthest=0\n2. Main Algorithm: For i from 0..n-2, update cur_farthest=max(cur_farthest, i+nums[i]); when i==cur_end, increment jumps and set cur_end=cur_farthest\n3. Return Result: Return jumps\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(1)\n\nKey Insights\n- Layered BFS over positions but implemented greedily\n- Never need exact path, only counts\n\nCommon Pitfalls\n- Do not count a jump at the last index\n- Ensure cur_end advances to avoid infinite loop",
+  "solutionCode": "def min_jumps(nums):\n    jumps = 0\n    cur_end = 0\n    cur_farthest = 0\n    for i in range(len(nums) - 1):\n        cur_farthest = max(cur_farthest, i + nums[i])\n        if i == cur_end:\n            jumps += 1\n            cur_end = cur_farthest\n    return jumps",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          2,
+          3,
+          1,
+          1,
+          4
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "When min_jumps(nums=[2,3,1,1,4]), the expected result is 2"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "One step each layer"
+    },
+    {
+      "input": {
+        "nums": [
+          10,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Jump straight to end"
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          1
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single jump"
+    }
+  ],
+  "tags": [
+    "greedy",
+    "array"
+  ],
+  "hints": [
+    "Track current range and next range",
+    "Increase jump count when exiting a range",
+    "You do not need the actual path"
+  ],
+  "relatedProblems": [
+    "can-reach-end",
+    "partition-labels-slices"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 39,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def min_jumps(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def min_jumps(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {number}\n */\nfunction min_jumps(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int min_jumps(int[] nums) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint min_jumps(int* nums) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int min_jumps(vector<int>& nums) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

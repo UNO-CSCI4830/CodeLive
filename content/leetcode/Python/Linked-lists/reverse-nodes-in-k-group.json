@@ -1,0 +1,107 @@
+{
+  "id": "reverse-nodes-in-k-group",
+  "title": "Reverse Nodes in k-Group",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Given a linked list, reverse the nodes of the list k at a time and return its modified list. k is a positive integer and is less than or equal to the length of the list. If the number of nodes is not a multiple of k then left-out nodes remain as is.\n\n    \n\nConstraints:\n    - 1 ≤ k ≤ 10^5\n- 0 ≤ n ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/reverse-nodes-in-k-group/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nProcess the list in windows of size k. For each full window, reverse the nodes by iterative pointer flips while keeping track of the node before the group and the node after. Leave partial groups untouched.\n\nApproach\n1. Initial Setup: Use a helper to find the kth node ahead.\n2. Main Algorithm: Reverse pointers inside the group so the kth node becomes the new head of that segment.\n3. Return Result: Reconnect the segment to the previous tail and proceed to the next group.\n\nComplexity Analysis\n- Time Complexity: O(n) due to a single pass or divide-and-conquer\n  over the list where each node is visited a bounded number of times.\n- Space Complexity: O(1) accounting for pointers and, when needed,\n  recursion depth or extra structures.\n\nKey Insights\n- Reversing in place keeps space constant\n- Finding the kth node guards partial tails\n\nCommon Pitfalls\n- Advancing beyond group boundaries corrupts links\n- Forgetting to reconnect group to the rest of the list",
+  "solutionCode": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\ndef reverse_nodes_in_k_group(head, k):\n    def get_kth(node, k):\n        while node and k > 0:\n            node = node.next\n            k -= 1\n        return node\n    dummy = ListNode(0, head)\n    group_prev = dummy\n    while True:\n        kth = get_kth(group_prev, k)\n        if not kth:\n            break\n        group_next = kth.next\n        prev, curr = group_next, group_prev.next\n        while curr is not group_next:\n            nxt = curr.next\n            curr.next = prev\n            prev = curr\n            curr = nxt\n        tmp = group_prev.next\n        group_prev.next = kth\n        group_prev = tmp\n    return dummy.next",
+  "testCases": [
+    {
+      "input": {
+        "list": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "k": 2
+      },
+      "expected": {
+        "result": [
+          2,
+          1,
+          4,
+          3,
+          5
+        ]
+      },
+      "explanation": "Pairs reversed"
+    },
+    {
+      "input": {
+        "list": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "k": 3
+      },
+      "expected": {
+        "result": [
+          3,
+          2,
+          1,
+          4,
+          5
+        ]
+      },
+      "explanation": "Triples reversed, tail stays"
+    },
+    {
+      "input": {
+        "list": [
+          1
+        ],
+        "k": 1
+      },
+      "expected": {
+        "result": [
+          1
+        ]
+      },
+      "explanation": "k=1 leaves list unchanged"
+    },
+    {
+      "input": {
+        "list": [],
+        "k": 3
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Empty list unchanged"
+    }
+  ],
+  "tags": [
+    "linked-list"
+  ],
+  "hints": [
+    "Check if a full group of k exists before reversing",
+    "Reverse links while tracking previous and next",
+    "Reconnect group boundaries carefully"
+  ],
+  "relatedProblems": [
+    "reverse-linked-list",
+    "remove-nth-from-end"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 40,
+    "frequency": "medium",
+    "importance": 9
+  },
+  "starterCode": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any next}\n * @return {any}\n */\nfunction __init__(self, val, next) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> __init__(any self, any val, any next) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] __init__(any self, any val, any next) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] __init__(any& self, any& val, any& next) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

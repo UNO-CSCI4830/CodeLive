@@ -1,0 +1,109 @@
+{
+  "id": "grid-unique-paths-with-blocks",
+  "title": "Unique Paths in a Blocked Grid",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an m×n grid with obstacles where 1 indicates a blocked cell and 0 indicates free, count the number of unique paths from top-left to bottom-right moving only down or right. Return 0 if the destination is blocked.\n\n    \n\nConstraints:\n    - 1 ≤ m, n ≤ 100",
+  "leetcodeUrl": "https://leetcode.com/problems/unique-paths-ii/",
+  "complexity": {
+    "time": "O(mn)",
+    "space": "O(mn)"
+  },
+  "explanation": "Intuition\nUse 2-D DP where dp[r][c] is the number of ways to reach cell (r,c). Blocked cells contribute zero. Transitions add from top and left if inside bounds.\n\nApproach\n1. Initial Setup: Create dp with zeros; if start is blocked return 0\n2. Main Algorithm: Fill dp row by row: dp[r][c]=0 if blocked else dp[r-1][c]+dp[r][c-1] with border checks\n3. Return Result: Return dp[m-1][n-1]\n\nComplexity Analysis\n- Time Complexity: O(mn)\n- Space Complexity: O(mn) or O(n) with rolling row\n\nKey Insights\n- Borders need special handling since one parent may be missing\n- Obstacles zero out paths downstream\n\nCommon Pitfalls\n- Forgetting to seed dp[0][0]=1 when free\n- Adding paths through blocked cells",
+  "solutionCode": "def unique_paths_with_obstacles(grid):\n    m, n = len(grid), len(grid[0])\n    if grid[0][0] == 1 or grid[m-1][n-1] == 1:\n        return 0\n    dp = [[0]*n for _ in range(m)]\n    dp[0][0] = 1\n    for r in range(m):\n        for c in range(n):\n            if grid[r][c] == 1:\n                dp[r][c] = 0\n            else:\n                if r > 0:\n                    dp[r][c] += dp[r-1][c]\n                if c > 0:\n                    dp[r][c] += dp[r][c-1]\n    return dp[m-1][n-1]",
+  "testCases": [
+    {
+      "input": {
+        "grid": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Two routes around the block"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Only path right then down is blocked, go down then right"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Start blocked"
+    },
+    {
+      "input": {
+        "grid": [
+          [
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single free cell"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "matrix"
+  ],
+  "hints": [
+    "Blocked cells contribute zero paths",
+    "State depends on top and left neighbors",
+    "Seed dp[0][0]=1 when free"
+  ],
+  "relatedProblems": [
+    "grid-min-path-sum",
+    "grid-unique-paths"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 58,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def unique_paths_with_obstacles(grid: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def unique_paths_with_obstacles(grid: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] grid}\n * @return {number}\n */\nfunction unique_paths_with_obstacles(grid) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int unique_paths_with_obstacles(int[][] grid) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint unique_paths_with_obstacles(int[][] grid) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int unique_paths_with_obstacles(vector<vector<int>>& grid) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

@@ -1,0 +1,43 @@
+{
+  "id": "counter-component",
+  "title": "Counter Component",
+  "category": "frontend",
+  "difficulty": "easy",
+  "description": "Build a `Counter` component in React with TypeScript.\n\n### Requirements\n\n- Display a count value starting at `0`\n- Include an **Increment** button that increases the count by 1\n- Include a **Decrement** button that decreases the count by 1\n- Include a **Reset** button that sets the count back to 0\n- The count display should have a `data-testid=\"count\"` attribute\n- Each button should have a `data-testid` matching its action: `increment`, `decrement`, `reset`\n- The decrement button should be **disabled** when count is 0\n\n### Bonus\n\n- Add a `step` prop that controls how much each click changes the count (default: 1)",
+  "constraints": "- Use React functional components with hooks\n- Use TypeScript for type safety\n- Do not use any external state management libraries",
+  "hints": [
+    "Use the useState hook to manage the counter state.",
+    "The disabled attribute on a button can be bound to a condition.",
+    "data-testid attributes are used by the test runner to find elements."
+  ],
+  "tags": ["react", "typescript", "hooks", "state"],
+  "starter_files": [
+    {
+      "path": "Counter.tsx",
+      "content": "import React from 'react';\nimport './Counter.css';\n\ninterface CounterProps {\n  step?: number;\n}\n\nexport const Counter: React.FC<CounterProps> = ({ step = 1 }) => {\n  // TODO: Implement the counter component\n  return (\n    <div className=\"counter\">\n      <h2 data-testid=\"count\">0</h2>\n      {/* Add your buttons here */}\n    </div>\n  );\n};\n\nexport default Counter;\n",
+      "language": "tsx",
+      "readonly": false
+    },
+    {
+      "path": "Counter.css",
+      "content": ".counter {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  gap: 1rem;\n  padding: 2rem;\n}\n\n.counter h2 {\n  font-size: 3rem;\n  font-variant-numeric: tabular-nums;\n}\n\n.counter-buttons {\n  display: flex;\n  gap: 0.5rem;\n}\n\n.counter-buttons button {\n  padding: 0.5rem 1rem;\n  border-radius: 0.375rem;\n  border: 1px solid #d1d5db;\n  background: #f9fafb;\n  cursor: pointer;\n  font-size: 0.875rem;\n}\n\n.counter-buttons button:hover:not(:disabled) {\n  background: #e5e7eb;\n}\n\n.counter-buttons button:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent } from '@testing-library/react';\nimport { Counter } from './Counter';\n\ndescribe('Counter', () => {\n  it('renders with initial count of 0', () => {\n    render(<Counter />);\n    expect(screen.getByTestId('count')).toHaveTextContent('0');\n  });\n\n  it('increments the count', () => {\n    render(<Counter />);\n    fireEvent.click(screen.getByTestId('increment'));\n    expect(screen.getByTestId('count')).toHaveTextContent('1');\n  });\n\n  it('decrements the count', () => {\n    render(<Counter />);\n    fireEvent.click(screen.getByTestId('increment'));\n    fireEvent.click(screen.getByTestId('increment'));\n    fireEvent.click(screen.getByTestId('decrement'));\n    expect(screen.getByTestId('count')).toHaveTextContent('1');\n  });\n\n  it('resets the count', () => {\n    render(<Counter />);\n    fireEvent.click(screen.getByTestId('increment'));\n    fireEvent.click(screen.getByTestId('increment'));\n    fireEvent.click(screen.getByTestId('reset'));\n    expect(screen.getByTestId('count')).toHaveTextContent('0');\n  });\n\n  it('disables decrement at 0', () => {\n    render(<Counter />);\n    expect(screen.getByTestId('decrement')).toBeDisabled();\n  });\n\n  it('supports custom step prop', () => {\n    render(<Counter step={5} />);\n    fireEvent.click(screen.getByTestId('increment'));\n    expect(screen.getByTestId('count')).toHaveTextContent('5');\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "Counter.tsx",
+      "content": "import React, { useState } from 'react';\nimport './Counter.css';\n\ninterface CounterProps {\n  step?: number;\n}\n\nexport const Counter: React.FC<CounterProps> = ({ step = 1 }) => {\n  const [count, setCount] = useState(0);\n\n  return (\n    <div className=\"counter\">\n      <h2 data-testid=\"count\">{count}</h2>\n      <div className=\"counter-buttons\">\n        <button\n          data-testid=\"decrement\"\n          onClick={() => setCount(c => c - step)}\n          disabled={count <= 0}\n        >\n          Decrement\n        </button>\n        <button\n          data-testid=\"reset\"\n          onClick={() => setCount(0)}\n        >\n          Reset\n        </button>\n        <button\n          data-testid=\"increment\"\n          onClick={() => setCount(c => c + step)}\n        >\n          Increment\n        </button>\n      </div>\n    </div>\n  );\n};\n\nexport default Counter;\n",
+      "language": "tsx"
+    }
+  ],
+  "sort_order": 1
+}

@@ -1,0 +1,49 @@
+{
+  "id": "hook-use-toggle",
+  "title": "useToggle Hook",
+  "category": "frontend",
+  "difficulty": "easy",
+  "description": "Implement a **useToggle** custom hook that manages a boolean state.\n\n### Requirements\n\n- `useToggle(initialValue?)` returns an array: `[value, toggle, setValue]`\n- `value` is the current boolean (default `false`)\n- `toggle()` flips the value\n- `setValue(bool)` sets to a specific value\n- The hook must accept an optional `initialValue` parameter\n\n### Usage Example\n\n```tsx\nconst [isOn, toggle, setIsOn] = useToggle(false);\ntoggle();     // isOn → true\ntoggle();     // isOn → false\nsetIsOn(true); // isOn → true\n```\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Display value | `toggle-value` |\n| Toggle button | `toggle-btn` |\n| Set True button | `set-true` |\n| Set False button | `set-false` |",
+  "constraints": "- Implement as a standalone custom hook in useToggle.ts\n- Use only React built-in hooks (useState, useCallback)\n- The hook must be reusable across components",
+  "hints": [
+    "Use useState<boolean> to store the value.",
+    "The toggle function should use the callback form of setState: prev => !prev.",
+    "Wrap toggle and setValue in useCallback for referential stability."
+  ],
+  "tags": ["react", "hooks", "custom-hooks", "state"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { useToggle } from './useToggle';\n\nexport default function App() {\n  const [isOn, toggle, setIsOn] = useToggle(false);\n\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>\n      <h1 style={{ marginBottom: '1rem' }}>useToggle</h1>\n      <p data-testid=\"toggle-value\" style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>\n        {isOn ? '✅ ON' : '❌ OFF'}\n      </p>\n      <div style={{ display: 'flex', gap: '0.5rem' }}>\n        <button data-testid=\"toggle-btn\" onClick={toggle}>Toggle</button>\n        <button data-testid=\"set-true\" onClick={() => setIsOn(true)}>Set True</button>\n        <button data-testid=\"set-false\" onClick={() => setIsOn(false)}>Set False</button>\n      </div>\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "useToggle.ts",
+      "content": "import { useState, useCallback } from 'react';\n\n/**\n * Custom hook that manages a boolean toggle state.\n *\n * @param initialValue - Starting value (default: false)\n * @returns [value, toggle, setValue]\n */\nexport function useToggle(\n  initialValue = false\n): [boolean, () => void, (value: boolean) => void] {\n  // TODO: Implement the hook\n  // Return [value, toggle, setValue]\n\n  return [false, () => {}, () => {}];\n}\n",
+      "language": "ts",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": "button {\n  padding: 0.5rem 1rem;\n  border: 1px solid #d1d5db;\n  border-radius: 0.375rem;\n  background: #f9fafb;\n  cursor: pointer;\n  font-size: 0.875rem;\n}\n\nbutton:hover {\n  background: #e5e7eb;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport React from 'react';\nimport { useToggle } from './useToggle';\n\nfunction Harness({ initial = false }: { initial?: boolean }) {\n  const [value, toggle, setValue] = useToggle(initial);\n  return (\n    <div>\n      <span data-testid=\"toggle-value\">{String(value)}</span>\n      <button data-testid=\"toggle-btn\" onClick={toggle}>Toggle</button>\n      <button data-testid=\"set-true\" onClick={() => setValue(true)}>True</button>\n      <button data-testid=\"set-false\" onClick={() => setValue(false)}>False</button>\n    </div>\n  );\n}\n\ndescribe('useToggle', () => {\n  it('defaults to false', () => {\n    render(<Harness />);\n    expect(screen.getByTestId('toggle-value')).toHaveTextContent('false');\n  });\n\n  it('respects initial value', () => {\n    render(<Harness initial={true} />);\n    expect(screen.getByTestId('toggle-value')).toHaveTextContent('true');\n  });\n\n  it('toggles the value', () => {\n    render(<Harness />);\n    fireEvent.click(screen.getByTestId('toggle-btn'));\n    expect(screen.getByTestId('toggle-value')).toHaveTextContent('true');\n    fireEvent.click(screen.getByTestId('toggle-btn'));\n    expect(screen.getByTestId('toggle-value')).toHaveTextContent('false');\n  });\n\n  it('sets to a specific value with setValue', () => {\n    render(<Harness />);\n    fireEvent.click(screen.getByTestId('set-true'));\n    expect(screen.getByTestId('toggle-value')).toHaveTextContent('true');\n    fireEvent.click(screen.getByTestId('set-false'));\n    expect(screen.getByTestId('toggle-value')).toHaveTextContent('false');\n  });\n\n  it('setValue(true) when already true stays true', () => {\n    render(<Harness initial={true} />);\n    fireEvent.click(screen.getByTestId('set-true'));\n    expect(screen.getByTestId('toggle-value')).toHaveTextContent('true');\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "useToggle.ts",
+      "content": "import { useState, useCallback } from 'react';\n\nexport function useToggle(\n  initialValue = false\n): [boolean, () => void, (value: boolean) => void] {\n  const [value, setValue] = useState(initialValue);\n\n  const toggle = useCallback(() => setValue((prev) => !prev), []);\n  const set = useCallback((v: boolean) => setValue(v), []);\n\n  return [value, toggle, set];\n}\n",
+      "language": "ts"
+    }
+  ],
+  "sort_order": 200
+}

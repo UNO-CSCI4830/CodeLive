@@ -1,0 +1,96 @@
+{
+  "id": "balanced-binary-tree",
+  "title": "Check if a Binary Tree is Height-Balanced",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Determine if A binary tree is height-balanced if for every node the heights of the left and right subtrees differ by no more than one. Determine whether a given tree is balanced. Return True if balanced, otherwise False.\n\n    \n\nConstraints:\n    - 0 ≤ nodes ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/balanced-binary-tree/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(h)"
+  },
+  "explanation": "Intuition\nCompute subtree heights bottom-up. If any subtree is unbalanced, propagate a sentinel value upward to avoid recomputing heights. This turns balance checks into a single postorder traversal.\n\nApproach\n1. Initial Setup: Write a helper returning height or -1 if unbalanced.\n2. Main Algorithm: At each node, get left and right heights; if diff > 1 return -1.\n3. Return Result: Top-level returns True iff helper returns nonnegative.\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(h) recursion\n\nKey Insights\n- Sentinel shortcut avoids extra passes\n- Height depends on children's heights\n\nCommon Pitfalls\n- Using absolute diff on None incorrectly\n- Confusing nodes and edges when computing height",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef is_balanced(root: TreeNode) -> bool:\n    def height(node):\n        if not node:\n            return 0\n        lh = height(node.left)\n        if lh == -1:\n            return -1\n        rh = height(node.right)\n        if rh == -1:\n            return -1\n        if abs(lh - rh) > 1:\n            return -1\n        return 1 + (lh if lh > rh else rh)\n    return height(root) != -1",
+  "testCases": [
+    {
+      "input": {
+        "tree": [
+          3,
+          9,
+          20,
+          null,
+          null,
+          15,
+          7
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Balanced example"
+    },
+    {
+      "input": {
+        "tree": [
+          1,
+          2,
+          2,
+          3,
+          3,
+          null,
+          null,
+          4,
+          4
+        ]
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Left side too deep"
+    },
+    {
+      "input": {
+        "tree": []
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Empty tree is balanced"
+    },
+    {
+      "input": {
+        "tree": [
+          1
+        ]
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Single node is balanced"
+    }
+  ],
+  "tags": [
+    "tree",
+    "dfs"
+  ],
+  "hints": [
+    "Return -1 when a subtree is unbalanced",
+    "Use postorder to get heights first",
+    "Check abs(lh - rh) <= 1"
+  ],
+  "relatedProblems": [
+    "maximum-depth-of-tree",
+    "diameter-of-binary-tree"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 51.2,
+    "frequency": "high",
+    "importance": 6
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {boolean}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

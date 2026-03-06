@@ -1,0 +1,124 @@
+{
+  "id": "burst-balloons-min-arrows",
+  "title": "Minimum Arrows to Burst All Balloons",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given There are balloons represented by intervals [x_start, x_end]. An arrow shot at position x bursts all balloons with x_start ≤ x ≤ x_end. Return the minimum number of arrows to burst all balloons.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5\n- -2·10^9 ≤ x_start ≤ x_end ≤ 2·10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/",
+  "complexity": {
+    "time": "O(n log n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nShoot arrows at the right edge of the leftmost finishing balloon. Once an arrow is placed, skip all balloons overlapping that point, and repeat. Sorting by end coordinate ensures each arrow covers as many as possible.\n\nApproach\n1. Initial Setup: Sort intervals by end ascending\n2. Main Algorithm: Initialize arrows=0 and pos=-inf; for each interval if start>pos, shoot at end and set pos=end\n3. Return Result: Return arrows\n\nComplexity Analysis\n- Time Complexity: O(n log n)\n- Space Complexity: O(1) extra\n\nKey Insights\n- End-sorted greedy maximizes coverage per arrow\n- Strict start>pos handles closed intervals\n\nCommon Pitfalls\n- Using start sort is not optimal\n- If you use ≥ instead of > you may overshoot coverage",
+  "solutionCode": "def find_min_arrow_shots(points):\n    if not points:\n        return 0\n    points.sort(key=lambda x: x[1])\n    arrows = 0\n    pos = -10**19\n    for s, e in points:\n        if s > pos:\n            arrows += 1\n            pos = e\n    return arrows",
+  "testCases": [
+    {
+      "input": {
+        "points": [
+          [
+            10,
+            16
+          ],
+          [
+            2,
+            8
+          ],
+          [
+            1,
+            6
+          ],
+          [
+            7,
+            12
+          ]
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Shoot at 6 and 12"
+    },
+    {
+      "input": {
+        "points": []
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "No balloons"
+    },
+    {
+      "input": {
+        "points": [
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5,
+            6
+          ],
+          [
+            7,
+            8
+          ]
+        ]
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "No overlaps"
+    },
+    {
+      "input": {
+        "points": [
+          [
+            1,
+            10
+          ],
+          [
+            2,
+            9
+          ],
+          [
+            3,
+            8
+          ]
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Nested intervals"
+    }
+  ],
+  "tags": [
+    "greedy",
+    "intervals",
+    "sorting"
+  ],
+  "hints": [
+    "Sort by right endpoints",
+    "Place arrow at the current right endpoint",
+    "Skip all covered intervals"
+  ],
+  "relatedProblems": [
+    "schedule-max-compatible",
+    "merge-intervals-min-removals"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 53,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def find_min_arrow_shots(points: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def find_min_arrow_shots(points: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] points}\n * @return {number}\n */\nfunction find_min_arrow_shots(points) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int find_min_arrow_shots(int[][] points) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint find_min_arrow_shots(int[][] points) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int find_min_arrow_shots(vector<vector<int>>& points) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

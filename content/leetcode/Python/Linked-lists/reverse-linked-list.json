@@ -1,0 +1,98 @@
+{
+  "id": "reverse-linked-list",
+  "title": "Reverse a Linked List",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given Reverse a singly linked list and return the new head. Modify the next pointers in place using an iterative approach. Do not use extra arrays or recursion.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5 nodes\n- Node values fit in 32-bit signed integer\n- List may be empty",
+  "leetcodeUrl": "https://leetcode.com/problems/reverse-linked-list/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nAt each step, we detach the current node and point it to the growing reversed prefix. Only a constant number of pointers are moved per node, so the method is linear and in place.\n\nApproach\n1. Initial Setup: Track two pointers prev and curr.\n2. Main Algorithm: Iterate while curr is not None, rewire curr.next to prev and shift both pointers forward.\n3. Return Result: Return prev which becomes the new head.\n\nComplexity Analysis\n- Time Complexity: O(n) due to a single pass or divide-and-conquer\n  over the list where each node is visited a bounded number of times.\n- Space Complexity: O(1) accounting for pointers and, when needed,\n  recursion depth or extra structures.\n\nKey Insights\n- Reversing a list is pointer gymnastics, not value copying\n- Thinking in terms of growing a new head clarifies the loop\n\nCommon Pitfalls\n- Losing reference to the rest of the list without storing next\n- Returning curr instead of prev at the end",
+  "solutionCode": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\ndef reverse_list(head):\n    prev = None\n    curr = head\n    while curr:\n        nxt = curr.next\n        curr.next = prev\n        prev = curr\n        curr = nxt\n    return prev",
+  "testCases": [
+    {
+      "input": {
+        "list": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": {
+        "result": [
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      },
+      "explanation": "Standard reversal"
+    },
+    {
+      "input": {
+        "list": []
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Empty list returns empty"
+    },
+    {
+      "input": {
+        "list": [
+          1
+        ]
+      },
+      "expected": {
+        "result": [
+          1
+        ]
+      },
+      "explanation": "Single node unchanged"
+    },
+    {
+      "input": {
+        "list": [
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "result": [
+          2,
+          1
+        ]
+      },
+      "explanation": "Shortest nontrivial case"
+    }
+  ],
+  "tags": [
+    "linked-list",
+    "two-pointers"
+  ],
+  "hints": [
+    "Keep track of the next node before rewiring",
+    "Point current to the previous node",
+    "Move both pointers forward"
+  ],
+  "relatedProblems": [
+    "reorder-linked-list",
+    "reverse-nodes-in-k-group"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 74,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any next}\n * @return {any}\n */\nfunction __init__(self, val, next) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> __init__(any self, any val, any next) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] __init__(any self, any val, any next) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] __init__(any& self, any& val, any& next) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

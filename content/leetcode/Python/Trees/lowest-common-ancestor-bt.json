@@ -1,0 +1,106 @@
+{
+  "id": "lowest-common-ancestor-bt",
+  "title": "Lowest Common Ancestor in a Binary Tree",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a binary tree (not necessarily a BST) and two node values p and q that exist in the tree, return the value of their lowest common ancestor.\n\n    \n\nConstraints:\n    - 1 ≤ nodes ≤ 10^5\n- All values unique",
+  "leetcodeUrl": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(h)"
+  },
+  "explanation": "Intuition\nA node is the LCA if one target lies in its left subtree and the other in its right, or if the node equals one target and the other lies below it.\n\nApproach\n1. Initial Setup: DFS returns whether subtree contains p or q\n2. Main Algorithm: When two of (left,right,mid) are True, record current as LCA\n3. Return Result: Bubble True/False up recursion\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(h)\n\nKey Insights\n- Boolean returns let us compose results cleanly\n- Handles ancestor relationships naturally\n\nCommon Pitfalls\n- Not stopping after setting LCA can still work but wastes time\n- Assuming BST ordering where none exists",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef lca_in_binary_tree(root: TreeNode, p: int, q: int) -> int:\n    ans = None\n    def dfs(node):\n        nonlocal ans\n        if not node:\n            return False\n        left = dfs(node.left)\n        right = dfs(node.right)\n        mid = (node.val == p) or (node.val == q)\n        if (mid and left) or (mid and right) or (left and right):\n            ans = node\n        return left or right or mid\n    dfs(root)\n    return ans.val if ans else None",
+  "testCases": [
+    {
+      "input": {
+        "tree": [
+          3,
+          5,
+          1,
+          6,
+          2,
+          0,
+          8,
+          null,
+          null,
+          7,
+          4
+        ],
+        "p": 5,
+        "q": 1
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Split at root"
+    },
+    {
+      "input": {
+        "tree": [
+          1,
+          2
+        ],
+        "p": 1,
+        "q": 2
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Root is ancestor"
+    },
+    {
+      "input": {
+        "tree": [
+          5,
+          3,
+          6,
+          2,
+          4
+        ],
+        "p": 2,
+        "q": 4
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "LCA in left subtree"
+    },
+    {
+      "input": {
+        "tree": [
+          1
+        ],
+        "p": 1,
+        "q": 1
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "When __init__(tree=[1], p=1, q=1), the expected result is 1"
+    }
+  ],
+  "tags": [
+    "tree",
+    "dfs"
+  ],
+  "hints": [
+    "Return booleans from recursion",
+    "Check mid,left,right combo"
+  ],
+  "relatedProblems": [
+    "lowest-common-ancestor-bst",
+    "maximum-depth-of-tree"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 56.2,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {number}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

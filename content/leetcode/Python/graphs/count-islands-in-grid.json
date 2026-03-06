@@ -1,0 +1,92 @@
+{
+  "id": "count-islands-in-grid",
+  "title": "Count Landmasses in a Grid",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an m×n grid of '1' (land) and '0' (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.\n\nConstraints:\n- 1 ≤ m, n ≤ 300",
+  "leetcodeUrl": "https://leetcode.com/problems/number-of-islands/",
+  "complexity": {
+    "time": "O(mn)",
+    "space": "O(mn) worst-case"
+  },
+  "explanation": "Intuition\nEach unvisited '1' starts a flood fill that marks the entire island.\n\nApproach\n1. Initial Setup: Scan all cells\n2. Main Algorithm: On '1' not yet visited, BFS/DFS to mark all touches\n3. Return Result: Increase island count for each new flood\n\nComplexity Analysis\n- Time Complexity: O(mn)\n- Space Complexity: O(mn) in worst-case recursion/queue\n\nKey Insights\n- Mutate grid or track visited to avoid repeats\n- Use 4-directional adjacency\n\nCommon Pitfalls\n- Diagonal neighbors do not connect\n- Forgetting to mark visited when enqueuing can duplicate work",
+  "solutionCode": "from collections import deque\ndef num_islands(grid):\n    if not grid: \n        return 0\n    m, n = len(grid), len(grid[0])\n    grid = [list(row) if isinstance(row, str) else row[:] for row in grid]\n    def bfs(r, c):\n        q = deque([(r, c)])\n        grid[r][c] = '0'\n        while q:\n            x, y = q.popleft()\n            for dx, dy in [(1,0),(-1,0),(0,1),(0,-1)]:\n                i, j = x + dx, y + dy\n                if 0 <= i < m and 0 <= j < n and grid[i][j] == '1':\n                    grid[i][j] = '0'\n                    q.append((i, j))\n    count = 0\n    for i in range(m):\n        for j in range(n):\n            if grid[i][j] == '1':\n                count += 1\n                bfs(i, j)\n    return count",
+  "testCases": [
+    {
+      "input": {
+        "grid": [
+          "11000",
+          "11000",
+          "00100",
+          "00011"
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Three distinct landmasses"
+    },
+    {
+      "input": {
+        "grid": [
+          "0"
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "When num_islands(grid=[\"0\"]), the expected result is 0"
+    },
+    {
+      "input": {
+        "grid": [
+          "1"
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single cell island"
+    },
+    {
+      "input": {
+        "grid": [
+          "11110",
+          "11010",
+          "11000",
+          "00000"
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "All connected"
+    }
+  ],
+  "tags": [
+    "graph",
+    "bfs",
+    "dfs",
+    "matrix"
+  ],
+  "hints": [
+    "Flood fill each unseen '1'",
+    "Mutate to '0' to mark visited",
+    "Check 4 neighbors only"
+  ],
+  "relatedProblems": [
+    "count-provinces",
+    "num-enclaves"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 61,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def num_islands(grid: List[str]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def num_islands(grid: List[str]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] grid}\n * @return {number}\n */\nfunction num_islands(grid) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int num_islands(String[] grid) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint num_islands(char** grid) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int num_islands(vector<string>& grid) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

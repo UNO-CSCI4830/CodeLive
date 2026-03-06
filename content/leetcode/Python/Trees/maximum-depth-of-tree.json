@@ -1,0 +1,94 @@
+{
+  "id": "maximum-depth-of-tree",
+  "title": "Maximum Depth of a Tree",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given the root of a binary tree, return its maximum depth, defined as the number of nodes along the longest path from the root down to a leaf.\n\n    \n\nConstraints:\n    - 0 ≤ nodes ≤ 10^5\n- Node values are 32‑bit signed\n- Tree may be empty",
+  "leetcodeUrl": "https://leetcode.com/problems/maximum-depth-of-binary-tree/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(h) recursion"
+  },
+  "explanation": "Intuition\nThe depth of a node equals one plus the maximum of the depths of its children. A simple postorder traversal naturally computes this bottom‑up.\n\nApproach\n1. Initial Setup: Recurse to leaves computing depths\n2. Main Algorithm: Take max of left and right and add one\n3. Return Result: Return the value to parent\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(h) recursion\n\nKey Insights\n- Postorder matches bottom‑up definition\n- An empty subtree has depth 0\n\nCommon Pitfalls\n- Forgetting base case for None\n- Confusing edges vs nodes when defining depth",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef max_tree_depth(root: TreeNode) -> int:\n    if not root:\n        return 0\n    left = max_tree_depth(root.left)\n    right = max_tree_depth(root.right)\n    return 1 + (left if left > right else right)",
+  "testCases": [
+    {
+      "input": {
+        "tree": [
+          3,
+          9,
+          20,
+          null,
+          null,
+          15,
+          7
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Longest path length 3"
+    },
+    {
+      "input": {
+        "tree": []
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Empty tree has depth 0"
+    },
+    {
+      "input": {
+        "tree": [
+          1
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single node depth 1"
+    },
+    {
+      "input": {
+        "tree": [
+          1,
+          2,
+          3,
+          4,
+          null,
+          null,
+          5
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Deepest path length 3"
+    }
+  ],
+  "tags": [
+    "tree",
+    "dfs"
+  ],
+  "hints": [
+    "Think postorder",
+    "Depth is nodes count not edges",
+    "Return 0 on None"
+  ],
+  "relatedProblems": [
+    "diameter-of-binary-tree",
+    "right-side-view"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 74.5,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {number}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

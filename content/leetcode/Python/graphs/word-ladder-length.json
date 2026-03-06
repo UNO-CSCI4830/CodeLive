@@ -1,0 +1,104 @@
+{
+  "id": "word-ladder-length",
+  "title": "Shortest Transformation Ladder Length",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Given beginWord, endWord, and a dictionary of words, return the length of the shortest transformation sequence from beginWord to endWord such that only one letter can be changed at a time and each transformed word must exist in the dictionary. If no sequence, return 0.\n\n    \n\nConstraints:\n    - 1 ≤ |word| ≤ 10\n- 1 ≤ |wordList| ≤ 5000",
+  "leetcodeUrl": "https://leetcode.com/problems/word-ladder/",
+  "complexity": {
+    "time": "O(N·L·Σ)",
+    "space": "O(N·L)"
+  },
+  "explanation": "Intuition\nUse BFS over words. Either generate neighbors by changing each position to letters a..z or precompute wildcard buckets like 'h*t'.\n\nApproach\n1. Initial Setup: Add endWord to set\n2. Main Algorithm: BFS from begin; for each word, mutate each position to 'a'..'z' and enqueue unseen neighbors\n3. Return Result: Track distance by levels\n\nComplexity Analysis\n- Time Complexity: Roughly O(N·L·Σ)\n- Space Complexity: O(N)\n\nKey Insights\n- Using a set makes neighbor checks O(1)\n- Bidirectional BFS can speed up but adds complexity\n\nCommon Pitfalls\n- Revisiting words causes cycles\n- Forgetting to include endWord makes answer always 0",
+  "solutionCode": "from collections import deque\ndef ladder_length(beginWord, endWord, wordList):\n    wordSet = set(wordList)\n    if endWord not in wordSet:\n        return 0\n    q = deque([(beginWord, 1)])\n    seen = {beginWord}\n    while q:\n        w, d = q.popleft()\n        if w == endWord:\n            return d\n        arr = list(w)\n        for i in range(len(arr)):\n            orig = arr[i]\n            for c in \"abcdefghijklmnopqrstuvwxyz\":\n                if c == orig: \n                    continue\n                arr[i] = c\n                nw = \"\".join(arr)\n                if nw in wordSet and nw not in seen:\n                    seen.add(nw)\n                    q.append((nw, d + 1))\n            arr[i] = orig\n    return 0",
+  "testCases": [
+    {
+      "input": {
+        "beginWord": "hit",
+        "endWord": "cog",
+        "wordList": [
+          "hot",
+          "dot",
+          "dog",
+          "lot",
+          "log",
+          "cog"
+        ]
+      },
+      "expected": {
+        "result": 5
+      },
+      "explanation": "Classic ladder"
+    },
+    {
+      "input": {
+        "beginWord": "hit",
+        "endWord": "cog",
+        "wordList": [
+          "hot",
+          "dot",
+          "dog",
+          "lot",
+          "log"
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "End not in list"
+    },
+    {
+      "input": {
+        "beginWord": "a",
+        "endWord": "c",
+        "wordList": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "When ladder_length(beginWord=\"a\", endWord=\"c\", wordList=[\"a\",\"b\",\"c\"]), the expected result is 2"
+    },
+    {
+      "input": {
+        "beginWord": "same",
+        "endWord": "same",
+        "wordList": [
+          "same"
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "No changes needed"
+    }
+  ],
+  "tags": [
+    "graph",
+    "bfs",
+    "string"
+  ],
+  "hints": [
+    "Use BFS by word differences of one letter",
+    "Use a set for O(1) word lookups",
+    "Level-by-level distance"
+  ],
+  "relatedProblems": [
+    "word-ladder-ii",
+    "evaluate-division"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 33,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def ladder_length(beginWord: str, endWord: str, wordList: List[str]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def ladder_length(beginWord: str, endWord: str, wordList: List[str]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string beginWord, string endWord, number[] wordList}\n * @return {number}\n */\nfunction ladder_length(beginWord, endWord, wordList) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int ladder_length(String beginWord, String endWord, String[] wordList) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint ladder_length(char* beginWord, char* endWord, char** wordList) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int ladder_length(string& beginWord, string& endWord, vector<string>& wordList) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

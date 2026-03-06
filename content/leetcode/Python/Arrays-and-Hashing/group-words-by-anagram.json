@@ -1,0 +1,130 @@
+{
+  "id": "group-words-by-anagram",
+  "title": "Group Words by Anagram",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given a list of strings, group them so that anagrams appear together. Two strings are anagrams if they contain exactly the same characters in possibly different orders. Return a list of groups where each group is a list of strings that are mutual anagrams. The order of groups does not matter, and the order of words inside a group does not matter.\n\nInput: words (list of lowercase strings). Output: list of lists.\n\n    \n\nConstraints:\n    - 1 ≤ len(words) ≤ 10^4\n- 1 ≤ len(words[i]) ≤ 100\n- Words contain lowercase English letters only",
+  "leetcodeUrl": "https://leetcode.com/problems/group-anagrams/",
+  "complexity": {
+    "time": "O(n k log k)",
+    "space": "O(n k)"
+  },
+  "explanation": "Intuition\nAnagrams share the same multiset of characters. If we map each word to a canonical signature representing its letters, all anagrams will map to the same key. Sorting characters gives a simple signature. For very long words we could use character counts, but sorting is clear and effective for typical constraints.\n\nApproach\n1. Initial Setup: Create a dictionary mapping signature→list.\n2. Main Algorithm: For each word, compute its signature by sorting characters, then append the word to that bucket.\n3. Return Result: Return the list of all buckets as the grouped result.\n\nComplexity Analysis\n- Time Complexity: O(n k log k) because the algorithm scans elements a constant\n  number of times and performs O(1) work for each update or lookup.\n- Space Complexity: O(n k) due to the auxiliary structures required to\n  store counts, prefix sums, or membership sets while ensuring fast access.\n\nKey Insights\n- An effective signature collapses anagram detection to equality checks\n- Hashing signatures avoids pairwise word comparisons\n\nCommon Pitfalls\n- Using the raw word as key breaks grouping since permutations differ\n- Forgetting to initialize buckets leads to KeyError",
+  "solutionCode": "from collections import defaultdict\ndef group_words_by_anagram(words):\n    groups = defaultdict(list)\n    for w in words:\n        sig = ''.join(sorted(w))\n        groups[sig].append(w)\n    return list(groups.values())",
+  "testCases": [
+    {
+      "input": {
+        "words": [
+          "eat",
+          "tea",
+          "tan",
+          "ate",
+          "nat",
+          "bat"
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            "eat",
+            "tea",
+            "ate"
+          ],
+          [
+            "tan",
+            "nat"
+          ],
+          [
+            "bat"
+          ]
+        ]
+      },
+      "explanation": "Basic grouping with multiple clusters"
+    },
+    {
+      "input": {
+        "words": [
+          ""
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            ""
+          ]
+        ]
+      },
+      "explanation": "Edge case with empty string"
+    },
+    {
+      "input": {
+        "words": [
+          "a"
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            "a"
+          ]
+        ]
+      },
+      "explanation": "Single word should return a single group"
+    },
+    {
+      "input": {
+        "words": [
+          "ab",
+          "ba",
+          "abc",
+          "cba",
+          "bca",
+          "bbb"
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            "ab",
+            "ba"
+          ],
+          [
+            "abc",
+            "cba",
+            "bca"
+          ],
+          [
+            "bbb"
+          ]
+        ]
+      },
+      "explanation": "Multiple group sizes and a singleton group"
+    }
+  ],
+  "tags": [
+    "array",
+    "hash-table",
+    "string",
+    "sorting"
+  ],
+  "hints": [
+    "How can two words be compared without pairwise checks",
+    "Build a signature that is identical across anagrams",
+    "A dictionary from signature to list yields groups directly"
+  ],
+  "relatedProblems": [
+    "frequency-sort-array",
+    "arrays-are-isomorphic"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 62.1,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def group_words_by_anagram(words: List[str]) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def group_words_by_anagram(words: List[str]) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] words}\n * @return {any}\n */\nfunction group_words_by_anagram(words) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<List<Integer>> group_words_by_anagram(String[] words) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[List[int]] group_words_by_anagram(char** words) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[List[int]] group_words_by_anagram(vector<string>& words) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

@@ -1,0 +1,351 @@
+/**
+ * InterviewSessionPage — the main interview room.
+ *
+ * Wraps everything in SessionProvider for real-time state. Renders:
+ * - A header bar with timer, question navigation, and session controls
+ * - The correct layout based on the current problem type (leetcode vs frontend)
+ * - Session completed screen when done
+ *
+ * On session end (interviewer only):
+ *  1. Captures code snapshots for all questions
+ *  2. Saves them to the backend
+ *  3. Triggers async AI report generation
+ *  4. Navigates to the report loading page
+ */
+
+import { useCallback, useMemo, useRef, useState } from "react";
+import { useParams, useNavigate, Link, Navigate } from "react-router-dom";
+import { Loader2, LogOut, Trophy, ChevronLeft } from "lucide-react";
+import { useAuth } from "@/lib/AuthContext";
+import { SessionProvider, useSession } from "../SessionContext";
+import SessionTimer from "../components/SessionTimer";
+import QuestionNav from "../components/QuestionNav";
+import LeetcodeSessionLayout, {
+  type SessionLayoutHandle,
+} from "../layouts/LeetcodeSessionLayout";
+import FrontendSessionLayout from "../layouts/FrontendSessionLayout";
+import { saveSnapshots, generateReport, type SnapshotPayload } from "../api";
+import "./InterviewSessionPage.css";
+
+/** Inner component that consumes SessionContext. */
+function InterviewRoom() {
+  const {
+    session,
+    loading,
+    error,
+    currentProblem,
+    isInterviewer,
+    advance,
+    lockCurrent,
+    end,
+  } = useSession();
+
+  const { profile } = useAuth();
+  const navigate = useNavigate();
+
+  const userName = profile?.name ?? (isInterviewer ? "Interviewer" : "Candidate");
+  const userColor = isInterviewer ? "#f97316" : "#3b82f6"; // orange / blue
+
+  // Ref to the active layout (Leetcode or Frontend — both share the same handle shape)
+  const layoutRef = useRef<SessionLayoutHandle>(null);
+
+  // Accumulates snapshots as the interviewer advances through questions
+  const snapshotsRef = useRef<SnapshotPayload[]>([]);
+
+  // End-session confirmation modal
+  const [showEndModal, setShowEndModal] = useState(false);
+  const [endingSession, setEndingSession] = useState(false);
+  const skipReportRef = useRef(false);
+
+  /** Capture the current layout snapshot and push to the accumulator. */
+  const captureCurrentSnapshot = useCallback(() => {
+    if (!currentProblem || !layoutRef.current) return;
+    const snap = layoutRef.current.captureSnapshot();
+    snapshotsRef.current.push({
+      orderIndex: currentProblem.order_index,
+      problemId: currentProblem.problem_id,
+      category: currentProblem.category,
+      code: snap.code,
+      language: snap.language,
+      hintsUsed: snap.hintsUsed,
+      aiMessages: snap.aiMessages,
+    });
+  }, [currentProblem]);
+
+  /**
+   * Shared end-session flow (called by both the "End" button and the
+   * "Next" button on the last question).
+   *  1. Capture final snapshot
+   *  2. End the session in Supabase
+   *  3. Save snapshots + trigger AI report (fire & forget — errors are logged)
+   *  4. Navigate to the report loading page
+   */
+  const doEndWithReport = useCallback(async () => {
+    if (!session) return;
+    setEndingSession(true);
+    captureCurrentSnapshot();
+    await end();
+
+    const sessionId = session.id;
+    const snapshots = [...snapshotsRef.current];
+
+    // Build problem metadata for the report request
+    const problems = snapshots.map((s) => {
+      const sessionProblem = session.problems.find(
+        (p) => p.order_index === s.orderIndex,
+      );
+      return {
+        orderIndex: s.orderIndex,
+        problemId: s.problemId,
+        category: s.category,
+        // Title and description come from layout snapshot (layout loaded the JSON)
+        title: (layoutRef.current?.captureSnapshot().problemTitle) ?? s.problemId,
+        description: "",
+        timeLimit: sessionProblem?.time_limit ?? 30,
+      };
+    });
+
+    // Fire-and-forget — navigate immediately, report page polls for completion
+    saveSnapshots(sessionId, snapshots)
+      .then(() => generateReport(sessionId, { problems }))
+      .catch((err) => console.error("[report] generation failed:", err));
+
+    navigate(`/session/${sessionId}/report`);
+  }, [session, captureCurrentSnapshot, end, navigate]);
+
+  const handleTimerExpired = useCallback(() => {
+    lockCurrent();
+  }, [lockCurrent]);
+
+  const handleAdvance = useCallback(async () => {
+    if (!session) return;
+    const isLast = session.current_index >= session.problems.length - 1;
+    if (isLast) {
+      await doEndWithReport();
+    } else {
+      // Capture before advancing so we preserve this question's state
+      captureCurrentSnapshot();
+      await advance();
+    }
+  }, [session, advance, doEndWithReport, captureCurrentSnapshot]);
+
+  const handleEndSession = useCallback(() => {
+    setShowEndModal(true);
+  }, []);
+
+  /** Modal: generate report */
+  const handleModalReport = useCallback(async () => {
+    setShowEndModal(false);
+    await doEndWithReport();
+  }, [doEndWithReport]);
+
+  /** Modal: just go home (end session but skip report) */
+  const handleModalHome = useCallback(async () => {
+    if (!session) return;
+    skipReportRef.current = true;
+    setEndingSession(true);
+    setShowEndModal(false);
+    await end();
+    navigate("/dashboard");
+  }, [session, end, navigate]);
+
+  const canAdvance = useMemo(() => {
+    if (!currentProblem) return false;
+    return currentProblem.locked || isInterviewer;
+  }, [currentProblem, isInterviewer]);
+
+  /* ── Loading ──────────────────────────────────────── */
+  if (loading) {
+    return (
+      <div className="isp-loading">
+        <Loader2 className="isp-loading-spinner" />
+        <p>Joining interview session…</p>
+      </div>
+    );
+  }
+
+  if (error || !session) {
+    return (
+      <div className="isp-error">
+        <p>{error ?? "Session not found."}</p>
+        <Link to="/dashboard" className="isp-back">
+          <ChevronLeft className="isp-back-icon" /> Back to Dashboard
+        </Link>
+      </div>
+    );
+  }
+
+  /* ── Session completed ────────────────────────────── */
+  if (session.status === "completed") {
+    // If the interviewer chose to skip the report, go to dashboard
+    if (skipReportRef.current) {
+      return <Navigate to="/dashboard" replace />;
+    }
+    // Otherwise redirect to the report page
+    if (isInterviewer) {
+      return <Navigate to={`/session/${session.id}/report`} replace />;
+    }
+    return (
+      <div className="isp-completed">
+        <div className="isp-completed-card">
+          <Trophy className="isp-completed-icon" />
+          <h1 className="isp-completed-heading">Session Complete</h1>
+          <p className="isp-completed-text">
+            All {session.problems.length} problem{session.problems.length !== 1 && "s"}{" "}
+            {session.problems.length !== 1 ? "have" : "has"} been completed.
+          </p>
+          <Link to="/dashboard" className="isp-completed-btn">
+            Return to Dashboard
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentProblem) {
+    return (
+      <div className="isp-error">
+        <p>No current problem found.</p>
+      </div>
+    );
+  }
+
+  /* ── Active session ───────────────────────────────── */
+  return (
+    <div className="isp-shell">
+      {/* ── Header bar ── */}
+      <header className="isp-header">
+        <div className="isp-header-left">
+          <QuestionNav
+            problems={session.problems}
+            currentIndex={session.current_index}
+            onAdvance={handleAdvance}
+            canAdvance={canAdvance}
+            disabled={session.status !== "active"}
+          />
+        </div>
+
+        <div className="isp-header-center">
+          <SessionTimer
+            timeLimitMinutes={currentProblem.time_limit}
+            onExpired={handleTimerExpired}
+            locked={currentProblem.locked}
+            autoStart
+            startedAt={session.started_at}
+          />
+        </div>
+
+        <div className="isp-header-right">
+          <div className="isp-participants">
+            <span className="isp-participant isp-participant--interviewer" title="Interviewer">
+              I
+            </span>
+            {session.candidate_id && (
+              <span className="isp-participant isp-participant--candidate" title="Candidate">
+                C
+              </span>
+            )}
+          </div>
+
+          {isInterviewer && (
+            <button
+              type="button"
+              className="isp-end-btn"
+              onClick={handleEndSession}
+              title="End session"
+            >
+              <LogOut className="isp-end-icon" />
+              End
+            </button>
+          )}
+        </div>
+      </header>
+
+      {/* ── Problem layout ── */}
+      <div className="isp-content">
+        {currentProblem.category === "leetcode" ? (
+          <LeetcodeSessionLayout
+            ref={layoutRef}
+            sessionId={session.id}
+            problemId={currentProblem.problem_id}
+            orderIndex={currentProblem.order_index}
+            locked={currentProblem.locked}
+            userName={userName}
+            userColor={userColor}
+          />
+        ) : (
+          <FrontendSessionLayout
+            ref={layoutRef}
+            sessionId={session.id}
+            problemId={currentProblem.problem_id}
+            orderIndex={currentProblem.order_index}
+            locked={currentProblem.locked}
+            userName={userName}
+            userColor={userColor}
+          />
+        )}
+      </div>
+
+      {/* ── End-session modal ── */}
+      {showEndModal && (
+        <div className="isp-modal-overlay">
+          <div className="isp-modal">
+            <h2 className="isp-modal-title">End Interview</h2>
+            <p className="isp-modal-body">
+              Would you like to generate an AI interview report, or just return to the dashboard?
+            </p>
+            <div className="isp-modal-actions">
+              <button
+                type="button"
+                className="isp-modal-btn isp-modal-btn--ghost"
+                onClick={() => setShowEndModal(false)}
+                disabled={endingSession}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="isp-modal-btn isp-modal-btn--secondary"
+                onClick={handleModalHome}
+                disabled={endingSession}
+              >
+                Return to Dashboard
+              </button>
+              <button
+                type="button"
+                className="isp-modal-btn isp-modal-btn--primary"
+                onClick={handleModalReport}
+                disabled={endingSession}
+              >
+                {endingSession ? "Generating…" : "Generate Report"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Outer wrapper that provides SessionContext. */
+export default function InterviewSessionPage() {
+  const { sessionId } = useParams<{ sessionId: string }>();
+  const { user } = useAuth();
+
+  if (!sessionId || !user) {
+    return (
+      <div className="isp-error">
+        <p>Invalid session.</p>
+        <Link to="/dashboard" className="isp-back">
+          <ChevronLeft className="isp-back-icon" /> Back to Dashboard
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <SessionProvider sessionId={sessionId} userId={user.id}>
+      <InterviewRoom />
+    </SessionProvider>
+  );
+}

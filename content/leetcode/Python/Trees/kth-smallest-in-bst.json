@@ -1,0 +1,101 @@
+{
+  "id": "kth-smallest-in-bst",
+  "title": "Kth Smallest in BST",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given the root of a BST and an integer k, return the k-th smallest element in the tree.\n\n    \n\nConstraints:\n    - 1 ≤ nodes ≤ 10^5\n- 1 ≤ k ≤ nodes",
+  "leetcodeUrl": "https://leetcode.com/problems/kth-smallest-element-in-a-bst/",
+  "complexity": {
+    "time": "O(h + k)",
+    "space": "O(h) for stack"
+  },
+  "explanation": "Intuition\nInorder traversal visits nodes in ascending order in a BST. Stop after visiting k nodes.\n\nApproach\n1. Initial Setup: Iterative inorder with stack\n2. Main Algorithm: Count visits until k\n3. Return Result: Return the current value\n\nComplexity Analysis\n- Time Complexity: O(h + k)\n- Space Complexity: O(h) for stack\n\nKey Insights\n- BST inorder is sorted\n- Short‑circuit once found\n\nCommon Pitfalls\n- Visiting entire tree unnecessarily\n- Not handling k bounds",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef kth_smallest_bst(root: TreeNode, k: int) -> int:\n    stack = []\n    cur = root\n    count = 0\n    while cur or stack:\n        while cur:\n            stack.append(cur)\n            cur = cur.left\n        cur = stack.pop()\n        count += 1\n        if count == k:\n            return cur.val\n        cur = cur.right\n    return -1",
+  "testCases": [
+    {
+      "input": {
+        "tree": [
+          3,
+          1,
+          4,
+          null,
+          2
+        ],
+        "k": 1
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Smallest element"
+    },
+    {
+      "input": {
+        "tree": [
+          5,
+          3,
+          6,
+          2,
+          4,
+          null,
+          null,
+          1
+        ],
+        "k": 3
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Third smallest"
+    },
+    {
+      "input": {
+        "tree": [
+          1
+        ],
+        "k": 1
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single node"
+    },
+    {
+      "input": {
+        "tree": [
+          2,
+          1,
+          3
+        ],
+        "k": 2
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Middle element"
+    }
+  ],
+  "tags": [
+    "tree",
+    "stack"
+  ],
+  "hints": [
+    "Inorder yields sorted stream",
+    "Stop when count hits k",
+    "Use stack"
+  ],
+  "relatedProblems": [
+    "validate-bst",
+    "inorder-traversal-iterative"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 66.7,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {number}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

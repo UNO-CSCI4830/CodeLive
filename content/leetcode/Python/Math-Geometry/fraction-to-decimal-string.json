@@ -1,0 +1,81 @@
+{
+  "id": "fraction-to-decimal-string",
+  "title": "Convert Fraction to Recurring Decimal",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given integers numerator and denominator, return the decimal string representation of the fraction. If the fractional part is repeating, enclose the repeating part in parentheses. Handle signs and zero correctly.\n\n    \n\nConstraints:\n    - -2^31 ≤ numerator, denominator ≤ 2^31-1\n- denominator ≠ 0",
+  "leetcodeUrl": "https://leetcode.com/problems/fraction-to-recurring-decimal/",
+  "complexity": {
+    "time": "O(k)",
+    "space": "O(k)"
+  },
+  "explanation": "Intuition\nLong division simulation yields the decimal expansion. The remainder determines the next digit. When a remainder repeats, the digits since its first appearance form a recurring cycle. Track the index at which each remainder first appeared to place parentheses correctly.\n\nApproach\n1. Initial Setup: Handle sign and convert to positive longs\n2. Main Algorithm: Compute integer part; for the fractional part, loop while remainder>0: multiply by 10, append digit, and record remainder positions; when a repeated remainder appears, insert '(' at its index and append ')'\n3. Return Result: \n\nComplexity Analysis\n- Time Complexity: O(k) where k is the length of the decimal expansion\n- Space Complexity: O(k) for digit storage\n\nKey Insights\n- Remainder map allows detection of repeats\n- Use absolute values and prepend sign at the end\n\nCommon Pitfalls\n- Forgetting to add '0' when there is no fractional part\n- Off-by-one when inserting parentheses",
+  "solutionCode": "def fraction_to_decimal(numerator: int, denominator: int) -> str:\n    if numerator == 0:\n        return \"0\"\n    res = []\n    if (numerator < 0) ^ (denominator < 0):\n        res.append(\"-\")\n    num = abs(numerator)\n    den = abs(denominator)\n    res.append(str(num // den))\n    rem = num % den\n    if rem == 0:\n        return \"\".join(res)\n    res.append(\".\")\n    pos = {}\n    while rem != 0:\n        if rem in pos:\n            idx = pos[rem]\n            res.insert(idx, \"(\")\n            res.append(\")\")\n            break\n        pos[rem] = len(res)\n        rem *= 10\n        res.append(str(rem // den))\n        rem %= den\n    return \"\".join(res)",
+  "testCases": [
+    {
+      "input": {
+        "numerator": 1,
+        "denominator": 2
+      },
+      "expected": {
+        "result": "0.5"
+      },
+      "explanation": "Finite decimal"
+    },
+    {
+      "input": {
+        "numerator": 2,
+        "denominator": 3
+      },
+      "expected": {
+        "result": "0.(6)"
+      },
+      "explanation": "Repeating 6"
+    },
+    {
+      "input": {
+        "numerator": -50,
+        "denominator": 8
+      },
+      "expected": {
+        "result": "-6.25"
+      },
+      "explanation": "Negative mixed"
+    },
+    {
+      "input": {
+        "numerator": 1,
+        "denominator": 6
+      },
+      "expected": {
+        "result": "0.1(6)"
+      },
+      "explanation": "Recurring tail begins after one digit"
+    }
+  ],
+  "tags": [
+    "math",
+    "hash-table",
+    "string"
+  ],
+  "hints": [
+    "Store remainder positions to find cycles",
+    "Work with absolute values then add sign",
+    "Insert parentheses when a remainder repeats"
+  ],
+  "relatedProblems": [
+    "fast-power-exponent",
+    "integer-sqrt-floor"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 29,
+    "frequency": "medium",
+    "importance": 8
+  },
+  "starterCode": "def fraction_to_decimal(numerator: int, denominator: int) -> str:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def fraction_to_decimal(numerator: int, denominator: int) -> str:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number numerator, number denominator}\n * @return {string}\n */\nfunction fraction_to_decimal(numerator, denominator) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public String fraction_to_decimal(int numerator, int denominator) {\n        // Write your solution here\n        return \"\";\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nchar* fraction_to_decimal(int numerator, int denominator) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    string fraction_to_decimal(int& numerator, int& denominator) {\n        // Write your solution here\n        return \"\";\n    }\n};"
+}

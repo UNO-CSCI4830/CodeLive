@@ -1,0 +1,88 @@
+{
+  "id": "partition-labels-slices",
+  "title": "Partition String into Independent Slices",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a string s, partition it into as many parts as possible so that each letter appears in at most one part, and return a list of the sizes of these parts.\n\n    \n\nConstraints:\n    - 1 ≤ |s| ≤ 500",
+  "leetcodeUrl": "https://leetcode.com/problems/partition-labels/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nGreedy based on last occurrence. Track the rightmost index for each character. Scan once, extending the current partition's right boundary to the furthest last occurrence seen so far. When index meets boundary, close a partition.\n\nApproach\n1. Initial Setup: Record last index of each char\n2. Main Algorithm: Scan s, update right=max(right, last[s[i]]); when i==right, append size and start new segment\n3. Return Result: Return sizes\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(1) since alphabet is fixed\n\nKey Insights\n- Right boundary only moves forward\n- Each index belongs to exactly one partition\n\nCommon Pitfalls\n- Forgetting to include the last segment\n- Using first instead of last occurrence breaks correctness",
+  "solutionCode": "def partition_labels(s: str):\n    last = {ch: i for i, ch in enumerate(s)}\n    res = []\n    start = right = 0\n    for i, ch in enumerate(s):\n        right = max(right, last[ch])\n        if i == right:\n            res.append(i - start + 1)\n            start = i + 1\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "s": "ababcbacadefegdehijhklij"
+      },
+      "expected": {
+        "result": [
+          9,
+          7,
+          8
+        ]
+      },
+      "explanation": "Greedy boundaries"
+    },
+    {
+      "input": {
+        "s": "eccbbbbdec"
+      },
+      "expected": {
+        "result": [
+          10
+        ]
+      },
+      "explanation": "All letters cross each other"
+    },
+    {
+      "input": {
+        "s": "a"
+      },
+      "expected": {
+        "result": [
+          1
+        ]
+      },
+      "explanation": "Single letter"
+    },
+    {
+      "input": {
+        "s": "abc"
+      },
+      "expected": {
+        "result": [
+          1,
+          1,
+          1
+        ]
+      },
+      "explanation": "No overlaps"
+    }
+  ],
+  "tags": [
+    "greedy",
+    "string"
+  ],
+  "hints": [
+    "Map each char to its last index",
+    "Expand partition right to the furthest last",
+    "Cut when i meets right"
+  ],
+  "relatedProblems": [
+    "schedule-max-compatible",
+    "min-jumps-to-end"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 77,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def partition_labels(s: str) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def partition_labels(s: str) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s}\n * @return {any}\n */\nfunction partition_labels(s) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> partition_labels(String s) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] partition_labels(char* s) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] partition_labels(string& s) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

@@ -1,0 +1,110 @@
+{
+  "id": "copy-list-with-random-pointer",
+  "title": "Copy List with Random Pointer",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given A linked list has nodes with next and random pointers. The random pointer may point to any node or None. Create a deep copy of the list without using extra hash maps by interleaving copies.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/copy-list-with-random-pointer/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1) extra"
+  },
+  "explanation": "Intuition\nInsert cloned nodes after each original to make random pointer assignment O(1). Then detach the cloned list by restoring the original next pointers and threading the copies together.\n\nApproach\n1. Initial Setup: First pass: interleave clones between originals.\n2. Main Algorithm: Second: set each clone.random to original.random.next.\n3. Return Result: Third: detach the cloned list and restore the original.\n\nComplexity Analysis\n- Time Complexity: O(n) due to a single pass or divide-and-conquer\n  over the list where each node is visited a bounded number of times.\n- Space Complexity: O(1) extra accounting for pointers and, when needed,\n  recursion depth or extra structures.\n\nKey Insights\n- Interleaving avoids building a value→node map\n- Three passes keep logic simple and linear\n\nCommon Pitfalls\n- Forgetting to restore the original list after cloning\n- Not handling None in random leads to attribute errors",
+  "solutionCode": "class Node:\n    def __init__(self, x, next=None, random=None):\n        self.val = x\n        self.next = next\n        self.random = random\ndef copy_list_with_random_pointer(head):\n    if not head:\n        return None\n    cur = head\n    while cur:\n        nxt = cur.next\n        copy = Node(cur.val, nxt, None)\n        cur.next = copy\n        cur = nxt\n    cur = head\n    while cur:\n        if cur.random:\n            cur.next.random = cur.random.next\n        cur = cur.next.next\n    cur = head\n    new_head = head.next\n    while cur:\n        copy = cur.next\n        cur.next = copy.next\n        copy.next = copy.next.next if copy.next else None\n        cur = cur.next\n    return new_head",
+  "testCases": [
+    {
+      "input": {
+        "nodes": [
+          [
+            7,
+            null
+          ],
+          [
+            13,
+            0
+          ],
+          [
+            11,
+            4
+          ],
+          [
+            10,
+            2
+          ],
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": "deep-copy"
+      },
+      "explanation": "Structure identical and independent"
+    },
+    {
+      "input": {
+        "nodes": []
+      },
+      "expected": {
+        "result": "empty"
+      },
+      "explanation": "Copy of empty is empty"
+    },
+    {
+      "input": {
+        "nodes": [
+          [
+            1,
+            null
+          ]
+        ]
+      },
+      "expected": {
+        "result": "single"
+      },
+      "explanation": "Single node self-contained"
+    },
+    {
+      "input": {
+        "nodes": [
+          [
+            3,
+            0
+          ],
+          [
+            3,
+            null
+          ]
+        ]
+      },
+      "expected": {
+        "result": "self-loop-and-null"
+      },
+      "explanation": "First random to self, second to None"
+    }
+  ],
+  "tags": [
+    "linked-list"
+  ],
+  "hints": [
+    "Create clones interleaved with originals",
+    "Clone.random equals original.random.next",
+    "Detach to form the final deep copy"
+  ],
+  "relatedProblems": [
+    "detect-cycle-in-list",
+    "cycle-start-node"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 47,
+    "frequency": "medium",
+    "importance": 8
+  },
+  "starterCode": "def __init__(self: any, x: any, next: any, random: any) -> str:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, x: any, next: any, random: any) -> str:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any x, any next, any random}\n * @return {any}\n */\nfunction __init__(self, x, next, random) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public str __init__(any self, any x, any next, any random) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nstr __init__(any self, any x, any next, any random) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    str __init__(any& self, any& x, any& next, any& random) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

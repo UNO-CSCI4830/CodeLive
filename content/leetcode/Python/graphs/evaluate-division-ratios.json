@@ -1,0 +1,153 @@
+{
+  "id": "evaluate-division-ratios",
+  "title": "Evaluate Division Equations via Graph",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "You are given equations like a/b = value and some queries x/y. Treat each variable as a node and the ratio as a directed edge weight. For a query, compute x/y by multiplying edge weights along a path if one exists; otherwise return -1.0.\n\n    \n\nConstraints:\n    - 1 ≤ equations ≤ 20\n- Variables are lowercase strings\n- Values are positive floats",
+  "leetcodeUrl": "https://leetcode.com/problems/evaluate-division/",
+  "complexity": {
+    "time": "O(V+E) per query worst-case",
+    "space": "O(V+E)"
+  },
+  "explanation": "Intuition\nBuild a bidirectional weighted graph. For a query, run DFS or BFS accumulating the product of weights until reaching the target.\n\nApproach\n1. Initial Setup: Construct adjacency with edges u->v (w) and v->u (1/w)\n2. Main Algorithm: For each query, if nodes absent return -1\n3. Return Result: Run DFS multiplying weights; return -1 if not reachable\n\nComplexity Analysis\n- Time Complexity: O(V+E) per query\n- Space Complexity: O(V+E)\n\nKey Insights\n- Include self edge x/x=1.0 when variable exists\n- Avoid revisiting nodes to prevent cycles\n\nCommon Pitfalls\n- Floating error is acceptable in typical constraints\n- Unknown variable must yield -1.0",
+  "solutionCode": "from collections import defaultdict, deque\ndef calc_equation(equations, values, queries):\n    g = defaultdict(list)\n    for (a, b), w in zip(equations, values):\n        g[a].append((b, w))\n        g[b].append((a, 1.0 / w))\n    def query(s, t):\n        if s not in g or t not in g:\n            return -1.0\n        if s == t:\n            return 1.0\n        q = deque([(s, 1.0)])\n        seen = {s}\n        while q:\n            u, val = q.popleft()\n            if u == t:\n                return val\n            for v, w in g[u]:\n                if v not in seen:\n                    seen.add(v)\n                    q.append((v, val * w))\n        return -1.0\n    return [query(a, b) for a, b in queries]",
+  "testCases": [
+    {
+      "input": {
+        "equations": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "b",
+            "c"
+          ]
+        ],
+        "values": [
+          2,
+          3
+        ],
+        "queries": [
+          [
+            "a",
+            "c"
+          ],
+          [
+            "b",
+            "a"
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          6,
+          0.5
+        ]
+      },
+      "explanation": "Products along paths and inverses"
+    },
+    {
+      "input": {
+        "equations": [
+          [
+            "a",
+            "b"
+          ]
+        ],
+        "values": [
+          2
+        ],
+        "queries": [
+          [
+            "a",
+            "a"
+          ],
+          [
+            "x",
+            "x"
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          1,
+          -1
+        ]
+      },
+      "explanation": "Known variable self 1.0, unknown -1.0"
+    },
+    {
+      "input": {
+        "equations": [
+          [
+            "a",
+            "b"
+          ],
+          [
+            "c",
+            "d"
+          ]
+        ],
+        "values": [
+          2,
+          4
+        ],
+        "queries": [
+          [
+            "a",
+            "d"
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          -1
+        ]
+      },
+      "explanation": "Disconnected components"
+    },
+    {
+      "input": {
+        "equations": [],
+        "values": [],
+        "queries": [
+          [
+            "a",
+            "b"
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          -1
+        ]
+      },
+      "explanation": "When calc_equation(equations=[], values=[], queries=[[\"a\",\"b\"]]), the expected result is [-1]"
+    }
+  ],
+  "tags": [
+    "graph",
+    "bfs"
+  ],
+  "hints": [
+    "Add reverse edges with reciprocal weights",
+    "Return 1.0 for x/x when x exists",
+    "Use BFS to accumulate product"
+  ],
+  "relatedProblems": [
+    "word-ladder-length",
+    "count-provinces"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 54,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def calc_equation(equations: List[List[int]], values: List[int], queries: List[List[int]]) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def calc_equation(equations: List[List[int]], values: List[int], queries: List[List[int]]) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] equations, number[] values, number[] queries}\n * @return {any}\n */\nfunction calc_equation(equations, values, queries) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> calc_equation(int[][] equations, int[] values, int[][] queries) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] calc_equation(int[][] equations, int* values, int[][] queries) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] calc_equation(vector<vector<int>>& equations, vector<int>& values, vector<vector<int>>& queries) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

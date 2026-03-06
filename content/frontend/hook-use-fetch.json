@@ -1,0 +1,50 @@
+{
+  "id": "hook-use-fetch",
+  "title": "useFetch Hook",
+  "category": "frontend",
+  "difficulty": "medium",
+  "description": "Implement a **useFetch** custom hook that fetches data from a URL and manages loading, error, and data states.\n\n### Requirements\n\n- `useFetch<T>(url: string)` returns `{ data: T | null, loading: boolean, error: string | null, refetch: () => void }`\n- On mount (and when `url` changes), fetch the URL and parse JSON\n- Set `loading` to `true` while fetching, `false` when complete\n- On success, set `data` to the parsed JSON and `error` to `null`\n- On failure, set `error` to the error message and `data` to `null`\n- `refetch()` triggers a fresh fetch (re-runs the request)\n- Cancel in-flight requests when the URL changes or on unmount (AbortController)\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Loading indicator | `loading` |\n| Error message | `error` |\n| Data display | `data` |\n| Refetch button | `refetch` |",
+  "constraints": "- Implement in useFetch.ts as a standalone hook\n- Use the native fetch API (no axios or other libraries)\n- Use AbortController for cancellation\n- Must handle the component unmounting during a pending fetch",
+  "hints": [
+    "Create an AbortController at the start of your effect and pass its signal to fetch().",
+    "Use a state object or separate useState calls for data, loading, and error.",
+    "The refetch function can increment a counter in state to re-trigger the useEffect.",
+    "When catching errors, check if the error is an AbortError and ignore it."
+  ],
+  "tags": ["react", "hooks", "custom-hooks", "fetch", "async", "abort-controller"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { useFetch } from './useFetch';\nimport './styles.css';\n\ninterface User {\n  id: number;\n  name: string;\n  email: string;\n}\n\nexport default function App() {\n  const { data, loading, error, refetch } = useFetch<User>(\n    'https://jsonplaceholder.typicode.com/users/1'\n  );\n\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>\n      <h1 style={{ marginBottom: '1rem' }}>useFetch</h1>\n      {loading && <p data-testid=\"loading\" className=\"fetch-loading\">Loading…</p>}\n      {error && <p data-testid=\"error\" className=\"fetch-error\">{error}</p>}\n      {data && (\n        <div data-testid=\"data\" className=\"fetch-card\">\n          <h2>{data.name}</h2>\n          <p>{data.email}</p>\n        </div>\n      )}\n      <button data-testid=\"refetch\" className=\"fetch-btn\" onClick={refetch}>\n        Refetch\n      </button>\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "useFetch.ts",
+      "content": "import { useState, useEffect } from 'react';\n\ninterface UseFetchReturn<T> {\n  data: T | null;\n  loading: boolean;\n  error: string | null;\n  refetch: () => void;\n}\n\n/**\n * Custom hook that fetches JSON data from a URL.\n *\n * @param url - The endpoint to fetch\n * @returns Object containing data, loading, error, and a refetch function\n */\nexport function useFetch<T>(url: string): UseFetchReturn<T> {\n  // TODO: Set up state for data, loading, error\n  // TODO: Use useEffect to fetch data when url changes\n  // TODO: Implement AbortController for cancellation\n  // TODO: Implement refetch as a way to re-trigger the effect\n\n  return {\n    data: null,\n    loading: false,\n    error: null,\n    refetch: () => {},\n  };\n}\n",
+      "language": "ts",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": ".fetch-loading {\n  color: #6b7280;\n  font-style: italic;\n}\n\n.fetch-error {\n  color: #ef4444;\n  padding: 0.75rem;\n  background: #fef2f2;\n  border: 1px solid #fecaca;\n  border-radius: 0.375rem;\n}\n\n.fetch-card {\n  padding: 1rem 1.25rem;\n  border: 1px solid #e5e7eb;\n  border-radius: 0.5rem;\n  background: #f9fafb;\n  margin-bottom: 1rem;\n}\n\n.fetch-card h2 {\n  margin: 0 0 0.25rem;\n  font-size: 1.125rem;\n}\n\n.fetch-card p {\n  margin: 0;\n  color: #6b7280;\n}\n\n.fetch-btn {\n  padding: 0.5rem 1rem;\n  border: 1px solid #d1d5db;\n  border-radius: 0.375rem;\n  background: #f9fafb;\n  cursor: pointer;\n  font-size: 0.875rem;\n}\n\n.fetch-btn:hover {\n  background: #e5e7eb;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent, waitFor } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport React from 'react';\nimport { useFetch } from './useFetch';\n\nconst MOCK_USER = { id: 1, name: 'Alice', email: 'alice@example.com' };\n\nfunction Harness({ url }: { url: string }) {\n  const { data, loading, error, refetch } = useFetch<typeof MOCK_USER>(url);\n  return (\n    <div>\n      {loading && <span data-testid=\"loading\">Loading</span>}\n      {error && <span data-testid=\"error\">{error}</span>}\n      {data && <span data-testid=\"data\">{data.name}</span>}\n      <button data-testid=\"refetch\" onClick={refetch}>Refetch</button>\n    </div>\n  );\n}\n\ndescribe('useFetch', () => {\n  beforeEach(() => {\n    global.fetch = jest.fn();\n  });\n\n  afterEach(() => {\n    jest.restoreAllMocks();\n  });\n\n  it('shows loading state initially', () => {\n    (global.fetch as jest.Mock).mockReturnValue(new Promise(() => {}));\n    render(<Harness url=\"/api/user\" />);\n    expect(screen.getByTestId('loading')).toBeInTheDocument();\n  });\n\n  it('shows data on successful fetch', async () => {\n    (global.fetch as jest.Mock).mockResolvedValue({\n      ok: true,\n      json: async () => MOCK_USER,\n    });\n    render(<Harness url=\"/api/user\" />);\n    await waitFor(() => {\n      expect(screen.getByTestId('data')).toHaveTextContent('Alice');\n    });\n    expect(screen.queryByTestId('loading')).not.toBeInTheDocument();\n  });\n\n  it('shows error on failed fetch', async () => {\n    (global.fetch as jest.Mock).mockResolvedValue({\n      ok: false,\n      status: 500,\n      statusText: 'Internal Server Error',\n    });\n    render(<Harness url=\"/api/user\" />);\n    await waitFor(() => {\n      expect(screen.getByTestId('error')).toBeInTheDocument();\n    });\n    expect(screen.queryByTestId('data')).not.toBeInTheDocument();\n  });\n\n  it('shows error on network failure', async () => {\n    (global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'));\n    render(<Harness url=\"/api/user\" />);\n    await waitFor(() => {\n      expect(screen.getByTestId('error')).toHaveTextContent('Network error');\n    });\n  });\n\n  it('refetch triggers a new request', async () => {\n    let callCount = 0;\n    (global.fetch as jest.Mock).mockImplementation(async () => {\n      callCount++;\n      return { ok: true, json: async () => ({ ...MOCK_USER, name: `User ${callCount}` }) };\n    });\n    render(<Harness url=\"/api/user\" />);\n    await waitFor(() => {\n      expect(screen.getByTestId('data')).toHaveTextContent('User 1');\n    });\n    fireEvent.click(screen.getByTestId('refetch'));\n    await waitFor(() => {\n      expect(screen.getByTestId('data')).toHaveTextContent('User 2');\n    });\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "useFetch.ts",
+      "content": "import { useState, useEffect, useCallback } from 'react';\n\ninterface UseFetchReturn<T> {\n  data: T | null;\n  loading: boolean;\n  error: string | null;\n  refetch: () => void;\n}\n\nexport function useFetch<T>(url: string): UseFetchReturn<T> {\n  const [data, setData] = useState<T | null>(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState<string | null>(null);\n  const [tick, setTick] = useState(0);\n\n  const refetch = useCallback(() => {\n    setTick(t => t + 1);\n  }, []);\n\n  useEffect(() => {\n    const controller = new AbortController();\n\n    const fetchData = async () => {\n      setLoading(true);\n      setError(null);\n\n      try {\n        const response = await fetch(url, { signal: controller.signal });\n        if (!response.ok) {\n          throw new Error(`HTTP ${response.status}: ${response.statusText}`);\n        }\n        const json = await response.json();\n        setData(json);\n      } catch (err: any) {\n        if (err.name !== 'AbortError') {\n          setError(err.message || 'An error occurred');\n          setData(null);\n        }\n      } finally {\n        if (!controller.signal.aborted) {\n          setLoading(false);\n        }\n      }\n    };\n\n    fetchData();\n\n    return () => {\n      controller.abort();\n    };\n  }, [url, tick]);\n\n  return { data, loading, error, refetch };\n}\n",
+      "language": "ts"
+    }
+  ],
+  "sort_order": 211
+}

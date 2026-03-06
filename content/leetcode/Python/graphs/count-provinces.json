@@ -1,0 +1,130 @@
+{
+  "id": "count-provinces",
+  "title": "Count Provinces from Friendship Matrix",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "You are given an n×n 0/1 matrix isConnected where isConnected[i][j]=1 means cities i and j have a direct connection. A province is a group of directly or indirectly connected cities. Return the number of provinces. Cities are 0-indexed in the input for coding convenience.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 200\n- Matrix is symmetric with ones on the diagonal",
+  "leetcodeUrl": "https://leetcode.com/problems/number-of-provinces/",
+  "complexity": {
+    "time": "O(n^2)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nTreat the matrix as an undirected graph adjacency matrix. Counting connected components via DFS or BFS yields the number of provinces.\n\nApproach\n1. Initial Setup: Allocate a visited set\n2. Main Algorithm: For each unvisited node, run DFS/BFS to mark its component\n3. Return Result: Count how many times we start a new traversal\n\nComplexity Analysis\n- Time Complexity: O(n^2) to scan neighbors\n- Space Complexity: O(n) for visited\n\nKey Insights\n- Matrix neighbors are row indices with value 1\n- Either DFS or BFS works equally here\n\nCommon Pitfalls\n- Forgetting to mark nodes visited causes repeated work\n- Assuming the matrix is not symmetric will miscount",
+  "solutionCode": "def count_provinces(isConnected):\n    n = len(isConnected)\n    seen = [False] * n\n    def dfs(i):\n        stack = [i]\n        while stack:\n            u = stack.pop()\n            if seen[u]:\n                continue\n            seen[u] = True\n            row = isConnected[u]\n            for v in range(n):\n                if row[v] and not seen[v]:\n                    stack.append(v)\n    ans = 0\n    for i in range(n):\n        if not seen[i]:\n            ans += 1\n            dfs(i)\n    return ans",
+  "testCases": [
+    {
+      "input": {
+        "isConnected": [
+          [
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Cities 0 and 1 form one province; 2 is alone"
+    },
+    {
+      "input": {
+        "isConnected": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "All isolated"
+    },
+    {
+      "input": {
+        "isConnected": [
+          [
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single city"
+    },
+    {
+      "input": {
+        "isConnected": [
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1
+          ]
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Everything connected"
+    }
+  ],
+  "tags": [
+    "graph",
+    "dfs",
+    "bfs",
+    "union-find"
+  ],
+  "hints": [
+    "Think in terms of connected components",
+    "Use a visited set to avoid repeats",
+    "DFS or BFS both work on the matrix rows"
+  ],
+  "relatedProblems": [
+    "count-islands-in-grid",
+    "count-connected-components"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 64,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def count_provinces(isConnected: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def count_provinces(isConnected: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] isConnected}\n * @return {number}\n */\nfunction count_provinces(isConnected) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int count_provinces(int[][] isConnected) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint count_provinces(int[][] isConnected) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int count_provinces(vector<vector<int>>& isConnected) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

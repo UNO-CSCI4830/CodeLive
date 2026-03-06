@@ -1,0 +1,80 @@
+{
+  "id": "regular-expression-matching",
+  "title": "Regex Matching with '.' and '*'",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Implement regular expression matching with support for '.' and '*' where '.' matches any single character and '*' means zero or more of the preceding element. Pattern covers the entire string.\n\n    \n\nConstraints:\n    - 0 ≤ |s|,|p| ≤ 30",
+  "leetcodeUrl": "https://leetcode.com/problems/regular-expression-matching/",
+  "complexity": {
+    "time": "O(nm)",
+    "space": "O(nm)"
+  },
+  "explanation": "Intuition\ndp[i][j] means s[:i] matches p[:j]. If p[j-1] is not '*', match requires dp[i-1][j-1] and char match (or '.'). If p[j-1] is '*', it can represent zero of previous (dp[i][j-2]) or at least one if s[i-1] matches p[j-2] and dp[i-1][j].\n\nApproach\n1. Initial Setup: Initialize dp[0][0]=True; prefill first row for patterns like a*, a*b*\n2. Main Algorithm: Iterate i,j applying '*' dual rule and normal match rule\n3. Return Result: Answer dp[n][m]\n\nComplexity Analysis\n- Time Complexity: O(nm)\n- Space Complexity: O(nm)\n\nKey Insights\n- Carefully index p[j-2] when j≥2\n- Two cases for '*' represent zero or more\n\nCommon Pitfalls\n- Forgetting to fill first row for zero matches\n- Confusing wildcard meanings with glob",
+  "solutionCode": "def is_match_regex(s: str, p: str) -> bool:\n    n, m = len(s), len(p)\n    dp = [[False]*(m+1) for _ in range(n+1)]\n    dp[0][0] = True\n    for j in range(2, m+1):\n        if p[j-1] == '*':\n            dp[0][j] = dp[0][j-2]\n    def match(i, j):\n        return p[j-1] == '.' or s[i-1] == p[j-1]\n    for i in range(1, n+1):\n        for j in range(1, m+1):\n            if p[j-1] == '*':\n                dp[i][j] = dp[i][j-2] or (match(i, j-1) and dp[i-1][j])\n            else:\n                dp[i][j] = match(i, j) and dp[i-1][j-1]\n    return dp[n][m]",
+  "testCases": [
+    {
+      "input": {
+        "s": "aa",
+        "p": "a"
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "a cannot match aa"
+    },
+    {
+      "input": {
+        "s": "aa",
+        "p": "a*"
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "* repeats a"
+    },
+    {
+      "input": {
+        "s": "ab",
+        "p": ".*"
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": ".* matches any string"
+    },
+    {
+      "input": {
+        "s": "aab",
+        "p": "c*a*b"
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "c* zero times, a* repeats"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "string"
+  ],
+  "hints": [
+    "Zero or more of previous element",
+    "Prefill dp[0][j] for x* patterns",
+    "Helper for char-equality with '.'"
+  ],
+  "relatedProblems": [
+    "wildcard-matching-glob",
+    "edit-distance-min"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 21,
+    "frequency": "high",
+    "importance": 10
+  },
+  "starterCode": "def is_match_regex(s: str, p: str) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def is_match_regex(s: str, p: str) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s, string p}\n * @return {boolean}\n */\nfunction is_match_regex(s, p) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean is_match_regex(String s, String p) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool is_match_regex(char* s, char* p) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool is_match_regex(string& s, string& p) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

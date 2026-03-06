@@ -1,0 +1,42 @@
+/* ProfilePage — Bold Typography */
+
+.profile-wrapper {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.profile-heading {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
+}
+
+.profile-card {
+  border: 1px solid var(--border);
+  background: transparent;
+}
+
+.profile-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.profile-field:last-child { border-bottom: none; }
+
+.profile-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--muted-fg);
+}
+
+.profile-value {
+  font-size: 0.875rem;
+  color: var(--fg);
+}

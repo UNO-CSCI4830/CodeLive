@@ -1,0 +1,112 @@
+{
+  "id": "min-meeting-rooms-needed",
+  "title": "Minimum Rooms to Host All Meetings",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a list of meeting time intervals [start, end), return the minimum number of conference rooms required to host all meetings without overlap. Intervals are half-open so a meeting ending at t frees a room for a meeting starting at t.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5\n- -10^9 ≤ start < end ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/meeting-rooms-ii/",
+  "complexity": {
+    "time": "O(n log n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nThe peak number of concurrent meetings equals the required rooms. One way is to track a running count with a sweep-line: convert intervals into +1 at start and -1 at end, sort by time with ends before starts on ties, then accumulate. Alternatively, use a min-heap of end times and compare starts to earliest end.\n\nApproach\n1. Initial Setup: Extract and sort all boundary events (start as +1, end as -1)\n2. Main Algorithm: Scan events in order, updating active count and tracking the maximum\n3. Return Result: Return the maximum active count\n\nComplexity Analysis\n- Time Complexity: O(n log n) due to sorting\n- Space Complexity: O(1) beyond event list\n\nKey Insights\n- Tie-break by processing end before start at same time\n- Half-open semantics allow sharing a room at equal times\n\nCommon Pitfalls\n- If you process starts before ends, counts inflate\n- Min-heap solution is fine but sweep-line is simpler to type",
+  "solutionCode": "def min_meeting_rooms(intervals):\n    events = []\n    for s, e in intervals:\n        events.append((s, 1))\n        events.append((e, -1))\n    events.sort(key=lambda x: (x[0], x[1]))\n    active = 0\n    best = 0\n    for _, delta in events:\n        active += delta\n        if active > best:\n            best = active\n    return best",
+  "testCases": [
+    {
+      "input": {
+        "intervals": [
+          [
+            0,
+            30
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            15,
+            20
+          ]
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Overlap peak is 2"
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            7,
+            10
+          ],
+          [
+            2,
+            4
+          ]
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "No overlap"
+    },
+    {
+      "input": {
+        "intervals": []
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "No meetings"
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            0,
+            5
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            10,
+            15
+          ]
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Half-open allows reuse at boundaries"
+    }
+  ],
+  "tags": [
+    "intervals",
+    "sweep-line",
+    "sorting"
+  ],
+  "hints": [
+    "Convert to start/end events",
+    "Sort ends before starts on tie",
+    "Track peak active meetings"
+  ],
+  "relatedProblems": [
+    "schedule-max-compatible",
+    "burst-balloons-min-arrows"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 51,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def min_meeting_rooms(intervals: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def min_meeting_rooms(intervals: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] intervals}\n * @return {number}\n */\nfunction min_meeting_rooms(intervals) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int min_meeting_rooms(int[][] intervals) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint min_meeting_rooms(int[][] intervals) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int min_meeting_rooms(vector<vector<int>>& intervals) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

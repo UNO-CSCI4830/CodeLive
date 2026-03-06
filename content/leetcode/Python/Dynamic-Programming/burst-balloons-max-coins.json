@@ -1,0 +1,89 @@
+{
+  "id": "burst-balloons-max-coins",
+  "title": "Max Coins from Bursting Balloons",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "You are given n balloons, each balloon has a number. After bursting balloon i you gain nums[left]*nums[i]*nums[right]. The left and right neighbors are the closest unburst balloons. Return the maximum coins you can collect by bursting in optimal order.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 300\n- 1 ≤ nums[i] ≤ 100",
+  "leetcodeUrl": "https://leetcode.com/problems/burst-balloons/",
+  "complexity": {
+    "time": "O(n^3)",
+    "space": "O(n^2)"
+  },
+  "explanation": "Intuition\nInterval DP: pad nums with 1 at both ends. Let dp[l][r] be max coins from open interval (l,r). Choose a last balloon k in (l,r) to burst; gain nums[l]*nums[k]*nums[r] plus dp[l][k]+dp[k][r].\n\nApproach\n1. Initial Setup: Pad nums with 1 at both ends\n2. Main Algorithm: For len from 2..n+1, compute dp on intervals and try all k between\n3. Return Result: Return dp[0][n+1]\n\nComplexity Analysis\n- Time Complexity: O(n^3)\n- Space Complexity: O(n^2)\n\nKey Insights\n- Choosing last burst avoids dependency cycles\n- Padding simplifies boundaries\n\nCommon Pitfalls\n- Wrongly choosing first burst complicates state\n- Indices are over padded array of length n+2",
+  "solutionCode": "def max_coins(nums):\n    vals = [1] + nums + [1]\n    n = len(nums)\n    dp = [[0]*(n+2) for _ in range(n+2)]\n    for L in range(2, n+2):\n        for l in range(0, n+2-L):\n            r = l + L\n            best = 0\n            for k in range(l+1, r):\n                cand = dp[l][k] + dp[k][r] + vals[l]*vals[k]*vals[r]\n                if cand > best:\n                    best = cand\n            dp[l][r] = best\n    return dp[0][n+1]",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          3,
+          1,
+          5,
+          8
+        ]
+      },
+      "expected": {
+        "result": 167
+      },
+      "explanation": "Optimal order via interval DP"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          5
+        ]
+      },
+      "expected": {
+        "result": 10
+      },
+      "explanation": "Burst 5 then 1 or vice versa with padding"
+    },
+    {
+      "input": {
+        "nums": [
+          7
+        ]
+      },
+      "expected": {
+        "result": 7
+      },
+      "explanation": "When max_coins(nums=[7]), the expected result is 7"
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          2,
+          2
+        ]
+      },
+      "expected": {
+        "result": 12
+      },
+      "explanation": "When max_coins(nums=[2,2,2]), the expected result is 12"
+    }
+  ],
+  "tags": [
+    "dynamic-programming"
+  ],
+  "hints": [
+    "Pick last balloon in subinterval",
+    "Pad with 1s at both ends",
+    "Triple loop over length, l, k"
+  ],
+  "relatedProblems": [
+    "palindrome-partition-min-cut",
+    "longest-palindromic-subsequence"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 61,
+    "frequency": "medium",
+    "importance": 9
+  },
+  "starterCode": "def max_coins(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def max_coins(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {number}\n */\nfunction max_coins(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int max_coins(int[] nums) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint max_coins(int* nums) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int max_coins(vector<int>& nums) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

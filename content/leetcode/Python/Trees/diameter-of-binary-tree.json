@@ -1,0 +1,86 @@
+{
+  "id": "diameter-of-binary-tree",
+  "title": "Diameter of a Binary Tree",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Return the length of the longest path between any two nodes in a binary tree, measured in number of edges.\n\nConstraints:\n- 0 ≤ nodes ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/diameter-of-binary-tree/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(h)"
+  },
+  "explanation": "Intuition\nThe longest path through a node equals left depth plus right depth. Track the best while computing depths with a postorder traversal.\n\nApproach\n1. Initial Setup: Define a depth function\n2. Main Algorithm: Update global diameter with left+right at each node\n3. Return Result: Return 1+max(left,right)\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(h)\n\nKey Insights\n- Postorder gives child depths first\n- Diameter may or may not pass root\n\nCommon Pitfalls\n- Confusing nodes vs edges in answer\n- Forgetting to update a global best",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef diameter_of_tree(root: TreeNode) -> int:\n    best = 0\n    def depth(node):\n        nonlocal best\n        if not node:\n            return 0\n        lh = depth(node.left)\n        rh = depth(node.right)\n        if lh + rh > best:\n            best = lh + rh\n        return 1 + (lh if lh > rh else rh)\n    depth(root)\n    return best",
+  "testCases": [
+    {
+      "input": {
+        "tree": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Edges count equals 3"
+    },
+    {
+      "input": {
+        "tree": []
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "When __init__(tree=[]), the expected result is 0"
+    },
+    {
+      "input": {
+        "tree": [
+          1
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Single node path has 0 edges"
+    },
+    {
+      "input": {
+        "tree": [
+          1,
+          2
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Edge between the two nodes"
+    }
+  ],
+  "tags": [
+    "tree",
+    "dfs"
+  ],
+  "hints": [
+    "Keep a reference to best diameter",
+    "Depth counts nodes, diameter counts edges"
+  ],
+  "relatedProblems": [
+    "maximum-depth-of-tree",
+    "right-side-view"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 55.6,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {number}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

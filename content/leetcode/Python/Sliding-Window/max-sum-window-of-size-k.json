@@ -1,0 +1,101 @@
+{
+  "id": "max-sum-window-of-size-k",
+  "title": "Max Sum Window of Size K",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given an integer array and a window size k, find the maximum sum achievable by any contiguous subarray of length k. Use a fixed-size sliding window that adds the new right value and removes the left value at each step.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- 1 ≤ k ≤ len(nums)\n- -10^4 ≤ nums[i] ≤ 10^4",
+  "leetcodeUrl": "https://leetcode.com/problems/maximum-average-subarray-i/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nThe sum of a length k window can be updated in O(1) by subtracting the element that leaves and adding the element that enters. This avoids recomputing sums from scratch for each position.\n\nApproach\n1. Initial Setup: Compute the sum of the first k elements.\n2. Main Algorithm: Slide the window by one step each time, updating the running sum and tracking the best.\n3. Return Result: Return the maximum sum observed.\n\nComplexity Analysis\n- Time Complexity: O(n) because the window grows and shrinks in a\n  single pass without revisiting elements more than a constant number of\n  times.\n- Space Complexity: O(1) to maintain counts, sets, or running\n  aggregates needed to validate the window.\n\nKey Insights\n- Fixed-size windows support constant time updates\n- This technique generalizes to moving averages\n\nCommon Pitfalls\n- Forgetting to initialize with the first k sum\n- Off by one when removing nums[i-k]",
+  "solutionCode": "def max_sum_window_of_size_k(nums, k):\n    if k > len(nums) or k <= 0:\n        return 0\n    cur = sum(nums[:k])\n    best = cur\n    for i in range(k, len(nums)):\n        cur += nums[i] - nums[i - k]\n        if cur > best:\n            best = cur\n    return best",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          4,
+          2,
+          10,
+          23,
+          3,
+          1,
+          0,
+          20
+        ],
+        "k": 4
+      },
+      "expected": {
+        "result": 39
+      },
+      "explanation": "Window [10,23,3,1] gives 37, best is [4,2,10,23]=39"
+    },
+    {
+      "input": {
+        "nums": [
+          -1,
+          -2,
+          -3
+        ],
+        "k": 2
+      },
+      "expected": {
+        "result": -3
+      },
+      "explanation": "Max among [-3,-5] is -3"
+    },
+    {
+      "input": {
+        "nums": [
+          5
+        ],
+        "k": 1
+      },
+      "expected": {
+        "result": 5
+      },
+      "explanation": "Single element window"
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          2,
+          2,
+          2
+        ],
+        "k": 2
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Any length-2 window sums to 4"
+    }
+  ],
+  "tags": [
+    "array",
+    "sliding-window"
+  ],
+  "hints": [
+    "Keep a running sum for the window",
+    "Subtract the outgoing element and add the incoming",
+    "Track the max as you slide"
+  ],
+  "relatedProblems": [
+    "smallest-window-with-target-sum",
+    "longest-ones-after-flips"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 71,
+    "frequency": "high",
+    "importance": 6
+  },
+  "starterCode": "def max_sum_window_of_size_k(nums: List[int], k: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def max_sum_window_of_size_k(nums: List[int], k: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number k}\n * @return {number}\n */\nfunction max_sum_window_of_size_k(nums, k) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int max_sum_window_of_size_k(int[] nums, int k) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint max_sum_window_of_size_k(int* nums, int k) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int max_sum_window_of_size_k(vector<int>& nums, int& k) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

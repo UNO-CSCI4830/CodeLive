@@ -1,0 +1,124 @@
+{
+  "id": "erase-min-overlaps",
+  "title": "Remove Fewest Intervals to Avoid Overlaps",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a set of closed intervals, remove the minimum number of intervals so that the rest are non-overlapping. Return the number of intervals removed.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5\n- -10^9 ≤ start ≤ end ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/non-overlapping-intervals/",
+  "complexity": {
+    "time": "O(n log n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nThis is the complement of selecting the maximum number of compatible intervals. Sort by end time and count how many intervals can be kept without overlap. The removals equal total minus kept.\n\nApproach\n1. Initial Setup: Sort intervals by end ascending\n2. Main Algorithm: Greedily keep an interval if its start ≥ last_end; update last_end to its end\n3. Return Result: Return n - kept\n\nComplexity Analysis\n- Time Complexity: O(n log n) due to sorting\n- Space Complexity: O(1) extra\n\nKey Insights\n- Earliest finishing keeps the most\n- Closed intervals allow equality at endpoints\n\nCommon Pitfalls\n- Mixing open/closed semantics changes the condition\n- Sorting by start fails on counterexamples",
+  "solutionCode": "def erase_overlap_intervals(intervals):\n    intervals.sort(key=lambda x: x[1])\n    kept = 0\n    last_end = -10**19\n    for s, e in intervals:\n        if s >= last_end:\n            kept += 1\n            last_end = e\n    return len(intervals) - kept",
+  "testCases": [
+    {
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Keep [1,2],[2,3],[3,4]"
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Keep only one"
+    },
+    {
+      "input": {
+        "intervals": []
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Nothing to remove"
+    },
+    {
+      "input": {
+        "intervals": [
+          [
+            1,
+            100
+          ],
+          [
+            11,
+            22
+          ],
+          [
+            1,
+            11
+          ],
+          [
+            2,
+            12
+          ]
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Keep [1,11] and [11,22]"
+    }
+  ],
+  "tags": [
+    "intervals",
+    "greedy",
+    "sorting"
+  ],
+  "hints": [
+    "Sort by earliest finish time",
+    "Count kept intervals, answer is total-kept",
+    "Equality at endpoints is non-overlap for closed intervals"
+  ],
+  "relatedProblems": [
+    "schedule-max-compatible",
+    "merge-intervals-consolidate"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 56,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def erase_overlap_intervals(intervals: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def erase_overlap_intervals(intervals: List[List[int]]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] intervals}\n * @return {number}\n */\nfunction erase_overlap_intervals(intervals) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int erase_overlap_intervals(int[][] intervals) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint erase_overlap_intervals(int[][] intervals) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int erase_overlap_intervals(vector<vector<int>>& intervals) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

@@ -1,0 +1,122 @@
+{
+  "id": "search-in-2d-matrix",
+  "title": "Search in 2D Matrix",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "You are given a matrix with m rows and n columns where each row is sorted ascending and the first element of each row is greater than the last element of the previous row. Determine if a target value exists in the matrix. Treat the matrix as a flattened sorted array and apply binary search.\n\n    \n\nConstraints:\n    - 0 ≤ m, n ≤ 10^3\n- -10^9 ≤ matrix[i][j], target ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/search-a-2d-matrix/",
+  "complexity": {
+    "time": "O(log(mn))",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nThe matrix ordering allows a direct mapping from 1D indices to 2D coordinates using division and modulo. Standard binary search applies without scanning rows separately.\n\nApproach\n1. Initial Setup: Guard against empty matrix.\n2. Main Algorithm: Binary search on range [0, m*n-1], map mid to (mid//n, mid%n) and compare matrix value to target.\n3. Return Result: Return True when found, else False after the loop.\n\nComplexity Analysis\n- Time Complexity: O(log(mn)) because the search space halves at each step.\n- Space Complexity: O(1) since only a few variables are maintained.\n\nKey Insights\n- Flattening conceptually avoids extra row searches\n- Index mapping is constant time\n\nCommon Pitfalls\n- Forgetting to check empty matrix\n- Mixing up row and column when mapping",
+  "solutionCode": "def search_in_2d_matrix(matrix, target):\n    if not matrix or not matrix[0]:\n        return False\n    m, n = len(matrix), len(matrix[0])\n    left, right = 0, m * n - 1\n    while left <= right:\n        mid = (left + right) // 2\n        r, c = divmod(mid, n)\n        val = matrix[r][c]\n        if val == target:\n            return True\n        if val < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return False",
+  "testCases": [
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            3,
+            5,
+            7
+          ],
+          [
+            10,
+            11,
+            16,
+            20
+          ],
+          [
+            23,
+            30,
+            34,
+            60
+          ]
+        ],
+        "target": 3
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Present in row 0"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1,
+            3,
+            5,
+            7
+          ],
+          [
+            10,
+            11,
+            16,
+            20
+          ],
+          [
+            23,
+            30,
+            34,
+            60
+          ]
+        ],
+        "target": 13
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Not present"
+    },
+    {
+      "input": {
+        "matrix": [],
+        "target": 1
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Empty matrix"
+    },
+    {
+      "input": {
+        "matrix": [
+          [
+            1
+          ]
+        ],
+        "target": 1
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Single cell"
+    }
+  ],
+  "tags": [
+    "matrix",
+    "binary-search"
+  ],
+  "hints": [
+    "Map 1D mid to 2D coordinates",
+    "Use the same compare and shrink logic",
+    "Handle empty matrix up front"
+  ],
+  "relatedProblems": [
+    "first-and-last-position",
+    "search-insert-position"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 47,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def search_in_2d_matrix(matrix: List[List[int]], target: int) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def search_in_2d_matrix(matrix: List[List[int]], target: int) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] matrix, number target}\n * @return {boolean}\n */\nfunction search_in_2d_matrix(matrix, target) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean search_in_2d_matrix(int[][] matrix, int target) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool search_in_2d_matrix(int[][] matrix, int target) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool search_in_2d_matrix(vector<vector<int>>& matrix, int& target) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

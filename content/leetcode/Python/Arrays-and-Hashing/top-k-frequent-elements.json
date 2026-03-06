@@ -1,0 +1,123 @@
+{
+  "id": "top-k-frequent-elements",
+  "title": "Top-K Frequent Elements",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an integer array nums and an integer k, return any ordering of the k most frequent elements. If multiple elements share the same frequency, any order among them is acceptable. The solution should be better than O(n log n) by avoiding a full sort of all values.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- 1 ≤ k ≤ number of distinct values in nums\n- -10^9 ≤ nums[i] ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/top-k-frequent-elements/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nFrequency counting reduces the problem to selecting the top k keys by count. A bucket array indexed by frequency lets us avoid sorting all pairs. We place each value into the bucket corresponding to its count, then read buckets in descending order until k elements are collected.\n\nApproach\n1. Initial Setup: Count values with a hash map.\n2. Main Algorithm: Allocate buckets where index i holds values that occur i times, then fill them from the counts.\n3. Return Result: Iterate from highest to lowest frequency and collect elements until k are taken.\n\nComplexity Analysis\n- Time Complexity: O(n) because the algorithm scans elements a constant\n  number of times and performs O(1) work for each update or lookup.\n- Space Complexity: O(n) due to the auxiliary structures required to\n  store counts, prefix sums, or membership sets while ensuring fast access.\n\nKey Insights\n- Bucket sort pattern converts selection by rank into linear time\n- Counting first isolates structure from ordering concerns\n\nCommon Pitfalls\n- Sorting the full map wastes time for large inputs\n- Forgetting that frequency cannot exceed n may over-allocate",
+  "solutionCode": "from collections import Counter\ndef top_k_frequent_elements(nums, k):\n    counts = Counter(nums)\n    buckets = [[] for _ in range(len(nums) + 1)]\n    for val, freq in counts.items():\n        buckets[freq].append(val)\n    result = []\n    for freq in range(len(buckets) - 1, -1, -1):\n        for v in buckets[freq]:\n            result.append(v)\n            if len(result) == k:\n                return result\n    return result",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          2,
+          2,
+          3
+        ],
+        "k": 2
+      },
+      "expected": {
+        "result": [
+          1,
+          2
+        ]
+      },
+      "explanation": "Two most frequent values are 1 and 2"
+    },
+    {
+      "input": {
+        "nums": [
+          4
+        ],
+        "k": 1
+      },
+      "expected": {
+        "result": [
+          4
+        ]
+      },
+      "explanation": "Edge case with one value"
+    },
+    {
+      "input": {
+        "nums": [
+          5,
+          5,
+          6,
+          6,
+          6,
+          7
+        ],
+        "k": 1
+      },
+      "expected": {
+        "result": [
+          6
+        ]
+      },
+      "explanation": "Clear single winner by frequency"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          9,
+          9,
+          8,
+          8,
+          7,
+          7
+        ],
+        "k": 3
+      },
+      "expected": {
+        "result": [
+          9,
+          8,
+          7
+        ]
+      },
+      "explanation": "Multiple high-frequency elements"
+    }
+  ],
+  "tags": [
+    "array",
+    "hash-table"
+  ],
+  "hints": [
+    "Can you avoid sorting all unique values",
+    "Think about a structure indexed by frequency",
+    "Walk buckets from high to low until you collect k"
+  ],
+  "relatedProblems": [
+    "frequency-sort-array",
+    "majority-elements-over-n3"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 54.7,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def top_k_frequent_elements(nums: List[int], k: int) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def top_k_frequent_elements(nums: List[int], k: int) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number k}\n * @return {any}\n */\nfunction top_k_frequent_elements(nums, k) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> top_k_frequent_elements(int[] nums, int k) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] top_k_frequent_elements(int* nums, int k) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] top_k_frequent_elements(vector<int>& nums, int& k) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

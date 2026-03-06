@@ -1,0 +1,50 @@
+{
+  "id": "hook-use-local-storage",
+  "title": "useLocalStorage Hook",
+  "category": "frontend",
+  "difficulty": "easy",
+  "description": "Implement a **useLocalStorage** custom hook that syncs state with `localStorage`.\n\n### Requirements\n\n- `useLocalStorage<T>(key, initialValue)` returns `[storedValue, setValue]`\n- On mount, read from `localStorage` using the given `key`. If a value exists, parse it as JSON and use it\n- If no value exists in `localStorage`, use `initialValue`\n- When `setValue` is called, update both the React state **and** `localStorage`\n- Handle JSON parse errors gracefully — fall back to `initialValue` if stored data is corrupt\n- The hook must be generic and work with strings, numbers, objects, and arrays\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Display value | `stored-value` |\n| Increment button | `increment` |\n| Reset button | `reset` |",
+  "constraints": "- Implement as a standalone custom hook in useLocalStorage.ts\n- Use only React built-in hooks\n- Must handle SSR-like scenarios where localStorage might not be available",
+  "hints": [
+    "Use a lazy initializer in useState: useState(() => { /* read localStorage */ }).",
+    "Wrap the localStorage read in a try/catch to handle corrupt or missing data.",
+    "Call localStorage.setItem inside the setValue function after updating state.",
+    "Use JSON.stringify and JSON.parse for serialization."
+  ],
+  "tags": ["react", "hooks", "custom-hooks", "localStorage", "persistence"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { useLocalStorage } from './useLocalStorage';\n\nexport default function App() {\n  const [count, setCount] = useLocalStorage<number>('demo-count', 0);\n\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>\n      <h1 style={{ marginBottom: '1rem' }}>useLocalStorage</h1>\n      <p style={{ color: '#6b7280', marginBottom: '1rem' }}>Value persists across page reloads</p>\n      <p data-testid=\"stored-value\" style={{ fontSize: '2rem', marginBottom: '1rem' }}>{count}</p>\n      <div style={{ display: 'flex', gap: '0.5rem' }}>\n        <button data-testid=\"increment\" onClick={() => setCount(count + 1)}>Increment</button>\n        <button data-testid=\"reset\" onClick={() => setCount(0)}>Reset</button>\n      </div>\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "useLocalStorage.ts",
+      "content": "import { useState } from 'react';\n\n/**\n * Custom hook that syncs state with localStorage.\n *\n * @param key - The localStorage key\n * @param initialValue - Fallback value if nothing is stored\n * @returns [storedValue, setValue]\n */\nexport function useLocalStorage<T>(\n  key: string,\n  initialValue: T\n): [T, (value: T | ((prev: T) => T)) => void] {\n  // TODO: Read from localStorage on mount (with JSON.parse)\n  // TODO: Return [value, setter that writes to both state and localStorage]\n\n  return [initialValue, () => {}];\n}\n",
+      "language": "ts",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": "button {\n  padding: 0.5rem 1rem;\n  border: 1px solid #d1d5db;\n  border-radius: 0.375rem;\n  background: #f9fafb;\n  cursor: pointer;\n  font-size: 0.875rem;\n}\n\nbutton:hover {\n  background: #e5e7eb;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport React from 'react';\nimport { useLocalStorage } from './useLocalStorage';\n\nfunction Harness({ storageKey = 'test-key', initial = 0 }: { storageKey?: string; initial?: number }) {\n  const [value, setValue] = useLocalStorage<number>(storageKey, initial);\n  return (\n    <div>\n      <span data-testid=\"stored-value\">{value}</span>\n      <button data-testid=\"increment\" onClick={() => setValue(value + 1)}>+</button>\n      <button data-testid=\"reset\" onClick={() => setValue(0)}>Reset</button>\n    </div>\n  );\n}\n\ndescribe('useLocalStorage', () => {\n  beforeEach(() => localStorage.clear());\n\n  it('uses initial value when nothing is stored', () => {\n    render(<Harness initial={42} />);\n    expect(screen.getByTestId('stored-value')).toHaveTextContent('42');\n  });\n\n  it('reads existing value from localStorage', () => {\n    localStorage.setItem('test-key', JSON.stringify(99));\n    render(<Harness />);\n    expect(screen.getByTestId('stored-value')).toHaveTextContent('99');\n  });\n\n  it('writes to localStorage on update', () => {\n    render(<Harness />);\n    fireEvent.click(screen.getByTestId('increment'));\n    expect(JSON.parse(localStorage.getItem('test-key') || '0')).toBe(1);\n  });\n\n  it('updates displayed value on set', () => {\n    render(<Harness />);\n    fireEvent.click(screen.getByTestId('increment'));\n    fireEvent.click(screen.getByTestId('increment'));\n    expect(screen.getByTestId('stored-value')).toHaveTextContent('2');\n  });\n\n  it('falls back to initial on corrupt data', () => {\n    localStorage.setItem('test-key', '{{{bad json');\n    render(<Harness initial={5} />);\n    expect(screen.getByTestId('stored-value')).toHaveTextContent('5');\n  });\n\n  it('can reset to initial value', () => {\n    render(<Harness />);\n    fireEvent.click(screen.getByTestId('increment'));\n    fireEvent.click(screen.getByTestId('increment'));\n    fireEvent.click(screen.getByTestId('reset'));\n    expect(screen.getByTestId('stored-value')).toHaveTextContent('0');\n    expect(JSON.parse(localStorage.getItem('test-key') || '-1')).toBe(0);\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "useLocalStorage.ts",
+      "content": "import { useState, useCallback } from 'react';\n\nexport function useLocalStorage<T>(\n  key: string,\n  initialValue: T\n): [T, (value: T | ((prev: T) => T)) => void] {\n  const [storedValue, setStoredValue] = useState<T>(() => {\n    try {\n      const item = localStorage.getItem(key);\n      return item ? (JSON.parse(item) as T) : initialValue;\n    } catch {\n      return initialValue;\n    }\n  });\n\n  const setValue = useCallback(\n    (value: T | ((prev: T) => T)) => {\n      setStoredValue((prev) => {\n        const next = value instanceof Function ? value(prev) : value;\n        try {\n          localStorage.setItem(key, JSON.stringify(next));\n        } catch {\n          // quota exceeded or other error — state still updates\n        }\n        return next;\n      });\n    },\n    [key]\n  );\n\n  return [storedValue, setValue];\n}\n",
+      "language": "ts"
+    }
+  ],
+  "sort_order": 201
+}

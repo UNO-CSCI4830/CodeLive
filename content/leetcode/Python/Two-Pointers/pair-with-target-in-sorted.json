@@ -1,0 +1,108 @@
+{
+  "id": "pair-with-target-in-sorted",
+  "title": "Pair Indices for Target in Sorted Array",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given a nondecreasing array nums and a target, return the indices of two elements that sum to target. If multiple answers exist, return any. If none exist, return an empty list.\n\n    \n\nConstraints:\n    - 2 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i], target ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nTwo pointers exploit the monotonic order. If the sum is too small, increase the lower pointer. If too large, decrease the upper pointer.\n\nApproach\n1. Initial Setup: Initialize i at start and j at end.\n2. Main Algorithm: While i < j, compare nums[i]+nums[j] with target and move the proper pointer.\n3. Return Result: Return the pair when found or an empty list otherwise.\n\nComplexity Analysis\n- Time Complexity: O(n) because the scan adjusts pointers a limited\n  number of times and avoids nested loops.\n- Space Complexity: O(1) since only a few variables or an output\n  list are used.\n\nKey Insights\n- Monotonic arrays let you prune one side per step\n- Each pointer moves at most n times\n\nCommon Pitfalls\n- Binary search for each i yields O(n log n) instead\n- Not handling duplicates is fine since any answer works",
+  "solutionCode": "def pair_with_target_in_sorted(nums, target):\n    i, j = 0, len(nums) - 1\n    while i < j:\n        s = nums[i] + nums[j]\n        if s == target:\n            return [i, j]\n        if s < target:\n            i += 1\n        else:\n            j -= 1\n    return []",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          2,
+          3,
+          4
+        ],
+        "target": 6
+      },
+      "expected": {
+        "result": [
+          0,
+          2
+        ]
+      },
+      "explanation": "2+4=6 with two pointers"
+    },
+    {
+      "input": {
+        "nums": [
+          -2,
+          0,
+          3,
+          3
+        ],
+        "target": 1
+      },
+      "expected": {
+        "result": [
+          0,
+          3
+        ]
+      },
+      "explanation": "Pick -2 and 3 at index 3"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ],
+        "target": 7
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "No valid pair"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "target": 2
+      },
+      "expected": {
+        "result": [
+          0,
+          4
+        ]
+      },
+      "explanation": "Any pair of ones works"
+    }
+  ],
+  "tags": [
+    "array",
+    "two-pointers"
+  ],
+  "hints": [
+    "Compare the sum to the target and move one pointer",
+    "Which side can increase the sum",
+    "Which side can decrease the sum"
+  ],
+  "relatedProblems": [
+    "widest-water-reservoir",
+    "closest-triplet-sum"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 67,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def pair_with_target_in_sorted(nums: List[int], target: int) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def pair_with_target_in_sorted(nums: List[int], target: int) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number target}\n * @return {any}\n */\nfunction pair_with_target_in_sorted(nums, target) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> pair_with_target_in_sorted(int[] nums, int target) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] pair_with_target_in_sorted(int* nums, int target) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] pair_with_target_in_sorted(vector<int>& nums, int& target) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

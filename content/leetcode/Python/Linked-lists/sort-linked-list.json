@@ -1,0 +1,103 @@
+{
+  "id": "sort-linked-list",
+  "title": "Sort Linked List",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given Sort a singly linked list in ascending order in O(n log n) time and O(1) extra space by using merge sort tailored for linked lists.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/sort-list/",
+  "complexity": {
+    "time": "O(n log n)",
+    "space": "O(log n) recursion"
+  },
+  "explanation": "Intuition\nArrays prefer quicksort or heapsort, but lists are ideal for merge sort because splitting and merging are pointer operations. Use slow and fast to split, recursively sort halves, then merge them.\n\nApproach\n1. Initial Setup: Split the list into halves using slow/fast pointers.\n2. Main Algorithm: Recursively sort each half and merge them with a dummy head.\n3. Return Result: Return the merged result.\n\nComplexity Analysis\n- Time Complexity: O(n log n) due to a single pass or divide-and-conquer\n  over the list where each node is visited a bounded number of times.\n- Space Complexity: O(log n) recursion accounting for pointers and, when needed,\n  recursion depth or extra structures.\n\nKey Insights\n- Merging lists is stable and pointer-friendly\n- Top-down recursion yields clean code\n\nCommon Pitfalls\n- Not disconnecting halves leads to infinite recursion\n- Using extra arrays breaks space bounds",
+  "solutionCode": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\ndef sort_linked_list(head):\n    if not head or not head.next:\n        return head\n    slow, fast = head, head.next\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    mid = slow.next\n    slow.next = None\n    left = sort_linked_list(head)\n    right = sort_linked_list(mid)\n    dummy = ListNode(0)\n    tail = dummy\n    while left and right:\n        if left.val <= right.val:\n            tail.next = left\n            left = left.next\n        else:\n            tail.next = right\n            right = right.next\n        tail = tail.next\n    tail.next = left if left else right\n    return dummy.next",
+  "testCases": [
+    {
+      "input": {
+        "list": [
+          4,
+          2,
+          1,
+          3
+        ]
+      },
+      "expected": {
+        "result": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "explanation": "Basic sort"
+    },
+    {
+      "input": {
+        "list": [
+          -1,
+          5,
+          3,
+          4,
+          0
+        ]
+      },
+      "expected": {
+        "result": [
+          -1,
+          0,
+          3,
+          4,
+          5
+        ]
+      },
+      "explanation": "Handles negatives"
+    },
+    {
+      "input": {
+        "list": []
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Empty list"
+    },
+    {
+      "input": {
+        "list": [
+          1
+        ]
+      },
+      "expected": {
+        "result": [
+          1
+        ]
+      },
+      "explanation": "Already sorted"
+    }
+  ],
+  "tags": [
+    "linked-list",
+    "divide-and-conquer",
+    "sorting"
+  ],
+  "hints": [
+    "Find middle with slow/fast",
+    "Break the list before recursing",
+    "Merge with a dummy head"
+  ],
+  "relatedProblems": [
+    "merge-two-sorted-lists",
+    "partition-linked-list"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 57,
+    "frequency": "medium",
+    "importance": 8
+  },
+  "starterCode": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any next}\n * @return {any}\n */\nfunction __init__(self, val, next) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> __init__(any self, any val, any next) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] __init__(any self, any val, any next) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] __init__(any& self, any& val, any& next) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

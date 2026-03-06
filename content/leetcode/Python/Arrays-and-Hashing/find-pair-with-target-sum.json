@@ -1,0 +1,111 @@
+{
+  "id": "find-pair-with-target-sum",
+  "title": "Find Pair with Target Sum",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given an integer array nums and a target, return the indices of two distinct elements whose values add up to target. If no such pair exists, return an empty list. Indices should reflect the original positions in the input. The goal is to solve this in a single pass using an auxiliary structure for O(1) lookups.\n\nInput: nums (list of integers), target (integer). Output: a list of two indices in ascending order or an empty list if no solution exists. Assume zero or one valid pair. Duplicates may appear. Negative values are allowed.\n\n    \n\nConstraints:\n    - 2 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i], target ≤ 10^9\n- At most one valid pair exists",
+  "leetcodeUrl": "https://leetcode.com/problems/two-sum/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nWe want to detect whether any element x has its complement y = target - x among elements already seen. A hash map provides O(1) expected lookup. By scanning left to right and storing indices for values as we go, the moment we see a value whose complement has been observed, we can return the pair immediately.\n\nApproach\n1. Initial Setup: Initialize an empty map value→index.\n2. Main Algorithm: Iterate through nums; for each value x at index i, check if target - x exists in the map. If so, report [map[target - x], i]. Otherwise store x→i.\n3. Return Result: Return the indices when found, or [] if no pair exists.\n\nComplexity Analysis\n- Time Complexity: O(n) because the algorithm scans elements a constant\n  number of times and performs O(1) work for each update or lookup.\n- Space Complexity: O(n) due to the auxiliary structures required to\n  store counts, prefix sums, or membership sets while ensuring fast access.\n\nKey Insights\n- Complement lookups convert a quadratic search into linear time\n- Hash maps preserve only essential information: value locations\n\nCommon Pitfalls\n- Forgetting to ensure distinct indices can create self-pair errors\n- Storing the current value before checking its complement returns the same index twice",
+  "solutionCode": "def find_pair_with_target_sum(nums, target):\n    seen = {}\n    for i, x in enumerate(nums):\n        y = target - x\n        if y in seen:\n            return [seen[y], i]\n        seen[x] = i\n    return []",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          2,
+          7,
+          11,
+          15
+        ],
+        "target": 9
+      },
+      "expected": {
+        "result": [
+          0,
+          1
+        ]
+      },
+      "explanation": "Basic case with clear complement pair"
+    },
+    {
+      "input": {
+        "nums": [
+          3,
+          3
+        ],
+        "target": 6
+      },
+      "expected": {
+        "result": [
+          0,
+          1
+        ]
+      },
+      "explanation": "Duplicate values allowed but indices must differ"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "target": 17
+      },
+      "expected": {
+        "result": [
+          7,
+          8
+        ]
+      },
+      "explanation": "Larger input to show linear performance"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ],
+        "target": 7
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "No solution should yield an empty list"
+    }
+  ],
+  "tags": [
+    "array",
+    "hash-table"
+  ],
+  "hints": [
+    "What structure gives O(1) average lookups by value",
+    "Try storing previously seen values with their indices",
+    "For each x, check if target - x has already appeared"
+  ],
+  "relatedProblems": [
+    "count-subarrays-sum-to-k",
+    "product-except-self"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 56.4,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def find_pair_with_target_sum(nums: List[int], target: int) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def find_pair_with_target_sum(nums: List[int], target: int) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number target}\n * @return {any}\n */\nfunction find_pair_with_target_sum(nums, target) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> find_pair_with_target_sum(int[] nums, int target) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] find_pair_with_target_sum(int* nums, int target) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] find_pair_with_target_sum(vector<int>& nums, int& target) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

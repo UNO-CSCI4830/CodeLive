@@ -1,0 +1,95 @@
+{
+  "id": "next-greatest-letter",
+  "title": "Next Greatest Letter",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given a sorted list of characters letters and a target character, return the smallest element in letters that is strictly greater than target. The letters wrap around, so if target is at least the last letter, return the first letter.\n\n    \n\nConstraints:\n    - 1 ≤ len(letters) ≤ 10^5\n- letters is sorted and contains lowercase English letters\n- letters has at least two distinct characters",
+  "leetcodeUrl": "https://leetcode.com/problems/find-smallest-letter-greater-than-target/",
+  "complexity": {
+    "time": "O(log n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nWe need the first value greater than target. This is a classic upper bound search. If all letters are ≤ target, wrap by taking the first element using modulo indexing.\n\nApproach\n1. Initial Setup: Use a half-open binary search to find leftmost index with value > target.\n2. Main Algorithm: Check bounds and wrap using index % n.\n3. Return Result: Return the character at the final index.\n\nComplexity Analysis\n- Time Complexity: O(log n) because the search space halves at each step.\n- Space Complexity: O(1) since only a few variables are maintained.\n\nKey Insights\n- Upper bound differs from lower bound by the comparison operator\n- Modulo handles wrap around cleanly\n\nCommon Pitfalls\n- Returning letters[left] without modulo fails when target is large\n- Confusing ≥ with > changes behavior on duplicates",
+  "solutionCode": "def next_greatest_letter(letters, target):\n    left, right = 0, len(letters)\n    while left < right:\n        mid = (left + right) // 2\n        if letters[mid] <= target:\n            left = mid + 1\n        else:\n            right = mid\n    return letters[left % len(letters)]",
+  "testCases": [
+    {
+      "input": {
+        "letters": [
+          "c",
+          "f",
+          "j"
+        ],
+        "target": "a"
+      },
+      "expected": {
+        "result": "c"
+      },
+      "explanation": "First greater than a is c"
+    },
+    {
+      "input": {
+        "letters": [
+          "c",
+          "f",
+          "j"
+        ],
+        "target": "c"
+      },
+      "expected": {
+        "result": "f"
+      },
+      "explanation": "Strictly greater than c"
+    },
+    {
+      "input": {
+        "letters": [
+          "c",
+          "f",
+          "j"
+        ],
+        "target": "j"
+      },
+      "expected": {
+        "result": "c"
+      },
+      "explanation": "Wrap around to start"
+    },
+    {
+      "input": {
+        "letters": [
+          "a",
+          "b"
+        ],
+        "target": "z"
+      },
+      "expected": {
+        "result": "a"
+      },
+      "explanation": "Wrap all the way"
+    }
+  ],
+  "tags": [
+    "array",
+    "binary-search"
+  ],
+  "hints": [
+    "Think upper bound rather than lower bound",
+    "Use half-open interval to avoid off by ones",
+    "Wrap with modulo when index equals n"
+  ],
+  "relatedProblems": [
+    "search-insert-position",
+    "index-in-sorted"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 76,
+    "frequency": "medium",
+    "importance": 5
+  },
+  "starterCode": "def next_greatest_letter(letters: List[str], target: str) -> str:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def next_greatest_letter(letters: List[str], target: str) -> str:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] letters, string target}\n * @return {any}\n */\nfunction next_greatest_letter(letters, target) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public str next_greatest_letter(String[] letters, String target) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nstr next_greatest_letter(char** letters, char* target) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    str next_greatest_letter(vector<string>& letters, string& target) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

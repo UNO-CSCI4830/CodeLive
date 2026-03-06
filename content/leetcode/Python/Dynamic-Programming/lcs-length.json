@@ -1,0 +1,80 @@
+{
+  "id": "lcs-length",
+  "title": "Longest Common Subsequence Length",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given two strings, return the length of their longest common subsequence. A subsequence does not require contiguity.\n\n    \n\nConstraints:\n    - 1 ≤ |s1|, |s2| ≤ 1000",
+  "leetcodeUrl": "https://leetcode.com/problems/longest-common-subsequence/",
+  "complexity": {
+    "time": "O(nm)",
+    "space": "O(nm)"
+  },
+  "explanation": "Intuition\nLet dp[i][j] be LCS length for s1[:i], s2[:j]. If chars match, take 1+dp[i-1][j-1]; else max of dp[i-1][j] and dp[i][j-1].\n\nApproach\n1. Initial Setup: Make 2-D table of size (n+1)×(m+1)\n2. Main Algorithm: Fill row by row using character comparisons\n3. Return Result: Return dp[n][m]\n\nComplexity Analysis\n- Time Complexity: O(nm)\n- Space Complexity: O(nm) or O(min(n,m)) with rolling rows\n\nKey Insights\n- Adding dummy 0th row/col simplifies borders\n- Char match links diagonally\n\nCommon Pitfalls\n- Confusing substring with subsequence\n- Forgetting to handle empty prefixes",
+  "solutionCode": "def lcs_length(a: str, b: str) -> int:\n    n, m = len(a), len(b)\n    dp = [[0]*(m+1) for _ in range(n+1)]\n    for i in range(1, n+1):\n        for j in range(1, m+1):\n            if a[i-1] == b[j-1]:\n                dp[i][j] = dp[i-1][j-1] + 1\n            else:\n                dp[i][j] = max(dp[i-1][j], dp[i][j-1])\n    return dp[n][m]",
+  "testCases": [
+    {
+      "input": {
+        "a": "abcde",
+        "b": "ace"
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Common 'ace'"
+    },
+    {
+      "input": {
+        "a": "abc",
+        "b": "abc"
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "When lcs_length(a=\"abc\", b=\"abc\"), the expected result is 3"
+    },
+    {
+      "input": {
+        "a": "abc",
+        "b": "def"
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "No common chars"
+    },
+    {
+      "input": {
+        "a": "",
+        "b": "x"
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Empty first string"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "string"
+  ],
+  "hints": [
+    "Match → diagonal +1",
+    "Else take max of top/left",
+    "Use extra row/col of zeros"
+  ],
+  "relatedProblems": [
+    "longest-palindromic-subsequence",
+    "edit-distance-min"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 56,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def lcs_length(a: str, b: str) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def lcs_length(a: str, b: str) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string a, string b}\n * @return {number}\n */\nfunction lcs_length(a, b) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int lcs_length(String a, String b) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint lcs_length(char* a, char* b) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int lcs_length(string& a, string& b) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

@@ -1,0 +1,102 @@
+{
+  "id": "reorder-linked-list",
+  "title": "Reorder Linked List",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given Reorder a list L0→L1→…→Ln into L0→Ln→L1→Ln-1→L2→Ln-2→… in place. Do not modify node values, only pointers.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/reorder-list/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nSplit the list at the midpoint, reverse the second half, then merge the two halves by alternating nodes. Each step is linear and in place.\n\nApproach\n1. Initial Setup: Find the middle using slow/fast pointers.\n2. Main Algorithm: Reverse the second half. Then weave nodes from first and reversed second alternately.\n3. Return Result: Return head after merging.\n\nComplexity Analysis\n- Time Complexity: O(n) due to a single pass or divide-and-conquer\n  over the list where each node is visited a bounded number of times.\n- Space Complexity: O(1) accounting for pointers and, when needed,\n  recursion depth or extra structures.\n\nKey Insights\n- Breaking the problem into three linear phases keeps it simple\n- Midpoint split ensures correct interleaving\n\nCommon Pitfalls\n- Forgetting to terminate the first half before reversing\n- Not saving next pointers while weaving can create cycles",
+  "solutionCode": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\ndef reorder_list(head):\n    if not head or not head.next:\n        return head\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    prev = None\n    curr = slow.next\n    slow.next = None\n    while curr:\n        nxt = curr.next\n        curr.next = prev\n        prev = curr\n        curr = nxt\n    first, second = head, prev\n    while second:\n        n1, n2 = first.next, second.next\n        first.next = second\n        second.next = n1\n        first, second = n1, n2\n    return head",
+  "testCases": [
+    {
+      "input": {
+        "list": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "expected": {
+        "result": [
+          1,
+          4,
+          2,
+          3
+        ]
+      },
+      "explanation": "Even length case"
+    },
+    {
+      "input": {
+        "list": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": {
+        "result": [
+          1,
+          5,
+          2,
+          4,
+          3
+        ]
+      },
+      "explanation": "Odd length case"
+    },
+    {
+      "input": {
+        "list": [
+          1
+        ]
+      },
+      "expected": {
+        "result": [
+          1
+        ]
+      },
+      "explanation": "Single node unchanged"
+    },
+    {
+      "input": {
+        "list": []
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Empty list unchanged"
+    }
+  ],
+  "tags": [
+    "linked-list",
+    "two-pointers"
+  ],
+  "hints": [
+    "Find the list midpoint first",
+    "Reverse the second half",
+    "Merge by alternating nodes"
+  ],
+  "relatedProblems": [
+    "reverse-linked-list",
+    "remove-nth-from-end"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 55,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any next}\n * @return {any}\n */\nfunction __init__(self, val, next) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> __init__(any self, any val, any next) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] __init__(any self, any val, any next) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] __init__(any& self, any& val, any& next) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

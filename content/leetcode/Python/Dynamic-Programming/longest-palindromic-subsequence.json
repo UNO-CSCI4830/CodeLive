@@ -1,0 +1,76 @@
+{
+  "id": "longest-palindromic-subsequence",
+  "title": "Longest Palindromic Subsequence Length",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a string s, find the length of the longest palindromic subsequence.\n\n    \n\nConstraints:\n    - 1 ≤ |s| ≤ 1000",
+  "leetcodeUrl": "https://leetcode.com/problems/longest-palindromic-subsequence/",
+  "complexity": {
+    "time": "O(n^2)",
+    "space": "O(n^2)"
+  },
+  "explanation": "Intuition\nLet dp[i][j] be LPS length in s[i..j]. If s[i]==s[j], dp=2+dp[i+1][j-1]; else max of dp[i+1][j] and dp[i][j-1]. Fill for increasing lengths.\n\nApproach\n1. Initial Setup: Initialize dp[i][i]=1\n2. Main Algorithm: For len from 2..n, fill i..j using recurrence\n3. Return Result: Return dp[0][n-1]\n\nComplexity Analysis\n- Time Complexity: O(n^2)\n- Space Complexity: O(n^2)\n\nKey Insights\n- Interval DP over substrings\n- Reverse relation to LCS between s and reversed s\n\nCommon Pitfalls\n- Be careful with i+1>j-1 base\n- Indices must expand outward correctly",
+  "solutionCode": "def lps_length(s: str) -> int:\n    n = len(s)\n    dp = [[0]*n for _ in range(n)]\n    for i in range(n):\n        dp[i][i] = 1\n    for L in range(2, n+1):\n        for i in range(0, n-L+1):\n            j = i + L - 1\n            if s[i] == s[j]:\n                dp[i][j] = 2 + (dp[i+1][j-1] if i+1 <= j-1 else 0)\n            else:\n                dp[i][j] = max(dp[i+1][j], dp[i][j-1])\n    return dp[0][n-1]",
+  "testCases": [
+    {
+      "input": {
+        "s": "bbbab"
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "bbbb subsequence"
+    },
+    {
+      "input": {
+        "s": "cbbd"
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "When lps_length(s=\"cbbd\"), the expected result is 2"
+    },
+    {
+      "input": {
+        "s": "a"
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single char"
+    },
+    {
+      "input": {
+        "s": "agbdba"
+      },
+      "expected": {
+        "result": 5
+      },
+      "explanation": "When lps_length(s=\"agbdba\"), the expected result is 5"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "string"
+  ],
+  "hints": [
+    "Interval DP from shorter to longer",
+    "Match ends adds 2",
+    "Else take max of excluding one end"
+  ],
+  "relatedProblems": [
+    "lcs-length",
+    "palindrome-partition-min-cut"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 62,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def lps_length(s: str) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def lps_length(s: str) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s}\n * @return {number}\n */\nfunction lps_length(s) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int lps_length(String s) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint lps_length(char* s) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int lps_length(string& s) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

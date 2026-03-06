@@ -1,0 +1,121 @@
+{
+  "id": "level-order-traversal",
+  "title": "Level Order Traversal",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Return the level order traversal of a binary tree, grouping values by depth from top to bottom.\n\nConstraints:\n- 0 ≤ nodes ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/binary-tree-level-order-traversal/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(w) for queue"
+  },
+  "explanation": "Intuition\nBreadth-first search processes nodes level by level using a queue. The queue size at each step captures the number of nodes at the current depth.\n\nApproach\n1. Initial Setup: Enqueue root if exists\n2. Main Algorithm: For each level, pop 'size' nodes and enqueue children\n3. Return Result: Append collected level values\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(w) for queue\n\nKey Insights\n- Level size snapshot isolates depth groups\n- BFS ensures top-to-bottom order\n\nCommon Pitfalls\n- Not fixing the level size before popping mixes levels\n- Forgetting to check empty root",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef level_order_values(root: TreeNode):\n    from collections import deque\n    if not root:\n        return []\n    res = []\n    q = deque([root])\n    while q:\n        size = len(q)\n        level = []\n        for _ in range(size):\n            node = q.popleft()\n            level.append(node.val)\n            if node.left:\n                q.append(node.left)\n            if node.right:\n                q.append(node.right)\n        res.append(level)\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "tree": [
+          3,
+          9,
+          20,
+          null,
+          null,
+          15,
+          7
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            3
+          ],
+          [
+            9,
+            20
+          ],
+          [
+            15,
+            7
+          ]
+        ]
+      },
+      "explanation": "Three levels"
+    },
+    {
+      "input": {
+        "tree": []
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "When __init__(tree=[]), the expected result is []"
+    },
+    {
+      "input": {
+        "tree": [
+          1
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            1
+          ]
+        ]
+      },
+      "explanation": "Single level"
+    },
+    {
+      "input": {
+        "tree": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "expected": {
+        "result": [
+          [
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            4,
+            5
+          ]
+        ]
+      },
+      "explanation": "Balanced small tree"
+    }
+  ],
+  "tags": [
+    "tree",
+    "bfs",
+    "queue"
+  ],
+  "hints": [
+    "Use a deque queue",
+    "Snapshot queue length each level",
+    "Append per level"
+  ],
+  "relatedProblems": [
+    "right-side-view",
+    "maximum-depth-of-tree"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 62.3,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {any}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<List<Integer>> __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[List[int]] __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[List[int]] __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

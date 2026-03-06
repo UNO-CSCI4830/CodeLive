@@ -1,0 +1,96 @@
+{
+  "id": "cycle-start-node",
+  "title": "Find Cycle Start Node",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Find If a cycle exists in a singly linked list, return the node where the cycle begins. If no cycle exists, return None. Use O(1) space.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5\n- Values arbitrary 32-bit",
+  "leetcodeUrl": "https://leetcode.com/problems/linked-list-cycle-ii/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nAfter slow and fast meet inside the cycle, resetting one pointer to head and advancing both one step at a time leads them to meet at the cycle entry. This follows from equalizing distances traveled.\n\nApproach\n1. Initial Setup: Run Floyd to detect a meeting. If none, return None.\n2. Main Algorithm: Reset slow to head and move both one step until they meet.\n3. Return Result: Return the meeting node.\n\nComplexity Analysis\n- Time Complexity: O(n) due to a single pass or divide-and-conquer\n  over the list where each node is visited a bounded number of times.\n- Space Complexity: O(1) accounting for pointers and, when needed,\n  recursion depth or extra structures.\n\nKey Insights\n- Mathematical relation between path lengths yields the entry\n- No additional memory is needed beyond pointers\n\nCommon Pitfalls\n- Forgetting to handle the no cycle case\n- Continuing to move fast by two after meeting is incorrect",
+  "solutionCode": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\ndef cycle_start_node(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow is fast:\n            break\n    else:\n        return None\n    slow = head\n    while slow is not fast:\n        slow = slow.next\n        fast = fast.next\n    return slow",
+  "testCases": [
+    {
+      "input": {
+        "list": [
+          3,
+          2,
+          0,
+          -4
+        ],
+        "pos": 1
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Start node value is 2"
+    },
+    {
+      "input": {
+        "list": [
+          1,
+          2
+        ],
+        "pos": 0
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Cycle starts at head"
+    },
+    {
+      "input": {
+        "list": [
+          1
+        ],
+        "pos": -1
+      },
+      "expected": {
+        "result": null
+      },
+      "explanation": "No cycle exists"
+    },
+    {
+      "input": {
+        "list": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "pos": 3
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Entry at value 4"
+    }
+  ],
+  "tags": [
+    "linked-list",
+    "two-pointers"
+  ],
+  "hints": [
+    "Detect the cycle first",
+    "Reset one pointer to head after meeting",
+    "Advance both one step to find entry"
+  ],
+  "relatedProblems": [
+    "detect-cycle-in-list",
+    "rotate-linked-list"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 45,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def __init__(self: any, val: any, next: any) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, next: any) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any next}\n * @return {number}\n */\nfunction __init__(self, val, next) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int __init__(any self, any val, any next) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint __init__(any self, any val, any next) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int __init__(any& self, any& val, any& next) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

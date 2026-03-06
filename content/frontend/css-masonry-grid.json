@@ -1,0 +1,44 @@
+{
+  "id": "css-masonry-grid",
+  "title": "Masonry Grid",
+  "category": "frontend",
+  "difficulty": "hard",
+  "description": "Write CSS to create a **Pinterest-style masonry grid** where cards of varying heights pack neatly into columns without gaps.\n\n### Visual Target\n\n```\n┌──────┐ ┌──────┐ ┌──────┐\n│  A   │ │  B   │ │      │\n│      │ └──────┘ │  C   │\n└──────┘ ┌──────┐ │      │\n┌──────┐ │  D   │ │      │\n│  E   │ │      │ └──────┘\n│      │ │      │ ┌──────┐\n│      │ └──────┘ │  F   │\n└──────┘          └──────┘\n```\n\nCards fill columns top-to-bottom then left-to-right, each column flush at the top.\n\n### Requirements\n\n- `.masonry` uses **CSS columns** (`column-count: 3`, `column-gap: 1rem`)\n- `.masonry` has `2rem` padding\n- Each `.masonry__item` must not break across columns (`break-inside: avoid`)\n- Items have `margin-bottom: 1rem` for vertical spacing\n- Items have white background, `1rem` padding, `0.5rem` border-radius, and a subtle box-shadow\n- Each item has an `.masonry__image` div with background colour as a placeholder and variable height\n- The image placeholder has `border-radius: 0.375rem` and `margin-bottom: 0.75rem`\n- At **narrow widths** (< 640px), fall back to `column-count: 1`\n- At **medium widths** (640px–1023px), use `column-count: 2`\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Masonry container | `masonry` |\n| First item | `item-1` |",
+  "constraints": "- Only edit styles.css\n- Use CSS multi-column layout (column-count), not CSS Grid or Flexbox for the masonry effect\n- Use media queries for responsive column counts\n- Do not use JavaScript for layout calculations",
+  "hints": [
+    "CSS columns (column-count / column-gap) naturally create a masonry-like flow where content fills each column top-to-bottom.",
+    "Add break-inside: avoid to each item so cards don't split across column boundaries.",
+    "Use display: inline-block or just rely on block elements inside columns. Inline-block avoids extra whitespace issues.",
+    "For responsive, use @media (max-width: 639px) { column-count: 1 } and @media (min-width: 640px) and (max-width: 1023px) { column-count: 2 }."
+  ],
+  "tags": ["css", "masonry", "columns", "responsive", "layout"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport './styles.css';\n\nconst items = [\n  { id: 1, title: 'Mountain Vista', height: '12rem', color: '#93c5fd' },\n  { id: 2, title: 'Ocean Breeze', height: '8rem', color: '#6ee7b7' },\n  { id: 3, title: 'Desert Sunset', height: '16rem', color: '#fca5a5' },\n  { id: 4, title: 'Forest Path', height: '10rem', color: '#a5b4fc' },\n  { id: 5, title: 'City Lights', height: '14rem', color: '#fcd34d' },\n  { id: 6, title: 'Arctic Ice', height: '9rem', color: '#a7f3d0' },\n  { id: 7, title: 'Coral Reef', height: '11rem', color: '#f9a8d4' },\n  { id: 8, title: 'Lava Flow', height: '7rem', color: '#fdba74' },\n  { id: 9, title: 'Northern Lights', height: '13rem', color: '#c4b5fd' },\n];\n\nexport default function App() {\n  return (\n    <div className=\"masonry\" data-testid=\"masonry\">\n      {items.map(item => (\n        <div key={item.id} className=\"masonry__item\" data-testid={`item-${item.id}`}>\n          <div\n            className=\"masonry__image\"\n            style={{ height: item.height, backgroundColor: item.color }}\n          />\n          <h3 className=\"masonry__title\">{item.title}</h3>\n          <p className=\"masonry__desc\">A beautiful photograph capturing nature's wonder.</p>\n        </div>\n      ))}\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "styles.css",
+      "content": "/* === Masonry Container ===\n * TODO: column-count: 3, column-gap: 1rem\n * TODO: padding: 2rem\n */\n.masonry {\n\n}\n\n/* === Masonry Item ===\n * TODO: break-inside: avoid\n * TODO: margin-bottom: 1rem\n * TODO: White background, 1rem padding, 0.5rem border-radius\n * TODO: Subtle box-shadow\n * TODO: display: inline-block, width: 100%\n */\n.masonry__item {\n\n}\n\n/* === Image Placeholder ===\n * TODO: border-radius 0.375rem, margin-bottom 0.75rem\n */\n.masonry__image {\n\n}\n\n/* Provided styles */\n.masonry__title {\n  margin: 0 0 0.25rem;\n  font-size: 0.9375rem;\n  font-weight: 600;\n  color: #111827;\n}\n\n.masonry__desc {\n  margin: 0;\n  font-size: 0.8125rem;\n  color: #6b7280;\n  line-height: 1.5;\n}\n\n/* === Responsive ===\n * TODO: < 640px → column-count: 1\n * TODO: 640px–1023px → column-count: 2\n */\n",
+      "language": "css",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport App from './App';\n\ndescribe('Masonry Grid', () => {\n  beforeEach(() => {\n    render(<App />);\n  });\n\n  it('masonry uses column layout', () => {\n    const masonry = screen.getByTestId('masonry');\n    const styles = getComputedStyle(masonry);\n    expect(styles.columnCount).toBe('3');\n  });\n\n  it('masonry has column gap', () => {\n    const masonry = screen.getByTestId('masonry');\n    const styles = getComputedStyle(masonry);\n    expect(styles.columnGap).toBe('1rem');\n  });\n\n  it('masonry has padding', () => {\n    const masonry = screen.getByTestId('masonry');\n    expect(getComputedStyle(masonry).padding).toBe('2rem');\n  });\n\n  it('items avoid column breaks', () => {\n    const item = screen.getByTestId('item-1');\n    const styles = getComputedStyle(item);\n    expect(styles.breakInside).toBe('avoid');\n  });\n\n  it('items have white background', () => {\n    const item = screen.getByTestId('item-1');\n    expect(getComputedStyle(item).backgroundColor).toBe('rgb(255, 255, 255)');\n  });\n\n  it('items have border-radius', () => {\n    const item = screen.getByTestId('item-1');\n    expect(getComputedStyle(item).borderRadius).toBe('0.5rem');\n  });\n\n  it('items have bottom margin', () => {\n    const item = screen.getByTestId('item-1');\n    expect(getComputedStyle(item).marginBottom).toBe('1rem');\n  });\n\n  it('renders all 9 items', () => {\n    for (let i = 1; i <= 9; i++) {\n      expect(screen.getByTestId(`item-${i}`)).toBeInTheDocument();\n    }\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "styles.css",
+      "content": ".masonry {\n  column-count: 3;\n  column-gap: 1rem;\n  padding: 2rem;\n}\n\n.masonry__item {\n  break-inside: avoid;\n  margin-bottom: 1rem;\n  background-color: #ffffff;\n  padding: 1rem;\n  border-radius: 0.5rem;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);\n  display: inline-block;\n  width: 100%;\n}\n\n.masonry__image {\n  border-radius: 0.375rem;\n  margin-bottom: 0.75rem;\n}\n\n.masonry__title {\n  margin: 0 0 0.25rem;\n  font-size: 0.9375rem;\n  font-weight: 600;\n  color: #111827;\n}\n\n.masonry__desc {\n  margin: 0;\n  font-size: 0.8125rem;\n  color: #6b7280;\n  line-height: 1.5;\n}\n\n@media (max-width: 639px) {\n  .masonry {\n    column-count: 1;\n  }\n}\n\n@media (min-width: 640px) and (max-width: 1023px) {\n  .masonry {\n    column-count: 2;\n  }\n}\n",
+      "language": "css"
+    }
+  ],
+  "sort_order": 320
+}

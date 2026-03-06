@@ -1,0 +1,67 @@
+{
+  "id": "perf-code-splitting",
+  "title": "Dynamic Import & Code Splitting",
+  "category": "frontend",
+  "difficulty": "hard",
+  "description": "Implement code splitting using `React.lazy` and `Suspense` for a multi-route dashboard where each panel is loaded on demand.\n\n### Requirements\n\n- Each dashboard panel (`Analytics`, `Settings`, `Reports`) is loaded via `React.lazy`\n- Wrap lazy components in `Suspense` with a custom `LoadingFallback`\n- The `LoadingFallback` shows a skeleton matching the panel layout\n- Handle load failures with an `ErrorBoundary` that shows a retry button\n- Clicking retry re-attempts the lazy import\n- Preload the next likely panel on hover over its tab button\n- Track which panels have been loaded (show a \"loaded\" badge)\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Tab button | `panel-tab-{id}` |\n| Panel content | `panel-content` |\n| Loading fallback | `loading-fallback` |\n| Error boundary | `error-boundary` |\n| Retry button | `retry-btn` |\n| Loaded badge | `loaded-{id}` |",
+  "constraints": "- Must use React.lazy and Suspense\n- Must implement a class-based ErrorBoundary\n- Retry must actually re-attempt the import\n- Preload on hover using dynamic import()\n- Panels must only load when first accessed",
+  "hints": [
+    "React.lazy(() => import('./Panel')) returns a lazy component. Store the import function in a map so you can retry it later.",
+    "For preload on hover, call the import() function but don't use its result — React's cache will remember it.",
+    "An ErrorBoundary is a class component with static getDerivedStateFromError and componentDidCatch."
+  ],
+  "tags": ["react", "performance", "code-splitting", "lazy", "suspense"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { Dashboard } from './Dashboard';\nimport './styles.css';\n\nexport default function App() {\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif', maxWidth: '36rem' }}>\n      <h1 style={{ marginBottom: '1.5rem' }}>Code Split Dashboard</h1>\n      <Dashboard />\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "Analytics.tsx",
+      "content": "import React from 'react';\n\nconst Analytics: React.FC = () => (\n  <div data-testid=\"panel-content\" className=\"panel\">\n    <h2>Analytics</h2>\n    <div className=\"panel__grid\">\n      <div className=\"panel__card\">Views: 12,340</div>\n      <div className=\"panel__card\">Sessions: 3,210</div>\n      <div className=\"panel__card\">Bounce Rate: 42%</div>\n      <div className=\"panel__card\">Avg Duration: 3m 22s</div>\n    </div>\n  </div>\n);\n\nexport default Analytics;\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "Settings.tsx",
+      "content": "import React from 'react';\n\nconst Settings: React.FC = () => (\n  <div data-testid=\"panel-content\" className=\"panel\">\n    <h2>Settings</h2>\n    <div className=\"panel__form\">\n      <label>Theme: <select><option>Light</option><option>Dark</option></select></label>\n      <label>Language: <select><option>English</option><option>Spanish</option></select></label>\n      <label>Notifications: <input type=\"checkbox\" defaultChecked /></label>\n    </div>\n  </div>\n);\n\nexport default Settings;\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "Reports.tsx",
+      "content": "import React from 'react';\n\nconst Reports: React.FC = () => (\n  <div data-testid=\"panel-content\" className=\"panel\">\n    <h2>Reports</h2>\n    <ul className=\"panel__reports\">\n      <li>Q1 Revenue Report — Ready</li>\n      <li>Q2 Revenue Report — Pending</li>\n      <li>User Growth Report — Ready</li>\n    </ul>\n  </div>\n);\n\nexport default Reports;\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "Dashboard.tsx",
+      "content": "import React, { useState, Suspense } from 'react';\nimport './styles.css';\n\n// TODO: Use React.lazy for each panel\n// TODO: Implement ErrorBoundary class component\n// TODO: Implement LoadingFallback\n// TODO: Track loaded panels\n// TODO: Preload on hover\n\ninterface Tab {\n  id: string;\n  label: string;\n}\n\nconst tabs: Tab[] = [\n  { id: 'analytics', label: 'Analytics' },\n  { id: 'settings', label: 'Settings' },\n  { id: 'reports', label: 'Reports' },\n];\n\nexport const Dashboard: React.FC = () => {\n  const [activeTab, setActiveTab] = useState('analytics');\n\n  // Placeholder — currently NOT code-split\n  const renderPanel = () => {\n    return <div data-testid=\"panel-content\">Select a tab</div>;\n  };\n\n  return (\n    <div className=\"cs-dash\">\n      <div className=\"cs-dash__tabs\">\n        {tabs.map(tab => (\n          <button\n            key={tab.id}\n            data-testid={`panel-tab-${tab.id}`}\n            className={`cs-dash__tab${tab.id === activeTab ? ' cs-dash__tab--active' : ''}`}\n            onClick={() => setActiveTab(tab.id)}\n          >\n            {tab.label}\n          </button>\n        ))}\n      </div>\n      <div className=\"cs-dash__content\">\n        {renderPanel()}\n      </div>\n    </div>\n  );\n};\n",
+      "language": "tsx",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": ".cs-dash {\n  border: 1px solid #e5e7eb;\n  border-radius: 0.5rem;\n  overflow: hidden;\n}\n\n.cs-dash__tabs {\n  display: flex;\n  border-bottom: 1px solid #e5e7eb;\n  background: #f9fafb;\n}\n\n.cs-dash__tab {\n  flex: 1;\n  padding: 0.625rem 1rem;\n  border: none;\n  background: transparent;\n  font-size: 0.875rem;\n  font-weight: 500;\n  color: #6b7280;\n  cursor: pointer;\n  border-bottom: 2px solid transparent;\n  position: relative;\n}\n\n.cs-dash__tab:hover {\n  color: #374151;\n}\n\n.cs-dash__tab--active {\n  color: #3b82f6;\n  border-bottom-color: #3b82f6;\n}\n\n.cs-dash__badge {\n  position: absolute;\n  top: 0.25rem;\n  right: 0.25rem;\n  width: 0.5rem;\n  height: 0.5rem;\n  background: #10b981;\n  border-radius: 50%;\n}\n\n.cs-dash__content {\n  padding: 1.5rem;\n  min-height: 12rem;\n}\n\n.panel h2 {\n  margin: 0 0 1rem;\n  font-size: 1.125rem;\n}\n\n.panel__grid {\n  display: grid;\n  grid-template-columns: 1fr 1fr;\n  gap: 0.75rem;\n}\n\n.panel__card {\n  padding: 1rem;\n  background: #f9fafb;\n  border-radius: 0.375rem;\n  font-size: 0.875rem;\n}\n\n.panel__form {\n  display: flex;\n  flex-direction: column;\n  gap: 0.75rem;\n}\n\n.panel__reports {\n  list-style: none;\n  padding: 0;\n  margin: 0;\n}\n\n.panel__reports li {\n  padding: 0.5rem 0;\n  border-bottom: 1px solid #f3f4f6;\n  font-size: 0.875rem;\n}\n\n.loading-skeleton {\n  display: flex;\n  flex-direction: column;\n  gap: 0.75rem;\n}\n\n.loading-skeleton__bar {\n  height: 1rem;\n  background: #e5e7eb;\n  border-radius: 0.25rem;\n  animation: pulse 1.5s ease-in-out infinite;\n}\n\n@keyframes pulse {\n  0%, 100% { opacity: 1; }\n  50% { opacity: 0.5; }\n}\n\n.error-fallback {\n  text-align: center;\n  padding: 2rem;\n}\n\n.error-fallback__title {\n  font-size: 1rem;\n  font-weight: 600;\n  color: #ef4444;\n  margin-bottom: 0.5rem;\n}\n\n.error-fallback__btn {\n  padding: 0.375rem 0.75rem;\n  border: none;\n  border-radius: 0.375rem;\n  background: #3b82f6;\n  color: white;\n  cursor: pointer;\n  font-size: 0.8125rem;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent, waitFor } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport React from 'react';\nimport App from './App';\n\ndescribe('Code Splitting Dashboard', () => {\n  it('renders tab buttons', () => {\n    render(<App />);\n    expect(screen.getByTestId('panel-tab-analytics')).toBeInTheDocument();\n    expect(screen.getByTestId('panel-tab-settings')).toBeInTheDocument();\n    expect(screen.getByTestId('panel-tab-reports')).toBeInTheDocument();\n  });\n\n  it('first tab is active by default', () => {\n    render(<App />);\n    expect(screen.getByTestId('panel-tab-analytics')).toHaveClass('cs-dash__tab--active');\n  });\n\n  it('shows loading fallback during lazy load', async () => {\n    render(<App />);\n    // The loading fallback should appear briefly or the content should resolve\n    await waitFor(() => {\n      const content = screen.getByTestId('panel-content');\n      expect(content).toBeInTheDocument();\n    });\n  });\n\n  it('loads panel content after lazy import resolves', async () => {\n    render(<App />);\n    await waitFor(() => {\n      expect(screen.getByTestId('panel-content')).toBeInTheDocument();\n    });\n  });\n\n  it('switching tabs updates active class', async () => {\n    render(<App />);\n    fireEvent.click(screen.getByTestId('panel-tab-settings'));\n    expect(screen.getByTestId('panel-tab-settings')).toHaveClass('cs-dash__tab--active');\n  });\n\n  it('switching tabs loads new panel content', async () => {\n    render(<App />);\n    fireEvent.click(screen.getByTestId('panel-tab-settings'));\n    await waitFor(() => {\n      const content = screen.getByTestId('panel-content');\n      expect(content).toBeInTheDocument();\n    });\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "Dashboard.tsx",
+      "content": "import React, { useState, Suspense, Component, ReactNode, lazy } from 'react';\nimport './styles.css';\n\ninterface Tab {\n  id: string;\n  label: string;\n}\n\nconst tabs: Tab[] = [\n  { id: 'analytics', label: 'Analytics' },\n  { id: 'settings', label: 'Settings' },\n  { id: 'reports', label: 'Reports' },\n];\n\n// Lazy imports\nconst importMap: Record<string, () => Promise<{ default: React.ComponentType }>> = {\n  analytics: () => import('./Analytics'),\n  settings: () => import('./Settings'),\n  reports: () => import('./Reports'),\n};\n\nconst lazyMap: Record<string, React.LazyExoticComponent<React.ComponentType>> = {\n  analytics: lazy(importMap.analytics),\n  settings: lazy(importMap.settings),\n  reports: lazy(importMap.reports),\n};\n\n// Loading Fallback\nconst LoadingFallback: React.FC = () => (\n  <div data-testid=\"loading-fallback\" className=\"loading-skeleton\">\n    <div className=\"loading-skeleton__bar\" style={{ width: '40%' }} />\n    <div className=\"loading-skeleton__bar\" style={{ width: '100%' }} />\n    <div className=\"loading-skeleton__bar\" style={{ width: '80%' }} />\n    <div className=\"loading-skeleton__bar\" style={{ width: '60%' }} />\n  </div>\n);\n\n// Error Boundary\ninterface EBProps { children: ReactNode; onRetry: () => void; }\ninterface EBState { hasError: boolean; }\n\nclass ErrorBoundary extends Component<EBProps, EBState> {\n  state: EBState = { hasError: false };\n  static getDerivedStateFromError(): EBState { return { hasError: true }; }\n  componentDidCatch() {}\n  handleRetry = () => {\n    this.setState({ hasError: false });\n    this.props.onRetry();\n  };\n  render() {\n    if (this.state.hasError) {\n      return (\n        <div data-testid=\"error-boundary\" className=\"error-fallback\">\n          <p className=\"error-fallback__title\">Failed to load panel</p>\n          <button data-testid=\"retry-btn\" className=\"error-fallback__btn\" onClick={this.handleRetry}>\n            Retry\n          </button>\n        </div>\n      );\n    }\n    return this.props.children;\n  }\n}\n\nexport const Dashboard: React.FC = () => {\n  const [activeTab, setActiveTab] = useState('analytics');\n  const [loadedPanels, setLoadedPanels] = useState<Set<string>>(new Set());\n  const [retryKey, setRetryKey] = useState(0);\n\n  const handlePreload = (id: string) => {\n    importMap[id]?.().then(() => {\n      setLoadedPanels(prev => new Set(prev).add(id));\n    }).catch(() => {});\n  };\n\n  const PanelComponent = lazyMap[activeTab];\n\n  return (\n    <div className=\"cs-dash\">\n      <div className=\"cs-dash__tabs\">\n        {tabs.map(tab => (\n          <button\n            key={tab.id}\n            data-testid={`panel-tab-${tab.id}`}\n            className={`cs-dash__tab${tab.id === activeTab ? ' cs-dash__tab--active' : ''}`}\n            onClick={() => setActiveTab(tab.id)}\n            onMouseEnter={() => handlePreload(tab.id)}\n          >\n            {tab.label}\n            {loadedPanels.has(tab.id) && <span data-testid={`loaded-${tab.id}`} className=\"cs-dash__badge\" />}\n          </button>\n        ))}\n      </div>\n      <div className=\"cs-dash__content\">\n        <ErrorBoundary key={retryKey} onRetry={() => setRetryKey(k => k + 1)}>\n          <Suspense fallback={<LoadingFallback />}>\n            <PanelComponent />\n          </Suspense>\n        </ErrorBoundary>\n      </div>\n    </div>\n  );\n};\n",
+      "language": "tsx"
+    }
+  ],
+  "sort_order": 621
+}

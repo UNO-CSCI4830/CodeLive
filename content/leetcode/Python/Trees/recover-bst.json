@@ -1,0 +1,100 @@
+{
+  "id": "recover-bst",
+  "title": "Recover a Swapped Binary Search Tree",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Given Two nodes in a Binary Search Tree were swapped by mistake. Restore the tree to a valid BST by swapping the two node values back. The recovery must not change the structure of the tree. Prefer an iterative inorder walk to keep stack usage controlled for typing practice.\n\n    \n\nConstraints:\n    - 1 ≤ nodes ≤ 10^5\n- All values are unique except the swap violation",
+  "leetcodeUrl": "https://leetcode.com/problems/recover-binary-search-tree/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(h)"
+  },
+  "explanation": "Intuition\nBST inorder traversal yields a sorted sequence. If two nodes are swapped, the inorder sequence contains one or two inversions. Track the previous visited node and identify the first and second out-of-order nodes. After traversal, swap their values to restore order.\n\nApproach\n1. Initial Setup: Perform iterative inorder with a stack.\n2. Main Algorithm: When current value < previous, mark first=prev on first violation and always set second=current; after traversal swap their values.\n3. Return Result: Return the root.\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(h) for stack\n\nKey Insights\n- Two misplaced nodes create at most two inversions\n- Swapping values preserves structure\n\nCommon Pitfalls\n- Mixing node references with values confuses swapping\n- Forgetting to handle adjacent swapped nodes",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef recover_bst(root: TreeNode) -> TreeNode:\n    first = second = prev = None\n    stack = []\n    cur = root\n    while cur or stack:\n        while cur:\n            stack.append(cur)\n            cur = cur.left\n        cur = stack.pop()\n        if prev and cur.val < prev.val:\n            if not first:\n                first = prev\n            second = cur\n        prev = cur\n        cur = cur.right\n    if first and second:\n        first.val, second.val = second.val, first.val\n    return root",
+  "testCases": [
+    {
+      "input": {
+        "tree": [
+          1,
+          3,
+          null,
+          null,
+          2
+        ]
+      },
+      "expected": {
+        "result": "recovered"
+      },
+      "explanation": "Swap back nodes 1 and 3"
+    },
+    {
+      "input": {
+        "tree": [
+          3,
+          1,
+          4,
+          null,
+          null,
+          2
+        ]
+      },
+      "expected": {
+        "result": "recovered"
+      },
+      "explanation": "Swap nodes 2 and 3"
+    },
+    {
+      "input": {
+        "tree": [
+          2,
+          1
+        ]
+      },
+      "expected": {
+        "result": "recovered"
+      },
+      "explanation": "Already valid remains unchanged"
+    },
+    {
+      "input": {
+        "tree": [
+          5,
+          3,
+          9,
+          2,
+          4,
+          7,
+          6
+        ]
+      },
+      "expected": {
+        "result": "recovered"
+      },
+      "explanation": "Detect if any inversion and fix"
+    }
+  ],
+  "tags": [
+    "tree",
+    "dfs"
+  ],
+  "hints": [
+    "Inorder traversal should be sorted",
+    "Track first and second violation nodes",
+    "Swap their values after traversal"
+  ],
+  "relatedProblems": [
+    "validate-bst",
+    "kth-smallest-in-bst"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 40.5,
+    "frequency": "medium",
+    "importance": 9
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> TreeNode:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> TreeNode:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {any}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public TreeNode __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nTreeNode __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    TreeNode __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

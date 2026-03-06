@@ -1,0 +1,96 @@
+{
+  "id": "valid-triangle-count",
+  "title": "Count Valid Triangles in Array",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an array of nonnegative integers representing side lengths, count how many triplets can form a triangle. A triangle is valid if a + b > c for sorted sides a ≤ b ≤ c.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 1000\n- 0 ≤ nums[i] ≤ 10^3",
+  "leetcodeUrl": "https://leetcode.com/problems/valid-triangle-number/",
+  "complexity": {
+    "time": "O(n^2)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nSort the array. Fix the largest side c and use a two-pointer sweep on the left to count pairs (a,b) with a+b>c. When a+b>c holds, all pairs between a..b are valid; move b left. Otherwise, move a right. This gives quadratic time.\n\nApproach\n1. Initial Setup: Sort nums ascending\n2. Main Algorithm: For k from n-1 down to 2, set i=0, j=k-1 and count pairs with a+b>nums[k], updating the total\n3. Return Result: Return total count\n\nComplexity Analysis\n- Time Complexity: O(n^2)\n- Space Complexity: O(1)\n\nKey Insights\n- Monotonicity lets you count ranges at once\n- Zeros cannot form a positive triangle\n\nCommon Pitfalls\n- Forgetting to sort breaks the two-pointer logic\n- Using ≥ instead of > will overcount degenerate triangles",
+  "solutionCode": "def triangle_number(nums):\n    nums.sort()\n    n = len(nums)\n    ans = 0\n    for k in range(n - 1, 1, -1):\n        i, j = 0, k - 1\n        while i < j:\n            if nums[i] + nums[j] > nums[k]:\n                ans += j - i\n                j -= 1\n            else:\n                i += 1\n    return ans",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          2,
+          2,
+          3,
+          4
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Triplets (2,3,4) and two (2,2,3)"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Choose any 3 of 4"
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Degenerate"
+    },
+    {
+      "input": {
+        "nums": [
+          3,
+          4,
+          6,
+          7
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Manual verification"
+    }
+  ],
+  "tags": [
+    "math",
+    "two-pointers",
+    "sorting"
+  ],
+  "hints": [
+    "Sort first",
+    "Fix largest and two-pointer the rest",
+    "Count ranges when a+b>c"
+  ],
+  "relatedProblems": [
+    "schedule-max-compatible",
+    "interval-list-intersection"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 50,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def triangle_number(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def triangle_number(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {number}\n */\nfunction triangle_number(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int triangle_number(int[] nums) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint triangle_number(int* nums) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int triangle_number(vector<int>& nums) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

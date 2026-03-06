@@ -1,0 +1,95 @@
+{
+  "id": "majority-element-over-n2",
+  "title": "Majority Element over n/2",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Return the element that appears more than n/2 times in the array. You may assume such an element always exists. Use the Boyer–Moore voting algorithm to achieve O(n) time and O(1) space.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/majority-element/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nThe majority element outvotes all others combined. Maintain a candidate and a counter. When the counter is zero, adopt the current element as the candidate. Increment on matches and decrement on mismatches. The final candidate is the majority.\n\nApproach\n1. Initial Setup: Initialize cand=None and count=0.\n2. Main Algorithm: Scan elements, update candidate and count accordingly.\n3. Return Result: Return the final candidate.\n\nComplexity Analysis\n- Time Complexity: O(n) because the algorithm scans elements a constant\n  number of times and performs O(1) work for each update or lookup.\n- Space Complexity: O(1) due to the auxiliary structures required to\n  store counts, prefix sums, or membership sets while ensuring fast access.\n\nKey Insights\n- Voting simulates canceling pairs of different elements\n- A majority over n/2 cannot be eliminated by cancellation\n\nCommon Pitfalls\n- Forgetting the existence guarantee would require verification\n- Using extra memory is unnecessary for this guarantee",
+  "solutionCode": "def majority_elements_n_over_2(nums):\n    cand = None\n    count = 0\n    for x in nums:\n        if count == 0:\n            cand = x\n            count = 1\n        elif x == cand:\n            count += 1\n        else:\n            count -= 1\n    return cand",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          3,
+          2,
+          3
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "3 appears twice in length 3"
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          2,
+          1,
+          1,
+          1,
+          2,
+          2
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "2 dominates occurrences"
+    },
+    {
+      "input": {
+        "nums": [
+          1
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single element is trivially majority"
+    },
+    {
+      "input": {
+        "nums": [
+          6,
+          6,
+          6,
+          7,
+          7
+        ]
+      },
+      "expected": {
+        "result": 6
+      },
+      "explanation": "6 exceeds n/2"
+    }
+  ],
+  "tags": [
+    "array"
+  ],
+  "hints": [
+    "Can you cancel pairs of different values",
+    "Track a candidate with a counter",
+    "Adopt new candidate when counter drops to zero"
+  ],
+  "relatedProblems": [
+    "majority-elements-over-n3",
+    "top-k-frequent-elements"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 62.5,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def majority_elements_n_over_2(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def majority_elements_n_over_2(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {number}\n */\nfunction majority_elements_n_over_2(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int majority_elements_n_over_2(int[] nums) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint majority_elements_n_over_2(int* nums) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int majority_elements_n_over_2(vector<int>& nums) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

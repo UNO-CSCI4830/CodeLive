@@ -1,0 +1,102 @@
+{
+  "id": "widest-water-reservoir",
+  "title": "Widest Water Reservoir",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "You are given an array heights where heights[i] is the height of a vertical wall at position i. Choose two walls to hold water between them. The amount of water is the area formed by the width between the walls and the smaller height. Return the maximum area possible.\n\n    \n\nConstraints:\n    - 2 ≤ len(heights) ≤ 10^5\n- 0 ≤ heights[i] ≤ 10^4",
+  "leetcodeUrl": "https://leetcode.com/problems/container-with-most-water/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nThe width shrinks as pointers move inward. A taller wall cannot help if the other side is shorter. Move the pointer at the shorter wall to possibly find a taller boundary while decreasing width slowly.\n\nApproach\n1. Initial Setup: Place pointers at both ends.\n2. Main Algorithm: Compute area and update best. Move the shorter wall inward since the taller side cannot increase the area without a taller partner.\n3. Return Result: Return the best area found over the sweep.\n\nComplexity Analysis\n- Time Complexity: O(n) because the scan adjusts pointers a limited\n  number of times and avoids nested loops.\n- Space Complexity: O(1) since only a few variables or an output\n  list are used.\n\nKey Insights\n- Two pointers explore all useful pairs without nested loops\n- Only the limiting side is worth moving at each step\n\nCommon Pitfalls\n- Moving the taller wall can miss better pairs\n- Forgetting to update best before moving pointers",
+  "solutionCode": "def widest_water_reservoir(heights):\n    left, right = 0, len(heights) - 1\n    best = 0\n    while left < right:\n        h = min(heights[left], heights[right])\n        width = right - left\n        best = max(best, h * width)\n        if heights[left] < heights[right]:\n            left += 1\n        else:\n            right -= 1\n    return best",
+  "testCases": [
+    {
+      "input": {
+        "heights": [
+          1,
+          8,
+          6,
+          2,
+          5,
+          4,
+          8,
+          3,
+          7
+        ]
+      },
+      "expected": {
+        "result": 49
+      },
+      "explanation": "Classic optimal pair at i=1, j=8"
+    },
+    {
+      "input": {
+        "heights": [
+          1,
+          1
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Only two walls available"
+    },
+    {
+      "input": {
+        "heights": [
+          4,
+          3,
+          2,
+          1,
+          4
+        ]
+      },
+      "expected": {
+        "result": 16
+      },
+      "explanation": "Best is 4 and 4 across width 4"
+    },
+    {
+      "input": {
+        "heights": [
+          0,
+          0,
+          0,
+          10,
+          0,
+          0
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Zero height walls yield zero area except single 10"
+    }
+  ],
+  "tags": [
+    "array",
+    "two-pointers"
+  ],
+  "hints": [
+    "Start from both ends to maximize width first",
+    "Area is limited by the smaller side",
+    "Move the limiting side inward"
+  ],
+  "relatedProblems": [
+    "sorted-squares-rebuilder",
+    "pair-with-target-in-sorted"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 53,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def widest_water_reservoir(heights: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def widest_water_reservoir(heights: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] heights}\n * @return {number}\n */\nfunction widest_water_reservoir(heights) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int widest_water_reservoir(int[] heights) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint widest_water_reservoir(int* heights) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int widest_water_reservoir(vector<int>& heights) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

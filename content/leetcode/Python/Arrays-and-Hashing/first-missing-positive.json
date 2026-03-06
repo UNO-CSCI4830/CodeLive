@@ -1,0 +1,94 @@
+{
+  "id": "first-missing-positive",
+  "title": "First Missing Positive",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Return the smallest positive integer missing from the array. The algorithm must run in O(n) time and use O(1) extra space. Values can be negative or large. The key idea is to rearrange elements so that value v resides at index v-1 whenever possible, then scan for the first mismatch.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/first-missing-positive/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nNumbers outside [1..n] cannot affect the smallest missing positive in an array of length n. Placing each number v into position v−1 whenever feasible ensures that if the array contains all 1..k, the first k slots will reflect that fact. The first index where nums[i] != i+1 identifies the minimal missing positive.\n\nApproach\n1. Initial Setup: Treat the array as a hash table where position i holds value i+1.\n2. Main Algorithm: Walk i from 0..n−1 and repeatedly swap nums[i] into its target index while it belongs in [1..n] and is not already placed.\n3. Return Result: Scan for the first i with nums[i] != i+1. If none, answer is n+1.\n\nComplexity Analysis\n- Time Complexity: O(n) because the algorithm scans elements a constant\n  number of times and performs O(1) work for each update or lookup.\n- Space Complexity: O(1) due to the auxiliary structures required to\n  store counts, prefix sums, or membership sets while ensuring fast access.\n\nKey Insights\n- Index placement converts membership into a local check\n- Ignoring out-of-range values keeps work bounded\n\nCommon Pitfalls\n- Swapping without checking destination causes infinite loops\n- Forgetting final scan misses the n+1 case",
+  "solutionCode": "def first_missing_positive(nums):\n    n = len(nums)\n    i = 0\n    while i < n:\n        v = nums[i]\n        pos = v - 1\n        if 1 <= v <= n and nums[pos] != v:\n            nums[i], nums[pos] = nums[pos], nums[i]\n        else:\n            i += 1\n    for i in range(n):\n        if nums[i] != i + 1:\n            return i + 1\n    return n + 1",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          0
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Missing 3 after placing 1 and 2"
+    },
+    {
+      "input": {
+        "nums": [
+          3,
+          4,
+          -1,
+          1
+        ]
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "After placement, slot for 2 is empty"
+    },
+    {
+      "input": {
+        "nums": [
+          7,
+          8,
+          9,
+          11,
+          12
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "No 1 present so answer is 1"
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          2
+        ]
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Duplicates do not fill missing 1"
+    }
+  ],
+  "tags": [
+    "array",
+    "hash-table"
+  ],
+  "hints": [
+    "Treat indices as buckets for values 1..n",
+    "Swap nums[i] into its correct position until stable",
+    "Scan to find the first mismatch i where nums[i] != i+1"
+  ],
+  "relatedProblems": [
+    "longest-consecutive-streak",
+    "find-balance-pivot"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 39.2,
+    "frequency": "high",
+    "importance": 10
+  },
+  "starterCode": "def first_missing_positive(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def first_missing_positive(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {number}\n */\nfunction first_missing_positive(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int first_missing_positive(int[] nums) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint first_missing_positive(int* nums) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int first_missing_positive(vector<int>& nums) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

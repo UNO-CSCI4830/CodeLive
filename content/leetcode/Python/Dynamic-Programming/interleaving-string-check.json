@@ -1,0 +1,84 @@
+{
+  "id": "interleaving-string-check",
+  "title": "Check Interleaving of Two Strings",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given strings s1, s2, s3, return True if s3 is formed by interleaving s1 and s2 preserving character order of each.\n\n    \n\nConstraints:\n    - 0 ≤ |s1|,|s2| ≤ 200\n- 0 ≤ |s3| ≤ 400",
+  "leetcodeUrl": "https://leetcode.com/problems/interleaving-string/",
+  "complexity": {
+    "time": "O(nm)",
+    "space": "O(nm)"
+  },
+  "explanation": "Intuition\ndp[i][j] indicates if s3[:i+j] can be formed using s1[:i] and s2[:j]. Transition tries taking next char from s1 or s2 if it matches s3.\n\nApproach\n1. Initial Setup: If lengths mismatch return False\n2. Main Algorithm: Initialize dp[0][0]=True; fill first row/col then full grid by OR of taking from s1 or s2\n3. Return Result: Return dp[n][m]\n\nComplexity Analysis\n- Time Complexity: O(nm)\n- Space Complexity: O(nm)\n\nKey Insights\n- Index mapping i+j to s3 position is key\n- Either source may provide next char\n\nCommon Pitfalls\n- Forgetting base rows leads to false negatives\n- Be careful with equality checks",
+  "solutionCode": "def is_interleave(s1: str, s2: str, s3: str) -> bool:\n    n, m, k = len(s1), len(s2), len(s3)\n    if n + m != k:\n        return False\n    dp = [[False]*(m+1) for _ in range(n+1)]\n    dp[0][0] = True\n    for i in range(1, n+1):\n        dp[i][0] = dp[i-1][0] and s1[i-1] == s3[i-1]\n    for j in range(1, m+1):\n        dp[0][j] = dp[0][j-1] and s2[j-1] == s3[j-1]\n    for i in range(1, n+1):\n        for j in range(1, m+1):\n            a = dp[i-1][j] and s1[i-1] == s3[i+j-1]\n            b = dp[i][j-1] and s2[j-1] == s3[i+j-1]\n            dp[i][j] = a or b\n    return dp[n][m]",
+  "testCases": [
+    {
+      "input": {
+        "s1": "aabcc",
+        "s2": "dbbca",
+        "s3": "aadbbcbcac"
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Valid weave"
+    },
+    {
+      "input": {
+        "s1": "aabcc",
+        "s2": "dbbca",
+        "s3": "aadbbbaccc"
+      },
+      "expected": {
+        "result": false
+      },
+      "explanation": "Order breaks"
+    },
+    {
+      "input": {
+        "s1": "",
+        "s2": "",
+        "s3": ""
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "When is_interleave(s1=\"\", s2=\"\", s3=\"\"), the expected result is true"
+    },
+    {
+      "input": {
+        "s1": "abc",
+        "s2": "def",
+        "s3": "adbcef"
+      },
+      "expected": {
+        "result": true
+      },
+      "explanation": "Alternate merge"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "string"
+  ],
+  "hints": [
+    "dp[i][j] considers taking next from s1 or s2",
+    "First row and column depend on prefixes",
+    "Check length sum upfront"
+  ],
+  "relatedProblems": [
+    "distinct-subsequence-count",
+    "edit-distance-min"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 39,
+    "frequency": "medium",
+    "importance": 8
+  },
+  "starterCode": "def is_interleave(s1: str, s2: str, s3: str) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def is_interleave(s1: str, s2: str, s3: str) -> bool:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s1, string s2, string s3}\n * @return {boolean}\n */\nfunction is_interleave(s1, s2, s3) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public boolean is_interleave(String s1, String s2, String s3) {\n        // Write your solution here\n        return false;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nbool is_interleave(char* s1, char* s2, char* s3) {\n    // Write your solution here\n    return false;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    bool is_interleave(string& s1, string& s2, string& s3) {\n        // Write your solution here\n        return false;\n    }\n};"
+}

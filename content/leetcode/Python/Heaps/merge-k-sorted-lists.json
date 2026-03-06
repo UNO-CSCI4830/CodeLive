@@ -1,0 +1,113 @@
+{
+  "id": "merge-k-sorted-lists",
+  "title": "Merge K Sorted Linked Lists with a Min-Heap",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "You are given an array of k singly linked lists, each sorted in ascending order. Merge them into one sorted list and return its head. Use a min-heap of the current heads to repeatedly extract the smallest node. This emphasizes how heaps coordinate k-way merges efficiently.\n\n    \n\nConstraints:\n    - 0 ≤ k ≤ 10^4\n- Total nodes across lists ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/merge-k-sorted-lists/",
+  "complexity": {
+    "time": "O(N log k)",
+    "space": "O(k)"
+  },
+  "explanation": "Intuition\nAt any moment, the smallest next element is among the list heads. A min-heap keyed by node value chooses the next node in O(log k).\n\nApproach\n1. Initial Setup: Push each non-empty list head into heap with (val, id, node)\n2. Main Algorithm: Pop the smallest, append to output, and push its next if present\n3. Return Result: Continue until the heap is empty\n\nComplexity Analysis\n- Time Complexity: O(N log k)\n- Space Complexity: O(k)\n\nKey Insights\n- Tie-break with an index to avoid comparing nodes\n- Heap reduces k-way selection to log k\n\nCommon Pitfalls\n- Pushing None nodes will crash\n- Forgetting to advance the source list drops elements",
+  "solutionCode": "import heapq\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\ndef merge_k_lists(lists):\n    heap = []\n    dummy = ListNode(0)\n    tail = dummy\n    for i, node in enumerate(lists):\n        if node:\n            heapq.heappush(heap, (node.val, i, node))\n    while heap:\n        _, i, node = heapq.heappop(heap)\n        tail.next = node\n        tail = tail.next\n        if node.next:\n            heapq.heappush(heap, (node.next.val, i, node.next))\n    return dummy.next",
+  "testCases": [
+    {
+      "input": {
+        "lists": [
+          [
+            1,
+            4,
+            5
+          ],
+          [
+            1,
+            3,
+            4
+          ],
+          [
+            2,
+            6
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          1,
+          1,
+          2,
+          3,
+          4,
+          4,
+          5,
+          6
+        ]
+      },
+      "explanation": "Classic 3-way merge"
+    },
+    {
+      "input": {
+        "lists": []
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "When __init__(lists=[]), the expected result is []"
+    },
+    {
+      "input": {
+        "lists": [
+          []
+        ]
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Single empty list"
+    },
+    {
+      "input": {
+        "lists": [
+          [
+            1
+          ],
+          [
+            0
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          0,
+          1
+        ]
+      },
+      "explanation": "Two lists small case"
+    }
+  ],
+  "tags": [
+    "heap",
+    "linked-list",
+    "divide-and-conquer"
+  ],
+  "hints": [
+    "Initialize heap with each list head",
+    "Pop smallest and push its next",
+    "Use an index to break ties between nodes"
+  ],
+  "relatedProblems": [
+    "kth-largest-in-array",
+    "k-closest-points"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 48,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any next}\n * @return {any}\n */\nfunction __init__(self, val, next) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> __init__(any self, any val, any next) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] __init__(any self, any val, any next) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] __init__(any& self, any& val, any& next) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

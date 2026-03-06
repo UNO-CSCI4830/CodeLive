@@ -1,0 +1,103 @@
+{
+  "id": "remove-nth-from-end",
+  "title": "Remove Nth From End",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given Remove the n-th node from the end of the list and return the head. Solve in one pass by maintaining a gap of n nodes between two pointers.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ list length\n- 0 ≤ list length ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/remove-nth-node-from-end-of-list/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nAdvance the first pointer n steps ahead, then move both pointers together until first reaches the end. The second pointer will be just before the node to delete.\n\nApproach\n1. Initial Setup: Create a dummy node before head.\n2. Main Algorithm: Advance first by n steps, then move both until first.next is None.\n3. Return Result: Bypass second.next to remove the node.\n\nComplexity Analysis\n- Time Complexity: O(n) due to a single pass or divide-and-conquer\n  over the list where each node is visited a bounded number of times.\n- Space Complexity: O(1) accounting for pointers and, when needed,\n  recursion depth or extra structures.\n\nKey Insights\n- A dummy simplifies deleting the head\n- Maintaining a fixed gap encodes the from-end position\n\nCommon Pitfalls\n- Not handling n equal to length deletes wrong node\n- Forgetting to return dummy.next",
+  "solutionCode": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\ndef remove_nth_from_end(head, n):\n    dummy = ListNode(0, head)\n    first = second = dummy\n    for _ in range(n):\n        first = first.next\n    while first and first.next:\n        first = first.next\n        second = second.next\n    second.next = second.next.next if second.next else None\n    return dummy.next",
+  "testCases": [
+    {
+      "input": {
+        "list": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "n": 2
+      },
+      "expected": {
+        "result": [
+          1,
+          2,
+          3,
+          5
+        ]
+      },
+      "explanation": "Remove the 4"
+    },
+    {
+      "input": {
+        "list": [
+          1
+        ],
+        "n": 1
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Remove the only node"
+    },
+    {
+      "input": {
+        "list": [
+          1,
+          2
+        ],
+        "n": 1
+      },
+      "expected": {
+        "result": [
+          1
+        ]
+      },
+      "explanation": "Remove tail"
+    },
+    {
+      "input": {
+        "list": [
+          1,
+          2
+        ],
+        "n": 2
+      },
+      "expected": {
+        "result": [
+          2
+        ]
+      },
+      "explanation": "Remove head"
+    }
+  ],
+  "tags": [
+    "linked-list",
+    "two-pointers"
+  ],
+  "hints": [
+    "Advance a lead pointer by n",
+    "Use a dummy to simplify head removal",
+    "Stop when lead reaches the end"
+  ],
+  "relatedProblems": [
+    "reverse-linked-list",
+    "reorder-linked-list"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 61,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any next}\n * @return {any}\n */\nfunction __init__(self, val, next) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> __init__(any self, any val, any next) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] __init__(any self, any val, any next) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] __init__(any& self, any& val, any& next) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

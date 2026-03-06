@@ -1,0 +1,141 @@
+{
+  "id": "k-closest-points",
+  "title": "K Closest Points to the Origin",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given an array of points on a 2D plane, return the k points closest to the origin using Euclidean distance. Use a size-k max-heap to keep the k best by storing negative squared distances in Python's min-heap or by pushing (dist, point) and popping the largest when size exceeds k.\n\n    \n\nConstraints:\n    - 1 ≤ len(points) ≤ 10^5\n- k ≥ 1\n- Coordinates fit 32-bit integers",
+  "leetcodeUrl": "https://leetcode.com/problems/k-closest-points-to-origin/",
+  "complexity": {
+    "time": "O(n log k)",
+    "space": "O(k)"
+  },
+  "explanation": "Intuition\nSquared distance preserves ordering while avoiding square roots. A max-heap of size k discards points farther than the current boundary.\n\nApproach\n1. Initial Setup: Iterate points computing squared distance\n2. Main Algorithm: Maintain a size-k heap that keeps the k smallest distances\n3. Return Result: Return points stored in the heap\n\nComplexity Analysis\n- Time Complexity: O(n log k)\n- Space Complexity: O(k)\n\nKey Insights\n- Use squared distances to avoid float errors\n- Heap boundary equals current k-th best distance\n\nCommon Pitfalls\n- Using exact sqrt slows code and risks precision\n- Mixing x^2+y^2 with Manhattan distance changes ranking",
+  "solutionCode": "import heapq\ndef k_closest(points, k):\n    heap = []\n    for x, y in points:\n        d = x*x + y*y\n        item = (-d, x, y)\n        if len(heap) < k:\n            heapq.heappush(heap, item)\n        else:\n            if item > heap[0]:\n                heapq.heapreplace(heap, item)\n    return [[x, y] for _, x, y in heap]",
+  "testCases": [
+    {
+      "input": {
+        "points": [
+          [
+            1,
+            3
+          ],
+          [
+            -2,
+            2
+          ]
+        ],
+        "k": 1
+      },
+      "expected": {
+        "result": [
+          [
+            -2,
+            2
+          ]
+        ]
+      },
+      "explanation": "Distance 5 vs 8"
+    },
+    {
+      "input": {
+        "points": [
+          [
+            3,
+            3
+          ],
+          [
+            5,
+            -1
+          ],
+          [
+            -2,
+            4
+          ]
+        ],
+        "k": 2
+      },
+      "expected": {
+        "result": [
+          [
+            3,
+            3
+          ],
+          [
+            -2,
+            4
+          ]
+        ]
+      },
+      "explanation": "Two closest by squared distance"
+    },
+    {
+      "input": {
+        "points": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "k": 1
+      },
+      "expected": {
+        "result": [
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      "explanation": "Tie broken by heap order acceptable"
+    },
+    {
+      "input": {
+        "points": [
+          [
+            0,
+            0
+          ]
+        ],
+        "k": 1
+      },
+      "expected": {
+        "result": [
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      "explanation": "Origin itself"
+    }
+  ],
+  "tags": [
+    "heap",
+    "geometry",
+    "array"
+  ],
+  "hints": [
+    "Store negative distances to simulate a max-heap",
+    "Keep heap size at most k",
+    "Return the points left in the heap"
+  ],
+  "relatedProblems": [
+    "kth-largest-in-array",
+    "top-k-frequent-elements"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 70,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def k_closest(points: List[List[int]], k: int) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def k_closest(points: List[List[int]], k: int) -> List[List[int]]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] points, number k}\n * @return {any}\n */\nfunction k_closest(points, k) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<List<Integer>> k_closest(int[][] points, int k) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[List[int]] k_closest(int[][] points, int k) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[List[int]] k_closest(vector<vector<int>>& points, int& k) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

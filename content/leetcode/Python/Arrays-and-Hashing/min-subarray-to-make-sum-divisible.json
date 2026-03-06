@@ -1,0 +1,99 @@
+{
+  "id": "min-subarray-to-make-sum-divisible",
+  "title": "Min Subarray to Make Sum Divisible",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Given an array nums and an integer p, remove the smallest length contiguous subarray so that the sum of the remaining elements is divisible by p. Return that minimal length, or -1 if impossible. The entire array cannot be removed.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- 1 ≤ p ≤ 10^9\n- -10^9 ≤ nums[i] ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/make-sum-divisible-by-p/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nLet total be the sum of the array and r = total mod p. We need a subarray with sum ≡ r (mod p) to delete. Using prefix modular sums, we seek i < j with (pref[j] − pref[i]) mod p = r, which implies pref[i] ≡ pref[j] − r (mod p). Mapping the earliest index for each remainder lets us discover minimal windows as we scan.\n\nApproach\n1. Initial Setup: Compute r = total mod p; if r == 0, return 0.\n2. Main Algorithm: Maintain a map from remainder to earliest index. For each index j with prefix sum Sj, let need = (Sj − r) mod p. Update the answer using seen[need] if it exists, then record seen[Sj] = j.\n3. Return Result: Return minimal window length unless it equals n, in which case return -1.\n\nComplexity Analysis\n- Time Complexity: O(n) because the algorithm scans elements a constant\n  number of times and performs O(1) work for each update or lookup.\n- Space Complexity: O(n) due to the auxiliary structures required to\n  store counts, prefix sums, or membership sets while ensuring fast access.\n\nKey Insights\n- Modular arithmetic turns divisibility into residue matching\n- Storing earliest indices yields minimal-length windows\n\nCommon Pitfalls\n- Forgetting to allow negative numbers in sums\n- Returning n means removing the entire array, which is invalid",
+  "solutionCode": "def min_subarray_to_make_sum_divisible(nums, p):\n    total = sum(nums)\n    target = total % p\n    if target == 0:\n        return 0\n    seen = {0: -1}\n    cur = 0\n    ans = len(nums)\n    for i, x in enumerate(nums):\n        cur = (cur + x) % p\n        need = (cur - target) % p\n        if need in seen:\n            ans = min(ans, i - seen[need])\n        seen[cur] = i\n    return -1 if ans == len(nums) else ans",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          3,
+          1,
+          4,
+          2
+        ],
+        "p": 6
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Remove [4] to get sum divisible by 6"
+    },
+    {
+      "input": {
+        "nums": [
+          6,
+          3,
+          5,
+          2
+        ],
+        "p": 9
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "Remove [5,2] to fix remainder 8"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ],
+        "p": 3
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Already divisible"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ],
+        "p": 7
+      },
+      "expected": {
+        "result": -1
+      },
+      "explanation": "Cannot remove entire array; no solution"
+    }
+  ],
+  "tags": [
+    "array",
+    "hash-table",
+    "prefix-sum"
+  ],
+  "hints": [
+    "Translate the requirement using modular arithmetic",
+    "Track earliest index for each prefix remainder",
+    "Avoid removing the entire array"
+  ],
+  "relatedProblems": [
+    "count-subarrays-sum-to-k",
+    "find-balance-pivot"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 42.8,
+    "frequency": "medium",
+    "importance": 8
+  },
+  "starterCode": "def min_subarray_to_make_sum_divisible(nums: List[int], p: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def min_subarray_to_make_sum_divisible(nums: List[int], p: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number p}\n * @return {number}\n */\nfunction min_subarray_to_make_sum_divisible(nums, p) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int min_subarray_to_make_sum_divisible(int[] nums, int p) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint min_subarray_to_make_sum_divisible(int* nums, int p) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int min_subarray_to_make_sum_divisible(vector<int>& nums, int& p) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

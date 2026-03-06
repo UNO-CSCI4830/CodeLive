@@ -1,0 +1,96 @@
+{
+  "id": "find-balance-pivot",
+  "title": "Find Balance Pivot",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Return the index where the sum of elements to the left equals the sum to the right. If multiple pivots exist, return the leftmost. If no pivot exists, return -1.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/find-pivot-index/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nIf total is the sum of all numbers, then at index i we need left == total − left − nums[i]. Maintain a running left sum and test this equation at each step.\n\nApproach\n1. Initial Setup: Compute total sum.\n2. Main Algorithm: Scan while tracking left sum. When left equals total − left − nums[i], return i.\n3. Return Result: If none match, return −1.\n\nComplexity Analysis\n- Time Complexity: O(n) because the algorithm scans elements a constant\n  number of times and performs O(1) work for each update or lookup.\n- Space Complexity: O(1) due to the auxiliary structures required to\n  store counts, prefix sums, or membership sets while ensuring fast access.\n\nKey Insights\n- Balancing reduces to a simple algebraic identity\n- Only a single pass and two numbers are necessary\n\nCommon Pitfalls\n- Updating left before testing shifts the balance point\n- Ignoring integer overflow in other languages can be a pitfall",
+  "solutionCode": "def find_balance_pivot(nums):\n    total = sum(nums)\n    left = 0\n    for i, x in enumerate(nums):\n        if left == total - left - x:\n            return i\n        left += x\n    return -1",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          7,
+          3,
+          6,
+          5,
+          6
+        ]
+      },
+      "expected": {
+        "result": 3
+      },
+      "explanation": "Left sum 11 equals right sum 11 at index 3"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3
+        ]
+      },
+      "expected": {
+        "result": -1
+      },
+      "explanation": "No balance point"
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          1,
+          -1
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Pivot at leftmost index"
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "All zeros create many valid pivots, choose leftmost"
+    }
+  ],
+  "tags": [
+    "array",
+    "prefix-sum"
+  ],
+  "hints": [
+    "Relate left sum and right sum to the total",
+    "Update left sum after testing the condition",
+    "Return the leftmost valid index"
+  ],
+  "relatedProblems": [
+    "product-except-self",
+    "count-subarrays-sum-to-k"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 69.3,
+    "frequency": "medium",
+    "importance": 5
+  },
+  "starterCode": "def find_balance_pivot(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def find_balance_pivot(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {number}\n */\nfunction find_balance_pivot(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int find_balance_pivot(int[] nums) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint find_balance_pivot(int* nums) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int find_balance_pivot(vector<int>& nums) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

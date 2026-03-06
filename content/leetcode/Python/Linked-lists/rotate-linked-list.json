@@ -1,0 +1,103 @@
+{
+  "id": "rotate-linked-list",
+  "title": "Rotate Linked List",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given Rotate the list to the right by k places. For example, rotating [1,2,3,4,5] by 2 yields [4,5,1,2,3].\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5\n- 0 ≤ k ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/rotate-list/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nConnecting tail to head forms a cycle. The new tail sits at position n - (k mod n) - 1. Break the cycle after the new tail to obtain the rotated list.\n\nApproach\n1. Initial Setup: Compute n and connect tail to head.\n2. Main Algorithm: Find new tail at n - (k mod n) - 1 steps from head.\n3. Return Result: Detach and return the next node as new head.\n\nComplexity Analysis\n- Time Complexity: O(n) due to a single pass or divide-and-conquer\n  over the list where each node is visited a bounded number of times.\n- Space Complexity: O(1) accounting for pointers and, when needed,\n  recursion depth or extra structures.\n\nKey Insights\n- Making the list circular simplifies pointer math\n- Modding k by n avoids unnecessary traversal\n\nCommon Pitfalls\n- Forgetting to break the cycle creates an infinite loop\n- Not handling k mod n == 0 returns a rotated but identical list",
+  "solutionCode": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\ndef rotate_list(head, k):\n    if not head or not head.next or k == 0:\n        return head\n    n = 1\n    tail = head\n    while tail.next:\n        tail = tail.next\n        n += 1\n    k %= n\n    if k == 0:\n        return head\n    tail.next = head\n    steps_to_new_tail = n - k - 1\n    new_tail = head\n    for _ in range(steps_to_new_tail):\n        new_tail = new_tail.next\n    new_head = new_tail.next\n    new_tail.next = None\n    return new_head",
+  "testCases": [
+    {
+      "input": {
+        "list": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "k": 2
+      },
+      "expected": {
+        "result": [
+          4,
+          5,
+          1,
+          2,
+          3
+        ]
+      },
+      "explanation": "Rotate by 2"
+    },
+    {
+      "input": {
+        "list": [
+          0,
+          1,
+          2
+        ],
+        "k": 4
+      },
+      "expected": {
+        "result": [
+          2,
+          0,
+          1
+        ]
+      },
+      "explanation": "k mod n = 1"
+    },
+    {
+      "input": {
+        "list": [],
+        "k": 3
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Empty stays empty"
+    },
+    {
+      "input": {
+        "list": [
+          1
+        ],
+        "k": 99
+      },
+      "expected": {
+        "result": [
+          1
+        ]
+      },
+      "explanation": "Single node unchanged"
+    }
+  ],
+  "tags": [
+    "linked-list"
+  ],
+  "hints": [
+    "Close the list into a ring",
+    "Find new tail using n - (k mod n) - 1",
+    "Break the ring at the correct place"
+  ],
+  "relatedProblems": [
+    "reverse-linked-list",
+    "reorder-linked-list"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 48,
+    "frequency": "medium",
+    "importance": 7
+  },
+  "starterCode": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, next: any) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any next}\n * @return {any}\n */\nfunction __init__(self, val, next) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> __init__(any self, any val, any next) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] __init__(any self, any val, any next) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] __init__(any& self, any& val, any& next) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

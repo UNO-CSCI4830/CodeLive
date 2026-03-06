@@ -1,0 +1,119 @@
+{
+  "id": "frequency-sort-array",
+  "title": "Frequency Sort Array",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given Rearrange an array so that elements appear in ascending order of frequency. If two numbers share the same frequency, place the larger value first among those ties. Return the sorted array.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/sort-array-by-increasing-frequency/",
+  "complexity": {
+    "time": "O(n log n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nWe must sort by a compound key: primary by frequency ascending, secondary by value descending. Counting with a hash map followed by a custom-key sort yields a concise solution.\n\nApproach\n1. Initial Setup: Count frequencies with a map.\n2. Main Algorithm: Use Python's sorted with a key that returns (freq[x], -x).\n3. Return Result: Return the sorted list as required.\n\nComplexity Analysis\n- Time Complexity: O(n log n) because the algorithm scans elements a constant\n  number of times and performs O(1) work for each update or lookup.\n- Space Complexity: O(n) due to the auxiliary structures required to\n  store counts, prefix sums, or membership sets while ensuring fast access.\n\nKey Insights\n- Composite sort keys encode multi-criteria ordering\n- Counting decouples value distribution from ordering\n\nCommon Pitfalls\n- Sorting by value first breaks the frequency requirement\n- Using frequency descending inverts the primary goal",
+  "solutionCode": "from collections import Counter\ndef frequency_sort_array(nums):\n    cnt = Counter(nums)\n    return sorted(nums, key=lambda x: (cnt[x], -x))",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          2,
+          2,
+          2,
+          3
+        ]
+      },
+      "expected": {
+        "result": [
+          3,
+          1,
+          1,
+          2,
+          2,
+          2
+        ]
+      },
+      "explanation": "Least frequent first; tie broken by value desc"
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          3,
+          1,
+          3,
+          2
+        ]
+      },
+      "expected": {
+        "result": [
+          1,
+          3,
+          3,
+          2,
+          2
+        ]
+      },
+      "explanation": "Frequencies: 1→1, 2→2, 3→2"
+    },
+    {
+      "input": {
+        "nums": [
+          -1,
+          -1,
+          -2,
+          -2,
+          -2
+        ]
+      },
+      "expected": {
+        "result": [
+          -1,
+          -1,
+          -2,
+          -2,
+          -2
+        ]
+      },
+      "explanation": "Tie handling with negatives"
+    },
+    {
+      "input": {
+        "nums": [
+          5
+        ]
+      },
+      "expected": {
+        "result": [
+          5
+        ]
+      },
+      "explanation": "Single element remains as is"
+    }
+  ],
+  "tags": [
+    "array",
+    "hash-table",
+    "sorting"
+  ],
+  "hints": [
+    "Start by counting occurrences",
+    "A composite key handles both criteria",
+    "Remember value should decrease when frequencies tie"
+  ],
+  "relatedProblems": [
+    "top-k-frequent-elements",
+    "group-words-by-anagram"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 60.2,
+    "frequency": "medium",
+    "importance": 6
+  },
+  "starterCode": "def frequency_sort_array(nums: List[int]) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def frequency_sort_array(nums: List[int]) -> List[int]:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {any}\n */\nfunction frequency_sort_array(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public List<Integer> frequency_sort_array(int[] nums) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nList[int] frequency_sort_array(int* nums) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    List[int] frequency_sort_array(vector<int>& nums) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

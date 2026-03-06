@@ -1,0 +1,103 @@
+{
+  "id": "invert-binary-tree",
+  "title": "Invert Binary Tree",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given Invert a binary tree by swapping left and right children for every node.\n\nConstraints:\n- 0 ≤ nodes ≤ 10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/invert-binary-tree/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(h) recursion"
+  },
+  "explanation": "Intuition\nSwapping the children of each node recursively mirrors the tree. The operation is local and independent per node.\n\nApproach\n1. Initial Setup: If node is None, return\n2. Main Algorithm: Swap node.left and node.right\n3. Return Result: Recurse on both children\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(h) recursion\n\nKey Insights\n- Purely structural transform\n- Preorder or postorder both work\n\nCommon Pitfalls\n- Not recursing after swap leaves subtrees uninverted\n- Stack depth issues on degenerate trees",
+  "solutionCode": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef invert_binary_tree(root: TreeNode) -> TreeNode:\n    if not root:\n        return None\n    root.left, root.right = invert_binary_tree(root.right),                             invert_binary_tree(root.left)\n    return root",
+  "testCases": [
+    {
+      "input": {
+        "tree": [
+          4,
+          2,
+          7,
+          1,
+          3,
+          6,
+          9
+        ]
+      },
+      "expected": {
+        "result": [
+          4,
+          7,
+          2,
+          9,
+          6,
+          3,
+          1
+        ]
+      },
+      "explanation": "Mirror image"
+    },
+    {
+      "input": {
+        "tree": []
+      },
+      "expected": {
+        "result": []
+      },
+      "explanation": "Empty tree unchanged"
+    },
+    {
+      "input": {
+        "tree": [
+          1
+        ]
+      },
+      "expected": {
+        "result": [
+          1
+        ]
+      },
+      "explanation": "Single node unchanged structurally"
+    },
+    {
+      "input": {
+        "tree": [
+          2,
+          1,
+          3
+        ]
+      },
+      "expected": {
+        "result": [
+          2,
+          3,
+          1
+        ]
+      },
+      "explanation": "Swap children at each node"
+    }
+  ],
+  "tags": [
+    "tree",
+    "dfs"
+  ],
+  "hints": [
+    "Swap and recurse",
+    "Order of recursion does not matter"
+  ],
+  "relatedProblems": [
+    "right-side-view",
+    "level-order-traversal"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 75.1,
+    "frequency": "medium",
+    "importance": 5
+  },
+  "starterCode": "def __init__(self: any, val: any, left: any, right: any) -> TreeNode:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any, val: any, left: any, right: any) -> TreeNode:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self, any val, any left, any right}\n * @return {any}\n */\nfunction __init__(self, val, left, right) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public TreeNode __init__(any self, any val, any left, any right) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nTreeNode __init__(any self, any val, any left, any right) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    TreeNode __init__(any& self, any& val, any& left, any& right) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

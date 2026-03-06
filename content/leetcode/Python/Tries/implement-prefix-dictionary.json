@@ -1,0 +1,153 @@
+{
+  "id": "implement-prefix-dictionary",
+  "title": "Implement a Prefix Dictionary",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given Design a prefix dictionary supporting insertion of lowercase words, exact search, and prefix queries. The API exposes three methods: `insert(word)`, `search(word)`, and `startsWith(prefix)`. Use a trie so that each operation runs in time proportional to the input length. Do not store words in auxiliary sets. The goal is to practice node allocation, child navigation, and end markers while writing small, clear methods suited for typing repetition.\n\n    \n\nConstraints:\n    - 1 ≤ total characters across all insertions ≤ 2·10^6\n- Words consist of 'a'..'z' only\n- 0 ≤ number of queries ≤ 2·10^5",
+  "leetcodeUrl": "https://leetcode.com/problems/implement-trie-prefix-tree/",
+  "complexity": {
+    "time": "O(L)",
+    "space": "O(Σ·N) nodes"
+  },
+  "explanation": "Intuition\nA trie organizes words character by character. Each node stores child pointers and a boolean end flag. Traversing L characters takes O(L) for both search and insert, independent of the number of words.\n\nApproach\n1. Initial Setup: Represent nodes with a dict from char to child\n2. Main Algorithm: Insert walks or creates children and marks end at the last node\n3. Return Result: Search walks and checks end; startsWith walks and returns True if traversal succeeds\n\nComplexity Analysis\n- Time Complexity: O(L) per operation\n- Space Complexity: O(total characters)\n\nKey Insights\n- End markers separate prefixes from full words\n- Hash maps keep implementation concise\n\nCommon Pitfalls\n- Returning True for prefixes in search is incorrect\n- Forgetting to create children lazily increases memory",
+  "solutionCode": "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.end = False\nclass Trie:\n    def __init__(self):\n        self.root = TrieNode()\n    def insert(self, word: str) -> None:\n        node = self.root\n        for ch in word:\n            if ch not in node.children:\n                node.children[ch] = TrieNode()\n            node = node.children[ch]\n        node.end = True\n    def search(self, word: str) -> bool:\n        node = self.root\n        for ch in word:\n            if ch not in node.children:\n                return False\n            node = node.children[ch]\n        return node.end\n    def startsWith(self, prefix: str) -> bool:\n        node = self.root\n        for ch in prefix:\n            if ch not in node.children:\n                return False\n            node = node.children[ch]\n        return True",
+  "testCases": [
+    {
+      "input": {
+        "ops": [
+          "insert",
+          "search",
+          "search",
+          "startsWith",
+          "insert",
+          "search"
+        ],
+        "args": [
+          [
+            "apple"
+          ],
+          [
+            "apple"
+          ],
+          [
+            "app"
+          ],
+          [
+            "app"
+          ],
+          [
+            "app"
+          ],
+          [
+            "app"
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          null,
+          true,
+          false,
+          true,
+          null,
+          true
+        ]
+      },
+      "explanation": "Classic check of prefix vs full word"
+    },
+    {
+      "input": {
+        "ops": [
+          "startsWith"
+        ],
+        "args": [
+          [
+            "a"
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          false
+        ]
+      },
+      "explanation": "No words inserted yet"
+    },
+    {
+      "input": {
+        "ops": [
+          "insert",
+          "startsWith"
+        ],
+        "args": [
+          [
+            "a"
+          ],
+          [
+            "a"
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          null,
+          true
+        ]
+      },
+      "explanation": "Single letter prefix"
+    },
+    {
+      "input": {
+        "ops": [
+          "insert",
+          "insert",
+          "search"
+        ],
+        "args": [
+          [
+            "app"
+          ],
+          [
+            "apple"
+          ],
+          [
+            "apple"
+          ]
+        ]
+      },
+      "expected": {
+        "result": [
+          null,
+          null,
+          true
+        ]
+      },
+      "explanation": "Longer word shares prefix"
+    }
+  ],
+  "tags": [
+    "trie",
+    "string",
+    "hash-table"
+  ],
+  "hints": [
+    "Each node needs an end-of-word flag",
+    "Create children lazily during insert",
+    "For search, require end flag at finish"
+  ],
+  "relatedProblems": [
+    "add-and-search-words",
+    "replace-words-using-dictionary"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 65,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def __init__(self: any) -> None:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any) -> None:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self}\n * @return {any}\n */\nfunction __init__(self) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public None __init__(any self) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nNone __init__(any self) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    None __init__(any& self) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

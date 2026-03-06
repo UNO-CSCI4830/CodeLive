@@ -1,0 +1,93 @@
+{
+  "id": "house-robber-linear",
+  "title": "House Robber on a Street",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given You are a professional robber planning to rob houses along a street. Each house has a non-negative amount of money. Adjacent houses cannot be robbed on the same night. Compute the maximum amount you can rob.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 1000\n- 0 ≤ nums[i] ≤ 10^4",
+  "leetcodeUrl": "https://leetcode.com/problems/house-robber/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nLet dp[i] be the best we can do up to index i. Transition compares skipping the house vs robbing it plus dp[i-2]. We can keep only two rolling values.\n\nApproach\n1. Initial Setup: Initialize prev2=0, prev1=nums[0]\n2. Main Algorithm: For each value x from index 1, cur=max(prev1, prev2+x); shift prev2=prev1, prev1=cur\n3. Return Result: Return prev1\n\nComplexity Analysis\n- Time Complexity: O(n)\n- Space Complexity: O(1)\n\nKey Insights\n- Choice between take and skip per house\n- Rolling window captures dp[i-1] and dp[i-2]\n\nCommon Pitfalls\n- Do not index below 0\n- All zeros return zero",
+  "solutionCode": "def rob(nums):\n    prev2, prev1 = 0, 0\n    for x in nums:\n        prev2, prev1 = prev1, max(prev1, prev2 + x)\n    return prev1",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          1
+        ]
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Take 1 and 3"
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          7,
+          9,
+          3,
+          1
+        ]
+      },
+      "expected": {
+        "result": 12
+      },
+      "explanation": "7+3 or 2+9+1, pick best 12"
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0,
+          0
+        ]
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Nothing to rob"
+    },
+    {
+      "input": {
+        "nums": [
+          100
+        ]
+      },
+      "expected": {
+        "result": 100
+      },
+      "explanation": "Single house"
+    }
+  ],
+  "tags": [
+    "dynamic-programming",
+    "array"
+  ],
+  "hints": [
+    "Take vs skip",
+    "Keep two rolling totals",
+    "No adjacency when taking a house"
+  ],
+  "relatedProblems": [
+    "house-robber-circle",
+    "delete-and-earn"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 78,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def rob(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def rob(nums: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {number}\n */\nfunction rob(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int rob(int[] nums) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint rob(int* nums) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int rob(vector<int>& nums) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

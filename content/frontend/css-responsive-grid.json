@@ -1,0 +1,43 @@
+{
+  "id": "css-responsive-grid",
+  "title": "Responsive Card Grid",
+  "category": "frontend",
+  "difficulty": "easy",
+  "description": "Write CSS to create a **responsive card grid** that adapts to different screen widths using CSS Grid.\n\n### Visual Target\n\n**Wide (≥ 768px):** 3 equal columns\n```\n┌──────┐ ┌──────┐ ┌──────┐\n│ Card │ │ Card │ │ Card │\n└──────┘ └──────┘ └──────┘\n┌──────┐ ┌──────┐ ┌──────┐\n│ Card │ │ Card │ │ Card │\n└──────┘ └──────┘ └──────┘\n```\n\n**Narrow (< 768px):** Cards stack in a single column, each full width\n```\n┌──────────────────┐\n│      Card        │\n└──────────────────┘\n┌──────────────────┐\n│      Card        │\n└──────────────────┘\n```\n\n### Requirements\n\n- `.grid` uses CSS Grid layout\n- Cards fill available space with `repeat(auto-fill, minmax(16rem, 1fr))`\n- Gap between cards: `1.5rem`\n- Grid has `2rem` padding\n- Each `.grid__card` has white background, `1rem` padding, `0.5rem` border-radius, and 1px solid `#e5e7eb` border\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Grid container | `grid` |\n| First card | `card-1` |\n| Second card | `card-2` |",
+  "constraints": "- Only edit styles.css\n- Use CSS Grid (not flexbox) for the grid layout\n- Use auto-fill with minmax for responsiveness — no media queries needed",
+  "hints": [
+    "Use display: grid with grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)).",
+    "The auto-fill keyword makes the grid automatically wrap cards when they can't fit at 16rem minimum.",
+    "Don't forget to set gap for spacing between grid items."
+  ],
+  "tags": ["css", "grid", "responsive", "layout"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport './styles.css';\n\nconst cards = [\n  { id: 1, title: 'Design', desc: 'Create beautiful interfaces' },\n  { id: 2, title: 'Develop', desc: 'Build robust applications' },\n  { id: 3, title: 'Deploy', desc: 'Ship to production' },\n  { id: 4, title: 'Monitor', desc: 'Track performance' },\n  { id: 5, title: 'Iterate', desc: 'Improve continuously' },\n  { id: 6, title: 'Scale', desc: 'Grow with confidence' },\n];\n\nexport default function App() {\n  return (\n    <div className=\"grid\" data-testid=\"grid\">\n      {cards.map(c => (\n        <div key={c.id} className=\"grid__card\" data-testid={`card-${c.id}`}>\n          <h3 className=\"grid__card-title\">{c.title}</h3>\n          <p className=\"grid__card-desc\">{c.desc}</p>\n        </div>\n      ))}\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "styles.css",
+      "content": "/* === Grid Container ===\n * TODO: Use CSS Grid\n * TODO: Set grid-template-columns with auto-fill and minmax(16rem, 1fr)\n * TODO: Set gap to 1.5rem\n * TODO: Add 2rem padding\n */\n.grid {\n\n}\n\n/* === Grid Card ===\n * TODO: White background\n * TODO: 1rem padding\n * TODO: 0.5rem border-radius\n * TODO: 1px solid #e5e7eb border\n */\n.grid__card {\n\n}\n\n/* Provided styles */\n.grid__card-title {\n  margin: 0 0 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n  color: #111827;\n}\n\n.grid__card-desc {\n  margin: 0;\n  font-size: 0.875rem;\n  color: #6b7280;\n}\n",
+      "language": "css",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport App from './App';\n\ndescribe('Responsive Card Grid', () => {\n  beforeEach(() => {\n    render(<App />);\n  });\n\n  it('grid uses CSS Grid', () => {\n    const grid = screen.getByTestId('grid');\n    expect(getComputedStyle(grid).display).toBe('grid');\n  });\n\n  it('grid has gap', () => {\n    const grid = screen.getByTestId('grid');\n    const styles = getComputedStyle(grid);\n    expect(styles.gap).toBe('1.5rem');\n  });\n\n  it('grid has padding', () => {\n    const grid = screen.getByTestId('grid');\n    const styles = getComputedStyle(grid);\n    expect(styles.padding).toBe('2rem');\n  });\n\n  it('card has white background', () => {\n    const card = screen.getByTestId('card-1');\n    expect(getComputedStyle(card).backgroundColor).toBe('rgb(255, 255, 255)');\n  });\n\n  it('card has border-radius', () => {\n    const card = screen.getByTestId('card-1');\n    expect(getComputedStyle(card).borderRadius).toBe('0.5rem');\n  });\n\n  it('card has border', () => {\n    const card = screen.getByTestId('card-1');\n    const styles = getComputedStyle(card);\n    expect(styles.borderStyle).toBe('solid');\n  });\n\n  it('card has padding', () => {\n    const card = screen.getByTestId('card-1');\n    expect(getComputedStyle(card).padding).toBe('1rem');\n  });\n\n  it('renders all 6 cards', () => {\n    for (let i = 1; i <= 6; i++) {\n      expect(screen.getByTestId(`card-${i}`)).toBeInTheDocument();\n    }\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "styles.css",
+      "content": ".grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));\n  gap: 1.5rem;\n  padding: 2rem;\n}\n\n.grid__card {\n  background-color: #ffffff;\n  padding: 1rem;\n  border-radius: 0.5rem;\n  border: 1px solid #e5e7eb;\n}\n\n.grid__card-title {\n  margin: 0 0 0.5rem;\n  font-size: 1rem;\n  font-weight: 600;\n  color: #111827;\n}\n\n.grid__card-desc {\n  margin: 0;\n  font-size: 0.875rem;\n  color: #6b7280;\n}\n",
+      "language": "css"
+    }
+  ],
+  "sort_order": 301
+}

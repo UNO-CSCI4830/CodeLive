@@ -1,0 +1,106 @@
+{
+  "id": "subsets-with-duplicates",
+  "title": "All Subsets With Duplicates Allowed",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Return all possible subsets of a list that may contain duplicates. Ensure the result does not contain duplicate subsets. Sort the array then skip equal elements at the same recursion depth.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 15\n- Elements may contain duplicates",
+  "leetcodeUrl": "https://leetcode.com/problems/subsets-ii/",
+  "complexity": {
+    "time": "O(n·2^n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nSorting groups identical values. When iterating choices at a level, skip a value equal to the one just used to avoid regenerating the same subset structure.\n\nApproach\n1. Initial Setup: Sort nums\n2. Main Algorithm: For loop from index to n, skip if i>start and nums[i]==nums[i-1]\n3. Return Result: Recurse after append, then pop\n\nComplexity Analysis\n- Time Complexity: O(n·2^n)\n- Space Complexity: O(n) recursion\n\nKey Insights\n- Sorting enables simple duplicate checks\n- Skip works per depth, not globally\n\nCommon Pitfalls\n- Skipping across recursion levels is incorrect\n- Not sorting makes skipping unreliable",
+  "solutionCode": "def subsets_with_dup(nums):\n    nums.sort()\n    res, path = [], []\n    def dfs(start):\n        res.append(path[:])\n        for i in range(start, len(nums)):\n            if i > start and nums[i] == nums[i - 1]:\n                continue\n            path.append(nums[i])\n            dfs(i + 1)\n            path.pop()\n    dfs(0)\n    return res",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          2
+        ]
+      },
+      "expected": {
+        "result": "size 6"
+      },
+      "explanation": "No duplicate subsets"
+    },
+    {
+      "input": {
+        "nums": []
+      },
+      "expected": {
+        "result": [
+          []
+        ]
+      },
+      "explanation": "Empty input"
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          2,
+          2
+        ]
+      },
+      "expected": {
+        "result": [
+          [],
+          [
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            2,
+            2
+          ]
+        ]
+      },
+      "explanation": "All same values"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          2,
+          3
+        ]
+      },
+      "expected": {
+        "result": "size 12"
+      },
+      "explanation": "Skips at depth"
+    }
+  ],
+  "tags": [
+    "backtracking",
+    "array",
+    "sorting"
+  ],
+  "hints": [
+    "Sort first",
+    "Skip i>start and nums[i]==nums[i-1]",
+    "Always append a copy"
+  ],
+  "relatedProblems": [
+    "subsets-without-duplicates",
+    "permute-unique"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 60,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def subsets_with_dup(nums: List[int]) -> str:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def subsets_with_dup(nums: List[int]) -> str:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums}\n * @return {any}\n */\nfunction subsets_with_dup(nums) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public str subsets_with_dup(int[] nums) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nstr subsets_with_dup(int* nums) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    str subsets_with_dup(vector<int>& nums) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

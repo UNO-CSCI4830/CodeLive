@@ -1,0 +1,142 @@
+{
+  "id": "median-from-data-stream",
+  "title": "Maintain the Median of a Data Stream",
+  "difficulty": "Hard",
+  "language": "python",
+  "description": "Given Design a structure that supports adding integers and querying the median at any time. Maintain two heaps: a max-heap for the lower half and a min-heap for the upper half, rebalancing so their sizes differ by at most one. This is a canonical two-heap pattern.\n\n    \n\nConstraints:\n    - Up to 2·10^5 operations\n- Values fit 32-bit signed",
+  "leetcodeUrl": "https://leetcode.com/problems/find-median-from-data-stream/",
+  "complexity": {
+    "time": "O(log n) per op",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nLower half's max and upper half's min pin the middle. Balancing keeps the median at the roots and enables O(1) read after O(log n) updates.\n\nApproach\n1. Initial Setup: Push to max-heap (store negative) or to min-heap based on value\n2. Main Algorithm: Move one element between heaps if sizes differ by 2\n3. Return Result: Median is either the average of roots or the root of the larger heap\n\nComplexity Analysis\n- Time Complexity: O(log n) per add\n- Space Complexity: O(n)\n\nKey Insights\n- Two heaps partition the stream on the fly\n- Negating values simulates a max-heap in Python\n\nCommon Pitfalls\n- Forgetting to rebalance leads to wrong median\n- Mixing integer and float division incorrectly",
+  "solutionCode": "import heapq\nclass MedianFinder:\n    def __init__(self):\n        self.low = []\n        self.high = []\n    def addNum(self, num: int) -> None:\n        heapq.heappush(self.low, -num)\n        if self.high and -self.low[0] > self.high[0]:\n            x = -heapq.heappop(self.low)\n            heapq.heappush(self.high, x)\n        if len(self.low) > len(self.high) + 1:\n            x = -heapq.heappop(self.low)\n            heapq.heappush(self.high, x)\n        elif len(self.high) > len(self.low) + 1:\n            x = heapq.heappop(self.high)\n            heapq.heappush(self.low, -x)\n    def findMedian(self) -> float:\n        if len(self.low) == len(self.high):\n            if not self.low:\n                return 0.0\n            return (-self.low[0] + self.high[0]) / 2.0\n        return float(-self.low[0]) if len(self.low) > len(self.high)                else float(self.high[0])",
+  "testCases": [
+    {
+      "input": {
+        "ops": [
+          "addNum",
+          "addNum",
+          "findMedian",
+          "addNum",
+          "findMedian"
+        ],
+        "args": [
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [],
+          [
+            3
+          ],
+          []
+        ]
+      },
+      "expected": {
+        "result": [
+          null,
+          null,
+          1.5,
+          null,
+          2
+        ]
+      },
+      "explanation": "Median updates as stream grows"
+    },
+    {
+      "input": {
+        "ops": [
+          "addNum",
+          "findMedian"
+        ],
+        "args": [
+          [
+            2
+          ],
+          []
+        ]
+      },
+      "expected": {
+        "result": [
+          null,
+          2
+        ]
+      },
+      "explanation": "Single element median"
+    },
+    {
+      "input": {
+        "ops": [
+          "addNum",
+          "addNum",
+          "addNum",
+          "findMedian"
+        ],
+        "args": [
+          [
+            5
+          ],
+          [
+            15
+          ],
+          [
+            1
+          ],
+          []
+        ]
+      },
+      "expected": {
+        "result": [
+          null,
+          null,
+          null,
+          5
+        ]
+      },
+      "explanation": "Balanced split"
+    },
+    {
+      "input": {
+        "ops": [
+          "findMedian"
+        ],
+        "args": [
+          []
+        ]
+      },
+      "expected": {
+        "result": [
+          0
+        ]
+      },
+      "explanation": "Empty stream returns 0 by convention"
+    }
+  ],
+  "tags": [
+    "heap",
+    "design"
+  ],
+  "hints": [
+    "Use two heaps for lower and upper halves",
+    "Negate numbers in the lower heap to simulate max-heap",
+    "Rebalance when sizes differ by more than one"
+  ],
+  "relatedProblems": [
+    "sliding-window-median",
+    "kth-largest-in-array"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 49,
+    "frequency": "high",
+    "importance": 10
+  },
+  "starterCode": "def __init__(self: any) -> None:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any) -> None:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self}\n * @return {any}\n */\nfunction __init__(self) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public None __init__(any self) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nNone __init__(any self) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    None __init__(any& self) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

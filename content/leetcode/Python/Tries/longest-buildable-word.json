@@ -1,0 +1,98 @@
+{
+  "id": "longest-buildable-word",
+  "title": "Longest Word Buildable by Successive Prefixes",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a list of distinct lowercase words, find the longest word that can be built one character at a time by other words in the list. Every prefix of the word must also be present in the list. If multiple answers have the same length, return the lexicographically smallest. Use a trie and a DFS that only descends through nodes whose prefixes are complete words.\n\n    \n\nConstraints:\n    - 1 ≤ |words| ≤ 10^5\n- Sum of word lengths ≤ 2·10^6\n- Words contain 'a'..'z' only",
+  "leetcodeUrl": "https://leetcode.com/problems/longest-word-in-dictionary/",
+  "complexity": {
+    "time": "O(T)",
+    "space": "O(T)"
+  },
+  "explanation": "Intuition\nThe constraint that every prefix must exist means valid paths descend only through nodes marked as end. A DFS that filters by end nodes constructs candidates and tracks the best by length then lexicographic order.\n\nApproach\n1. Initial Setup: Insert words into a trie marking end flags\n2. Main Algorithm: Depth-first search from the root, continuing only through end nodes\n3. Return Result: Update the best answer by length then lexicographic order\n\nComplexity Analysis\n- Time Complexity: O(T) where T is total characters\n- Space Complexity: O(T) for the trie\n\nKey Insights\n- Filtering by end nodes prunes invalid branches early\n- Sorting child keys provides deterministic lexicographic order\n\nCommon Pitfalls\n- Allowing non-end prefixes yields invalid candidates\n- Not tie-breaking lexicographically may return wrong answer",
+  "solutionCode": "class TrieNB:\n    def __init__(self):\n        self.children = {}\n        self.end = False\ndef longest_buildable_word(words):\n    root = TrieNB()\n    for w in words:\n        node = root\n        for ch in w:\n            node = node.children.setdefault(ch, TrieNB())\n        node.end = True\n    best = \"\"\n    def dfs(node, path):\n        nonlocal best\n        if path and not node.end:\n            return\n        if len(path) > len(best) or            (len(path) == len(best) and path < best):\n            best = path\n        for ch in sorted(node.children.keys()):\n            dfs(node.children[ch], path + ch)\n    dfs(root, \"\")\n    return best",
+  "testCases": [
+    {
+      "input": {
+        "words": [
+          "w",
+          "wo",
+          "wor",
+          "worl",
+          "world"
+        ]
+      },
+      "expected": {
+        "result": "world"
+      },
+      "explanation": "All prefixes exist"
+    },
+    {
+      "input": {
+        "words": [
+          "a",
+          "banana",
+          "app",
+          "appl",
+          "ap",
+          "apply",
+          "apple"
+        ]
+      },
+      "expected": {
+        "result": "apple"
+      },
+      "explanation": "Two length-5 words, pick lexicographically smaller"
+    },
+    {
+      "input": {
+        "words": [
+          "b",
+          "ba",
+          "ban"
+        ]
+      },
+      "expected": {
+        "result": "ban"
+      },
+      "explanation": "Shortest chain grows to 'ban'"
+    },
+    {
+      "input": {
+        "words": [
+          "abc",
+          "ab"
+        ]
+      },
+      "expected": {
+        "result": "ab"
+      },
+      "explanation": "Prefix must be a word"
+    }
+  ],
+  "tags": [
+    "trie",
+    "dfs",
+    "string"
+  ],
+  "hints": [
+    "Only descend through nodes marked as complete words",
+    "Track best by length then lexicographic order",
+    "Sort child keys for deterministic traversal"
+  ],
+  "relatedProblems": [
+    "replace-words-using-dictionary",
+    "implement-prefix-dictionary"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 47,
+    "frequency": "medium",
+    "importance": 8
+  },
+  "starterCode": "def __init__(self: any) -> str:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def __init__(self: any) -> str:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {any self}\n * @return {any}\n */\nfunction __init__(self) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public str __init__(any self) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nstr __init__(any self) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    str __init__(any& self) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

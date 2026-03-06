@@ -1,0 +1,49 @@
+{
+  "id": "component-accordion",
+  "title": "Accordion",
+  "category": "frontend",
+  "difficulty": "easy",
+  "description": "Build an **Accordion** component that displays a list of collapsible sections.\n\n### Requirements\n\n- Render a header button for each item in the `items` array\n- All sections start **collapsed** (panel content is not in the DOM)\n- Clicking a header **expands** that section, revealing its content\n- Clicking the same header again **collapses** it\n- Only **one section** can be open at a time — opening a new one closes the previous\n- Each header must have `aria-expanded` set to `\"true\"` when open, `\"false\"` when closed\n- When open, apply the CSS class `accordion__header--open` to the header button\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Section header | `header-{item.id}` |\n| Section panel | `panel-{item.id}` |",
+  "constraints": "- Use React functional components with hooks\n- Do not use any external UI libraries\n- Panels must be conditionally rendered, not just hidden with CSS",
+  "hints": [
+    "Use useState to track the id of the currently open section (or null if none are open).",
+    "Clicking the same header that's already open should set the state to null.",
+    "Only render the panel div when its section is the active one."
+  ],
+  "tags": ["react", "state", "conditional-rendering", "interactive"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { Accordion } from './Accordion';\nimport type { AccordionItem } from './Accordion';\n\nconst faqItems: AccordionItem[] = [\n  {\n    id: '1',\n    title: 'What is React?',\n    content:\n      'React is a JavaScript library for building user interfaces. It lets you compose complex UIs from small, isolated pieces of code called components.',\n  },\n  {\n    id: '2',\n    title: 'What are hooks?',\n    content:\n      'Hooks are functions that let you use state and other React features in functional components. Common hooks include useState, useEffect, and useContext.',\n  },\n  {\n    id: '3',\n    title: 'What is JSX?',\n    content:\n      'JSX is a syntax extension for JavaScript that looks similar to HTML. It is used with React to describe what the UI should look like.',\n  },\n];\n\nexport default function App() {\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>\n      <h1 style={{ marginBottom: '1.5rem' }}>FAQ</h1>\n      <Accordion items={faqItems} />\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "Accordion.tsx",
+      "content": "import React from 'react';\nimport './styles.css';\n\nexport interface AccordionItem {\n  id: string;\n  title: string;\n  content: string;\n}\n\ninterface AccordionProps {\n  items: AccordionItem[];\n}\n\nexport const Accordion: React.FC<AccordionProps> = ({ items }) => {\n  // TODO: Track which section is currently expanded (or null)\n\n  return (\n    <div className=\"accordion\">\n      {items.map((item) => (\n        <div key={item.id} className=\"accordion__item\">\n          <button\n            data-testid={`header-${item.id}`}\n            className=\"accordion__header\"\n            aria-expanded={false}\n          >\n            <span>{item.title}</span>\n            <span className=\"accordion__icon\">&#9656;</span>\n          </button>\n          {/* TODO: Conditionally render the panel only when this section is open */}\n          <div\n            data-testid={`panel-${item.id}`}\n            className=\"accordion__panel\"\n            role=\"region\"\n          >\n            <div className=\"accordion__content\">{item.content}</div>\n          </div>\n        </div>\n      ))}\n    </div>\n  );\n};\n\nexport default Accordion;\n",
+      "language": "tsx",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": ".accordion {\n  width: 100%;\n  max-width: 32rem;\n  border: 1px solid #e5e7eb;\n  border-radius: 0.5rem;\n  overflow: hidden;\n}\n\n.accordion__item + .accordion__item {\n  border-top: 1px solid #e5e7eb;\n}\n\n.accordion__header {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 0.875rem 1rem;\n  background: #f9fafb;\n  border: none;\n  cursor: pointer;\n  font-size: 0.9375rem;\n  font-weight: 500;\n  color: #1f2937;\n  text-align: left;\n  transition: background-color 0.15s ease;\n}\n\n.accordion__header:hover {\n  background: #f3f4f6;\n}\n\n.accordion__header--open {\n  background: #eff6ff;\n  color: #1d4ed8;\n}\n\n.accordion__icon {\n  font-size: 0.75rem;\n  transition: transform 0.2s ease;\n}\n\n.accordion__header--open .accordion__icon {\n  transform: rotate(90deg);\n}\n\n.accordion__content {\n  padding: 0.875rem 1rem;\n  font-size: 0.875rem;\n  color: #4b5563;\n  line-height: 1.6;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen, fireEvent } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport { Accordion } from './Accordion';\n\nconst testItems = [\n  { id: '1', title: 'Section One', content: 'Content for section one' },\n  { id: '2', title: 'Section Two', content: 'Content for section two' },\n  { id: '3', title: 'Section Three', content: 'Content for section three' },\n];\n\ndescribe('Accordion', () => {\n  it('renders all section headers', () => {\n    render(<Accordion items={testItems} />);\n    expect(screen.getByTestId('header-1')).toHaveTextContent('Section One');\n    expect(screen.getByTestId('header-2')).toHaveTextContent('Section Two');\n    expect(screen.getByTestId('header-3')).toHaveTextContent('Section Three');\n  });\n\n  it('all sections start collapsed', () => {\n    render(<Accordion items={testItems} />);\n    expect(screen.queryByTestId('panel-1')).not.toBeInTheDocument();\n    expect(screen.queryByTestId('panel-2')).not.toBeInTheDocument();\n    expect(screen.queryByTestId('panel-3')).not.toBeInTheDocument();\n  });\n\n  it('expands a section when its header is clicked', () => {\n    render(<Accordion items={testItems} />);\n    fireEvent.click(screen.getByTestId('header-1'));\n    expect(screen.getByTestId('panel-1')).toBeInTheDocument();\n    expect(screen.getByTestId('panel-1')).toHaveTextContent('Content for section one');\n  });\n\n  it('collapses a section when its header is clicked again', () => {\n    render(<Accordion items={testItems} />);\n    fireEvent.click(screen.getByTestId('header-1'));\n    fireEvent.click(screen.getByTestId('header-1'));\n    expect(screen.queryByTestId('panel-1')).not.toBeInTheDocument();\n  });\n\n  it('closes the previous section when opening another', () => {\n    render(<Accordion items={testItems} />);\n    fireEvent.click(screen.getByTestId('header-1'));\n    expect(screen.getByTestId('panel-1')).toBeInTheDocument();\n    fireEvent.click(screen.getByTestId('header-2'));\n    expect(screen.queryByTestId('panel-1')).not.toBeInTheDocument();\n    expect(screen.getByTestId('panel-2')).toBeInTheDocument();\n  });\n\n  it('sets aria-expanded correctly', () => {\n    render(<Accordion items={testItems} />);\n    expect(screen.getByTestId('header-1')).toHaveAttribute('aria-expanded', 'false');\n    fireEvent.click(screen.getByTestId('header-1'));\n    expect(screen.getByTestId('header-1')).toHaveAttribute('aria-expanded', 'true');\n    expect(screen.getByTestId('header-2')).toHaveAttribute('aria-expanded', 'false');\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "Accordion.tsx",
+      "content": "import React, { useState } from 'react';\nimport './styles.css';\n\nexport interface AccordionItem {\n  id: string;\n  title: string;\n  content: string;\n}\n\ninterface AccordionProps {\n  items: AccordionItem[];\n}\n\nexport const Accordion: React.FC<AccordionProps> = ({ items }) => {\n  const [openId, setOpenId] = useState<string | null>(null);\n\n  const toggle = (id: string) => {\n    setOpenId((prev) => (prev === id ? null : id));\n  };\n\n  return (\n    <div className=\"accordion\">\n      {items.map((item) => {\n        const isOpen = openId === item.id;\n        return (\n          <div key={item.id} className=\"accordion__item\">\n            <button\n              data-testid={`header-${item.id}`}\n              className={`accordion__header${isOpen ? ' accordion__header--open' : ''}`}\n              aria-expanded={isOpen}\n              onClick={() => toggle(item.id)}\n            >\n              <span>{item.title}</span>\n              <span className=\"accordion__icon\">&#9656;</span>\n            </button>\n            {isOpen && (\n              <div\n                data-testid={`panel-${item.id}`}\n                className=\"accordion__panel\"\n                role=\"region\"\n              >\n                <div className=\"accordion__content\">{item.content}</div>\n              </div>\n            )}\n          </div>\n        );\n      })}\n    </div>\n  );\n};\n\nexport default Accordion;\n",
+      "language": "tsx"
+    }
+  ],
+  "sort_order": 101
+}

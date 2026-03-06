@@ -1,0 +1,109 @@
+{
+  "id": "longest-ones-after-flips",
+  "title": "Longest Ones After Flips",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a binary array and an integer k, return the length of the longest subarray containing at most k zeros. Think of flipping up to k zeros to ones to maximize consecutive ones.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- nums contains only 0 or 1\n- 0 ≤ k ≤ len(nums)",
+  "leetcodeUrl": "https://leetcode.com/problems/max-consecutive-ones-iii/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nThe window is valid if it contains at most k zeros. Expand right and count zeros. If the count exceeds k, move left to discard zeros until the window becomes valid again.\n\nApproach\n1. Initial Setup: Track the number of zeros in the window.\n2. Main Algorithm: Advance right and increment zeros on 0. While zeros > k, move left and decrement when passing a 0.\n3. Return Result: Record the longest valid window length.\n\nComplexity Analysis\n- Time Complexity: O(n) because the window grows and shrinks in a\n  single pass without revisiting elements more than a constant number of\n  times.\n- Space Complexity: O(1) to maintain counts, sets, or running\n  aggregates needed to validate the window.\n\nKey Insights\n- Counting constraint violations tells you when to shrink\n- This pattern generalizes to at most K of some bad symbol\n\nCommon Pitfalls\n- Not decrementing on leaving a zero keeps the window invalid\n- Confusing exactly k with at most k",
+  "solutionCode": "def longest_ones_after_flips(nums, k):\n    left = 0\n    zeros = 0\n    best = 0\n    for right, x in enumerate(nums):\n        if x == 0:\n            zeros += 1\n        while zeros > k:\n            if nums[left] == 0:\n                zeros -= 1\n            left += 1\n        best = max(best, right - left + 1)\n    return best",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0
+        ],
+        "k": 2
+      },
+      "expected": {
+        "result": 6
+      },
+      "explanation": "Best window length is 6"
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "k": 0
+      },
+      "expected": {
+        "result": 2
+      },
+      "explanation": "At most two consecutive ones"
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "k": 3
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Flip three zeros"
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "k": 1
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Already all ones"
+    }
+  ],
+  "tags": [
+    "array",
+    "sliding-window"
+  ],
+  "hints": [
+    "Monitor zeros as the constraint",
+    "Shrink only when zeros exceed k",
+    "Update best after each extension"
+  ],
+  "relatedProblems": [
+    "smallest-window-with-target-sum",
+    "max-sum-window-of-size-k"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 64,
+    "frequency": "high",
+    "importance": 7
+  },
+  "starterCode": "def longest_ones_after_flips(nums: List[int], k: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def longest_ones_after_flips(nums: List[int], k: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number k}\n * @return {number}\n */\nfunction longest_ones_after_flips(nums, k) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int longest_ones_after_flips(int[] nums, int k) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint longest_ones_after_flips(int* nums, int k) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int longest_ones_after_flips(vector<int>& nums, int& k) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

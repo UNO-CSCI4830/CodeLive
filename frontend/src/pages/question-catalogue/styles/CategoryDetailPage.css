@@ -1,0 +1,107 @@
+/* CategoryDetailPage — Bold Typography */
+
+.catdetail-wrapper {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.catdetail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 2rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--muted-fg);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease);
+}
+.catdetail-back:hover { color: var(--fg); }
+.catdetail-back-icon { width: 1rem; height: 1rem; }
+
+.catdetail-header { margin-bottom: 2.5rem; }
+
+.catdetail-heading {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
+}
+
+.catdetail-meta {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--muted-fg);
+}
+
+.catdetail-not-found {
+  margin-bottom: 1rem;
+  color: var(--muted-fg);
+}
+
+.catdetail-group { margin-bottom: 2rem; }
+
+.catdetail-group-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--fg);
+  letter-spacing: var(--tracking-tight);
+}
+
+.catdetail-group-count {
+  padding: 0.125rem 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--muted-fg);
+  background: var(--muted);
+}
+
+.catdetail-list {
+  border: 1px solid var(--border);
+  background: transparent;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.catdetail-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--duration-fast) var(--ease);
+}
+.catdetail-item:last-child { border-bottom: none; }
+.catdetail-item:hover { background: var(--muted); }
+
+.catdetail-item--link {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.catdetail-item-title {
+  font-size: 0.875rem;
+  color: var(--fg);
+}
+
+.catdetail-item-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.catdetail-item-chevron {
+  width: 1rem;
+  height: 1rem;
+  color: var(--muted-fg);
+}

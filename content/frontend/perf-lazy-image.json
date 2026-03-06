@@ -1,0 +1,49 @@
+{
+  "id": "perf-lazy-image",
+  "title": "Lazy Loading Images",
+  "category": "frontend",
+  "difficulty": "easy",
+  "description": "Implement lazy loading for images using Intersection Observer so images only load when they scroll into view.\n\n### Requirements\n\n- Images below the fold should NOT load until they scroll near the viewport\n- Use `IntersectionObserver` with `rootMargin: '200px'` for eager pre-loading\n- Show a placeholder skeleton while the image hasn't loaded yet\n- Once the image enters the viewport, set the `src` attribute to trigger loading\n- After the image loads, hide the skeleton and show the image with a fade-in\n- Add `loading=\"lazy\"` as a progressive enhancement\n- Clean up the observer on unmount\n\n### Test IDs\n\n| Element | data-testid |\n|---------|-------------|\n| Image container | `img-container-{index}` |\n| Image element | `img-{index}` |\n| Skeleton | `skeleton-{index}` |\n| Images loaded count | `loaded-count` |",
+  "constraints": "- Must use IntersectionObserver API\n- Images must not have src set until observed\n- Skeleton must show until image fully loads\n- Observer must be disconnected on unmount\n- Must work with variable-height images",
+  "hints": [
+    "Use a data-src attribute or store the URL in state. Only copy it to src when the observer fires.",
+    "Use the image's `onLoad` event to detect when it's fully loaded and hide the skeleton.",
+    "Create one IntersectionObserver and observe all image elements. Use entry.target to identify which image was intersected."
+  ],
+  "tags": ["react", "performance", "lazy-loading", "intersection-observer"],
+  "starter_files": [
+    {
+      "path": "App.tsx",
+      "content": "import React from 'react';\nimport { ImageGallery } from './ImageGallery';\nimport './styles.css';\n\nconst images = Array.from({ length: 12 }, (_, i) => ({\n  id: i,\n  url: `https://picsum.photos/seed/${i + 1}/400/300`,\n  alt: `Photo ${i + 1}`,\n}));\n\nexport default function App() {\n  return (\n    <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif', maxWidth: '28rem' }}>\n      <h1 style={{ marginBottom: '1.5rem' }}>Image Gallery</h1>\n      <ImageGallery images={images} />\n    </div>\n  );\n}\n",
+      "language": "tsx",
+      "readonly": true
+    },
+    {
+      "path": "ImageGallery.tsx",
+      "content": "import React, { useState, useEffect, useRef, useCallback } from 'react';\nimport './styles.css';\n\ninterface ImageData {\n  id: number;\n  url: string;\n  alt: string;\n}\n\ninterface ImageGalleryProps {\n  images: ImageData[];\n}\n\n// TODO: Implement lazy loading with IntersectionObserver\n// Currently all images load immediately — fix this\n\nexport const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {\n  const [loadedCount, setLoadedCount] = useState(0);\n\n  return (\n    <div>\n      <p data-testid=\"loaded-count\" className=\"gallery__count\">\n        {loadedCount} of {images.length} loaded\n      </p>\n      <div className=\"gallery\">\n        {images.map((image, index) => (\n          <div\n            key={image.id}\n            data-testid={`img-container-${index}`}\n            className=\"gallery__item\"\n          >\n            {/* TODO: Add skeleton placeholder */}\n            <div data-testid={`skeleton-${index}`} className=\"gallery__skeleton\" />\n\n            {/* BUG: Image loads immediately — should lazy load */}\n            <img\n              data-testid={`img-${index}`}\n              src={image.url}\n              alt={image.alt}\n              className=\"gallery__img\"\n              onLoad={() => setLoadedCount(c => c + 1)}\n            />\n          </div>\n        ))}\n      </div>\n    </div>\n  );\n};\n",
+      "language": "tsx",
+      "readonly": false
+    },
+    {
+      "path": "styles.css",
+      "content": ".gallery__count {\n  font-size: 0.8125rem;\n  color: #6b7280;\n  margin-bottom: 0.75rem;\n}\n\n.gallery {\n  display: flex;\n  flex-direction: column;\n  gap: 1rem;\n}\n\n.gallery__item {\n  position: relative;\n  border-radius: 0.5rem;\n  overflow: hidden;\n  aspect-ratio: 4 / 3;\n  background: #f3f4f6;\n}\n\n.gallery__skeleton {\n  position: absolute;\n  inset: 0;\n  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);\n  background-size: 200% 100%;\n  animation: skeleton-shimmer 1.5s ease-in-out infinite;\n}\n\n.gallery__skeleton--hidden {\n  display: none;\n}\n\n@keyframes skeleton-shimmer {\n  0% { background-position: 200% 0; }\n  100% { background-position: -200% 0; }\n}\n\n.gallery__img {\n  width: 100%;\n  height: 100%;\n  object-fit: cover;\n  display: block;\n  opacity: 0;\n  transition: opacity 0.3s ease;\n}\n\n.gallery__img--loaded {\n  opacity: 1;\n}\n",
+      "language": "css",
+      "readonly": true
+    }
+  ],
+  "test_config": {
+    "test_file": "import { render, screen } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport React from 'react';\nimport App from './App';\n\n// Mock IntersectionObserver\nlet observerCallback: IntersectionObserverCallback;\nlet observedElements: Element[] = [];\n\nconst mockIntersectionObserver = jest.fn((cb: IntersectionObserverCallback) => {\n  observerCallback = cb;\n  return {\n    observe: jest.fn((el: Element) => { observedElements.push(el); }),\n    unobserve: jest.fn(),\n    disconnect: jest.fn(),\n  };\n});\n\nwindow.IntersectionObserver = mockIntersectionObserver as any;\n\nfunction simulateIntersect(elements: Element[]) {\n  const entries = elements.map(el => ({\n    target: el,\n    isIntersecting: true,\n    intersectionRatio: 1,\n    boundingClientRect: {} as DOMRectReadOnly,\n    intersectionRect: {} as DOMRectReadOnly,\n    rootBounds: null,\n    time: Date.now(),\n  }));\n  observerCallback(entries, {} as IntersectionObserver);\n}\n\ndescribe('Lazy Loading Images', () => {\n  beforeEach(() => {\n    observedElements = [];\n  });\n\n  it('renders image containers', () => {\n    render(<App />);\n    expect(screen.getByTestId('img-container-0')).toBeInTheDocument();\n    expect(screen.getByTestId('img-container-11')).toBeInTheDocument();\n  });\n\n  it('images do not have src initially', () => {\n    render(<App />);\n    const img = screen.getByTestId('img-0');\n    // src should not be the actual URL (should be empty or data-src)\n    expect(img.getAttribute('src') || '').not.toContain('picsum');\n  });\n\n  it('creates IntersectionObserver', () => {\n    render(<App />);\n    expect(mockIntersectionObserver).toHaveBeenCalled();\n  });\n\n  it('skeletons are visible initially', () => {\n    render(<App />);\n    expect(screen.getByTestId('skeleton-0')).toBeInTheDocument();\n  });\n\n  it('displays loaded count', () => {\n    render(<App />);\n    expect(screen.getByTestId('loaded-count')).toHaveTextContent('0 of 12 loaded');\n  });\n\n  it('observes image elements', () => {\n    render(<App />);\n    expect(observedElements.length).toBeGreaterThan(0);\n  });\n});",
+    "dependencies": {
+      "@testing-library/react": "^14.0.0",
+      "@testing-library/jest-dom": "^6.0.0"
+    }
+  },
+  "solution_files": [
+    {
+      "path": "ImageGallery.tsx",
+      "content": "import React, { useState, useEffect, useRef, useCallback } from 'react';\nimport './styles.css';\n\ninterface ImageData {\n  id: number;\n  url: string;\n  alt: string;\n}\n\ninterface ImageGalleryProps {\n  images: ImageData[];\n}\n\nexport const ImageGallery: React.FC<ImageGalleryProps> = ({ images }) => {\n  const [loadedCount, setLoadedCount] = useState(0);\n  const [visibleSet, setVisibleSet] = useState<Set<number>>(new Set());\n  const [loadedSet, setLoadedSet] = useState<Set<number>>(new Set());\n  const imgRefs = useRef<(HTMLImageElement | null)[]>([]);\n  const observerRef = useRef<IntersectionObserver | null>(null);\n\n  useEffect(() => {\n    observerRef.current = new IntersectionObserver(\n      (entries) => {\n        entries.forEach(entry => {\n          if (entry.isIntersecting) {\n            const idx = imgRefs.current.indexOf(entry.target as HTMLImageElement);\n            if (idx !== -1) {\n              setVisibleSet(prev => new Set(prev).add(idx));\n              observerRef.current?.unobserve(entry.target);\n            }\n          }\n        });\n      },\n      { rootMargin: '200px' }\n    );\n\n    imgRefs.current.forEach(el => {\n      if (el) observerRef.current?.observe(el);\n    });\n\n    return () => {\n      observerRef.current?.disconnect();\n    };\n  }, [images]);\n\n  const handleLoad = useCallback((index: number) => {\n    setLoadedSet(prev => new Set(prev).add(index));\n    setLoadedCount(c => c + 1);\n  }, []);\n\n  return (\n    <div>\n      <p data-testid=\"loaded-count\" className=\"gallery__count\">\n        {loadedCount} of {images.length} loaded\n      </p>\n      <div className=\"gallery\">\n        {images.map((image, index) => (\n          <div\n            key={image.id}\n            data-testid={`img-container-${index}`}\n            className=\"gallery__item\"\n          >\n            {!loadedSet.has(index) && (\n              <div data-testid={`skeleton-${index}`} className=\"gallery__skeleton\" />\n            )}\n\n            <img\n              ref={el => { imgRefs.current[index] = el; }}\n              data-testid={`img-${index}`}\n              src={visibleSet.has(index) ? image.url : undefined}\n              alt={image.alt}\n              loading=\"lazy\"\n              className={`gallery__img${loadedSet.has(index) ? ' gallery__img--loaded' : ''}`}\n              onLoad={() => handleLoad(index)}\n            />\n          </div>\n        ))}\n      </div>\n    </div>\n  );\n};\n",
+      "language": "tsx"
+    }
+  ],
+  "sort_order": 602
+}

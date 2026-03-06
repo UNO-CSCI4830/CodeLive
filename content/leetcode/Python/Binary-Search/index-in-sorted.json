@@ -1,0 +1,96 @@
+{
+  "id": "index-in-sorted",
+  "title": "Locate Index in Sorted Array",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given Search for a target value in a sorted array of distinct integers. Return its index if present, otherwise return -1. Use iterative binary search with careful mid computation and bounds updates.\n\n    \n\nConstraints:\n    - 0 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i], target ≤ 10^9\n- All elements are distinct",
+  "leetcodeUrl": "https://leetcode.com/problems/binary-search/",
+  "complexity": {
+    "time": "O(log n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nBinary search repeatedly halves the search interval by comparing the middle element to the target. If the middle is too small we discard the left half, otherwise we discard the right half. This guarantees logarithmic time on sorted arrays.\n\nApproach\n1. Initial Setup: Initialize left at 0 and right at n-1.\n2. Main Algorithm: While left ≤ right, check the middle value and move the boundary that cannot contain the target.\n3. Return Result: Return the found index or -1 when the window becomes empty.\n\nComplexity Analysis\n- Time Complexity: O(log n) because the search space halves at each step.\n- Space Complexity: O(1) since only a few variables are maintained.\n\nKey Insights\n- Mid recomputed each loop keeps the invariant correct\n- Loop ends when the interval is empty\n\nCommon Pitfalls\n- Using (left+right)//2 avoids overflow in Python but not in other languages\n- Forgetting equal case can result in an infinite loop",
+  "solutionCode": "def index_in_sorted(nums, target):\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        if nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          -1,
+          0,
+          3,
+          5,
+          9,
+          12
+        ],
+        "target": 9
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Target at index 4"
+    },
+    {
+      "input": {
+        "nums": [
+          -1,
+          0,
+          3,
+          5,
+          9,
+          12
+        ],
+        "target": 2
+      },
+      "expected": {
+        "result": -1
+      },
+      "explanation": "Absent target returns -1"
+    },
+    {
+      "input": {
+        "nums": [],
+        "target": 1
+      },
+      "expected": {
+        "result": -1
+      },
+      "explanation": "Empty array"
+    },
+    {
+      "input": {
+        "nums": [
+          5
+        ],
+        "target": 5
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "Single element found"
+    }
+  ],
+  "tags": [
+    "array",
+    "binary-search"
+  ],
+  "hints": [
+    "Maintain left and right as inclusive bounds",
+    "Compare target to the middle element",
+    "Shrink the half that cannot contain the target"
+  ],
+  "relatedProblems": [
+    "search-insert-position",
+    "first-and-last-position"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 74,
+    "frequency": "high",
+    "importance": 6
+  },
+  "starterCode": "def index_in_sorted(nums: List[int], target: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def index_in_sorted(nums: List[int], target: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number target}\n * @return {number}\n */\nfunction index_in_sorted(nums, target) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int index_in_sorted(int[] nums, int target) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint index_in_sorted(int* nums, int target) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int index_in_sorted(vector<int>& nums, int& target) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

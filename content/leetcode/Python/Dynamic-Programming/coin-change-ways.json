@@ -1,0 +1,87 @@
+{
+  "id": "coin-change-ways",
+  "title": "Number of Ways to Make Amount",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Return the number of combinations that make up amount using unlimited coins. Order of coins does not matter.\n\n    \n\nConstraints:\n    - 0 ≤ amount ≤ 5000\n- 1 ≤ |coins| ≤ 30",
+  "leetcodeUrl": "https://leetcode.com/problems/coin-change-ii/",
+  "complexity": {
+    "time": "O(amount·|coins|)",
+    "space": "O(amount)"
+  },
+  "explanation": "Intuition\nCount combinations (not permutations). Iterate over coins outer loop so each combination is formed once. dp[a]+=dp[a-c].\n\nApproach\n1. Initial Setup: dp[0]=1, others 0\n2. Main Algorithm: For each coin c, for a in [c..amount]: dp[a]+=dp[a-c]\n3. Return Result: Return dp[amount]\n\nComplexity Analysis\n- Time Complexity: O(A·C)\n- Space Complexity: O(A)\n\nKey Insights\n- Coin-outer loop enforces nondecreasing order\n- dp[a] accumulates counts\n\nCommon Pitfalls\n- Reversing loop or order counts permutations\n- Beware integer growth; Python is unbounded",
+  "solutionCode": "def change(amount, coins):\n    dp = [0] * (amount + 1)\n    dp[0] = 1\n    for c in coins:\n        for a in range(c, amount + 1):\n            dp[a] += dp[a - c]\n    return dp[amount]",
+  "testCases": [
+    {
+      "input": {
+        "coins": [
+          1,
+          2,
+          5
+        ],
+        "amount": 5
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Combinations: 5; 2+2+1; 2+1+1+1; 1×5"
+    },
+    {
+      "input": {
+        "coins": [
+          2
+        ],
+        "amount": 3
+      },
+      "expected": {
+        "result": 0
+      },
+      "explanation": "When change(coins=[2], amount=3), the expected result is 0"
+    },
+    {
+      "input": {
+        "coins": [],
+        "amount": 0
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Empty set makes 0"
+    },
+    {
+      "input": {
+        "coins": [
+          10
+        ],
+        "amount": 10
+      },
+      "expected": {
+        "result": 1
+      },
+      "explanation": "Single coin"
+    }
+  ],
+  "tags": [
+    "dynamic-programming"
+  ],
+  "hints": [
+    "Use coin as outer loop",
+    "dp[0]=1 seeds combinations",
+    "Forward amount loop enables reuse"
+  ],
+  "relatedProblems": [
+    "coin-change-min",
+    "subset-sum-equal-target"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 65,
+    "frequency": "high",
+    "importance": 8
+  },
+  "starterCode": "def change(amount: int, coins: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def change(amount: int, coins: List[int]) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number amount, number[] coins}\n * @return {number}\n */\nfunction change(amount, coins) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int change(int amount, int[] coins) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint change(int amount, int* coins) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int change(int& amount, vector<int>& coins) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}

@@ -1,0 +1,76 @@
+{
+  "id": "vowel-mirror",
+  "title": "Vowel Mirror",
+  "difficulty": "Easy",
+  "language": "python",
+  "description": "Given Reverse only the vowels in a string and return the resulting string. Use two pointers that move inward and swap vowels when both sides are on a vowel.\n\n    \n\nConstraints:\n    - 1 ≤ len(s) ≤ 10^5\n- s contains printable ASCII characters",
+  "leetcodeUrl": "https://leetcode.com/problems/reverse-vowels-of-a-string/",
+  "complexity": {
+    "time": "O(n)",
+    "space": "O(n)"
+  },
+  "explanation": "Intuition\nVowels are sparse compared to consonants. Two pointers let us skip non vowels quickly and swap in place when both sides are vowels.\n\nApproach\n1. Initial Setup: Build a fast membership set for vowels.\n2. Main Algorithm: Move i from the left and j from the right. Skip non vowels. Swap when both are vowels.\n3. Return Result: Return the joined string.\n\nComplexity Analysis\n- Time Complexity: O(n) because the scan adjusts pointers a limited\n  number of times and avoids nested loops.\n- Space Complexity: O(n) since only a few variables or an output\n  list are used.\n\nKey Insights\n- Pointer skipping avoids extra storage of non vowels\n- A set lookup is O(1) for classification\n\nCommon Pitfalls\n- Forgetting uppercase vowels\n- Using repeated string concatenation can be slow",
+  "solutionCode": "def vowel_mirror(s):\n    vowels = set('aeiouAEIOU')\n    chars = list(s)\n    i, j = 0, len(chars) - 1\n    while i < j:\n        if chars[i] not in vowels:\n            i += 1\n            continue\n        if chars[j] not in vowels:\n            j -= 1\n            continue\n        chars[i], chars[j] = chars[j], chars[i]\n        i += 1\n        j -= 1\n    return ''.join(chars)",
+  "testCases": [
+    {
+      "input": {
+        "s": "hello"
+      },
+      "expected": {
+        "result": "holle"
+      },
+      "explanation": "Swap e and o"
+    },
+    {
+      "input": {
+        "s": "leetcode"
+      },
+      "expected": {
+        "result": "leotcede"
+      },
+      "explanation": "Multiple swaps"
+    },
+    {
+      "input": {
+        "s": "aA"
+      },
+      "expected": {
+        "result": "Aa"
+      },
+      "explanation": "Case sensitivity included"
+    },
+    {
+      "input": {
+        "s": "xyz"
+      },
+      "expected": {
+        "result": "xyz"
+      },
+      "explanation": "No vowels to move"
+    }
+  ],
+  "tags": [
+    "string",
+    "two-pointers"
+  ],
+  "hints": [
+    "Use a set for O(1) vowel checks",
+    "Advance pointers until both point at vowels",
+    "Swap and continue inward"
+  ],
+  "relatedProblems": [
+    "almost-palindrome",
+    "sorted-squares-rebuilder"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 75,
+    "frequency": "medium",
+    "importance": 5
+  },
+  "starterCode": "def vowel_mirror(s: str) -> str:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def vowel_mirror(s: str) -> str:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {string s}\n * @return {any}\n */\nfunction vowel_mirror(s) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public str vowel_mirror(String s) {\n        // Write your solution here\n        return null;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nstr vowel_mirror(char* s) {\n    // Write your solution here\n    return NULL;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    str vowel_mirror(string& s) {\n        // Write your solution here\n        return {};\n    }\n};"
+}

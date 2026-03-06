@@ -5,8 +5,8 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseServiceKey) {
   throw new Error(
-    "Missing Supabase environment variables. " +
-      "Ensure SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are set in backend/.env"
+    "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY. " +
+      "Run 'infisical run -- npm run dev' or check your Infisical project."
   );
 }
 

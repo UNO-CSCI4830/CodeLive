@@ -1,0 +1,106 @@
+{
+  "id": "search-in-rotated",
+  "title": "Search in Rotated Sorted Array",
+  "difficulty": "Medium",
+  "language": "python",
+  "description": "Given a rotated sorted array of distinct integers and a target, return its index if found, otherwise -1. The array was originally sorted in ascending order and rotated at some pivot unknown to you.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i], target ≤ 10^9",
+  "leetcodeUrl": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+  "complexity": {
+    "time": "O(log n)",
+    "space": "O(1)"
+  },
+  "explanation": "Intuition\nAt any point at least one side around mid is sorted. Compare target to the sorted side to decide which half to discard. This preserves the logarithmic time guarantee.\n\nApproach\n1. Initial Setup: Maintain left and right inclusive.\n2. Main Algorithm: While left ≤ right, probe mid and identify the sorted half, then decide which half to keep.\n3. Return Result: Return index when found or -1 otherwise.\n\nComplexity Analysis\n- Time Complexity: O(log n) because the search space halves at each step.\n- Space Complexity: O(1) since only a few variables are maintained.\n\nKey Insights\n- In a rotation, exactly one side is sorted unless equal elements exist\n- Narrow the interval based on which side contains the target\n\nCommon Pitfalls\n- Misidentifying the sorted side causes missed targets\n- Not using ≤ and < carefully can loop forever",
+  "solutionCode": "def search_in_rotated(nums, target):\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        if nums[left] <= nums[mid]:\n            if nums[left] <= target < nums[mid]:\n                right = mid - 1\n            else:\n                left = mid + 1\n        else:\n            if nums[mid] < target <= nums[right]:\n                left = mid + 1\n            else:\n                right = mid - 1\n    return -1",
+  "testCases": [
+    {
+      "input": {
+        "nums": [
+          4,
+          5,
+          6,
+          7,
+          0,
+          1,
+          2
+        ],
+        "target": 0
+      },
+      "expected": {
+        "result": 4
+      },
+      "explanation": "Target at index 4"
+    },
+    {
+      "input": {
+        "nums": [
+          4,
+          5,
+          6,
+          7,
+          0,
+          1,
+          2
+        ],
+        "target": 3
+      },
+      "expected": {
+        "result": -1
+      },
+      "explanation": "Not present"
+    },
+    {
+      "input": {
+        "nums": [
+          1
+        ],
+        "target": 0
+      },
+      "expected": {
+        "result": -1
+      },
+      "explanation": "Single element mismatch"
+    },
+    {
+      "input": {
+        "nums": [
+          6,
+          7,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "target": 4
+      },
+      "expected": {
+        "result": 5
+      },
+      "explanation": "Found on right sorted half"
+    }
+  ],
+  "tags": [
+    "array",
+    "binary-search"
+  ],
+  "hints": [
+    "One side of the split is always sorted",
+    "Check if target lies within that side's range",
+    "Discard the impossible half"
+  ],
+  "relatedProblems": [
+    "find-min-in-rotated",
+    "first-and-last-position"
+  ],
+  "difficulty_metrics": {
+    "acceptance_rate": 38,
+    "frequency": "high",
+    "importance": 9
+  },
+  "starterCode": "def search_in_rotated(nums: List[int], target: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodePython": "def search_in_rotated(nums: List[int], target: int) -> int:\n    # Write your solution here\n    pass",
+  "starterCodeJavascript": "/**\n * @param {number[] nums, number target}\n * @return {number}\n */\nfunction search_in_rotated(nums, target) {\n    // Write your solution here\n    \n}",
+  "starterCodeJava": "class Solution {\n    public int search_in_rotated(int[] nums, int target) {\n        // Write your solution here\n        return 0;\n    }\n}",
+  "starterCodeC": "#include <stdbool.h>\n#include <stdlib.h>\n\nint search_in_rotated(int* nums, int target) {\n    // Write your solution here\n    return 0;\n}",
+  "starterCodeCpp": "#include <vector>\n#include <string>\nusing namespace std;\n\nclass Solution {\npublic:\n    int search_in_rotated(vector<int>& nums, int& target) {\n        // Write your solution here\n        return 0;\n    }\n};"
+}
