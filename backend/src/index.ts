@@ -21,10 +21,14 @@ const ALLOWED_ORIGINS = (process.env.CORS_ORIGINS ?? "http://localhost:3000")
   .split(",")
   .map((o) => o.trim());
 
+const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
+
 app.use(
   cors({
     origin: (incoming, cb) => {
       if (!incoming || ALLOWED_ORIGINS.includes(incoming)) return cb(null, true);
+      // In local dev, allow any localhost origin (handles Vite port fallback)
+      if (isDev && incoming.match(/^https?:\/\/localhost(:\d+)?$/)) return cb(null, true);
       cb(new Error(`CORS: ${incoming} not allowed`));
     },
   }),
