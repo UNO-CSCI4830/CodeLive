@@ -36,11 +36,39 @@ export async function joinSession(
 }
 
 export async function fetchSession(sessionId: string): Promise<Session> {
-  const res = await fetch(`/api/sessions/${sessionId}`);
-  if (!res.ok) {
-    throw new Error(`Failed to fetch session (${res.status})`);
+  const maxAttempts = 4;
+  let attempt = 0;
+
+  while (attempt < maxAttempts) {
+    attempt += 1;
+    const res = await fetch(`/api/sessions/${sessionId}`);
+    if (res.ok) {
+      return res.json();
+    }
+
+    const body = await res.json().catch(() => ({} as Record<string, unknown>));
+    const backendError =
+      typeof body.error === "string" && body.error.trim().length > 0
+        ? body.error
+        : null;
+
+    const isRetriable =
+      res.status === 404 || res.status === 408 || res.status === 425 || res.status === 429 || res.status >= 500;
+
+    if (isRetriable && attempt < maxAttempts) {
+      const backoffMs = 250 * attempt;
+      await new Promise((resolve) => setTimeout(resolve, backoffMs));
+      continue;
+    }
+
+    throw new Error(
+      backendError
+        ? `${backendError} (${res.status})`
+        : `Failed to fetch session (${res.status})`,
+    );
   }
-  return res.json();
+
+  throw new Error("Failed to fetch session");
 }
 
 export async function advanceQuestion(
@@ -73,7 +101,11 @@ export async function selectQuestion(
 }
 
 export async function endSession(sessionId: string): Promise<void> {
-  await fetch(`/api/sessions/${sessionId}/end`, { method: "POST" });
+  const res = await fetch(`/api/sessions/${sessionId}/end`, { method: "POST" });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `Failed to end session (${res.status})`);
+  }
 }
 
 export interface TimerState {

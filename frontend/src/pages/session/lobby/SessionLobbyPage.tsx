@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import { Copy, Loader2, Users, ChevronLeft, X } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
 import { SessionProvider, useSession } from "../SessionContext";
@@ -8,6 +8,11 @@ import "./SessionLobbyPage.css";
 function LobbyContent() {
   const { session, loading, error, isInterviewer, silentRefresh, end } = useSession();
   const navigate = useNavigate();
+  const location = useLocation();
+  const provisionalJoinCode =
+    typeof (location.state as { joinCode?: unknown } | null)?.joinCode === "string"
+      ? ((location.state as { joinCode?: string }).joinCode ?? "").trim().toUpperCase()
+      : "";
 
   // When session becomes active (candidate joined), redirect to interview
   useEffect(() => {
@@ -37,6 +42,40 @@ function LobbyContent() {
   };
 
   if (loading) {
+    if (provisionalJoinCode) {
+      return (
+        <div className="lobby-wrapper">
+          <div className="lobby-card">
+            <div className="lobby-icon-circle">
+              <Users className="lobby-icon" />
+            </div>
+            <h1 className="lobby-heading">Session Created</h1>
+            <p className="lobby-subtext">
+              Share this code with the candidate while we finish loading session details.
+            </p>
+            <div className="lobby-code-box">
+              <span className="lobby-code-label">Session Code</span>
+              <div className="lobby-code-display">
+                <span className="lobby-code">{provisionalJoinCode}</span>
+                <button
+                  type="button"
+                  className="lobby-copy-btn"
+                  onClick={() => navigator.clipboard.writeText(provisionalJoinCode)}
+                  title="Copy code"
+                >
+                  <Copy className="lobby-copy-icon" />
+                </button>
+              </div>
+            </div>
+            <div className="lobby-waiting">
+              <Loader2 className="lobby-waiting-spinner" />
+              <span>Loading session…</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="lobby-loading">
         <Loader2 className="lobby-spinner" />

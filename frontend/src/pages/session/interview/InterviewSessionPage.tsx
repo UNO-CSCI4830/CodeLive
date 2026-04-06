@@ -29,6 +29,8 @@ import DatabaseSessionLayout from "../layouts/DatabaseSessionLayout";
 import { saveSnapshots, generateReport, type SnapshotPayload } from "../api";
 import "./InterviewSessionPage.css";
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 /** Inner component that consumes SessionContext. */
 function InterviewRoom() {
   const {
@@ -59,7 +61,9 @@ function InterviewRoom() {
   // End-session confirmation modal
   const [showEndModal, setShowEndModal] = useState(false);
   const [endingSession, setEndingSession] = useState(false);
+  const [endError, setEndError] = useState<string | null>(null);
   const skipReportRef = useRef(false);
+  const endingRef = useRef(false);
 
   /** Capture the current layout snapshot and push to the accumulator. */
   const captureCurrentSnapshot = useCallback(() => {
@@ -85,42 +89,70 @@ function InterviewRoom() {
    *  4. Navigate to the report loading page
    */
   const doEndWithReport = useCallback(async () => {
-    if (!session) return;
+    if (!session || endingRef.current) return;
+    endingRef.current = true;
     setEndingSession(true);
+    setEndError(null);
     captureCurrentSnapshot();
-    await end();
+    try {
+      await end();
 
-    const sessionId = session.id;
-    const snapshots = [...snapshotsRef.current.values()].sort(
-      (a, b) => a.orderIndex - b.orderIndex,
-    );
-
-    // Build problem metadata for the report request
-    const problems = snapshots.map((s) => {
-      const sessionProblem = session.problems.find(
-        (p) => p.order_index === s.orderIndex,
+      const sessionId = session.id;
+      const snapshots = [...snapshotsRef.current.values()].sort(
+        (a, b) => a.orderIndex - b.orderIndex,
       );
-      return {
-        orderIndex: s.orderIndex,
-        problemId: s.problemId,
-        category: s.category,
-        // Title and description come from layout snapshot (layout loaded the JSON)
-        title: (layoutRef.current?.captureSnapshot().problemTitle) ?? s.problemId,
-        description: "",
-        timeLimit: sessionProblem?.time_limit ?? 30,
-      };
-    });
 
-    // Fire-and-forget — navigate immediately, report page polls for completion
-    saveSnapshots(sessionId, snapshots)
-      .then(() => generateReport(sessionId, { problems }))
-      .catch((err) => console.error("[report] generation failed:", err));
+      // Build problem metadata for the report request
+      const problems = snapshots.map((s) => {
+        const sessionProblem = session.problems.find(
+          (p) => p.order_index === s.orderIndex,
+        );
+        return {
+          orderIndex: s.orderIndex,
+          problemId: s.problemId,
+          category: s.category,
+          title: s.problemId.replace(/-/g, " "),
+          description: "",
+          timeLimit: sessionProblem?.time_limit ?? 30,
+        };
+      });
 
-    navigate(`/session/${sessionId}/report`);
+      // Best effort snapshots, but always attempt report generation.
+      try {
+        await saveSnapshots(sessionId, snapshots);
+      } catch (err) {
+        console.error("[report] snapshots save failed:", err);
+      }
+
+      // Await report trigger so /report has a pending row immediately.
+      // Retry a few times to smooth transient network hiccups on remote setups.
+      let generated = false;
+      let lastError: unknown = null;
+      for (let attempt = 1; attempt <= 3; attempt += 1) {
+        try {
+          await generateReport(sessionId, { problems });
+          generated = true;
+          break;
+        } catch (err) {
+          lastError = err;
+          if (attempt < 3) {
+            await sleep(300 * attempt);
+          }
+        }
+      }
+      if (!generated) throw lastError ?? new Error("Failed to trigger report generation");
+
+      navigate(`/session/${sessionId}/report`, { replace: true });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Failed to finalize session";
+      setEndError(msg);
+      setEndingSession(false);
+      endingRef.current = false;
+    }
   }, [session, captureCurrentSnapshot, end, navigate]);
 
   const handleAdvance = useCallback(async () => {
-    if (!session) return;
+    if (!session || endingSession) return;
     const isLast = session.current_index >= session.problems.length - 1;
     if (isLast) {
       await doEndWithReport();
@@ -129,19 +161,21 @@ function InterviewRoom() {
       captureCurrentSnapshot();
       await advance();
     }
-  }, [session, advance, doEndWithReport, captureCurrentSnapshot]);
+  }, [session, endingSession, advance, doEndWithReport, captureCurrentSnapshot]);
 
   const handleEndSession = useCallback(() => {
+    if (endingSession) return;
+    setEndError(null);
     setShowEndModal(true);
-  }, []);
+  }, [endingSession]);
 
   const handleSelectQuestion = useCallback(
     async (nextIndex: number) => {
-      if (!session || nextIndex === session.current_index) return;
+      if (!session || endingSession || nextIndex === session.current_index) return;
       captureCurrentSnapshot();
       await setCurrentIndex(nextIndex);
     },
-    [session, captureCurrentSnapshot, setCurrentIndex],
+    [session, endingSession, captureCurrentSnapshot, setCurrentIndex],
   );
 
   /** Modal: generate report */
@@ -152,12 +186,21 @@ function InterviewRoom() {
 
   /** Modal: just go home (end session but skip report) */
   const handleModalHome = useCallback(async () => {
-    if (!session) return;
+    if (!session || endingRef.current) return;
+    endingRef.current = true;
     skipReportRef.current = true;
     setEndingSession(true);
+    setEndError(null);
     setShowEndModal(false);
-    await end();
-    navigate("/dashboard");
+    try {
+      await end();
+      navigate("/dashboard", { replace: true });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Failed to end session";
+      setEndError(msg);
+      setEndingSession(false);
+      endingRef.current = false;
+    }
   }, [session, end, navigate]);
 
   const canAdvance = useMemo(() => {
@@ -190,6 +233,15 @@ function InterviewRoom() {
 
   /* ── Session completed ────────────────────────────── */
   if (session.status === "completed") {
+    if (endingSession) {
+      return (
+        <div className="isp-loading">
+          <Loader2 className="isp-loading-spinner" />
+          <p>Finalizing session…</p>
+        </div>
+      );
+    }
+
     // If the interviewer chose to skip the report, go to dashboard
     if (skipReportRef.current) {
       return <Navigate to="/dashboard" replace />;
@@ -226,6 +278,12 @@ function InterviewRoom() {
   /* ── Active session ───────────────────────────────── */
   return (
     <div className="isp-shell">
+      {endError && (
+        <div className="isp-end-error-banner" role="alert">
+          {endError}
+        </div>
+      )}
+
       {/* ── Header bar ── */}
       <header className="isp-header">
         <div className="isp-header-left">
@@ -235,7 +293,7 @@ function InterviewRoom() {
             onSelect={handleSelectQuestion}
             onAdvance={handleAdvance}
             canAdvance={canAdvance}
-            disabled={session.status !== "active"}
+            disabled={session.status !== "active" || endingSession}
             showAdvance={isInterviewer}
           />
         </div>
@@ -252,9 +310,9 @@ function InterviewRoom() {
             pausedAt={session.timer_paused_at}
             pausedSeconds={session.timer_paused_seconds}
             canToggle={isInterviewer}
-            onPause={pauseSharedTimer}
-            onResume={resumeSharedTimer}
-          />
+              onPause={pauseSharedTimer}
+              onResume={resumeSharedTimer}
+            />
         </div>
 
         <div className="isp-header-right">
@@ -274,6 +332,7 @@ function InterviewRoom() {
               type="button"
               className="isp-end-btn"
               onClick={handleEndSession}
+              disabled={endingSession}
               title="End session"
             >
               <LogOut className="isp-end-icon" />

@@ -228,8 +228,11 @@ export default function CreateSessionPage() {
         })),
       });
 
-      // Navigate to the lobby with the session ID
-      navigate(`/session/${result.sessionId}/lobby`);
+      // Navigate to the lobby with immediate join code (avoids a blank wait
+      // while the first session fetch is still in-flight on slower networks).
+      navigate(`/session/${result.sessionId}/lobby`, {
+        state: { joinCode: result.joinCode },
+      });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to create session");
     } finally {

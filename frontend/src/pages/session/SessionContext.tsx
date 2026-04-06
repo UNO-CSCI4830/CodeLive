@@ -194,6 +194,7 @@ export function SessionProvider({ sessionId, userId, children }: Props) {
     try {
       const data = await fetchSession(sessionId);
       setSession(data);
+      setError(null);
     } catch {
       // swallow — Realtime will catch a genuine failure eventually
     }
@@ -201,11 +202,15 @@ export function SessionProvider({ sessionId, userId, children }: Props) {
 
   // Polling fallback for active/waiting sessions so interviewer-driven state
   // changes (advance/end/timer) always propagate even if a realtime event is missed.
+  // Also keep retrying when session is temporarily unavailable (null) so the
+  // lobby can self-heal after transient network/cold-start failures.
   useEffect(() => {
-    if (!session || session.status === "completed" || session.status === "cancelled") {
+    const status = session?.status;
+    if (status === "completed" || status === "cancelled") {
       return;
     }
-    const id = setInterval(silentLoad, 2000);
+    const pollMs = session ? 2000 : 1500;
+    const id = setInterval(silentLoad, pollMs);
     return () => clearInterval(id);
   }, [session, silentLoad]);
 
