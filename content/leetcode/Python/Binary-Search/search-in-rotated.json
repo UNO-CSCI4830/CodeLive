@@ -3,7 +3,7 @@
   "title": "Search in Rotated Sorted Array",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a rotated sorted array of distinct integers and a target, return its index if found, otherwise -1. The array was originally sorted in ascending order and rotated at some pivot unknown to you.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i], target ≤ 10^9",
+  "description": "### Objective\nGiven a rotated sorted array of distinct integers and a target, return its index if found, otherwise -1. The array was originally sorted in ascending order and rotated at some pivot unknown to you.\n\n### Function Contract\nImplement `search_in_rotated(nums: List[int], target: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[4,5,6,7,0,1,2]`).\n- Input `target`: type `number` (example: `0`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(log n)`, space `O(1)`.\n\n### Constraints\n- 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i], target ≤ 10^9\n",
   "leetcodeUrl": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
   "complexity": {
     "time": "O(log n)",

@@ -3,7 +3,7 @@
   "title": "Nearby Duplicate Within K",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Determine whether the array contains two equal values whose indices differ by at most k. Use a sliding hash window of size up to k to track the last k elements efficiently.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9\n- 0 ≤ k ≤ 10^5",
+  "description": "### Objective\nDetermine whether the array contains two equal values whose indices differ by at most k. Use a sliding hash window of size up to k to track the last k elements efficiently.\n\n### Function Contract\nImplement `contains_nearby_duplicate(nums: List[int], k: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[1,2,3,1]`).\n- Input `k`: type `number` (example: `3`).\n- Return type: `boolean`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(k)`.\n\n### Constraints\n- 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9\n- 0 ≤ k ≤ 10^5\n",
   "leetcodeUrl": "https://leetcode.com/problems/contains-duplicate-ii/",
   "complexity": {
     "time": "O(n)",

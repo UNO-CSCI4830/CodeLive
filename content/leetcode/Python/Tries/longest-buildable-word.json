@@ -3,7 +3,7 @@
   "title": "Longest Word Buildable by Successive Prefixes",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a list of distinct lowercase words, find the longest word that can be built one character at a time by other words in the list. Every prefix of the word must also be present in the list. If multiple answers have the same length, return the lexicographically smallest. Use a trie and a DFS that only descends through nodes whose prefixes are complete words.\n\n    \n\nConstraints:\n    - 1 ≤ |words| ≤ 10^5\n- Sum of word lengths ≤ 2·10^6\n- Words contain 'a'..'z' only",
+  "description": "### Objective\nGiven a list of distinct lowercase words, find the longest word that can be built one character at a time by other words in the list. Every prefix of the word must also be present in the list. If multiple answers have the same length, return the lexicographically smallest. Use a trie and a DFS that only descends through nodes whose prefixes are complete words.\n\n### Function Contract\nImplement `__init__(self: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `words`: type `array` (example: `[\"w\",\"wo\",\"wor\",\"worl\",\"world\"]`).\n- Return type: `string`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(T)`, space `O(T)`.\n\n### Constraints\n- 1 ≤ |words| ≤ 10^5\n- Sum of word lengths ≤ 2·10^6\n- Words contain 'a'..'z' only\n",
   "leetcodeUrl": "https://leetcode.com/problems/longest-word-in-dictionary/",
   "complexity": {
     "time": "O(T)",

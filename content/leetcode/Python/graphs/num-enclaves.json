@@ -3,7 +3,7 @@
   "title": "Number of Enclaves (Land Trapped by Sea)",
   "difficulty": "Medium",
   "language": "python",
-  "description": "You are given a binary matrix where 1 represents land and 0 water. A land cell can walk to another by 4-direction moves. A land cell is an enclave if it cannot walk off the boundary of the grid. Return the count of land cells that are enclaves.\n\nConstraints:\n- 1 ≤ m, n ≤ 500",
+  "description": "### Objective\nYou are given a binary matrix where 1 represents land and 0 water. A land cell can walk to another by 4-direction moves. A land cell is an enclave if it cannot walk off the boundary of the grid. Return the count of land cells that are enclaves.\n\n### Function Contract\nImplement `num_enclaves(grid: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `grid`: type `array` (example: `[[0,0,0,0],[1,0,1,0],[0,1,1,0],[0,0,0,0]]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(mn)`, space `O(mn)`.\n\n### Constraints\n- 1 ≤ m, n ≤ 500\n",
   "leetcodeUrl": "https://leetcode.com/problems/number-of-enclaves/",
   "complexity": {
     "time": "O(mn)",

@@ -1,0 +1,72 @@
+{
+  "id": "polymorphic-event-validator",
+  "title": "Polymorphic Event Validator",
+  "category": "backend",
+  "difficulty": "medium",
+  "description": "Validate polymorphic event payloads where required fields depend on event type.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /events/validate`\n\n### Request Replay (Executed In Order)\n1. `POST /events/validate`\n   Request body: `{\"type\":\"email\",\"to\":\"x@y.com\",\"subject\":\"Hello\"}`\n   Expected status: `200`\n   Expected body: `{\"accepted\":true}`\n\n2. `POST /events/validate`\n   Request body: `{\"type\":\"sms\",\"message\":\"hi\"}`\n   Expected status: `400`\n   Expected body: `{\"error\":\"invalid_event\"}`\n\n3. `POST /events/validate`\n   Request body: `{\"type\":\"sms\",\"phone\":\"+15550000000\",\"message\":\"ping\"}`\n   Expected status: `200`\n   Expected body: `{\"accepted\":true}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Branch required fields by type.",
+    "Reject unknown type values."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "eventing",
+    "schema-validation"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Polymorphic Event Validator\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/events/validate\")\nasync def polymorphic_event_validator_post_events_validate(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/events/validate",
+        "expected_status": 200,
+        "expected_body": {
+          "accepted": true
+        },
+        "body": {
+          "type": "email",
+          "to": "x@y.com",
+          "subject": "Hello"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/events/validate",
+        "expected_status": 400,
+        "expected_body": {
+          "error": "invalid_event"
+        },
+        "body": {
+          "type": "sms",
+          "message": "hi"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/events/validate",
+        "expected_status": 200,
+        "expected_body": {
+          "accepted": true
+        },
+        "body": {
+          "type": "sms",
+          "phone": "+15550000000",
+          "message": "ping"
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 10
+}

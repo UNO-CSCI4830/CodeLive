@@ -1,0 +1,60 @@
+{
+  "id": "enum-filter-guard",
+  "title": "Enum Filter Guard",
+  "category": "backend",
+  "difficulty": "easy",
+  "description": "Guard query filters to a strict enum and return meaningful errors on invalid values.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `GET /tasks?status=open`\n- `GET /tasks?status=blocked`\n- `GET /tasks?status=done`\n\n### Request Replay (Executed In Order)\n1. `GET /tasks?status=open`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"status\":\"open\",\"count\":2}`\n\n2. `GET /tasks?status=blocked`\n   Request body: `(not provided)`\n   Expected status: `400`\n   Expected body: `{\"error\":\"invalid_status\"}`\n\n3. `GET /tasks?status=done`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"status\":\"done\",\"count\":1}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Centralize allowed status values.",
+    "Validate early before branching."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "query-validation",
+    "enums"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Enum Filter Guard\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.get(\"/tasks\")\nasync def enum_filter_guard_get_tasks():\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "GET",
+        "path": "/tasks?status=open",
+        "expected_status": 200,
+        "expected_body": {
+          "status": "open",
+          "count": 2
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/tasks?status=blocked",
+        "expected_status": 400,
+        "expected_body": {
+          "error": "invalid_status"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/tasks?status=done",
+        "expected_status": 200,
+        "expected_body": {
+          "status": "done",
+          "count": 1
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 8
+}

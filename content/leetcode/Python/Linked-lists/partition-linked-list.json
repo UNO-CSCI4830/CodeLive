@@ -3,7 +3,7 @@
   "title": "Partition Linked List",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given Rearrange a list so that all nodes with values less than x come before nodes with values greater than or equal to x. Preserve the original relative order of nodes in each partition.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5",
+  "description": "### Objective\nRearrange a list so that all nodes with values less than x come before nodes with values greater than or equal to x. Preserve the original relative order of nodes in each partition.\n\n### Function Contract\nImplement `__init__(self: any, val: any, next: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `list`: type `array` (example: `[1,4,3,2,5,2]`).\n- Input `x`: type `number` (example: `3`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 0 ≤ n ≤ 10^5\n",
   "leetcodeUrl": "https://leetcode.com/problems/partition-list/",
   "complexity": {
     "time": "O(n)",

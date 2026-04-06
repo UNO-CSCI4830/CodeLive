@@ -2,7 +2,13 @@
  * AI chat endpoint for the interview session assistant.
  *
  * POST /api/ai/chat
- * Body: { messages: { role: "system" | "user" | "assistant"; content: string }[] }
+ * Body: {
+ *   sessionId,
+ *   problemId,
+ *   orderIndex,
+ *   userMessage: { id, content, timestamp },
+ *   messages: { role: "system" | "user" | "assistant"; content: string }[]
+ * }
  *
  * Uses Anthropic Claude 3.5 Sonnet. The frontend sends a flat messages array
  * that may include system-role entries; this route extracts them into
@@ -14,6 +20,8 @@
 
 import { Router, type Request, type Response } from "express";
 import Anthropic from "@anthropic-ai/sdk";
+import { supabaseAdmin } from "../lib/supabase";
+import { requireAuth } from "../middleware/auth";
 
 const router = Router();
 
@@ -22,31 +30,79 @@ interface ChatMessage {
   content: string;
 }
 
-router.post("/api/ai/chat", async (req: Request, res: Response) => {
-  const { messages } = req.body as { messages?: ChatMessage[] };
+interface ChatRequestBody {
+  sessionId?: string;
+  problemId?: string;
+  orderIndex?: number;
+  userMessage?: {
+    id?: string;
+    content?: string;
+    timestamp?: number;
+  };
+  messages?: ChatMessage[];
+}
+
+const GUARDRAIL_PROMPT =
+  "You are an interview coding assistant. Never provide full solutions, complete final code, " +
+  "or exact final query answers. Provide hints, debugging guidance, and conceptual nudges only.";
+
+router.post("/api/ai/chat", requireAuth, async (req: Request, res: Response) => {
+  const { messages, sessionId, problemId, orderIndex, userMessage } = req.body as ChatRequestBody;
+  const authedUserId = (req as Request & { user?: { id: string } }).user?.id;
 
   if (!messages || !Array.isArray(messages)) {
     return res.status(400).json({ error: "messages array is required" });
   }
+  if (!sessionId) {
+    return res.status(400).json({ error: "sessionId is required" });
+  }
+  if (!authedUserId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  if (messages.length === 0 || messages.length > 64) {
+    return res.status(400).json({ error: "messages must contain 1-64 entries" });
+  }
+  if (!problemId || typeof problemId !== "string") {
+    return res.status(400).json({ error: "problemId is required" });
+  }
+  if (!Number.isInteger(orderIndex) || (orderIndex as number) < 0) {
+    return res.status(400).json({ error: "orderIndex must be a non-negative integer" });
+  }
+  const normalizedOrderIndex = orderIndex as number;
 
-  const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
-  console.log("[ai/chat] Anthropic key:", apiKey ? `set (${apiKey.length} chars)` : "MISSING — returning fallback");
+  const { data: session, error: sessionError } = await supabaseAdmin
+    .from("sessions")
+    .select("id, status, candidate_id, ai_enabled")
+    .eq("id", sessionId)
+    .maybeSingle();
 
-  // No key configured — return offline hint so the frontend stays functional
-  if (!apiKey) {
-    const lastUserMsg = [...messages].reverse().find((m) => m.role === "user");
-    const hint = generateFallbackHint(lastUserMsg?.content ?? "");
-    return res.json({ message: hint });
+  if (sessionError || !session) {
+    return res.status(404).json({ error: "Session not found" });
+  }
+  if (session.ai_enabled === false) {
+    return res.status(403).json({ error: "AI assistant is disabled for this session." });
+  }
+  if (session.status !== "active") {
+    return res.status(409).json({ error: "Session is not active." });
+  }
+  if (session.candidate_id !== authedUserId) {
+    return res.status(403).json({ error: "Only the candidate can send AI messages." });
   }
 
-  // Anthropic's API requires system content as a top-level string, not a
-  // message role. Extract all system entries and join them.
-  const systemText = messages
-    .filter((m) => m.role === "system")
-    .map((m) => m.content)
-    .join("\n\n");
+  const { data: sessionProblem, error: sessionProblemError } = await supabaseAdmin
+    .from("session_problems")
+    .select("problem_id")
+    .eq("session_id", sessionId)
+    .eq("order_index", normalizedOrderIndex)
+    .maybeSingle();
 
-  // Only user/assistant turns go into the messages array
+  if (sessionProblemError || !sessionProblem) {
+    return res.status(404).json({ error: "Session problem not found for orderIndex." });
+  }
+  if (sessionProblem.problem_id !== problemId) {
+    return res.status(400).json({ error: "problemId does not match the selected session problem." });
+  }
+
   const conversationTurns = messages.filter(
     (m): m is { role: "user" | "assistant"; content: string } =>
       m.role === "user" || m.role === "assistant",
@@ -56,13 +112,81 @@ router.post("/api/ai/chat", async (req: Request, res: Response) => {
     return res.status(400).json({ error: "No user messages provided" });
   }
 
+  const lastUserTurn = [...conversationTurns].reverse().find((m) => m.role === "user");
+  const userContent = (
+    typeof userMessage?.content === "string" && userMessage.content.trim()
+      ? userMessage.content.trim()
+      : lastUserTurn?.content?.trim() ?? ""
+  ).slice(0, 8000);
+
+  if (!userContent) {
+    return res.status(400).json({ error: "Last user message content is required" });
+  }
+
+  const userMessageId = (userMessage?.id?.trim() || `u_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`).slice(0, 120);
+  const userTimestampMs = Number.isFinite(userMessage?.timestamp)
+    ? Number(userMessage?.timestamp)
+    : Date.now();
+
+  try {
+    await persistAiMessage({
+      sessionId,
+      orderIndex: normalizedOrderIndex,
+      problemId,
+      messageId: userMessageId,
+      role: "user",
+      content: userContent,
+      timestampMs: userTimestampMs,
+      sentByUserId: authedUserId,
+    });
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : String(error);
+    return res.status(500).json({ error: `Failed to persist user chat message: ${msg}` });
+  }
+
+  const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
+  console.log("[ai/chat] Anthropic key:", apiKey ? `set (${apiKey.length} chars)` : "MISSING — returning fallback");
+
+  // No key configured — return offline hint so the frontend stays functional
+  if (!apiKey) {
+    const hint = generateFallbackHint(userContent);
+    const assistantMessageId = `a_${userMessageId}`;
+    const assistantTimestampMs = Date.now();
+
+    try {
+      await persistAiMessage({
+        sessionId,
+        orderIndex: normalizedOrderIndex,
+        problemId,
+        messageId: assistantMessageId,
+        role: "assistant",
+        content: hint,
+        timestampMs: assistantTimestampMs,
+        sentByUserId: null,
+      });
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : String(error);
+      return res.status(500).json({ error: `Failed to persist assistant chat message: ${msg}` });
+    }
+
+    return res.json({ message: hint, messageId: assistantMessageId, timestamp: assistantTimestampMs });
+  }
+
+  // Anthropic's API requires system content as a top-level string, not a
+  // message role. Extract all system entries and join them.
+  const systemText = messages
+    .filter((m) => m.role === "system")
+    .map((m) => m.content)
+    .join("\n\n");
+  const guardedSystemText = [GUARDRAIL_PROMPT, systemText].filter(Boolean).join("\n\n");
+
   try {
     const client = new Anthropic({ apiKey });
 
     const response = await client.messages.create({
       model: "claude-sonnet-4-6",
       max_tokens: 1024,
-      ...(systemText ? { system: systemText } : {}),
+      ...(guardedSystemText ? { system: guardedSystemText } : {}),
       messages: conversationTurns,
     });
 
@@ -71,12 +195,85 @@ router.post("/api/ai/chat", async (req: Request, res: Response) => {
         ? response.content[0].text
         : "I couldn't generate a response.";
 
-    return res.json({ message: text });
+    const assistantMessageId = `a_${userMessageId}`;
+    const assistantTimestampMs = Date.now();
+    await persistAiMessage({
+      sessionId,
+      orderIndex: normalizedOrderIndex,
+      problemId,
+      messageId: assistantMessageId,
+      role: "assistant",
+      content: text,
+      timestampMs: assistantTimestampMs,
+      sentByUserId: null,
+    });
+
+    return res.json({ message: text, messageId: assistantMessageId, timestamp: assistantTimestampMs });
   } catch (err) {
     console.error("[ai/chat] Anthropic error:", err);
-    return res.status(500).json({ error: "AI service error" });
+    const fallback =
+      "AI service is temporarily unavailable. Ask me to break the problem down and I can still help with high-level hints.";
+    const assistantMessageId = `a_${userMessageId}`;
+    const assistantTimestampMs = Date.now();
+    try {
+      await persistAiMessage({
+        sessionId,
+        orderIndex: normalizedOrderIndex,
+        problemId,
+        messageId: assistantMessageId,
+        role: "assistant",
+        content: fallback,
+        timestampMs: assistantTimestampMs,
+        sentByUserId: null,
+      });
+      return res.json({
+        message: fallback,
+        messageId: assistantMessageId,
+        timestamp: assistantTimestampMs,
+      });
+    } catch (persistError) {
+      const msg = persistError instanceof Error ? persistError.message : String(persistError);
+      return res.status(500).json({ error: `AI service error: ${msg}` });
+    }
   }
 });
+
+interface PersistAiMessageInput {
+  sessionId: string;
+  orderIndex: number;
+  problemId: string;
+  messageId: string;
+  role: "user" | "assistant";
+  content: string;
+  timestampMs: number;
+  sentByUserId: string | null;
+}
+
+async function persistAiMessage(input: PersistAiMessageInput): Promise<void> {
+  const occurredAtIso = new Date(
+    Number.isFinite(input.timestampMs) ? input.timestampMs : Date.now(),
+  ).toISOString();
+
+  const { error } = await supabaseAdmin
+    .from("session_ai_messages")
+    .upsert(
+      {
+        session_id: input.sessionId,
+        order_index: input.orderIndex,
+        problem_id: input.problemId,
+        message_id: input.messageId,
+        role: input.role,
+        content: input.content.slice(0, 8000),
+        sent_by_user_id: input.sentByUserId,
+        occurred_at: occurredAtIso,
+      },
+      { onConflict: "session_id,message_id" },
+    );
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
 
 /**
  * Generates a helpful fallback hint when no AI API key is configured.

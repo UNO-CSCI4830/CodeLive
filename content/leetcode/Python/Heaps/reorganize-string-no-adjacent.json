@@ -3,7 +3,7 @@
   "title": "Reorganize String to Avoid Adjacent Duplicates",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a string s, rearrange the characters so that no two adjacent characters are the same. If such an arrangement is impossible, return an empty string. Use a max-heap of character counts and always pick the two most frequent remaining characters to place next.\n\n    \n\nConstraints:\n    - 1 ≤ len(s) ≤ 10^5\n- s contains lowercase letters",
+  "description": "### Objective\nGiven a string s, rearrange the characters so that no two adjacent characters are the same. If such an arrangement is impossible, return an empty string. Use a max-heap of character counts and always pick the two most frequent remaining characters to place next.\n\n### Function Contract\nImplement `reorganize_string(s: str)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `s`: type `string` (example: `\"aab\"`).\n- Return type: `string`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n log m)`, space `O(m)`.\n\n### Constraints\n- 1 ≤ len(s) ≤ 10^5\n- s contains lowercase letters\n",
   "leetcodeUrl": "https://leetcode.com/problems/reorganize-string/",
   "complexity": {
     "time": "O(n log m)",
@@ -61,7 +61,7 @@
   ],
   "relatedProblems": [
     "task-scheduler-with-cooldown",
-    "top-k-frequent-elements"
+    "top-k-frequent-elements-heap"
   ],
   "difficulty_metrics": {
     "acceptance_rate": 46,

@@ -3,7 +3,7 @@
   "title": "Root-to-Leaf Path Sum",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Given a binary tree and a target sum, determine if any root‑to‑leaf path has node values summing to target.\n\n    \n\nConstraints:\n    - 0 ≤ nodes ≤ 10^5\n- Node values are 32‑bit signed",
+  "description": "### Objective\nGiven a binary tree and a target sum, determine if any root‑to‑leaf path has node values summing to target.\n\n### Function Contract\nImplement `__init__(self: any, val: any, left: any, right: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `tree`: type `array` (example: `[5,4,8,11,null,13,4,7,2,null,null,null,1]`).\n- Input `target`: type `number` (example: `22`).\n- Return type: `boolean`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(h)`.\n\n### Constraints\n- 0 ≤ nodes ≤ 10^5\n- Node values are 32‑bit signed\n",
   "leetcodeUrl": "https://leetcode.com/problems/path-sum/",
   "complexity": {
     "time": "O(n)",

@@ -290,7 +290,7 @@ const leetcodeSubs: SubCategory[] = [
       { id: "minimum-meeting-rooms", title: "Minimum Meeting Rooms", difficulty: "medium" },
       { id: "reorganize-string-no-adjacent", title: "Reorganize String to Avoid Adjacent Duplicates", difficulty: "medium" },
       { id: "task-scheduler-with-cooldown", title: "Task Scheduler with Cooldown", difficulty: "medium" },
-      { id: "top-k-frequent-elements", title: "Top-K Frequent Elements", difficulty: "medium" },
+      { id: "top-k-frequent-elements-heap", title: "Top-K Frequent Elements", difficulty: "medium" },
     ],
   },
   {

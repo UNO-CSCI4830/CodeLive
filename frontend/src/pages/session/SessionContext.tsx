@@ -14,7 +14,14 @@ import {
   type ReactNode,
 } from "react";
 import { supabase } from "@/lib/supabase";
-import { fetchSession, advanceQuestion, lockProblem, endSession } from "./api";
+import {
+  fetchSession,
+  advanceQuestion,
+  endSession,
+  selectQuestion,
+  pauseTimer,
+  resumeTimer,
+} from "./api";
 import type { Session, SessionProblem } from "./types";
 
 interface SessionContextValue {
@@ -31,8 +38,12 @@ interface SessionContextValue {
   /** Advance to the next question (both users see the change) */
   advance: () => Promise<void>;
 
-  /** Lock current problem (timer expired) */
-  lockCurrent: () => Promise<void>;
+  /** Jump to a specific question index */
+  setCurrentIndex: (index: number) => Promise<void>;
+
+  /** Pause or resume the shared interview timer */
+  pauseSharedTimer: () => Promise<void>;
+  resumeSharedTimer: () => Promise<void>;
 
   /** End the session entirely */
   end: () => Promise<void>;
@@ -137,20 +148,41 @@ export function SessionProvider({ sessionId, userId, children }: Props) {
     );
   }, [sessionId]);
 
-  const lockCurrent = useCallback(async () => {
-    if (!session) return;
-    await lockProblem(sessionId, session.current_index);
-    // Update local state
-    setSession((prev) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        problems: prev.problems.map((p) =>
-          p.order_index === prev.current_index ? { ...p, locked: true } : p,
-        ),
-      };
-    });
-  }, [sessionId, session]);
+  const setCurrentIndex = useCallback(
+    async (index: number) => {
+      const result = await selectQuestion(sessionId, index);
+      setSession((prev) => (prev ? { ...prev, current_index: result.currentIndex } : prev));
+    },
+    [sessionId],
+  );
+
+  const pauseSharedTimer = useCallback(async () => {
+    const result = await pauseTimer(sessionId);
+    setSession((prev) =>
+      prev
+        ? {
+            ...prev,
+            timer_paused: result.timerPaused,
+            timer_paused_at: result.timerPausedAt,
+            timer_paused_seconds: result.timerPausedSeconds,
+          }
+        : prev,
+    );
+  }, [sessionId]);
+
+  const resumeSharedTimer = useCallback(async () => {
+    const result = await resumeTimer(sessionId);
+    setSession((prev) =>
+      prev
+        ? {
+            ...prev,
+            timer_paused: result.timerPaused,
+            timer_paused_at: result.timerPausedAt,
+            timer_paused_seconds: result.timerPausedSeconds,
+          }
+        : prev,
+    );
+  }, [sessionId]);
 
   const endSess = useCallback(async () => {
     await endSession(sessionId);
@@ -167,6 +199,16 @@ export function SessionProvider({ sessionId, userId, children }: Props) {
     }
   }, [sessionId]);
 
+  // Polling fallback for active/waiting sessions so interviewer-driven state
+  // changes (advance/end/timer) always propagate even if a realtime event is missed.
+  useEffect(() => {
+    if (!session || session.status === "completed" || session.status === "cancelled") {
+      return;
+    }
+    const id = setInterval(silentLoad, 2000);
+    return () => clearInterval(id);
+  }, [session, silentLoad]);
+
   return (
     <SessionContext.Provider
       value={{
@@ -176,7 +218,9 @@ export function SessionProvider({ sessionId, userId, children }: Props) {
         currentProblem,
         isInterviewer,
         advance,
-        lockCurrent,
+        setCurrentIndex,
+        pauseSharedTimer,
+        resumeSharedTimer,
         end: endSess,
         refresh: load,
         silentRefresh: silentLoad,

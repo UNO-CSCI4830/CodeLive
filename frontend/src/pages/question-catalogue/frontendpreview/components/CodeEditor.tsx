@@ -5,6 +5,7 @@ import "../styles/CodeEditor.css";
 interface Props {
   value: string;
   language: string;
+  path?: string;
   readOnly?: boolean;
   onChange: (value: string) => void;
 }
@@ -94,6 +95,7 @@ function handleBeforeMount(monaco: Monaco) {
 export default function CodeEditor({
   value,
   language,
+  path,
   readOnly = false,
   onChange,
 }: Props) {
@@ -104,6 +106,7 @@ export default function CodeEditor({
       <Editor
         height="100%"
         language={toMonacoLang(language)}
+        path={path}
         value={value}
         onChange={(v) => onChange(v ?? "")}
         theme="vs-dark"

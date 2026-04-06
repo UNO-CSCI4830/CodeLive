@@ -3,7 +3,7 @@
   "title": "Lowest Common Ancestor in BST",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a BST and two node values p and q that exist in the tree, return the value of their lowest common ancestor.\n\n    \n\nConstraints:\n    - 1 ≤ nodes ≤ 10^5\n- All values unique\n- p and q are present",
+  "description": "### Objective\nGiven a BST and two node values p and q that exist in the tree, return the value of their lowest common ancestor.\n\n### Function Contract\nImplement `__init__(self: any, val: any, left: any, right: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `tree`: type `array` (example: `[6,2,8,0,4,7,9,null,null,3,5]`).\n- Input `p`: type `number` (example: `2`).\n- Input `q`: type `number` (example: `8`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(h)`, space `O(1) iterative`.\n\n### Constraints\n- 1 ≤ nodes ≤ 10^5\n- All values unique\n- p and q are present\n",
   "leetcodeUrl": "https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/",
   "complexity": {
     "time": "O(h)",

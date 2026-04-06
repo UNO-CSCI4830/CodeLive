@@ -17,6 +17,12 @@ const FrontendPreviewPage = lazy(
 const LeetcodePreviewPage = lazy(
   () => import("@/pages/question-catalogue/leetcodepreview/LeetcodePreviewPage"),
 );
+const BackendPreviewPage = lazy(
+  () => import("@/pages/question-catalogue/backendpreview/BackendPreviewPage"),
+);
+const DatabasePreviewPage = lazy(
+  () => import("@/pages/question-catalogue/databasepreview/DatabasePreviewPage"),
+);
 
 /* Session pages (lazy-loaded — they pull in Yjs + Monaco) */
 const CreateSessionPage = lazy(
@@ -62,6 +68,8 @@ export default function App() {
           {/* Full-screen editors — no sidebar */}
           <Route path="/questions/frontend/:problemId" element={<FrontendPreviewPage />} />
           <Route path="/questions/leetcode/:problemId" element={<LeetcodePreviewPage />} />
+          <Route path="/questions/backend/:problemId" element={<BackendPreviewPage />} />
+          <Route path="/questions/database/:problemId" element={<DatabasePreviewPage />} />
 
           {/* Session pages — full-screen, no sidebar */}
           <Route path="/session/:sessionId/lobby" element={<SessionLobbyPage />} />

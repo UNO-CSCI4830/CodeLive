@@ -3,7 +3,7 @@
   "title": "Task Scheduler with Cooldown",
   "difficulty": "Medium",
   "language": "python",
-  "description": "You are given tasks represented by uppercase letters and a nonnegative cooldown n. Each same letter task must be separated by at least n intervals. Compute the least number of time units to finish all tasks if you can execute one task or idle each unit. Use a greedy schedule with a max-heap of remaining counts and a queue to track cooldowns.\n\n    \n\nConstraints:\n    - 1 ≤ len(tasks) ≤ 10^5\n- 0 ≤ n ≤ 10^5",
+  "description": "### Objective\nYou are given tasks represented by uppercase letters and a nonnegative cooldown n. Each same letter task must be separated by at least n intervals. Compute the least number of time units to finish all tasks if you can execute one task or idle each unit. Use a greedy schedule with a max-heap of remaining counts and a queue to track cooldowns.\n\n### Function Contract\nImplement `least_interval(tasks: List[str], n: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `tasks`: type `array` (example: `[\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"]`).\n- Input `n`: type `number` (example: `2`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n log m)`, space `O(m)`.\n\n### Constraints\n- 1 ≤ len(tasks) ≤ 10^5\n- 0 ≤ n ≤ 10^5\n",
   "leetcodeUrl": "https://leetcode.com/problems/task-scheduler/",
   "complexity": {
     "time": "O(n log m)",

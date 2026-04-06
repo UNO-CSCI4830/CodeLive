@@ -3,7 +3,7 @@
   "title": "Shortest Path in a Binary Matrix (8 Directions)",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given an n×n binary matrix grid where 0 means empty and 1 means blocked, return the length of the shortest clear path from (0,0) to (n-1,n-1) moving in 8 directions. Return -1 if no such path exists.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 200",
+  "description": "### Objective\nGiven an n×n binary matrix grid where 0 means empty and 1 means blocked, return the length of the shortest clear path from (0,0) to (n-1,n-1) moving in 8 directions. Return -1 if no such path exists.\n\n### Function Contract\nImplement `shortest_path_binary_matrix(grid: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `grid`: type `array` (example: `[[0,1],[1,0]]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n^2)`, space `O(n^2)`.\n\n### Constraints\n- 1 ≤ n ≤ 200\n",
   "leetcodeUrl": "https://leetcode.com/problems/shortest-path-in-binary-matrix/",
   "complexity": {
     "time": "O(n^2)",

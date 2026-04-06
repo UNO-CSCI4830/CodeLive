@@ -3,7 +3,7 @@
   "title": "Cheapest Flight with Stop Limit",
   "difficulty": "Medium",
   "language": "python",
-  "description": "You are given flights[u,v,w] with cost w between cities u and v (directed). Find the cheapest price from src to dst with at most K stops. Return -1 if unreachable under the constraint. Use K+1 rounds of Bellman-Ford style relaxation to limit path length by edges.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 300\n- 0 ≤ |flights| ≤ 10^4\n- 0 ≤ K ≤ n-1",
+  "description": "### Objective\nYou are given flights[u,v,w] with cost w between cities u and v (directed). Find the cheapest price from src to dst with at most K stops. Return -1 if unreachable under the constraint. Use K+1 rounds of Bellman-Ford style relaxation to limit path length by edges.\n\n### Function Contract\nImplement `cheapest_price_k_stops(n: int, flights: List[List[int]], src: int, dst: int, K: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `n`: type `number` (example: `3`).\n- Input `flights`: type `array` (example: `[[0,1,100],[1,2,100],[0,2,500]]`).\n- Input `src`: type `number` (example: `0`).\n- Input `dst`: type `number` (example: `2`).\n- Input `K`: type `number` (example: `1`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(K·E)`, space `O(V)`.\n\n### Constraints\n- 1 ≤ n ≤ 300\n- 0 ≤ |flights| ≤ 10^4\n- 0 ≤ K ≤ n-1\n",
   "leetcodeUrl": "https://leetcode.com/problems/cheapest-flights-within-k-stops/",
   "complexity": {
     "time": "O(K·E)",

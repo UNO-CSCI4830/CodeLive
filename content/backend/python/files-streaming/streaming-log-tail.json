@@ -1,0 +1,81 @@
+{
+  "id": "streaming-log-tail",
+  "title": "Streaming Log Tail",
+  "category": "backend",
+  "difficulty": "medium",
+  "description": "Implement append and tail endpoints for in-memory log streams.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /logs/append`\n- `GET /logs/tail?n=2`\n\n### Request Replay (Executed In Order)\n1. `POST /logs/append`\n   Request body: `{\"line\":\"one\"}`\n   Expected status: `200`\n   Expected body: `{\"appended\":true,\"total\":1}`\n\n2. `POST /logs/append`\n   Request body: `{\"line\":\"two\"}`\n   Expected status: `200`\n   Expected body: `{\"appended\":true,\"total\":2}`\n\n3. `POST /logs/append`\n   Request body: `{\"line\":\"three\"}`\n   Expected status: `200`\n   Expected body: `{\"appended\":true,\"total\":3}`\n\n4. `GET /logs/tail?n=2`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"lines\":[\"two\",\"three\"]}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Use a list for append-only log storage.",
+    "Slice from the end for tail behavior."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "logs",
+    "streaming-patterns"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Streaming Log Tail\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/logs/append\")\nasync def streaming_log_tail_post_logs_append(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n\n@app.get(\"/logs/tail\")\nasync def streaming_log_tail_get_logs_tail():\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/logs/append",
+        "expected_status": 200,
+        "expected_body": {
+          "appended": true,
+          "total": 1
+        },
+        "body": {
+          "line": "one"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/logs/append",
+        "expected_status": 200,
+        "expected_body": {
+          "appended": true,
+          "total": 2
+        },
+        "body": {
+          "line": "two"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/logs/append",
+        "expected_status": 200,
+        "expected_body": {
+          "appended": true,
+          "total": 3
+        },
+        "body": {
+          "line": "three"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/logs/tail?n=2",
+        "expected_status": 200,
+        "expected_body": {
+          "lines": [
+            "two",
+            "three"
+          ]
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 34
+}

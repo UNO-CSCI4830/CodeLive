@@ -1,0 +1,58 @@
+{
+  "id": "api-key-guard",
+  "title": "API Key Guard",
+  "category": "backend",
+  "difficulty": "easy",
+  "description": "Protect an admin endpoint with a fixed API key check.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `GET /admin/ping?api_key=dev-secret`\n- `GET /admin/ping`\n- `GET /admin/ping?api_key=wrong`\n\n### Request Replay (Executed In Order)\n1. `GET /admin/ping?api_key=dev-secret`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"ok\":true}`\n\n2. `GET /admin/ping`\n   Request body: `(not provided)`\n   Expected status: `401`\n   Expected body: `{\"error\":\"unauthorized\"}`\n\n3. `GET /admin/ping?api_key=wrong`\n   Request body: `(not provided)`\n   Expected status: `401`\n   Expected body: `{\"error\":\"unauthorized\"}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Compare exact key string.",
+    "Fail closed on missing key."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "authn",
+    "access-control"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"API Key Guard\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.get(\"/admin/ping\")\nasync def api_key_guard_get_admin_ping():\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "GET",
+        "path": "/admin/ping?api_key=dev-secret",
+        "expected_status": 200,
+        "expected_body": {
+          "ok": true
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/admin/ping",
+        "expected_status": 401,
+        "expected_body": {
+          "error": "unauthorized"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/admin/ping?api_key=wrong",
+        "expected_status": 401,
+        "expected_body": {
+          "error": "unauthorized"
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 11
+}

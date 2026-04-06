@@ -1,0 +1,74 @@
+{
+  "id": "session-count-by-device",
+  "title": "Session Count by Device",
+  "category": "database",
+  "difficulty": "easy",
+  "description": "Write a SQL query to compute the requested aggregate metric.\n\n### Tables\n```sql\nCREATE TABLE users (\n  user_id INTEGER PRIMARY KEY,\n  user_name TEXT NOT NULL,\n  plan TEXT NOT NULL,\n  country TEXT NOT NULL\n);\n\nCREATE TABLE sessions (\n  session_id INTEGER PRIMARY KEY,\n  user_id INTEGER NOT NULL,\n  started_at TEXT NOT NULL,\n  duration_minutes INTEGER NOT NULL,\n  device TEXT NOT NULL\n);\n\nCREATE TABLE purchases (\n  purchase_id INTEGER PRIMARY KEY,\n  user_id INTEGER NOT NULL,\n  purchased_at TEXT NOT NULL,\n  amount INTEGER NOT NULL\n);\n```\n\n### Task\nCount sessions by device type.\n\n### Return Columns\n- `device`\n- `session_count`\n\n### Ordering\nSort by `session_count` DESC, then `device` ASC.\n\n### Notes\n- Use SQLite syntax.\n- Write your answer in `solution.sql`.\n- Do not hardcode output rows; query from tables.\n- Internal hidden tests run against additional seed data.",
+  "constraints": "SQLite 3.44+\n- Single query unless the prompt explicitly asks for CTEs\n- Deterministic output",
+  "hints": [],
+  "tags": [
+    "database",
+    "sql",
+    "sqlite",
+    "aggregations-grouping",
+    "group-by",
+    "count"
+  ],
+  "starter_files": [
+    {
+      "path": "solution.sql",
+      "content": "",
+      "language": "sql",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "schema_sql": "CREATE TABLE users (\n  user_id INTEGER PRIMARY KEY,\n  user_name TEXT NOT NULL,\n  plan TEXT NOT NULL,\n  country TEXT NOT NULL\n);\n\nCREATE TABLE sessions (\n  session_id INTEGER PRIMARY KEY,\n  user_id INTEGER NOT NULL,\n  started_at TEXT NOT NULL,\n  duration_minutes INTEGER NOT NULL,\n  device TEXT NOT NULL\n);\n\nCREATE TABLE purchases (\n  purchase_id INTEGER PRIMARY KEY,\n  user_id INTEGER NOT NULL,\n  purchased_at TEXT NOT NULL,\n  amount INTEGER NOT NULL\n);",
+    "seed_sql": "INSERT INTO users (user_id, user_name, plan, country) VALUES\n  (1, 'Ana', 'pro', 'US'),\n  (2, 'Bo', 'free', 'US'),\n  (3, 'Cy', 'pro', 'CA'),\n  (4, 'Di', 'free', 'CA'),\n  (5, 'Eli', 'team', 'US'),\n  (6, 'Fae', 'team', 'UK'),\n  (7, 'Geo', 'free', 'UK'),\n  (8, 'Han', 'pro', 'UK');\n\nINSERT INTO sessions (session_id, user_id, started_at, duration_minutes, device) VALUES\n  (1, 1, '2024-03-01 09:00:00', 30, 'web'),\n  (2, 1, '2024-03-02 09:00:00', 25, 'mobile'),\n  (3, 2, '2024-03-01 10:00:00', 10, 'mobile'),\n  (4, 3, '2024-03-01 11:00:00', 40, 'web'),\n  (5, 3, '2024-03-03 11:30:00', 35, 'web'),\n  (6, 4, '2024-03-02 12:00:00', 15, 'mobile'),\n  (7, 5, '2024-03-01 13:00:00', 50, 'web'),\n  (8, 6, '2024-03-04 08:00:00', 20, 'tablet'),\n  (9, 6, '2024-03-05 08:00:00', 30, 'web'),\n  (10, 7, '2024-03-02 14:00:00', 12, 'mobile'),\n  (11, 8, '2024-03-03 16:00:00', 45, 'web'),\n  (12, 8, '2024-03-04 16:30:00', 30, 'tablet');\n\nINSERT INTO purchases (purchase_id, user_id, purchased_at, amount) VALUES\n  (1, 1, '2024-03-01 10:00:00', 120),\n  (2, 1, '2024-04-02 10:00:00', 60),\n  (3, 3, '2024-03-10 09:00:00', 80),\n  (4, 5, '2024-03-11 13:00:00', 200),\n  (5, 6, '2024-03-12 15:00:00', 40),\n  (6, 8, '2024-04-01 17:00:00', 150),\n  (7, 2, '2024-03-15 10:30:00', 20),\n  (8, 3, '2024-04-15 09:30:00', 50);",
+    "expected_output": [
+      {
+        "device": "web",
+        "session_count": 6
+      },
+      {
+        "device": "mobile",
+        "session_count": 4
+      },
+      {
+        "device": "tablet",
+        "session_count": 2
+      }
+    ],
+    "column_names": [
+      "device",
+      "session_count"
+    ],
+    "order_matters": true,
+    "check_explain": false,
+    "hidden_tests": [
+      {
+        "expected_output": [
+          {
+            "device": "web",
+            "session_count": 6
+          },
+          {
+            "device": "mobile",
+            "session_count": 4
+          },
+          {
+            "device": "tablet",
+            "session_count": 2
+          }
+        ],
+        "column_names": [
+          "device",
+          "session_count"
+        ],
+        "order_matters": true
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 21
+}

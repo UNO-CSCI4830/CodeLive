@@ -1,0 +1,73 @@
+{
+  "id": "duplicate-request-deduper",
+  "title": "Duplicate Request Deduper",
+  "category": "backend",
+  "difficulty": "medium",
+  "description": "Prevent duplicate task submissions by request_id while preserving original result references.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /tasks/submit`\n\n### Request Replay (Executed In Order)\n1. `POST /tasks/submit`\n   Request body: `{\"request_id\":\"r1\",\"payload\":\"x\"}`\n   Expected status: `201`\n   Expected body: `{\"task_id\":\"task-1\",\"deduplicated\":false}`\n\n2. `POST /tasks/submit`\n   Request body: `{\"request_id\":\"r1\",\"payload\":\"x\"}`\n   Expected status: `200`\n   Expected body: `{\"task_id\":\"task-1\",\"deduplicated\":true}`\n\n3. `POST /tasks/submit`\n   Request body: `{\"request_id\":\"r2\",\"payload\":\"y\"}`\n   Expected status: `201`\n   Expected body: `{\"task_id\":\"task-2\",\"deduplicated\":false}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Track request_id to task_id mapping.",
+    "Return stable identifiers."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "deduplication",
+    "idempotency"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Duplicate Request Deduper\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/tasks/submit\")\nasync def duplicate_request_deduper_post_tasks_submit(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/tasks/submit",
+        "expected_status": 201,
+        "expected_body": {
+          "task_id": "task-1",
+          "deduplicated": false
+        },
+        "body": {
+          "request_id": "r1",
+          "payload": "x"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/tasks/submit",
+        "expected_status": 200,
+        "expected_body": {
+          "task_id": "task-1",
+          "deduplicated": true
+        },
+        "body": {
+          "request_id": "r1",
+          "payload": "x"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/tasks/submit",
+        "expected_status": 201,
+        "expected_body": {
+          "task_id": "task-2",
+          "deduplicated": false
+        },
+        "body": {
+          "request_id": "r2",
+          "payload": "y"
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 23
+}

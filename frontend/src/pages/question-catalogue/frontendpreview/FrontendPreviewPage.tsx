@@ -195,6 +195,7 @@ export default function FrontendPreviewPage() {
         </div>
 
         <CodeEditor
+          path={activeFilePath || "active-file.tsx"}
           value={fileContents[activeFilePath] ?? ""}
           language={activeFileObj?.language ?? "tsx"}
           readOnly={activeFileObj?.readonly ?? false}

@@ -3,7 +3,7 @@
   "title": "Cells Flowing to Both Oceans",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given an m×n matrix of heights, water can flow from cell (r,c) to a neighbor if the neighbor's height is less than or equal to the current cell's height. The top and left edges touch the Pacific ocean; bottom and right edges touch the Atlantic. Return coordinates that can flow to both oceans.\n\nConstraints:\n- 1 ≤ m, n ≤ 200",
+  "description": "### Objective\nGiven an m×n matrix of heights, water can flow from cell (r,c) to a neighbor if the neighbor's height is less than or equal to the current cell's height. The top and left edges touch the Pacific ocean; bottom and right edges touch the Atlantic. Return coordinates that can flow to both oceans.\n\n### Function Contract\nImplement `pacific_atlantic(heights: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `heights`: type `array` (example: `[[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]`).\n- Return type: `string`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(mn)`, space `O(mn)`.\n\n### Constraints\n- 1 ≤ m, n ≤ 200\n",
   "leetcodeUrl": "https://leetcode.com/problems/pacific-atlantic-water-flow/",
   "complexity": {
     "time": "O(mn)",

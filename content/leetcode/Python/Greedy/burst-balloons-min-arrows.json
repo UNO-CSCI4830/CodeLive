@@ -3,7 +3,7 @@
   "title": "Minimum Arrows to Burst All Balloons",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given There are balloons represented by intervals [x_start, x_end]. An arrow shot at position x bursts all balloons with x_start ≤ x ≤ x_end. Return the minimum number of arrows to burst all balloons.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5\n- -2·10^9 ≤ x_start ≤ x_end ≤ 2·10^9",
+  "description": "### Objective\nThere are balloons represented by intervals [x_start, x_end]. An arrow shot at position x bursts all balloons with x_start ≤ x ≤ x_end. Return the minimum number of arrows to burst all balloons.\n\n### Function Contract\nImplement `find_min_arrow_shots(points: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `points`: type `array` (example: `[[10,16],[2,8],[1,6],[7,12]]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n log n)`, space `O(1)`.\n\n### Constraints\n- 0 ≤ n ≤ 10^5\n- -2·10^9 ≤ x_start ≤ x_end ≤ 2·10^9\n",
   "leetcodeUrl": "https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/",
   "complexity": {
     "time": "O(n log n)",

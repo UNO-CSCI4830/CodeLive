@@ -1,0 +1,168 @@
+{
+  "id": "three-transaction-moving-average-debit",
+  "title": "3-Transaction Moving Average Debit",
+  "category": "database",
+  "difficulty": "medium",
+  "description": "Write a SQL query using window functions to produce the requested analytical output.\n\n### Tables\n```sql\nCREATE TABLE accounts (\n  account_id INTEGER PRIMARY KEY,\n  owner_name TEXT NOT NULL,\n  segment TEXT NOT NULL\n);\n\nCREATE TABLE transactions (\n  txn_id INTEGER PRIMARY KEY,\n  account_id INTEGER NOT NULL,\n  txn_date TEXT NOT NULL,\n  amount INTEGER NOT NULL,\n  txn_type TEXT NOT NULL\n);\n```\n\n### Task\nFor debit transactions only, compute 3-transaction moving average by account.\n\n### Return Columns\n- `account_id`\n- `txn_id`\n- `txn_date`\n- `moving_avg_debit`\n\n### Ordering\nSort by `account_id` ASC, `txn_date` ASC, `txn_id` ASC.\n\n### Notes\n- Use SQLite syntax.\n- Write your answer in `solution.sql`.\n- Do not hardcode output rows; query from tables.\n- Internal hidden tests run against additional seed data.",
+  "constraints": "SQLite 3.44+\n- Single query unless the prompt explicitly asks for CTEs\n- Deterministic output",
+  "hints": [],
+  "tags": [
+    "database",
+    "sql",
+    "sqlite",
+    "window-functions",
+    "window-frame",
+    "avg"
+  ],
+  "starter_files": [
+    {
+      "path": "solution.sql",
+      "content": "",
+      "language": "sql",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "schema_sql": "CREATE TABLE accounts (\n  account_id INTEGER PRIMARY KEY,\n  owner_name TEXT NOT NULL,\n  segment TEXT NOT NULL\n);\n\nCREATE TABLE transactions (\n  txn_id INTEGER PRIMARY KEY,\n  account_id INTEGER NOT NULL,\n  txn_date TEXT NOT NULL,\n  amount INTEGER NOT NULL,\n  txn_type TEXT NOT NULL\n);",
+    "seed_sql": "INSERT INTO accounts (account_id, owner_name, segment) VALUES\n  (1, 'Apex', 'enterprise'),\n  (2, 'Bloom', 'smb'),\n  (3, 'Comet', 'smb'),\n  (4, 'Drift', 'enterprise');\n\nINSERT INTO transactions (txn_id, account_id, txn_date, amount, txn_type) VALUES\n  (1, 1, '2024-05-01', 200, 'debit'),\n  (2, 1, '2024-05-03', 150, 'debit'),\n  (3, 1, '2024-05-04', 50, 'credit'),\n  (4, 1, '2024-05-06', 175, 'debit'),\n  (5, 2, '2024-05-01', 90, 'debit'),\n  (6, 2, '2024-05-02', 40, 'debit'),\n  (7, 2, '2024-05-05', 30, 'credit'),\n  (8, 3, '2024-05-01', 300, 'debit'),\n  (9, 3, '2024-05-07', 120, 'debit'),\n  (10, 4, '2024-05-02', 500, 'debit'),\n  (11, 4, '2024-05-08', 100, 'credit'),\n  (12, 4, '2024-05-09', 220, 'debit');",
+    "expected_output": [
+      {
+        "account_id": 1,
+        "txn_id": 1,
+        "txn_date": "2024-05-01",
+        "moving_avg_debit": 200
+      },
+      {
+        "account_id": 1,
+        "txn_id": 2,
+        "txn_date": "2024-05-03",
+        "moving_avg_debit": 175
+      },
+      {
+        "account_id": 1,
+        "txn_id": 4,
+        "txn_date": "2024-05-06",
+        "moving_avg_debit": 175
+      },
+      {
+        "account_id": 2,
+        "txn_id": 5,
+        "txn_date": "2024-05-01",
+        "moving_avg_debit": 90
+      },
+      {
+        "account_id": 2,
+        "txn_id": 6,
+        "txn_date": "2024-05-02",
+        "moving_avg_debit": 65
+      },
+      {
+        "account_id": 3,
+        "txn_id": 8,
+        "txn_date": "2024-05-01",
+        "moving_avg_debit": 300
+      },
+      {
+        "account_id": 3,
+        "txn_id": 9,
+        "txn_date": "2024-05-07",
+        "moving_avg_debit": 210
+      },
+      {
+        "account_id": 4,
+        "txn_id": 10,
+        "txn_date": "2024-05-02",
+        "moving_avg_debit": 500
+      },
+      {
+        "account_id": 4,
+        "txn_id": 12,
+        "txn_date": "2024-05-09",
+        "moving_avg_debit": 360
+      }
+    ],
+    "column_names": [
+      "account_id",
+      "txn_id",
+      "txn_date",
+      "moving_avg_debit"
+    ],
+    "order_matters": true,
+    "check_explain": false,
+    "hidden_tests": [
+      {
+        "expected_output": [
+          {
+            "account_id": 1,
+            "txn_id": 1,
+            "txn_date": "2024-05-01",
+            "moving_avg_debit": 200
+          },
+          {
+            "account_id": 1,
+            "txn_id": 2,
+            "txn_date": "2024-05-03",
+            "moving_avg_debit": 175
+          },
+          {
+            "account_id": 1,
+            "txn_id": 4,
+            "txn_date": "2024-05-06",
+            "moving_avg_debit": 175
+          },
+          {
+            "account_id": 2,
+            "txn_id": 5,
+            "txn_date": "2024-05-01",
+            "moving_avg_debit": 90
+          },
+          {
+            "account_id": 2,
+            "txn_id": 6,
+            "txn_date": "2024-05-02",
+            "moving_avg_debit": 65
+          },
+          {
+            "account_id": 2,
+            "txn_id": 13,
+            "txn_date": "2024-05-06",
+            "moving_avg_debit": 70
+          },
+          {
+            "account_id": 3,
+            "txn_id": 8,
+            "txn_date": "2024-05-01",
+            "moving_avg_debit": 300
+          },
+          {
+            "account_id": 3,
+            "txn_id": 9,
+            "txn_date": "2024-05-07",
+            "moving_avg_debit": 210
+          },
+          {
+            "account_id": 4,
+            "txn_id": 10,
+            "txn_date": "2024-05-02",
+            "moving_avg_debit": 500
+          },
+          {
+            "account_id": 4,
+            "txn_id": 12,
+            "txn_date": "2024-05-09",
+            "moving_avg_debit": 360
+          }
+        ],
+        "column_names": [
+          "account_id",
+          "txn_id",
+          "txn_date",
+          "moving_avg_debit"
+        ],
+        "order_matters": true
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 44
+}

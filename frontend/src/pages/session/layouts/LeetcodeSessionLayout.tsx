@@ -24,6 +24,8 @@ interface Props {
   locked: boolean;
   userName: string;
   userColor: string;
+  aiEnabled: boolean;
+  canSendAi: boolean;
 }
 
 export interface SessionLayoutHandle {
@@ -40,7 +42,16 @@ export interface SessionLayoutHandle {
 }
 
 const LeetcodeSessionLayout = forwardRef<SessionLayoutHandle, Props>(function LeetcodeSessionLayout(
-  { sessionId, problemId, orderIndex, locked, userName, userColor },
+  {
+    sessionId,
+    problemId,
+    orderIndex,
+    locked,
+    userName,
+    userColor,
+    aiEnabled,
+    canSendAi,
+  },
   ref,
 ) {
   /* ── Problem data ─────────────────────────────────── */
@@ -234,6 +245,22 @@ const LeetcodeSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Le
 
   return (
     <div className={`lsl-body ${isDragging ? "lsl-body--resizing" : ""}`}>
+      {aiEnabled && (
+        <AIAssistant
+          ref={aiRef}
+          sessionId={sessionId}
+          problemId={problemId}
+          orderIndex={orderIndex}
+          canSend={canSendAi}
+          problemTitle={problem.title}
+          problemDescription={problem.description}
+          currentCode={getText()}
+          language="python"
+          locked={locked}
+          problemKey={`${orderIndex}:${problemId}`}
+        />
+      )}
+
       {/* ── Left: description ── */}
       <section className="lsl-desc-col" style={{ width: `${leftWidth * 100}%` }}>
         <LeetcodeProblemDescription problem={problem} onHintReveal={setHintsUsed} />
@@ -328,16 +355,6 @@ const LeetcodeSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Le
         </div>
       </section>
 
-      {/* ── AI assistant — sliding drawer on the far right ── */}
-      <AIAssistant
-        ref={aiRef}
-        problemTitle={problem.title}
-        problemDescription={problem.description}
-        currentCode={getText()}
-        language="python"
-        locked={locked}
-        problemKey={`${orderIndex}:${problemId}`}
-      />
     </div>
   );
 });

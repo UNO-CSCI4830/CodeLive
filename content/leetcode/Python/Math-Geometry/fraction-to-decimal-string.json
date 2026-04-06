@@ -3,7 +3,7 @@
   "title": "Convert Fraction to Recurring Decimal",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given integers numerator and denominator, return the decimal string representation of the fraction. If the fractional part is repeating, enclose the repeating part in parentheses. Handle signs and zero correctly.\n\n    \n\nConstraints:\n    - -2^31 ≤ numerator, denominator ≤ 2^31-1\n- denominator ≠ 0",
+  "description": "### Objective\nGiven integers numerator and denominator, return the decimal string representation of the fraction. If the fractional part is repeating, enclose the repeating part in parentheses. Handle signs and zero correctly.\n\n### Function Contract\nImplement `fraction_to_decimal(numerator: int, denominator: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `numerator`: type `number` (example: `1`).\n- Input `denominator`: type `number` (example: `2`).\n- Return type: `string`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(k)`, space `O(k)`.\n\n### Constraints\n- -2^31 ≤ numerator, denominator ≤ 2^31-1\n- denominator ≠ 0\n",
   "leetcodeUrl": "https://leetcode.com/problems/fraction-to-recurring-decimal/",
   "complexity": {
     "time": "O(k)",

@@ -3,7 +3,7 @@
   "title": "Evaluate Division Equations via Graph",
   "difficulty": "Medium",
   "language": "python",
-  "description": "You are given equations like a/b = value and some queries x/y. Treat each variable as a node and the ratio as a directed edge weight. For a query, compute x/y by multiplying edge weights along a path if one exists; otherwise return -1.0.\n\n    \n\nConstraints:\n    - 1 ≤ equations ≤ 20\n- Variables are lowercase strings\n- Values are positive floats",
+  "description": "### Objective\nYou are given equations like a/b = value and some queries x/y. Treat each variable as a node and the ratio as a directed edge weight. For a query, compute x/y by multiplying edge weights along a path if one exists; otherwise return -1.0.\n\n### Function Contract\nImplement `calc_equation(equations: List[List[int]], values: List[int], queries: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `equations`: type `array` (example: `[[\"a\",\"b\"],[\"b\",\"c\"]]`).\n- Input `values`: type `array` (example: `[2,3]`).\n- Input `queries`: type `array` (example: `[[\"a\",\"c\"],[\"b\",\"a\"]]`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(V+E) per query worst-case`, space `O(V+E)`.\n\n### Constraints\n- 1 ≤ equations ≤ 20\n- Variables are lowercase strings\n- Values are positive floats\n",
   "leetcodeUrl": "https://leetcode.com/problems/evaluate-division/",
   "complexity": {
     "time": "O(V+E) per query worst-case",

@@ -3,7 +3,7 @@
   "title": "All Subsets of Distinct Elements",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Given a list of distinct integers, return all possible subsets including the empty set. The subsets can be returned in any order. Use backtracking that decides include or skip for each element.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 15\n- All elements are distinct",
+  "description": "### Objective\nGiven a list of distinct integers, return all possible subsets including the empty set. The subsets can be returned in any order. Use backtracking that decides include or skip for each element.\n\n### Function Contract\nImplement `subsets(nums: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[1,2,3]`).\n- Return type: `string`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n·2^n)`, space `O(n)`.\n\n### Constraints\n- 0 ≤ n ≤ 15\n- All elements are distinct\n",
   "leetcodeUrl": "https://leetcode.com/problems/subsets/",
   "complexity": {
     "time": "O(n·2^n)",

@@ -3,7 +3,7 @@
   "title": "Almost Palindrome",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a string s, return True if s can become a palindrome after removing at most one character. Only alphanumeric characters are considered if you prefilter, but here we treat the string as is.\n\n    \n\nConstraints:\n    - 1 ≤ len(s) ≤ 10^5\n- ASCII input",
+  "description": "### Objective\nGiven a string s, return True if s can become a palindrome after removing at most one character. Only alphanumeric characters are considered if you prefilter, but here we treat the string as is.\n\n### Function Contract\nImplement `almost_palindrome(s: str)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `s`: type `string` (example: `\"aba\"`).\n- Return type: `boolean`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 1 ≤ len(s) ≤ 10^5\n- ASCII input\n",
   "leetcodeUrl": "https://leetcode.com/problems/valid-palindrome-ii/",
   "complexity": {
     "time": "O(n)",

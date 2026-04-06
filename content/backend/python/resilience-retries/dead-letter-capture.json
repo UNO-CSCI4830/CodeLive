@@ -1,0 +1,68 @@
+{
+  "id": "dead-letter-capture",
+  "title": "Dead Letter Capture",
+  "category": "backend",
+  "difficulty": "hard",
+  "description": "Capture permanently failed events into a dead-letter collection for later inspection.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /events/process`\n- `GET /events/dead-letter`\n\n### Request Replay (Executed In Order)\n1. `POST /events/process`\n   Request body: `{\"event_id\":\"e1\",\"should_fail\":true}`\n   Expected status: `500`\n   Expected body: `{\"error\":\"processing_failed\"}`\n\n2. `GET /events/dead-letter`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"event_ids\":[\"e1\"]}`\n\n3. `POST /events/process`\n   Request body: `{\"event_id\":\"e2\",\"should_fail\":false}`\n   Expected status: `200`\n   Expected body: `{\"processed\":true}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Keep DLQ append-only.",
+    "Return failures without crashing the service."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "dead-letter",
+    "failure-handling"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Dead Letter Capture\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/events/process\")\nasync def dead_letter_capture_post_events_process(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n\n@app.get(\"/events/dead-letter\")\nasync def dead_letter_capture_get_events_dead_letter():\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/events/process",
+        "expected_status": 500,
+        "expected_body": {
+          "error": "processing_failed"
+        },
+        "body": {
+          "event_id": "e1",
+          "should_fail": true
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/events/dead-letter",
+        "expected_status": 200,
+        "expected_body": {
+          "event_ids": [
+            "e1"
+          ]
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/events/process",
+        "expected_status": 200,
+        "expected_body": {
+          "processed": true
+        },
+        "body": {
+          "event_id": "e2",
+          "should_fail": false
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 38
+}

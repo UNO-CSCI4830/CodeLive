@@ -3,7 +3,7 @@
   "title": "Minimum Rooms to Host All Meetings",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a list of meeting time intervals [start, end), return the minimum number of conference rooms required to host all meetings without overlap. Intervals are half-open so a meeting ending at t frees a room for a meeting starting at t.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5\n- -10^9 ≤ start < end ≤ 10^9",
+  "description": "### Objective\nGiven a list of meeting time intervals [start, end), return the minimum number of conference rooms required to host all meetings without overlap. Intervals are half-open so a meeting ending at t frees a room for a meeting starting at t.\n\n### Function Contract\nImplement `min_meeting_rooms(intervals: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `intervals`: type `array` (example: `[[0,30],[5,10],[15,20]]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n log n)`, space `O(n)`.\n\n### Constraints\n- 0 ≤ n ≤ 10^5\n- -10^9 ≤ start < end ≤ 10^9\n",
   "leetcodeUrl": "https://leetcode.com/problems/meeting-rooms-ii/",
   "complexity": {
     "time": "O(n log n)",

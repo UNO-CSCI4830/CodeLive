@@ -3,7 +3,7 @@
   "title": "Longest Window Without Repeats",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a string s, return the length of the longest substring that contains no repeated characters. The window should expand to include new characters and contract when a duplicate is encountered, ensuring a linear time solution.\n\n    \n\nConstraints:\n    - 0 ≤ len(s) ≤ 10^5\n- s consists of ASCII characters",
+  "description": "### Objective\nGiven a string s, return the length of the longest substring that contains no repeated characters. The window should expand to include new characters and contract when a duplicate is encountered, ensuring a linear time solution.\n\n### Function Contract\nImplement `longest_window_without_repeats(s: str)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `s`: type `string` (example: `\"abcabcbb\"`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(min(n, alphabet))`.\n\n### Constraints\n- 0 ≤ len(s) ≤ 10^5\n- s consists of ASCII characters\n",
   "leetcodeUrl": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
   "complexity": {
     "time": "O(n)",

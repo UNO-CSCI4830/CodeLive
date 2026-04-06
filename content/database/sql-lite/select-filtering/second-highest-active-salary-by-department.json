@@ -1,0 +1,74 @@
+{
+  "id": "second-highest-active-salary-by-department",
+  "title": "Second Highest Active Salary by Department",
+  "category": "database",
+  "difficulty": "hard",
+  "description": "Write a SQL query to answer the hiring-team analytics question.\n\n### Tables\n```sql\nCREATE TABLE employees (\n  emp_id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL,\n  department TEXT NOT NULL,\n  city TEXT NOT NULL,\n  salary INTEGER NOT NULL,\n  hire_date TEXT NOT NULL,\n  manager_id INTEGER,\n  is_active INTEGER NOT NULL\n);\n```\n\n### Task\nFor each department, return the second highest distinct active salary. Omit departments without a second distinct salary.\n\n### Return Columns\n- `department`\n- `second_highest_salary`\n\n### Ordering\nSort by `department` ASC.\n\n### Notes\n- Use SQLite syntax.\n- Write your answer in `solution.sql`.\n- Do not hardcode output rows; query from tables.\n- Internal hidden tests run against additional seed data.",
+  "constraints": "SQLite 3.44+\n- Single query unless the prompt explicitly asks for CTEs\n- Deterministic output",
+  "hints": [],
+  "tags": [
+    "database",
+    "sql",
+    "sqlite",
+    "select-filtering",
+    "dense-rank",
+    "distinct"
+  ],
+  "starter_files": [
+    {
+      "path": "solution.sql",
+      "content": "-- Hint: use DENSE_RANK() OVER (PARTITION BY department ORDER BY salary DESC).\n",
+      "language": "sql",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "schema_sql": "CREATE TABLE employees (\n  emp_id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL,\n  department TEXT NOT NULL,\n  city TEXT NOT NULL,\n  salary INTEGER NOT NULL,\n  hire_date TEXT NOT NULL,\n  manager_id INTEGER,\n  is_active INTEGER NOT NULL\n);",
+    "seed_sql": "INSERT INTO employees (emp_id, name, department, city, salary, hire_date, manager_id, is_active) VALUES\n  (1, 'Ava', 'Engineering', 'New York', 145000, '2020-01-15', 2, 1),\n  (2, 'Ben', 'Engineering', 'Boston', 120000, '2021-06-10', 1, 1),\n  (3, 'Chloe', 'Sales', 'Chicago', 98000, '2019-03-02', 6, 1),\n  (4, 'Diego', 'Engineering', 'New York', 132000, '2022-02-20', 1, 0),\n  (5, 'Elena', 'HR', 'Boston', 88000, '2018-11-12', 7, 1),\n  (6, 'Farah', 'Sales', 'New York', 125000, '2017-07-30', 3, 1),\n  (7, 'Gabe', 'HR', 'Chicago', 110000, '2016-05-18', 5, 1),\n  (8, 'Hana', 'Engineering', 'Chicago', 117000, '2023-09-01', 1, 1),\n  (9, 'Ivan', 'Support', 'New York', 76000, '2021-01-09', 10, 1),\n  (10, 'Jia', 'Support', 'Boston', 83000, '2019-12-01', 9, 0);",
+    "expected_output": [
+      {
+        "department": "Engineering",
+        "second_highest_salary": 120000
+      },
+      {
+        "department": "HR",
+        "second_highest_salary": 88000
+      },
+      {
+        "department": "Sales",
+        "second_highest_salary": 98000
+      }
+    ],
+    "column_names": [
+      "department",
+      "second_highest_salary"
+    ],
+    "order_matters": true,
+    "check_explain": false,
+    "hidden_tests": [
+      {
+        "expected_output": [
+          {
+            "department": "Engineering",
+            "second_highest_salary": 128000
+          },
+          {
+            "department": "HR",
+            "second_highest_salary": 88000
+          },
+          {
+            "department": "Sales",
+            "second_highest_salary": 98000
+          }
+        ],
+        "column_names": [
+          "department",
+          "second_highest_salary"
+        ],
+        "order_matters": true
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 10
+}

@@ -1,0 +1,88 @@
+{
+  "id": "idempotent-order-create",
+  "title": "Idempotent Order Create",
+  "category": "backend",
+  "difficulty": "hard",
+  "description": "Implement idempotent order creation keyed by a client-provided idempotency key.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /orders`\n\n### Request Replay (Executed In Order)\n1. `POST /orders`\n   Request body: `{\"idempotency_key\":\"abc\",\"item_id\":\"sku-1\",\"qty\":2}`\n   Expected status: `201`\n   Expected body: `{\"order_id\":\"ord-1\",\"deduplicated\":false}`\n\n2. `POST /orders`\n   Request body: `{\"idempotency_key\":\"abc\",\"item_id\":\"sku-1\",\"qty\":2}`\n   Expected status: `200`\n   Expected body: `{\"order_id\":\"ord-1\",\"deduplicated\":true}`\n\n3. `POST /orders`\n   Request body: `{\"idempotency_key\":\"def\",\"item_id\":\"sku-2\",\"qty\":1}`\n   Expected status: `201`\n   Expected body: `{\"order_id\":\"ord-2\",\"deduplicated\":false}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n- `app/schemas.py`\n- `app/service.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Persist request outcomes in an in-memory map.",
+    "Reuse the same order_id for duplicates."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "idempotency",
+    "write-safety"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Idempotent Order Create\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/orders\")\nasync def idempotent_order_create_post_orders(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    },
+    {
+      "path": "app/schemas.py",
+      "content": "from pydantic import BaseModel\nfrom typing import Any, Dict, Optional\n\n# Optional schemas for harder multi-file challenges.\nclass IdempotentOrderCreateInput(BaseModel):\n    payload: Dict[str, Any] = {}\n    note: Optional[str] = None\n",
+      "language": "python",
+      "readonly": false
+    },
+    {
+      "path": "app/service.py",
+      "content": "from typing import Any, Dict\n\n# Optional service-layer helpers for harder multi-file challenges.\ndef apply_business_rules(state: Dict[str, Any], payload: Dict[str, Any]) -> Dict[str, Any]:\n    # TODO: Replace this stub with challenge-specific logic.\n    return {\"state_size\": len(state), \"payload_keys\": sorted(payload.keys())}\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/orders",
+        "expected_status": 201,
+        "expected_body": {
+          "order_id": "ord-1",
+          "deduplicated": false
+        },
+        "body": {
+          "idempotency_key": "abc",
+          "item_id": "sku-1",
+          "qty": 2
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/orders",
+        "expected_status": 200,
+        "expected_body": {
+          "order_id": "ord-1",
+          "deduplicated": true
+        },
+        "body": {
+          "idempotency_key": "abc",
+          "item_id": "sku-1",
+          "qty": 2
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/orders",
+        "expected_status": 201,
+        "expected_body": {
+          "order_id": "ord-2",
+          "deduplicated": false
+        },
+        "body": {
+          "idempotency_key": "def",
+          "item_id": "sku-2",
+          "qty": 1
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 3
+}

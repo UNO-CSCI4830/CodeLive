@@ -3,7 +3,7 @@
   "title": "Check Interleaving of Two Strings",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given strings s1, s2, s3, return True if s3 is formed by interleaving s1 and s2 preserving character order of each.\n\n    \n\nConstraints:\n    - 0 ≤ |s1|,|s2| ≤ 200\n- 0 ≤ |s3| ≤ 400",
+  "description": "### Objective\nGiven strings s1, s2, s3, return True if s3 is formed by interleaving s1 and s2 preserving character order of each.\n\n### Function Contract\nImplement `is_interleave(s1: str, s2: str, s3: str)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `s1`: type `string` (example: `\"aabcc\"`).\n- Input `s2`: type `string` (example: `\"dbbca\"`).\n- Input `s3`: type `string` (example: `\"aadbbcbcac\"`).\n- Return type: `boolean`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(nm)`, space `O(nm)`.\n\n### Constraints\n- 0 ≤ |s1|,|s2| ≤ 200\n- 0 ≤ |s3| ≤ 400\n",
   "leetcodeUrl": "https://leetcode.com/problems/interleaving-string/",
   "complexity": {
     "time": "O(nm)",

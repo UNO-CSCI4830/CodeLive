@@ -3,7 +3,7 @@
   "title": "Regex Matching with '.' and '*'",
   "difficulty": "Hard",
   "language": "python",
-  "description": "Implement regular expression matching with support for '.' and '*' where '.' matches any single character and '*' means zero or more of the preceding element. Pattern covers the entire string.\n\n    \n\nConstraints:\n    - 0 ≤ |s|,|p| ≤ 30",
+  "description": "### Objective\nImplement regular expression matching with support for '.' and '*' where '.' matches any single character and '*' means zero or more of the preceding element. Pattern covers the entire string.\n\n### Function Contract\nImplement `is_match_regex(s: str, p: str)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `s`: type `string` (example: `\"aa\"`).\n- Input `p`: type `string` (example: `\"a\"`).\n- Return type: `boolean`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(nm)`, space `O(nm)`.\n\n### Constraints\n- 0 ≤ |s|,|p| ≤ 30\n",
   "leetcodeUrl": "https://leetcode.com/problems/regular-expression-matching/",
   "complexity": {
     "time": "O(nm)",

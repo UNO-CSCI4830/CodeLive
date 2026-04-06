@@ -3,7 +3,7 @@
   "title": "Array of Products Except Self",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given an integer array nums, return an array answer such that answer[i] is the product of all elements of nums except nums[i]. The solution must run in O(n) time without using division, and with O(1) extra space beyond the output array.\n\n    \n\nConstraints:\n    - 2 ≤ len(nums) ≤ 10^5\n- -30 ≤ nums[i] ≤ 30\n- At least one non-zero element exists",
+  "description": "### Objective\nGiven an integer array nums, return an array answer such that answer[i] is the product of all elements of nums except nums[i]. The solution must run in O(n) time without using division, and with O(1) extra space beyond the output array.\n\n### Function Contract\nImplement `product_except_self(nums: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[1,2,3,4]`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 2 ≤ len(nums) ≤ 10^5\n- -30 ≤ nums[i] ≤ 30\n- At least one non-zero element exists\n",
   "leetcodeUrl": "https://leetcode.com/problems/product-of-array-except-self/",
   "complexity": {
     "time": "O(n)",

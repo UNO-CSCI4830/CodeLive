@@ -1,0 +1,86 @@
+{
+  "id": "sse-notification-backlog",
+  "title": "SSE Notification Backlog",
+  "category": "backend",
+  "difficulty": "medium",
+  "description": "Implement event publish and backlog retrieval logic to support server-sent event clients.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /events/publish`\n- `GET /events/backlog?topic=alerts&after_id=evt-0`\n- `GET /events/backlog?topic=alerts&after_id=evt-1`\n\n### Request Replay (Executed In Order)\n1. `POST /events/publish`\n   Request body: `{\"topic\":\"alerts\",\"message\":\"cpu-high\"}`\n   Expected status: `200`\n   Expected body: `{\"published\":true,\"event_id\":\"evt-1\"}`\n\n2. `GET /events/backlog?topic=alerts&after_id=evt-0`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"events\":[{\"id\":\"evt-1\",\"message\":\"cpu-high\"}]}`\n\n3. `POST /events/publish`\n   Request body: `{\"topic\":\"alerts\",\"message\":\"disk-high\"}`\n   Expected status: `200`\n   Expected body: `{\"published\":true,\"event_id\":\"evt-2\"}`\n\n4. `GET /events/backlog?topic=alerts&after_id=evt-1`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"events\":[{\"id\":\"evt-2\",\"message\":\"disk-high\"}]}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Store events per topic in order.",
+    "Treat after_id as exclusive boundary."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "sse",
+    "event-backlog"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"SSE Notification Backlog\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/events/publish\")\nasync def sse_notification_backlog_post_events_publish(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n\n@app.get(\"/events/backlog\")\nasync def sse_notification_backlog_get_events_backlog():\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/events/publish",
+        "expected_status": 200,
+        "expected_body": {
+          "published": true,
+          "event_id": "evt-1"
+        },
+        "body": {
+          "topic": "alerts",
+          "message": "cpu-high"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/events/backlog?topic=alerts&after_id=evt-0",
+        "expected_status": 200,
+        "expected_body": {
+          "events": [
+            {
+              "id": "evt-1",
+              "message": "cpu-high"
+            }
+          ]
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/events/publish",
+        "expected_status": 200,
+        "expected_body": {
+          "published": true,
+          "event_id": "evt-2"
+        },
+        "body": {
+          "topic": "alerts",
+          "message": "disk-high"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/events/backlog?topic=alerts&after_id=evt-1",
+        "expected_status": 200,
+        "expected_body": {
+          "events": [
+            {
+              "id": "evt-2",
+              "message": "disk-high"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 49
+}

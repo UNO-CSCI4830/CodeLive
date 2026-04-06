@@ -26,6 +26,32 @@
   color: var(--muted-fg);
 }
 
+.rpl-controls {
+  margin-top: 0.9rem;
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.rpl-search-input,
+.rpl-filter-select {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--fg);
+  font-size: 0.8rem;
+  padding: 0.48rem 0.6rem;
+}
+
+.rpl-search-input {
+  width: min(22rem, 100%);
+}
+
+.rpl-search-input:focus,
+.rpl-filter-select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
 /* ── Table container ─────────────────────────────────────────────── */
 .rpl-table-wrap {
   background: var(--card);
@@ -122,6 +148,12 @@
   color: var(--muted-fg);
   font-size: 0.82rem;
   line-height: 1.4;
+}
+
+.rpl-text-cell {
+  font-size: 0.82rem;
+  color: var(--muted-fg);
+  white-space: nowrap;
 }
 .rpl-summary-cell--muted {
   color: var(--muted-fg);

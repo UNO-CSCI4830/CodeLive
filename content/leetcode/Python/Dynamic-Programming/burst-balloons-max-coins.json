@@ -3,7 +3,7 @@
   "title": "Max Coins from Bursting Balloons",
   "difficulty": "Hard",
   "language": "python",
-  "description": "You are given n balloons, each balloon has a number. After bursting balloon i you gain nums[left]*nums[i]*nums[right]. The left and right neighbors are the closest unburst balloons. Return the maximum coins you can collect by bursting in optimal order.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 300\n- 1 ≤ nums[i] ≤ 100",
+  "description": "### Objective\nYou are given n balloons, each balloon has a number. After bursting balloon i you gain nums[left]*nums[i]*nums[right]. The left and right neighbors are the closest unburst balloons. Return the maximum coins you can collect by bursting in optimal order.\n\n### Function Contract\nImplement `max_coins(nums: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[3,1,5,8]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n^3)`, space `O(n^2)`.\n\n### Constraints\n- 1 ≤ n ≤ 300\n- 1 ≤ nums[i] ≤ 100\n",
   "leetcodeUrl": "https://leetcode.com/problems/burst-balloons/",
   "complexity": {
     "time": "O(n^3)",

@@ -3,7 +3,7 @@
   "title": "Maximize Content Children with Cookies",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Given Each child i has a greed factor g[i], and each cookie j has size s[j]. If s[j] ≥ g[i], the child becomes content and you cannot reuse the cookie. Return the maximum number of content children.\n\n    \n\nConstraints:\n    - 0 ≤ n,m ≤ 3·10^4\n- 1 ≤ g[i], s[j] ≤ 2·10^9",
+  "description": "### Objective\nEach child i has a greed factor g[i], and each cookie j has size s[j]. If s[j] ≥ g[i], the child becomes content and you cannot reuse the cookie. Return the maximum number of content children.\n\n### Function Contract\nImplement `find_content_children(g: List[int], s: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `g`: type `array` (example: `[1,2,3]`).\n- Input `s`: type `array` (example: `[1,1]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n log n)`, space `O(1)`.\n\n### Constraints\n- 0 ≤ n,m ≤ 3·10^4\n- 1 ≤ g[i], s[j] ≤ 2·10^9\n",
   "leetcodeUrl": "https://leetcode.com/problems/assign-cookies/",
   "complexity": {
     "time": "O(n log n)",

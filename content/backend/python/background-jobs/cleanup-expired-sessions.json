@@ -1,0 +1,74 @@
+{
+  "id": "cleanup-expired-sessions",
+  "title": "Cleanup Expired Sessions",
+  "category": "backend",
+  "difficulty": "medium",
+  "description": "Implement a cleanup routine for expired in-memory sessions.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /sessions/seed`\n- `POST /maintenance/run-cleanup`\n\n### Request Replay (Executed In Order)\n1. `POST /sessions/seed`\n   Request body: `{\"sessions\":[{\"id\":\"s1\",\"expires_in_sec\":-1},{\"id\":\"s2\",\"expires_in_sec\":60}]}`\n   Expected status: `200`\n   Expected body: `{\"seeded\":2}`\n\n2. `POST /maintenance/run-cleanup`\n   Request body: `{}`\n   Expected status: `200`\n   Expected body: `{\"removed\":1,\"remaining\":1}`\n\n3. `POST /maintenance/run-cleanup`\n   Request body: `{}`\n   Expected status: `200`\n   Expected body: `{\"removed\":0,\"remaining\":1}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Store sessions in a dict keyed by id.",
+    "Filter expired entries during cleanup pass."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "maintenance",
+    "cleanup-jobs"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Cleanup Expired Sessions\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/sessions/seed\")\nasync def cleanup_expired_sessions_post_sessions_seed(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n\n@app.post(\"/maintenance/run-cleanup\")\nasync def cleanup_expired_sessions_post_maintenance_run_cleanup(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/sessions/seed",
+        "expected_status": 200,
+        "expected_body": {
+          "seeded": 2
+        },
+        "body": {
+          "sessions": [
+            {
+              "id": "s1",
+              "expires_in_sec": -1
+            },
+            {
+              "id": "s2",
+              "expires_in_sec": 60
+            }
+          ]
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/maintenance/run-cleanup",
+        "expected_status": 200,
+        "expected_body": {
+          "removed": 1,
+          "remaining": 1
+        },
+        "body": {}
+      },
+      {
+        "method": "POST",
+        "path": "/maintenance/run-cleanup",
+        "expected_status": 200,
+        "expected_body": {
+          "removed": 0,
+          "remaining": 1
+        },
+        "body": {}
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 43
+}

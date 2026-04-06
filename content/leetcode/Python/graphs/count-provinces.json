@@ -3,7 +3,7 @@
   "title": "Count Provinces from Friendship Matrix",
   "difficulty": "Medium",
   "language": "python",
-  "description": "You are given an n×n 0/1 matrix isConnected where isConnected[i][j]=1 means cities i and j have a direct connection. A province is a group of directly or indirectly connected cities. Return the number of provinces. Cities are 0-indexed in the input for coding convenience.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 200\n- Matrix is symmetric with ones on the diagonal",
+  "description": "### Objective\nYou are given an n×n 0/1 matrix isConnected where isConnected[i][j]=1 means cities i and j have a direct connection. A province is a group of directly or indirectly connected cities. Return the number of provinces. Cities are 0-indexed in the input for coding convenience.\n\n### Function Contract\nImplement `count_provinces(isConnected: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `isConnected`: type `array` (example: `[[1,1,0],[1,1,0],[0,0,1]]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n^2)`, space `O(n)`.\n\n### Constraints\n- 1 ≤ n ≤ 200\n- Matrix is symmetric with ones on the diagonal\n",
   "leetcodeUrl": "https://leetcode.com/problems/number-of-provinces/",
   "complexity": {
     "time": "O(n^2)",

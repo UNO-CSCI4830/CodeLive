@@ -1,0 +1,127 @@
+{
+  "total": 50,
+  "categories": [
+    {
+      "slug": "api-design",
+      "count": 5,
+      "problems": [
+        "bulk-user-import-partial-success",
+        "cursor-feed-pagination",
+        "health-probe-contract",
+        "idempotent-order-create",
+        "paginated-users-list"
+      ]
+    },
+    {
+      "slug": "async-concurrency",
+      "count": 5,
+      "problems": [
+        "async-batch-enrichment",
+        "bounded-worker-pool",
+        "concurrent-fanout-aggregator",
+        "duplicate-request-deduper",
+        "optimistic-lock-counter"
+      ]
+    },
+    {
+      "slug": "auth-security",
+      "count": 4,
+      "problems": [
+        "api-key-guard",
+        "nonce-replay-protection",
+        "role-based-route-access",
+        "webhook-signature-verify"
+      ]
+    },
+    {
+      "slug": "background-jobs",
+      "count": 4,
+      "problems": [
+        "cancel-running-job",
+        "cleanup-expired-sessions",
+        "job-status-poller",
+        "priority-queue-worker"
+      ]
+    },
+    {
+      "slug": "caching-rate-limits",
+      "count": 4,
+      "problems": [
+        "cache-key-normalization",
+        "in-memory-cache-ttl",
+        "per-user-quota-window",
+        "token-bucket-limiter"
+      ]
+    },
+    {
+      "slug": "files-streaming",
+      "count": 4,
+      "problems": [
+        "byte-range-download",
+        "chunked-upload-assembler",
+        "safe-file-download",
+        "streaming-log-tail"
+      ]
+    },
+    {
+      "slug": "integrations-webhooks",
+      "count": 5,
+      "problems": [
+        "bulkhead-isolation",
+        "idempotent-webhook-consumer",
+        "retryable-outbound-webhook",
+        "upstream-fallback-endpoint",
+        "webhook-event-ordering"
+      ]
+    },
+    {
+      "slug": "middleware-policies",
+      "count": 4,
+      "problems": [
+        "maintenance-mode-switch",
+        "origin-allowlist-policy",
+        "request-id-middleware",
+        "response-shape-enforcer"
+      ]
+    },
+    {
+      "slug": "observability-testing",
+      "count": 4,
+      "problems": [
+        "error-budget-burn-alert",
+        "health-check-dependencies",
+        "structured-request-logs",
+        "trace-context-propagation"
+      ]
+    },
+    {
+      "slug": "realtime-events",
+      "count": 2,
+      "problems": [
+        "reconnect-missed-events",
+        "sse-notification-backlog"
+      ]
+    },
+    {
+      "slug": "resilience-retries",
+      "count": 4,
+      "problems": [
+        "dead-letter-capture",
+        "exponential-backoff-policy",
+        "graceful-degradation-summary",
+        "hedged-request-racer"
+      ]
+    },
+    {
+      "slug": "validation-parsing",
+      "count": 5,
+      "problems": [
+        "enum-filter-guard",
+        "nested-config-validator",
+        "normalized-phone-input",
+        "polymorphic-event-validator",
+        "strict-user-payload"
+      ]
+    }
+  ]
+}

@@ -3,7 +3,7 @@
   "title": "Place N Queens on an N×N Board",
   "difficulty": "Hard",
   "language": "python",
-  "description": "Return all distinct solutions to the n-queens puzzle. Each solution contains a board configuration where n queens do not attack each other. Use backtracking with three constraint sets tracking occupied columns and diagonals.\n\nConstraints:\n- 1 ≤ n ≤ 12",
+  "description": "### Objective\nReturn all distinct solutions to the n-queens puzzle. Each solution contains a board configuration where n queens do not attack each other. Use backtracking with three constraint sets tracking occupied columns and diagonals.\n\n### Function Contract\nImplement `solve_n_queens(n: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `n`: type `number` (example: `4`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n!)`, space `O(n)`.\n\n### Constraints\n- 1 ≤ n ≤ 12\n",
   "leetcodeUrl": "https://leetcode.com/problems/n-queens/",
   "complexity": {
     "time": "O(n!)",

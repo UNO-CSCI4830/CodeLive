@@ -1,0 +1,1146 @@
+{
+  "total": 50,
+  "generated_at": "2026-04-05",
+  "difficulty": {
+    "easy": 15,
+    "medium": 20,
+    "hard": 15
+  },
+  "categories": [
+    {
+      "slug": "api-design",
+      "count": 5,
+      "difficulty": {
+        "easy": 3,
+        "medium": 1,
+        "hard": 1
+      },
+      "problems": [
+        {
+          "id": "bulk-user-import-partial-success",
+          "title": "Bulk User Import with Partial Success",
+          "difficulty": "easy",
+          "path": "api-design/bulk-user-import-partial-success.json"
+        },
+        {
+          "id": "cursor-feed-pagination",
+          "title": "Cursor Feed Pagination",
+          "difficulty": "medium",
+          "path": "api-design/cursor-feed-pagination.json"
+        },
+        {
+          "id": "health-probe-contract",
+          "title": "Health Probe Contract",
+          "difficulty": "easy",
+          "path": "api-design/health-probe-contract.json"
+        },
+        {
+          "id": "idempotent-order-create",
+          "title": "Idempotent Order Create",
+          "difficulty": "hard",
+          "path": "api-design/idempotent-order-create.json"
+        },
+        {
+          "id": "paginated-users-list",
+          "title": "Paginated Users List",
+          "difficulty": "easy",
+          "path": "api-design/paginated-users-list.json"
+        }
+      ]
+    },
+    {
+      "slug": "async-concurrency",
+      "count": 5,
+      "difficulty": {
+        "easy": 1,
+        "medium": 2,
+        "hard": 2
+      },
+      "problems": [
+        {
+          "id": "async-batch-enrichment",
+          "title": "Async Batch Enrichment",
+          "difficulty": "easy",
+          "path": "async-concurrency/async-batch-enrichment.json"
+        },
+        {
+          "id": "bounded-worker-pool",
+          "title": "Bounded Worker Pool",
+          "difficulty": "hard",
+          "path": "async-concurrency/bounded-worker-pool.json"
+        },
+        {
+          "id": "concurrent-fanout-aggregator",
+          "title": "Concurrent Fanout Aggregator",
+          "difficulty": "hard",
+          "path": "async-concurrency/concurrent-fanout-aggregator.json"
+        },
+        {
+          "id": "duplicate-request-deduper",
+          "title": "Duplicate Request Deduper",
+          "difficulty": "medium",
+          "path": "async-concurrency/duplicate-request-deduper.json"
+        },
+        {
+          "id": "optimistic-lock-counter",
+          "title": "Optimistic Lock Counter",
+          "difficulty": "medium",
+          "path": "async-concurrency/optimistic-lock-counter.json"
+        }
+      ]
+    },
+    {
+      "slug": "auth-security",
+      "count": 4,
+      "difficulty": {
+        "easy": 2,
+        "medium": 1,
+        "hard": 1
+      },
+      "problems": [
+        {
+          "id": "api-key-guard",
+          "title": "API Key Guard",
+          "difficulty": "easy",
+          "path": "auth-security/api-key-guard.json"
+        },
+        {
+          "id": "nonce-replay-protection",
+          "title": "Nonce Replay Protection",
+          "difficulty": "medium",
+          "path": "auth-security/nonce-replay-protection.json"
+        },
+        {
+          "id": "role-based-route-access",
+          "title": "Role-Based Route Access",
+          "difficulty": "easy",
+          "path": "auth-security/role-based-route-access.json"
+        },
+        {
+          "id": "webhook-signature-verify",
+          "title": "Webhook Signature Verify",
+          "difficulty": "hard",
+          "path": "auth-security/webhook-signature-verify.json"
+        }
+      ]
+    },
+    {
+      "slug": "background-jobs",
+      "count": 4,
+      "difficulty": {
+        "easy": 1,
+        "medium": 1,
+        "hard": 2
+      },
+      "problems": [
+        {
+          "id": "cancel-running-job",
+          "title": "Cancel Running Job",
+          "difficulty": "hard",
+          "path": "background-jobs/cancel-running-job.json"
+        },
+        {
+          "id": "cleanup-expired-sessions",
+          "title": "Cleanup Expired Sessions",
+          "difficulty": "medium",
+          "path": "background-jobs/cleanup-expired-sessions.json"
+        },
+        {
+          "id": "job-status-poller",
+          "title": "Job Status Poller",
+          "difficulty": "easy",
+          "path": "background-jobs/job-status-poller.json"
+        },
+        {
+          "id": "priority-queue-worker",
+          "title": "Priority Queue Worker",
+          "difficulty": "hard",
+          "path": "background-jobs/priority-queue-worker.json"
+        }
+      ]
+    },
+    {
+      "slug": "caching-rate-limits",
+      "count": 4,
+      "difficulty": {
+        "easy": 1,
+        "medium": 1,
+        "hard": 2
+      },
+      "problems": [
+        {
+          "id": "cache-key-normalization",
+          "title": "Cache Key Normalization",
+          "difficulty": "hard",
+          "path": "caching-rate-limits/cache-key-normalization.json"
+        },
+        {
+          "id": "in-memory-cache-ttl",
+          "title": "In-Memory Cache TTL",
+          "difficulty": "medium",
+          "path": "caching-rate-limits/in-memory-cache-ttl.json"
+        },
+        {
+          "id": "per-user-quota-window",
+          "title": "Per-User Quota Window",
+          "difficulty": "hard",
+          "path": "caching-rate-limits/per-user-quota-window.json"
+        },
+        {
+          "id": "token-bucket-limiter",
+          "title": "Token Bucket Limiter",
+          "difficulty": "easy",
+          "path": "caching-rate-limits/token-bucket-limiter.json"
+        }
+      ]
+    },
+    {
+      "slug": "files-streaming",
+      "count": 4,
+      "difficulty": {
+        "easy": 1,
+        "medium": 3,
+        "hard": 0
+      },
+      "problems": [
+        {
+          "id": "byte-range-download",
+          "title": "Byte Range Download",
+          "difficulty": "medium",
+          "path": "files-streaming/byte-range-download.json"
+        },
+        {
+          "id": "chunked-upload-assembler",
+          "title": "Chunked Upload Assembler",
+          "difficulty": "medium",
+          "path": "files-streaming/chunked-upload-assembler.json"
+        },
+        {
+          "id": "safe-file-download",
+          "title": "Safe File Download",
+          "difficulty": "easy",
+          "path": "files-streaming/safe-file-download.json"
+        },
+        {
+          "id": "streaming-log-tail",
+          "title": "Streaming Log Tail",
+          "difficulty": "medium",
+          "path": "files-streaming/streaming-log-tail.json"
+        }
+      ]
+    },
+    {
+      "slug": "integrations-webhooks",
+      "count": 5,
+      "difficulty": {
+        "easy": 0,
+        "medium": 3,
+        "hard": 2
+      },
+      "problems": [
+        {
+          "id": "bulkhead-isolation",
+          "title": "Bulkhead Isolation",
+          "difficulty": "hard",
+          "path": "integrations-webhooks/bulkhead-isolation.json"
+        },
+        {
+          "id": "idempotent-webhook-consumer",
+          "title": "Idempotent Webhook Consumer",
+          "difficulty": "medium",
+          "path": "integrations-webhooks/idempotent-webhook-consumer.json"
+        },
+        {
+          "id": "retryable-outbound-webhook",
+          "title": "Retryable Outbound Webhook",
+          "difficulty": "hard",
+          "path": "integrations-webhooks/retryable-outbound-webhook.json"
+        },
+        {
+          "id": "upstream-fallback-endpoint",
+          "title": "Upstream Fallback Endpoint",
+          "difficulty": "medium",
+          "path": "integrations-webhooks/upstream-fallback-endpoint.json"
+        },
+        {
+          "id": "webhook-event-ordering",
+          "title": "Webhook Event Ordering",
+          "difficulty": "medium",
+          "path": "integrations-webhooks/webhook-event-ordering.json"
+        }
+      ]
+    },
+    {
+      "slug": "middleware-policies",
+      "count": 4,
+      "difficulty": {
+        "easy": 2,
+        "medium": 1,
+        "hard": 1
+      },
+      "problems": [
+        {
+          "id": "maintenance-mode-switch",
+          "title": "Maintenance Mode Switch",
+          "difficulty": "easy",
+          "path": "middleware-policies/maintenance-mode-switch.json"
+        },
+        {
+          "id": "origin-allowlist-policy",
+          "title": "Origin Allowlist Policy",
+          "difficulty": "medium",
+          "path": "middleware-policies/origin-allowlist-policy.json"
+        },
+        {
+          "id": "request-id-middleware",
+          "title": "Request ID Middleware",
+          "difficulty": "easy",
+          "path": "middleware-policies/request-id-middleware.json"
+        },
+        {
+          "id": "response-shape-enforcer",
+          "title": "Response Shape Enforcer",
+          "difficulty": "hard",
+          "path": "middleware-policies/response-shape-enforcer.json"
+        }
+      ]
+    },
+    {
+      "slug": "observability-testing",
+      "count": 4,
+      "difficulty": {
+        "easy": 1,
+        "medium": 2,
+        "hard": 1
+      },
+      "problems": [
+        {
+          "id": "error-budget-burn-alert",
+          "title": "Error Budget Burn Alert",
+          "difficulty": "hard",
+          "path": "observability-testing/error-budget-burn-alert.json"
+        },
+        {
+          "id": "health-check-dependencies",
+          "title": "Health Check Dependencies",
+          "difficulty": "medium",
+          "path": "observability-testing/health-check-dependencies.json"
+        },
+        {
+          "id": "structured-request-logs",
+          "title": "Structured Request Logs",
+          "difficulty": "easy",
+          "path": "observability-testing/structured-request-logs.json"
+        },
+        {
+          "id": "trace-context-propagation",
+          "title": "Trace Context Propagation",
+          "difficulty": "medium",
+          "path": "observability-testing/trace-context-propagation.json"
+        }
+      ]
+    },
+    {
+      "slug": "realtime-events",
+      "count": 2,
+      "difficulty": {
+        "easy": 0,
+        "medium": 1,
+        "hard": 1
+      },
+      "problems": [
+        {
+          "id": "reconnect-missed-events",
+          "title": "Reconnect Missed Events",
+          "difficulty": "hard",
+          "path": "realtime-events/reconnect-missed-events.json"
+        },
+        {
+          "id": "sse-notification-backlog",
+          "title": "SSE Notification Backlog",
+          "difficulty": "medium",
+          "path": "realtime-events/sse-notification-backlog.json"
+        }
+      ]
+    },
+    {
+      "slug": "resilience-retries",
+      "count": 4,
+      "difficulty": {
+        "easy": 0,
+        "medium": 2,
+        "hard": 2
+      },
+      "problems": [
+        {
+          "id": "dead-letter-capture",
+          "title": "Dead Letter Capture",
+          "difficulty": "hard",
+          "path": "resilience-retries/dead-letter-capture.json"
+        },
+        {
+          "id": "exponential-backoff-policy",
+          "title": "Exponential Backoff Policy",
+          "difficulty": "medium",
+          "path": "resilience-retries/exponential-backoff-policy.json"
+        },
+        {
+          "id": "graceful-degradation-summary",
+          "title": "Graceful Degradation Summary",
+          "difficulty": "medium",
+          "path": "resilience-retries/graceful-degradation-summary.json"
+        },
+        {
+          "id": "hedged-request-racer",
+          "title": "Hedged Request Racer",
+          "difficulty": "hard",
+          "path": "resilience-retries/hedged-request-racer.json"
+        }
+      ]
+    },
+    {
+      "slug": "validation-parsing",
+      "count": 5,
+      "difficulty": {
+        "easy": 3,
+        "medium": 2,
+        "hard": 0
+      },
+      "problems": [
+        {
+          "id": "enum-filter-guard",
+          "title": "Enum Filter Guard",
+          "difficulty": "easy",
+          "path": "validation-parsing/enum-filter-guard.json"
+        },
+        {
+          "id": "nested-config-validator",
+          "title": "Nested Config Validator",
+          "difficulty": "medium",
+          "path": "validation-parsing/nested-config-validator.json"
+        },
+        {
+          "id": "normalized-phone-input",
+          "title": "Normalized Phone Input",
+          "difficulty": "easy",
+          "path": "validation-parsing/normalized-phone-input.json"
+        },
+        {
+          "id": "polymorphic-event-validator",
+          "title": "Polymorphic Event Validator",
+          "difficulty": "medium",
+          "path": "validation-parsing/polymorphic-event-validator.json"
+        },
+        {
+          "id": "strict-user-payload",
+          "title": "Strict User Payload Validation",
+          "difficulty": "easy",
+          "path": "validation-parsing/strict-user-payload.json"
+        }
+      ]
+    }
+  ],
+  "problems": [
+    {
+      "id": "bulk-user-import-partial-success",
+      "title": "Bulk User Import with Partial Success",
+      "difficulty": "easy",
+      "category": "api-design",
+      "path": "api-design/bulk-user-import-partial-success.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "bulk-operations",
+        "error-reporting"
+      ]
+    },
+    {
+      "id": "cursor-feed-pagination",
+      "title": "Cursor Feed Pagination",
+      "difficulty": "medium",
+      "category": "api-design",
+      "path": "api-design/cursor-feed-pagination.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "cursor-pagination",
+        "api-contracts"
+      ]
+    },
+    {
+      "id": "health-probe-contract",
+      "title": "Health Probe Contract",
+      "difficulty": "easy",
+      "category": "api-design",
+      "path": "api-design/health-probe-contract.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "api-contracts",
+        "health-checks"
+      ]
+    },
+    {
+      "id": "idempotent-order-create",
+      "title": "Idempotent Order Create",
+      "difficulty": "hard",
+      "category": "api-design",
+      "path": "api-design/idempotent-order-create.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "idempotency",
+        "write-safety"
+      ]
+    },
+    {
+      "id": "paginated-users-list",
+      "title": "Paginated Users List",
+      "difficulty": "easy",
+      "category": "api-design",
+      "path": "api-design/paginated-users-list.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "pagination",
+        "api-design"
+      ]
+    },
+    {
+      "id": "async-batch-enrichment",
+      "title": "Async Batch Enrichment",
+      "difficulty": "easy",
+      "category": "async-concurrency",
+      "path": "async-concurrency/async-batch-enrichment.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "asyncio",
+        "batch-processing"
+      ]
+    },
+    {
+      "id": "bounded-worker-pool",
+      "title": "Bounded Worker Pool",
+      "difficulty": "hard",
+      "category": "async-concurrency",
+      "path": "async-concurrency/bounded-worker-pool.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "worker-pool",
+        "throughput-control"
+      ]
+    },
+    {
+      "id": "concurrent-fanout-aggregator",
+      "title": "Concurrent Fanout Aggregator",
+      "difficulty": "hard",
+      "category": "async-concurrency",
+      "path": "async-concurrency/concurrent-fanout-aggregator.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "concurrency",
+        "aggregation"
+      ]
+    },
+    {
+      "id": "duplicate-request-deduper",
+      "title": "Duplicate Request Deduper",
+      "difficulty": "medium",
+      "category": "async-concurrency",
+      "path": "async-concurrency/duplicate-request-deduper.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "deduplication",
+        "idempotency"
+      ]
+    },
+    {
+      "id": "optimistic-lock-counter",
+      "title": "Optimistic Lock Counter",
+      "difficulty": "medium",
+      "category": "async-concurrency",
+      "path": "async-concurrency/optimistic-lock-counter.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "optimistic-locking",
+        "concurrency-control"
+      ]
+    },
+    {
+      "id": "api-key-guard",
+      "title": "API Key Guard",
+      "difficulty": "easy",
+      "category": "auth-security",
+      "path": "auth-security/api-key-guard.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "authn",
+        "access-control"
+      ]
+    },
+    {
+      "id": "nonce-replay-protection",
+      "title": "Nonce Replay Protection",
+      "difficulty": "medium",
+      "category": "auth-security",
+      "path": "auth-security/nonce-replay-protection.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "replay-protection",
+        "security"
+      ]
+    },
+    {
+      "id": "role-based-route-access",
+      "title": "Role-Based Route Access",
+      "difficulty": "easy",
+      "category": "auth-security",
+      "path": "auth-security/role-based-route-access.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "rbac",
+        "authorization"
+      ]
+    },
+    {
+      "id": "webhook-signature-verify",
+      "title": "Webhook Signature Verify",
+      "difficulty": "hard",
+      "category": "auth-security",
+      "path": "auth-security/webhook-signature-verify.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "webhooks",
+        "hmac",
+        "security"
+      ]
+    },
+    {
+      "id": "cancel-running-job",
+      "title": "Cancel Running Job",
+      "difficulty": "hard",
+      "category": "background-jobs",
+      "path": "background-jobs/cancel-running-job.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "job-control",
+        "cancellation"
+      ]
+    },
+    {
+      "id": "cleanup-expired-sessions",
+      "title": "Cleanup Expired Sessions",
+      "difficulty": "medium",
+      "category": "background-jobs",
+      "path": "background-jobs/cleanup-expired-sessions.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "maintenance",
+        "cleanup-jobs"
+      ]
+    },
+    {
+      "id": "job-status-poller",
+      "title": "Job Status Poller",
+      "difficulty": "easy",
+      "category": "background-jobs",
+      "path": "background-jobs/job-status-poller.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "jobs",
+        "polling"
+      ]
+    },
+    {
+      "id": "priority-queue-worker",
+      "title": "Priority Queue Worker",
+      "difficulty": "hard",
+      "category": "background-jobs",
+      "path": "background-jobs/priority-queue-worker.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "priority-queues",
+        "workers"
+      ]
+    },
+    {
+      "id": "cache-key-normalization",
+      "title": "Cache Key Normalization",
+      "difficulty": "hard",
+      "category": "caching-rate-limits",
+      "path": "caching-rate-limits/cache-key-normalization.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "cache-keys",
+        "normalization"
+      ]
+    },
+    {
+      "id": "in-memory-cache-ttl",
+      "title": "In-Memory Cache TTL",
+      "difficulty": "medium",
+      "category": "caching-rate-limits",
+      "path": "caching-rate-limits/in-memory-cache-ttl.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "caching",
+        "performance"
+      ]
+    },
+    {
+      "id": "per-user-quota-window",
+      "title": "Per-User Quota Window",
+      "difficulty": "hard",
+      "category": "caching-rate-limits",
+      "path": "caching-rate-limits/per-user-quota-window.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "quotas",
+        "rate-limits"
+      ]
+    },
+    {
+      "id": "token-bucket-limiter",
+      "title": "Token Bucket Limiter",
+      "difficulty": "easy",
+      "category": "caching-rate-limits",
+      "path": "caching-rate-limits/token-bucket-limiter.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "rate-limiting",
+        "traffic-control"
+      ]
+    },
+    {
+      "id": "byte-range-download",
+      "title": "Byte Range Download",
+      "difficulty": "medium",
+      "category": "files-streaming",
+      "path": "files-streaming/byte-range-download.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "range-requests",
+        "content-serving"
+      ]
+    },
+    {
+      "id": "chunked-upload-assembler",
+      "title": "Chunked Upload Assembler",
+      "difficulty": "medium",
+      "category": "files-streaming",
+      "path": "files-streaming/chunked-upload-assembler.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "uploads",
+        "chunking"
+      ]
+    },
+    {
+      "id": "safe-file-download",
+      "title": "Safe File Download",
+      "difficulty": "easy",
+      "category": "files-streaming",
+      "path": "files-streaming/safe-file-download.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "file-security",
+        "path-validation"
+      ]
+    },
+    {
+      "id": "streaming-log-tail",
+      "title": "Streaming Log Tail",
+      "difficulty": "medium",
+      "category": "files-streaming",
+      "path": "files-streaming/streaming-log-tail.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "logs",
+        "streaming-patterns"
+      ]
+    },
+    {
+      "id": "bulkhead-isolation",
+      "title": "Bulkhead Isolation",
+      "difficulty": "hard",
+      "category": "integrations-webhooks",
+      "path": "integrations-webhooks/bulkhead-isolation.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "bulkhead",
+        "resilience"
+      ]
+    },
+    {
+      "id": "idempotent-webhook-consumer",
+      "title": "Idempotent Webhook Consumer",
+      "difficulty": "medium",
+      "category": "integrations-webhooks",
+      "path": "integrations-webhooks/idempotent-webhook-consumer.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "webhook-consumers",
+        "idempotency"
+      ]
+    },
+    {
+      "id": "retryable-outbound-webhook",
+      "title": "Retryable Outbound Webhook",
+      "difficulty": "hard",
+      "category": "integrations-webhooks",
+      "path": "integrations-webhooks/retryable-outbound-webhook.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "webhooks",
+        "retries"
+      ]
+    },
+    {
+      "id": "upstream-fallback-endpoint",
+      "title": "Upstream Fallback Endpoint",
+      "difficulty": "medium",
+      "category": "integrations-webhooks",
+      "path": "integrations-webhooks/upstream-fallback-endpoint.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "integrations",
+        "fallbacks"
+      ]
+    },
+    {
+      "id": "webhook-event-ordering",
+      "title": "Webhook Event Ordering",
+      "difficulty": "medium",
+      "category": "integrations-webhooks",
+      "path": "integrations-webhooks/webhook-event-ordering.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "ordering",
+        "event-streams"
+      ]
+    },
+    {
+      "id": "maintenance-mode-switch",
+      "title": "Maintenance Mode Switch",
+      "difficulty": "easy",
+      "category": "middleware-policies",
+      "path": "middleware-policies/maintenance-mode-switch.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "feature-flags",
+        "operations"
+      ]
+    },
+    {
+      "id": "origin-allowlist-policy",
+      "title": "Origin Allowlist Policy",
+      "difficulty": "medium",
+      "category": "middleware-policies",
+      "path": "middleware-policies/origin-allowlist-policy.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "policy",
+        "security"
+      ]
+    },
+    {
+      "id": "request-id-middleware",
+      "title": "Request ID Middleware",
+      "difficulty": "easy",
+      "category": "middleware-policies",
+      "path": "middleware-policies/request-id-middleware.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "middleware",
+        "observability"
+      ]
+    },
+    {
+      "id": "response-shape-enforcer",
+      "title": "Response Shape Enforcer",
+      "difficulty": "hard",
+      "category": "middleware-policies",
+      "path": "middleware-policies/response-shape-enforcer.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "response-contract",
+        "middleware"
+      ]
+    },
+    {
+      "id": "error-budget-burn-alert",
+      "title": "Error Budget Burn Alert",
+      "difficulty": "hard",
+      "category": "observability-testing",
+      "path": "observability-testing/error-budget-burn-alert.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "slo",
+        "alerting"
+      ]
+    },
+    {
+      "id": "health-check-dependencies",
+      "title": "Health Check Dependencies",
+      "difficulty": "medium",
+      "category": "observability-testing",
+      "path": "observability-testing/health-check-dependencies.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "health-checks",
+        "dependency-monitoring"
+      ]
+    },
+    {
+      "id": "structured-request-logs",
+      "title": "Structured Request Logs",
+      "difficulty": "easy",
+      "category": "observability-testing",
+      "path": "observability-testing/structured-request-logs.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "logging",
+        "observability"
+      ]
+    },
+    {
+      "id": "trace-context-propagation",
+      "title": "Trace Context Propagation",
+      "difficulty": "medium",
+      "category": "observability-testing",
+      "path": "observability-testing/trace-context-propagation.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "tracing",
+        "context-propagation"
+      ]
+    },
+    {
+      "id": "reconnect-missed-events",
+      "title": "Reconnect Missed Events",
+      "difficulty": "hard",
+      "category": "realtime-events",
+      "path": "realtime-events/reconnect-missed-events.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "reconnect",
+        "event-streams"
+      ]
+    },
+    {
+      "id": "sse-notification-backlog",
+      "title": "SSE Notification Backlog",
+      "difficulty": "medium",
+      "category": "realtime-events",
+      "path": "realtime-events/sse-notification-backlog.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "sse",
+        "event-backlog"
+      ]
+    },
+    {
+      "id": "dead-letter-capture",
+      "title": "Dead Letter Capture",
+      "difficulty": "hard",
+      "category": "resilience-retries",
+      "path": "resilience-retries/dead-letter-capture.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "dead-letter",
+        "failure-handling"
+      ]
+    },
+    {
+      "id": "exponential-backoff-policy",
+      "title": "Exponential Backoff Policy",
+      "difficulty": "medium",
+      "category": "resilience-retries",
+      "path": "resilience-retries/exponential-backoff-policy.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "retry",
+        "backoff"
+      ]
+    },
+    {
+      "id": "graceful-degradation-summary",
+      "title": "Graceful Degradation Summary",
+      "difficulty": "medium",
+      "category": "resilience-retries",
+      "path": "resilience-retries/graceful-degradation-summary.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "degradation",
+        "resilience"
+      ]
+    },
+    {
+      "id": "hedged-request-racer",
+      "title": "Hedged Request Racer",
+      "difficulty": "hard",
+      "category": "resilience-retries",
+      "path": "resilience-retries/hedged-request-racer.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "hedging",
+        "latency"
+      ]
+    },
+    {
+      "id": "enum-filter-guard",
+      "title": "Enum Filter Guard",
+      "difficulty": "easy",
+      "category": "validation-parsing",
+      "path": "validation-parsing/enum-filter-guard.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "query-validation",
+        "enums"
+      ]
+    },
+    {
+      "id": "nested-config-validator",
+      "title": "Nested Config Validator",
+      "difficulty": "medium",
+      "category": "validation-parsing",
+      "path": "validation-parsing/nested-config-validator.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "nested-validation",
+        "config-management"
+      ]
+    },
+    {
+      "id": "normalized-phone-input",
+      "title": "Normalized Phone Input",
+      "difficulty": "easy",
+      "category": "validation-parsing",
+      "path": "validation-parsing/normalized-phone-input.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "normalization",
+        "input-sanitization"
+      ]
+    },
+    {
+      "id": "polymorphic-event-validator",
+      "title": "Polymorphic Event Validator",
+      "difficulty": "medium",
+      "category": "validation-parsing",
+      "path": "validation-parsing/polymorphic-event-validator.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "eventing",
+        "schema-validation"
+      ]
+    },
+    {
+      "id": "strict-user-payload",
+      "title": "Strict User Payload Validation",
+      "difficulty": "easy",
+      "category": "validation-parsing",
+      "path": "validation-parsing/strict-user-payload.json",
+      "tags": [
+        "backend",
+        "python",
+        "fastapi",
+        "validation",
+        "payloads"
+      ]
+    }
+  ]
+}

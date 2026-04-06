@@ -3,7 +3,7 @@
   "title": "Construct Tree from Preorder and Inorder",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given preorder and inorder traversal arrays of a binary tree with unique values, reconstruct the original tree.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 10^5\n- All values unique",
+  "description": "### Objective\nPreorder and inorder traversal arrays of a binary tree with unique values, reconstruct the original tree.\n\n### Function Contract\nImplement `__init__(self: any, val: any, left: any, right: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `preorder`: type `array` (example: `[3,9,20,15,7]`).\n- Input `inorder`: type `array` (example: `[9,3,15,20,7]`).\n- Return type: `string`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(n) for hashmap + O(h) recursion`.\n\n### Constraints\n- 1 ≤ n ≤ 10^5\n- All values unique\n",
   "leetcodeUrl": "https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/",
   "complexity": {
     "time": "O(n)",

@@ -3,7 +3,7 @@
   "title": "Max Sum Window of Size K",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Given an integer array and a window size k, find the maximum sum achievable by any contiguous subarray of length k. Use a fixed-size sliding window that adds the new right value and removes the left value at each step.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- 1 ≤ k ≤ len(nums)\n- -10^4 ≤ nums[i] ≤ 10^4",
+  "description": "### Objective\nGiven an integer array and a window size k, find the maximum sum achievable by any contiguous subarray of length k. Use a fixed-size sliding window that adds the new right value and removes the left value at each step.\n\n### Function Contract\nImplement `max_sum_window_of_size_k(nums: List[int], k: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[1,4,2,10,23,3,1,0,20]`).\n- Input `k`: type `number` (example: `4`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 1 ≤ len(nums) ≤ 10^5\n- 1 ≤ k ≤ len(nums)\n- -10^4 ≤ nums[i] ≤ 10^4\n",
   "leetcodeUrl": "https://leetcode.com/problems/maximum-average-subarray-i/",
   "complexity": {
     "time": "O(n)",

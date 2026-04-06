@@ -1,0 +1,54 @@
+{
+  "id": "avg-minutes-login-to-purchase-same-day",
+  "title": "Average Minutes from Login to Purchase (Same Day)",
+  "category": "database",
+  "difficulty": "medium",
+  "description": "Write a SQL query to compute the requested time-based metric.\n\n### Tables\n```sql\nCREATE TABLE users (\n  user_id INTEGER PRIMARY KEY,\n  signup_date TEXT NOT NULL,\n  channel TEXT NOT NULL\n);\n\nCREATE TABLE events (\n  event_id INTEGER PRIMARY KEY,\n  user_id INTEGER NOT NULL,\n  event_type TEXT NOT NULL,\n  event_time TEXT NOT NULL\n);\n```\n\n### Task\nFor each user-day with both login and purchase, compute minutes between first login and first purchase, then average.\n\n### Return Columns\n- `avg_minutes_to_purchase`\n\n### Ordering\nSingle-row output.\n\n### Notes\n- Use SQLite syntax.\n- Write your answer in `solution.sql`.\n- Do not hardcode output rows; query from tables.\n- Internal hidden tests run against additional seed data.",
+  "constraints": "SQLite 3.44+\n- Single query unless the prompt explicitly asks for CTEs\n- Deterministic output",
+  "hints": [],
+  "tags": [
+    "database",
+    "sql",
+    "sqlite",
+    "date-time-analytics",
+    "timestamp-diff",
+    "aggregation"
+  ],
+  "starter_files": [
+    {
+      "path": "solution.sql",
+      "content": "",
+      "language": "sql",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "schema_sql": "CREATE TABLE users (\n  user_id INTEGER PRIMARY KEY,\n  signup_date TEXT NOT NULL,\n  channel TEXT NOT NULL\n);\n\nCREATE TABLE events (\n  event_id INTEGER PRIMARY KEY,\n  user_id INTEGER NOT NULL,\n  event_type TEXT NOT NULL,\n  event_time TEXT NOT NULL\n);",
+    "seed_sql": "INSERT INTO users (user_id, signup_date, channel) VALUES\n  (1, '2024-06-01', 'ads'),\n  (2, '2024-06-01', 'referral'),\n  (3, '2024-06-02', 'ads'),\n  (4, '2024-06-03', 'organic'),\n  (5, '2024-06-03', 'referral'),\n  (6, '2024-06-04', 'ads');\n\nINSERT INTO events (event_id, user_id, event_type, event_time) VALUES\n  (1, 1, 'login', '2024-06-01 09:00:00'),\n  (2, 1, 'purchase', '2024-06-01 10:00:00'),\n  (3, 1, 'login', '2024-06-02 09:10:00'),\n  (4, 2, 'login', '2024-06-01 11:00:00'),\n  (5, 2, 'logout', '2024-06-01 11:30:00'),\n  (6, 2, 'login', '2024-06-03 08:00:00'),\n  (7, 3, 'login', '2024-06-02 12:00:00'),\n  (8, 3, 'purchase', '2024-06-03 14:00:00'),\n  (9, 4, 'login', '2024-06-03 09:00:00'),\n  (10, 4, 'login', '2024-06-04 09:05:00'),\n  (11, 4, 'login', '2024-06-05 09:06:00'),\n  (12, 5, 'login', '2024-06-03 10:00:00'),\n  (13, 5, 'purchase', '2024-06-10 10:00:00'),\n  (14, 6, 'login', '2024-06-04 09:00:00'),\n  (15, 6, 'login', '2024-06-05 09:10:00'),\n  (16, 6, 'login', '2024-06-06 09:20:00'),\n  (17, 6, 'purchase', '2024-06-06 13:00:00'),\n  (18, 3, 'login', '2024-06-04 08:00:00'),\n  (19, 1, 'login', '2024-06-04 09:00:00');",
+    "expected_output": [
+      {
+        "avg_minutes_to_purchase": 140
+      }
+    ],
+    "column_names": [
+      "avg_minutes_to_purchase"
+    ],
+    "order_matters": true,
+    "check_explain": false,
+    "hidden_tests": [
+      {
+        "expected_output": [
+          {
+            "avg_minutes_to_purchase": 163.33
+          }
+        ],
+        "column_names": [
+          "avg_minutes_to_purchase"
+        ],
+        "order_matters": true
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 55
+}

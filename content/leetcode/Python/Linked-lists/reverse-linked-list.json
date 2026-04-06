@@ -3,7 +3,7 @@
   "title": "Reverse a Linked List",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Given Reverse a singly linked list and return the new head. Modify the next pointers in place using an iterative approach. Do not use extra arrays or recursion.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5 nodes\n- Node values fit in 32-bit signed integer\n- List may be empty",
+  "description": "### Objective\nReverse a singly linked list and return the new head. Modify the next pointers in place using an iterative approach. Do not use extra arrays or recursion.\n\n### Function Contract\nImplement `__init__(self: any, val: any, next: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `list`: type `array` (example: `[1,2,3,4,5]`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 0 ≤ n ≤ 10^5 nodes\n- Node values fit in 32-bit signed integer\n- List may be empty\n",
   "leetcodeUrl": "https://leetcode.com/problems/reverse-linked-list/",
   "complexity": {
     "time": "O(n)",

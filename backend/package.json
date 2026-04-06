@@ -5,8 +5,10 @@
   "description": "Code Live backend — Express + TypeScript",
   "scripts": {
     "dev": "infisical run --env=dev --path=/Backend -- tsx watch src/index.ts",
+    "dev:runner": "tsx watch src/runner.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "start:runner": "node dist/runner.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

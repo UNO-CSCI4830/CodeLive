@@ -155,6 +155,129 @@
       ]
     },
     {
+      "id": "choose-k-from-n",
+      "title": "Choose K from 1..N",
+      "difficulty": "medium",
+      "category": "backtracking",
+      "tags": [
+        "backtracking",
+        "array"
+      ]
+    },
+    {
+      "id": "combination-sum-no-reuse",
+      "title": "Combination Sum Without Reuse",
+      "difficulty": "medium",
+      "category": "backtracking",
+      "tags": [
+        "backtracking",
+        "array",
+        "sorting"
+      ]
+    },
+    {
+      "id": "combination-sum-unbounded",
+      "title": "Combination Sum with Unlimited Picks",
+      "difficulty": "medium",
+      "category": "backtracking",
+      "tags": [
+        "backtracking",
+        "array"
+      ]
+    },
+    {
+      "id": "generate-parentheses",
+      "title": "Generate Balanced Parentheses",
+      "difficulty": "medium",
+      "category": "backtracking",
+      "tags": [
+        "backtracking",
+        "string"
+      ]
+    },
+    {
+      "id": "n-queens",
+      "title": "Place N Queens on an N×N Board",
+      "difficulty": "hard",
+      "category": "backtracking",
+      "tags": [
+        "backtracking"
+      ]
+    },
+    {
+      "id": "palindrome-partitioning",
+      "title": "Partition a String into Palindromes",
+      "difficulty": "medium",
+      "category": "backtracking",
+      "tags": [
+        "backtracking",
+        "string",
+        "dynamic-programming"
+      ]
+    },
+    {
+      "id": "permute-distinct",
+      "title": "Permutations of Distinct Elements",
+      "difficulty": "medium",
+      "category": "backtracking",
+      "tags": [
+        "backtracking",
+        "array"
+      ]
+    },
+    {
+      "id": "permute-unique",
+      "title": "Unique Permutations with Duplicates",
+      "difficulty": "medium",
+      "category": "backtracking",
+      "tags": [
+        "backtracking",
+        "array",
+        "sorting"
+      ]
+    },
+    {
+      "id": "phone-letter-combinations",
+      "title": "Phone Keypad Letter Combinations",
+      "difficulty": "medium",
+      "category": "backtracking",
+      "tags": [
+        "backtracking",
+        "string"
+      ]
+    },
+    {
+      "id": "restore-ip-addresses",
+      "title": "Restore Valid IP Addresses",
+      "difficulty": "medium",
+      "category": "backtracking",
+      "tags": [
+        "backtracking",
+        "string"
+      ]
+    },
+    {
+      "id": "subsets-with-duplicates",
+      "title": "All Subsets With Duplicates Allowed",
+      "difficulty": "medium",
+      "category": "backtracking",
+      "tags": [
+        "backtracking",
+        "array",
+        "sorting"
+      ]
+    },
+    {
+      "id": "subsets-without-duplicates",
+      "title": "All Subsets of Distinct Elements",
+      "difficulty": "easy",
+      "category": "backtracking",
+      "tags": [
+        "backtracking",
+        "array"
+      ]
+    },
+    {
       "id": "find-min-in-rotated",
       "title": "Find Minimum in Rotated Array",
       "difficulty": "medium",
@@ -523,6 +646,256 @@
       ]
     },
     {
+      "id": "cheapest-flights-with-k-stops",
+      "title": "Cheapest Flight with Stop Limit",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "bellman-ford",
+        "dynamic-programming"
+      ]
+    },
+    {
+      "id": "check-graph-bipartite",
+      "title": "Check if a Graph is Bipartite",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "bfs"
+      ]
+    },
+    {
+      "id": "clone-undirected-graph",
+      "title": "Clone an Undirected Graph",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "dfs",
+        "bfs"
+      ]
+    },
+    {
+      "id": "connect-points-min-cost",
+      "title": "Connect All Points with Minimum Cost",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "prim",
+        "mst"
+      ]
+    },
+    {
+      "id": "count-islands-in-grid",
+      "title": "Count Landmasses in a Grid",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "bfs",
+        "dfs",
+        "matrix"
+      ]
+    },
+    {
+      "id": "count-provinces",
+      "title": "Count Provinces from Friendship Matrix",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "dfs",
+        "bfs",
+        "union-find"
+      ]
+    },
+    {
+      "id": "course-ordering",
+      "title": "Build a Valid Course Order",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "topological-sort",
+        "bfs"
+      ]
+    },
+    {
+      "id": "course-plan-feasible",
+      "title": "Course Plan Feasibility",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "bfs",
+        "topological-sort"
+      ]
+    },
+    {
+      "id": "detect-cycle-directed",
+      "title": "Detect a Cycle in a Directed Graph",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "dfs"
+      ]
+    },
+    {
+      "id": "evaluate-division-ratios",
+      "title": "Evaluate Division Equations via Graph",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "bfs"
+      ]
+    },
+    {
+      "id": "find-city-threshold-distance",
+      "title": "Find City With Fewest Neighbors Within Threshold",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "floyd-warshall"
+      ]
+    },
+    {
+      "id": "min-cost-with-highway-pass",
+      "title": "Minimum Toll with Freeways and Tolls",
+      "difficulty": "hard",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "dijkstra",
+        "0-1-bfs"
+      ]
+    },
+    {
+      "id": "minimum-height-trees-centers",
+      "title": "Centers of a Tree (Minimum Height Trees)",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "bfs"
+      ]
+    },
+    {
+      "id": "mst-kruskal-total-cost",
+      "title": "Minimum Spanning Tree by Kruskal",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "kruskal",
+        "union-find",
+        "mst"
+      ]
+    },
+    {
+      "id": "network-broadcast-time",
+      "title": "Network Broadcast Time from a Source",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "dijkstra",
+        "heap"
+      ]
+    },
+    {
+      "id": "num-enclaves",
+      "title": "Number of Enclaves (Land Trapped by Sea)",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "bfs",
+        "matrix"
+      ]
+    },
+    {
+      "id": "pacific-atlantic-flow",
+      "title": "Cells Flowing to Both Oceans",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "dfs",
+        "matrix"
+      ]
+    },
+    {
+      "id": "path-with-minimum-effort",
+      "title": "Path with Minimum Effort in a Grid",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "dijkstra",
+        "matrix"
+      ]
+    },
+    {
+      "id": "redundant-connection-undirected",
+      "title": "Find the Redundant Connection in an Undirected Graph",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "union-find"
+      ]
+    },
+    {
+      "id": "rotting-oranges-min-time",
+      "title": "Minimum Time to Rot All Oranges",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "bfs",
+        "matrix"
+      ]
+    },
+    {
+      "id": "shortest-path-binary-matrix",
+      "title": "Shortest Path in a Binary Matrix (8 Directions)",
+      "difficulty": "medium",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "bfs",
+        "matrix"
+      ]
+    },
+    {
+      "id": "swim-in-rising-water",
+      "title": "Earliest Time to Swim Across Rising Water",
+      "difficulty": "hard",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "binary-search",
+        "bfs"
+      ]
+    },
+    {
+      "id": "word-ladder-length",
+      "title": "Shortest Transformation Ladder Length",
+      "difficulty": "hard",
+      "category": "graphs",
+      "tags": [
+        "graph",
+        "bfs",
+        "string"
+      ]
+    },
+    {
       "id": "assign-cookies-to-children",
       "title": "Maximize Content Children with Cookies",
       "difficulty": "easy",
@@ -682,7 +1055,7 @@
       ]
     },
     {
-      "id": "top-k-frequent-elements",
+      "id": "top-k-frequent-elements-heap",
       "title": "Top-K Frequent Elements",
       "difficulty": "medium",
       "category": "Heaps",
@@ -1392,379 +1765,6 @@
       "tags": [
         "array",
         "two-pointers"
-      ]
-    },
-    {
-      "id": "choose-k-from-n",
-      "title": "Choose K from 1..N",
-      "difficulty": "medium",
-      "category": "backtracking",
-      "tags": [
-        "backtracking",
-        "array"
-      ]
-    },
-    {
-      "id": "combination-sum-no-reuse",
-      "title": "Combination Sum Without Reuse",
-      "difficulty": "medium",
-      "category": "backtracking",
-      "tags": [
-        "backtracking",
-        "array",
-        "sorting"
-      ]
-    },
-    {
-      "id": "combination-sum-unbounded",
-      "title": "Combination Sum with Unlimited Picks",
-      "difficulty": "medium",
-      "category": "backtracking",
-      "tags": [
-        "backtracking",
-        "array"
-      ]
-    },
-    {
-      "id": "generate-parentheses",
-      "title": "Generate Balanced Parentheses",
-      "difficulty": "medium",
-      "category": "backtracking",
-      "tags": [
-        "backtracking",
-        "string"
-      ]
-    },
-    {
-      "id": "n-queens",
-      "title": "Place N Queens on an N\u00d7N Board",
-      "difficulty": "hard",
-      "category": "backtracking",
-      "tags": [
-        "backtracking"
-      ]
-    },
-    {
-      "id": "palindrome-partitioning",
-      "title": "Partition a String into Palindromes",
-      "difficulty": "medium",
-      "category": "backtracking",
-      "tags": [
-        "backtracking",
-        "string",
-        "dynamic-programming"
-      ]
-    },
-    {
-      "id": "permute-distinct",
-      "title": "Permutations of Distinct Elements",
-      "difficulty": "medium",
-      "category": "backtracking",
-      "tags": [
-        "backtracking",
-        "array"
-      ]
-    },
-    {
-      "id": "permute-unique",
-      "title": "Unique Permutations with Duplicates",
-      "difficulty": "medium",
-      "category": "backtracking",
-      "tags": [
-        "backtracking",
-        "array",
-        "sorting"
-      ]
-    },
-    {
-      "id": "phone-letter-combinations",
-      "title": "Phone Keypad Letter Combinations",
-      "difficulty": "medium",
-      "category": "backtracking",
-      "tags": [
-        "backtracking",
-        "string"
-      ]
-    },
-    {
-      "id": "restore-ip-addresses",
-      "title": "Restore Valid IP Addresses",
-      "difficulty": "medium",
-      "category": "backtracking",
-      "tags": [
-        "backtracking",
-        "string"
-      ]
-    },
-    {
-      "id": "subsets-with-duplicates",
-      "title": "All Subsets With Duplicates Allowed",
-      "difficulty": "medium",
-      "category": "backtracking",
-      "tags": [
-        "backtracking",
-        "array",
-        "sorting"
-      ]
-    },
-    {
-      "id": "subsets-without-duplicates",
-      "title": "All Subsets of Distinct Elements",
-      "difficulty": "easy",
-      "category": "backtracking",
-      "tags": [
-        "backtracking",
-        "array"
-      ]
-    },
-    {
-      "id": "cheapest-flights-with-k-stops",
-      "title": "Cheapest Flight with Stop Limit",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "bellman-ford",
-        "dynamic-programming"
-      ]
-    },
-    {
-      "id": "check-graph-bipartite",
-      "title": "Check if a Graph is Bipartite",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "bfs"
-      ]
-    },
-    {
-      "id": "clone-undirected-graph",
-      "title": "Clone an Undirected Graph",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "dfs",
-        "bfs"
-      ]
-    },
-    {
-      "id": "connect-points-min-cost",
-      "title": "Connect All Points with Minimum Cost",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "prim",
-        "mst"
-      ]
-    },
-    {
-      "id": "count-islands-in-grid",
-      "title": "Count Landmasses in a Grid",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "bfs",
-        "dfs",
-        "matrix"
-      ]
-    },
-    {
-      "id": "count-provinces",
-      "title": "Count Provinces from Friendship Matrix",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "dfs",
-        "bfs",
-        "union-find"
-      ]
-    },
-    {
-      "id": "course-ordering",
-      "title": "Build a Valid Course Order",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "topological-sort",
-        "bfs"
-      ]
-    },
-    {
-      "id": "course-plan-feasible",
-      "title": "Course Plan Feasibility",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "bfs",
-        "topological-sort"
-      ]
-    },
-    {
-      "id": "detect-cycle-directed",
-      "title": "Detect a Cycle in a Directed Graph",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "dfs"
-      ]
-    },
-    {
-      "id": "evaluate-division-ratios",
-      "title": "Evaluate Division Equations via Graph",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "bfs"
-      ]
-    },
-    {
-      "id": "find-city-threshold-distance",
-      "title": "Find City With Fewest Neighbors Within Threshold",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "floyd-warshall"
-      ]
-    },
-    {
-      "id": "min-cost-with-highway-pass",
-      "title": "Minimum Toll with Freeways and Tolls",
-      "difficulty": "hard",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "dijkstra",
-        "0-1-bfs"
-      ]
-    },
-    {
-      "id": "minimum-height-trees-centers",
-      "title": "Centers of a Tree (Minimum Height Trees)",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "bfs"
-      ]
-    },
-    {
-      "id": "mst-kruskal-total-cost",
-      "title": "Minimum Spanning Tree by Kruskal",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "kruskal",
-        "union-find",
-        "mst"
-      ]
-    },
-    {
-      "id": "network-broadcast-time",
-      "title": "Network Broadcast Time from a Source",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "dijkstra",
-        "heap"
-      ]
-    },
-    {
-      "id": "num-enclaves",
-      "title": "Number of Enclaves (Land Trapped by Sea)",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "bfs",
-        "matrix"
-      ]
-    },
-    {
-      "id": "pacific-atlantic-flow",
-      "title": "Cells Flowing to Both Oceans",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "dfs",
-        "matrix"
-      ]
-    },
-    {
-      "id": "path-with-minimum-effort",
-      "title": "Path with Minimum Effort in a Grid",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "dijkstra",
-        "matrix"
-      ]
-    },
-    {
-      "id": "redundant-connection-undirected",
-      "title": "Find the Redundant Connection in an Undirected Graph",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "union-find"
-      ]
-    },
-    {
-      "id": "rotting-oranges-min-time",
-      "title": "Minimum Time to Rot All Oranges",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "bfs",
-        "matrix"
-      ]
-    },
-    {
-      "id": "shortest-path-binary-matrix",
-      "title": "Shortest Path in a Binary Matrix (8 Directions)",
-      "difficulty": "medium",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "bfs",
-        "matrix"
-      ]
-    },
-    {
-      "id": "swim-in-rising-water",
-      "title": "Earliest Time to Swim Across Rising Water",
-      "difficulty": "hard",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "binary-search",
-        "bfs"
-      ]
-    },
-    {
-      "id": "word-ladder-length",
-      "title": "Shortest Transformation Ladder Length",
-      "difficulty": "hard",
-      "category": "graphs",
-      "tags": [
-        "graph",
-        "bfs",
-        "string"
       ]
     }
   ]

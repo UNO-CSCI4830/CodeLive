@@ -1,0 +1,60 @@
+{
+  "id": "token-bucket-limiter",
+  "title": "Token Bucket Limiter",
+  "category": "backend",
+  "difficulty": "easy",
+  "description": "Apply token-bucket rate limiting per client_id and report remaining tokens.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `GET /limited?client_id=c1`\n\n### Request Replay (Executed In Order)\n1. `GET /limited?client_id=c1`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"allowed\":true,\"remaining\":1}`\n\n2. `GET /limited?client_id=c1`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"allowed\":true,\"remaining\":0}`\n\n3. `GET /limited?client_id=c1`\n   Request body: `(not provided)`\n   Expected status: `429`\n   Expected body: `{\"error\":\"rate_limited\"}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Store bucket state by client.",
+    "Keep deterministic refill policy for tests."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "rate-limiting",
+    "traffic-control"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Token Bucket Limiter\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.get(\"/limited\")\nasync def token_bucket_limiter_get_limited():\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "GET",
+        "path": "/limited?client_id=c1",
+        "expected_status": 200,
+        "expected_body": {
+          "allowed": true,
+          "remaining": 1
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/limited?client_id=c1",
+        "expected_status": 200,
+        "expected_body": {
+          "allowed": true,
+          "remaining": 0
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/limited?client_id=c1",
+        "expected_status": 429,
+        "expected_body": {
+          "error": "rate_limited"
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 26
+}

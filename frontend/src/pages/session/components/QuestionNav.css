@@ -18,6 +18,7 @@
 }
 
 .qnav-pill {
+  appearance: none;
   display: flex;
   align-items: center;
   gap: 0.375rem;
@@ -29,7 +30,14 @@
   user-select: none;
   letter-spacing: var(--tracking-wide);
   border: 1px solid transparent;
+  outline: none;
+  cursor: pointer;
+  background: transparent;
   transition: all var(--duration-fast) var(--ease);
+}
+
+.qnav-pill:disabled {
+  cursor: not-allowed;
 }
 
 .qnav-pill--current {

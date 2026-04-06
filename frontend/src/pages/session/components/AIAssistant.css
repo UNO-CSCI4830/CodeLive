@@ -21,7 +21,7 @@
 /* ── Floating Sparkles tab button ─────────────────── */
 .ai-drawer-tab {
   position: absolute;
-  left: -40px;
+  right: -40px;
   bottom: 72px;
   width: 36px;
   height: 36px;
@@ -39,6 +39,10 @@
   transition: background var(--duration-fast) var(--ease),
               transform var(--duration-fast) var(--ease),
               box-shadow var(--duration-fast) var(--ease);
+}
+
+.ai-drawer:not(.ai-drawer--collapsed) .ai-drawer-tab {
+  display: none;
 }
 
 .ai-drawer-tab:hover {
@@ -60,7 +64,7 @@
   display: flex;
   flex-direction: column;
   background: var(--bg);
-  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
   overflow: hidden;
   min-width: 0;
 }
@@ -129,6 +133,17 @@
   height: 0.875rem;
 }
 
+.ai-readonly-pill {
+  border-radius: 9999px;
+  padding: 0.1rem 0.45rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--muted-fg);
+  border: 1px solid var(--border);
+}
+
 /* ── Messages area ───────────────────────────────── */
 .ai-messages {
   flex: 1;
@@ -185,6 +200,11 @@
 .ai-quick-btn:hover {
   border-color: var(--border-hover);
   background: var(--border);
+}
+
+.ai-quick-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 /* ── Message bubble ──────────────────────────────── */
@@ -318,6 +338,10 @@
 
 .ai-input-area--locked {
   opacity: 0.5;
+}
+
+.ai-input-area--readonly {
+  background: var(--muted);
 }
 
 .ai-input {

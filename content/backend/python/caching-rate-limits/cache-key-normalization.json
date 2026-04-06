@@ -1,0 +1,73 @@
+{
+  "id": "cache-key-normalization",
+  "title": "Cache Key Normalization",
+  "category": "backend",
+  "difficulty": "hard",
+  "description": "Normalize semantically equivalent query inputs to avoid cache fragmentation.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `GET /search-cache?q=Hello%20World`\n- `GET /search-cache?q=hello world`\n- `GET /search-cache?q=%20%20Hello%20World%20%20`\n\n### Request Replay (Executed In Order)\n1. `GET /search-cache?q=Hello%20World`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"normalized_q\":\"hello world\",\"source\":\"origin\"}`\n\n2. `GET /search-cache?q=hello world`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"normalized_q\":\"hello world\",\"source\":\"cache\"}`\n\n3. `GET /search-cache?q=%20%20Hello%20World%20%20`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"normalized_q\":\"hello world\",\"source\":\"cache\"}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n- `app/schemas.py`\n- `app/service.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Create a normalize_query helper.",
+    "Cache by normalized key, not raw input."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "cache-keys",
+    "normalization"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Cache Key Normalization\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.get(\"/search-cache\")\nasync def cache_key_normalization_get_search_cache():\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    },
+    {
+      "path": "app/schemas.py",
+      "content": "from pydantic import BaseModel\nfrom typing import Any, Dict, Optional\n\n# Optional schemas for harder multi-file challenges.\nclass CacheKeyNormalizationInput(BaseModel):\n    payload: Dict[str, Any] = {}\n    note: Optional[str] = None\n",
+      "language": "python",
+      "readonly": false
+    },
+    {
+      "path": "app/service.py",
+      "content": "from typing import Any, Dict\n\n# Optional service-layer helpers for harder multi-file challenges.\ndef apply_business_rules(state: Dict[str, Any], payload: Dict[str, Any]) -> Dict[str, Any]:\n    # TODO: Replace this stub with challenge-specific logic.\n    return {\"state_size\": len(state), \"payload_keys\": sorted(payload.keys())}\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "GET",
+        "path": "/search-cache?q=Hello%20World",
+        "expected_status": 200,
+        "expected_body": {
+          "normalized_q": "hello world",
+          "source": "origin"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/search-cache?q=hello world",
+        "expected_status": 200,
+        "expected_body": {
+          "normalized_q": "hello world",
+          "source": "cache"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/search-cache?q=%20%20Hello%20World%20%20",
+        "expected_status": 200,
+        "expected_body": {
+          "normalized_q": "hello world",
+          "source": "cache"
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 25
+}

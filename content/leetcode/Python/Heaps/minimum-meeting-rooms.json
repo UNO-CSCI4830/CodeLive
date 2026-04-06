@@ -3,7 +3,7 @@
   "title": "Minimum Meeting Rooms",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given an array of meeting intervals where intervals[i] = [start, end], return the minimum number of conference rooms required. Use a min-heap to track the earliest finishing meeting. When the next meeting starts after or at the earliest end, reuse that room by popping; otherwise, add a new room.\n\n    \n\nConstraints:\n    - 0 ≤ len(intervals) ≤ 10^5\n- 0 ≤ start < end ≤ 10^9",
+  "description": "### Objective\nGiven an array of meeting intervals where intervals[i] = [start, end], return the minimum number of conference rooms required. Use a min-heap to track the earliest finishing meeting. When the next meeting starts after or at the earliest end, reuse that room by popping; otherwise, add a new room.\n\n### Function Contract\nImplement `min_meeting_rooms(intervals: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `intervals`: type `array` (example: `[[0,30],[5,10],[15,20]]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n log n)`, space `O(n)`.\n\n### Constraints\n- 0 ≤ len(intervals) ≤ 10^5\n- 0 ≤ start < end ≤ 10^9\n",
   "leetcodeUrl": "https://leetcode.com/problems/meeting-rooms-ii/",
   "complexity": {
     "time": "O(n log n)",

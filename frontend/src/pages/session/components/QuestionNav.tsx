@@ -1,29 +1,34 @@
 /**
  * QuestionNav — horizontal navigation bar showing all problems in the
- * session. Highlights the current question and shows locked status.
- * Both users can advance to the next question.
+ * session. Highlights the current question and allows quick switching.
+ * Interviewer controls the Next/Finish action.
  */
 
-import { ChevronRight, Lock, CheckCircle2, Circle } from "lucide-react";
+import { ChevronRight, CheckCircle2, Circle } from "lucide-react";
 import type { SessionProblem } from "../types";
 import "./QuestionNav.css";
 
 interface Props {
   problems: SessionProblem[];
   currentIndex: number;
+  onSelect: (index: number) => void;
   onAdvance: () => void;
   /** Whether the advance button should be enabled */
   canAdvance: boolean;
   /** Disabled when session is completed */
   disabled?: boolean;
+  /** Whether to show the advance control */
+  showAdvance?: boolean;
 }
 
 export default function QuestionNav({
   problems,
   currentIndex,
+  onSelect,
   onAdvance,
   canAdvance,
   disabled,
+  showAdvance = true,
 }: Props) {
   const isLastQuestion = currentIndex >= problems.length - 1;
 
@@ -39,15 +44,16 @@ export default function QuestionNav({
           else if (isPast) stateClass = "qnav-pill--done";
 
           return (
-            <div
+            <button
+              type="button"
               key={p.id}
-              className={`qnav-pill ${stateClass} ${p.locked ? "qnav-pill--locked" : ""}`}
+              className={`qnav-pill ${stateClass}`}
               title={`Q${idx + 1}: ${p.problem_id.replace(/-/g, " ")}`}
+              disabled={disabled}
+              onClick={() => onSelect(idx)}
             >
               <span className="qnav-pill-icon">
-                {p.locked ? (
-                  <Lock className="qnav-icon-lock" />
-                ) : isPast ? (
+                {isPast ? (
                   <CheckCircle2 className="qnav-icon-done" />
                 ) : (
                   <Circle className="qnav-icon-pending" />
@@ -55,12 +61,12 @@ export default function QuestionNav({
               </span>
               <span className="qnav-pill-label">Q{idx + 1}</span>
               <span className="qnav-pill-cat">{p.category}</span>
-            </div>
+            </button>
           );
         })}
       </div>
 
-      {!disabled && (
+      {!disabled && showAdvance && (
         <button
           type="button"
           className="qnav-advance-btn"

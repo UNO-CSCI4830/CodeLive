@@ -3,7 +3,7 @@
   "title": "Ways to Climb a Staircase",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Given You are climbing a staircase. It takes n steps to reach the top. Each time you can climb either 1 or 2 steps. Return the number of distinct ways to reach the top. Use integer arithmetic.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 45",
+  "description": "### Objective\nYou are climbing a staircase. It takes n steps to reach the top. Each time you can climb either 1 or 2 steps. Return the number of distinct ways to reach the top. Use integer arithmetic.\n\n### Function Contract\nImplement `climb_stairs(n: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `n`: type `number` (example: `2`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 1 ≤ n ≤ 45\n",
   "leetcodeUrl": "https://leetcode.com/problems/climbing-stairs/",
   "complexity": {
     "time": "O(n)",

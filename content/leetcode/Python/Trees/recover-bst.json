@@ -3,7 +3,7 @@
   "title": "Recover a Swapped Binary Search Tree",
   "difficulty": "Hard",
   "language": "python",
-  "description": "Given Two nodes in a Binary Search Tree were swapped by mistake. Restore the tree to a valid BST by swapping the two node values back. The recovery must not change the structure of the tree. Prefer an iterative inorder walk to keep stack usage controlled for typing practice.\n\n    \n\nConstraints:\n    - 1 ≤ nodes ≤ 10^5\n- All values are unique except the swap violation",
+  "description": "### Objective\nGiven two nodes in a Binary Search Tree were swapped by mistake. Restore the tree to a valid BST by swapping the two node values back. The recovery must not change the structure of the tree. Prefer an iterative inorder walk to keep stack usage controlled for typing practice.\n\n### Function Contract\nImplement `__init__(self: any, val: any, left: any, right: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `tree`: type `array` (example: `[1,3,null,null,2]`).\n- Return type: `string`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(h)`.\n\n### Constraints\n- 1 ≤ nodes ≤ 10^5\n- All values are unique except the swap violation\n",
   "leetcodeUrl": "https://leetcode.com/problems/recover-binary-search-tree/",
   "complexity": {
     "time": "O(n)",

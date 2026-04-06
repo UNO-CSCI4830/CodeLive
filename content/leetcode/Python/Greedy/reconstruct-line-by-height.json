@@ -3,7 +3,7 @@
   "title": "Reconstruct Line by Height and K-Count",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Find You have people described by pairs (h, k) where h is height and k is the number of people in front of this person who have height ≥ h. Reconstruct the queue and return the final ordering.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 2000\n- 0 ≤ h ≤ 10^9\n- 0 ≤ k < n",
+  "description": "### Objective\nFind You have people described by pairs (h, k) where h is height and k is the number of people in front of this person who have height ≥ h. Reconstruct the queue and return the final ordering.\n\n### Function Contract\nImplement `reconstruct_queue(people: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `people`: type `array` (example: `[[7,0],[4,4],[7,1],[5,0],[6,1],[5,2]]`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n log n)`, space `O(n)`.\n\n### Constraints\n- 1 ≤ n ≤ 2000\n- 0 ≤ h ≤ 10^9\n- 0 ≤ k < n\n",
   "leetcodeUrl": "https://leetcode.com/problems/queue-reconstruction-by-height/",
   "complexity": {
     "time": "O(n log n)",

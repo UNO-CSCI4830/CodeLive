@@ -3,7 +3,7 @@
   "title": "Koko's Minimum Eating Speed",
   "difficulty": "Hard",
   "language": "python",
-  "description": "Given a list piles of banana piles and an integer h representing hours, find the minimum integer eating speed k such that all bananas can be eaten within h hours, where eating at speed k means consuming k from a single pile per hour until it is empty before moving to the next hour. Use binary search on the answer space.\n\n    \n\nConstraints:\n    - 1 ≤ len(piles) ≤ 10^5\n- 1 ≤ piles[i] ≤ 10^9\n- 1 ≤ h ≤ 10^9",
+  "description": "### Objective\nGiven a list piles of banana piles and an integer h representing hours, find the minimum integer eating speed k such that all bananas can be eaten within h hours, where eating at speed k means consuming k from a single pile per hour until it is empty before moving to the next hour. Use binary search on the answer space.\n\n### Function Contract\nImplement `min_eating_speed(piles: List[int], h: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `piles`: type `array` (example: `[3,6,7,11]`).\n- Input `h`: type `number` (example: `8`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n log M)`, space `O(1)`.\n\n### Constraints\n- 1 ≤ len(piles) ≤ 10^5\n- 1 ≤ piles[i] ≤ 10^9\n- 1 ≤ h ≤ 10^9\n",
   "leetcodeUrl": "https://leetcode.com/problems/koko-eating-bananas/",
   "complexity": {
     "time": "O(n log M)",

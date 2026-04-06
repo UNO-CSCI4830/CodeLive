@@ -3,7 +3,7 @@
   "title": "First and Last Position of Target",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a sorted array of integers, find the starting and ending position of a given target value. If the target is not found, return [-1, -1]. Use two tailored binary searches to find the leftmost and rightmost occurrences.\n\n    \n\nConstraints:\n    - 0 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i], target ≤ 10^9",
+  "description": "### Objective\nGiven a sorted array of integers, find the starting and ending position of a given target value. If the target is not found, return [-1, -1]. Use two tailored binary searches to find the leftmost and rightmost occurrences.\n\n### Function Contract\nImplement `first_and_last_position(nums: List[int], target: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[5,7,7,8,8,10]`).\n- Input `target`: type `number` (example: `8`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(log n)`, space `O(1)`.\n\n### Constraints\n- 0 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i], target ≤ 10^9\n",
   "leetcodeUrl": "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/",
   "complexity": {
     "time": "O(log n)",

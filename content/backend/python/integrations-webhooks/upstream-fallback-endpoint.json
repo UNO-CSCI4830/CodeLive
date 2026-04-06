@@ -1,0 +1,64 @@
+{
+  "id": "upstream-fallback-endpoint",
+  "title": "Upstream Fallback Endpoint",
+  "category": "backend",
+  "difficulty": "medium",
+  "description": "Call a primary upstream and fallback source when the primary is unavailable.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `GET /fx-rate?pair=USD-EUR&primary=ok`\n- `GET /fx-rate?pair=USD-EUR&primary=fail`\n- `GET /fx-rate?pair=EUR-GBP&primary=ok`\n\n### Request Replay (Executed In Order)\n1. `GET /fx-rate?pair=USD-EUR&primary=ok`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"pair\":\"USD-EUR\",\"rate\":0.91,\"source\":\"primary\"}`\n\n2. `GET /fx-rate?pair=USD-EUR&primary=fail`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"pair\":\"USD-EUR\",\"rate\":0.9,\"source\":\"fallback\"}`\n\n3. `GET /fx-rate?pair=EUR-GBP&primary=ok`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"pair\":\"EUR-GBP\",\"rate\":0.91,\"source\":\"primary\"}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Encapsulate primary and fallback calls.",
+    "Handle primary failures gracefully."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "integrations",
+    "fallbacks"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Upstream Fallback Endpoint\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.get(\"/fx-rate\")\nasync def upstream_fallback_endpoint_get_fx_rate():\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "GET",
+        "path": "/fx-rate?pair=USD-EUR&primary=ok",
+        "expected_status": 200,
+        "expected_body": {
+          "pair": "USD-EUR",
+          "rate": 0.91,
+          "source": "primary"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/fx-rate?pair=USD-EUR&primary=fail",
+        "expected_status": 200,
+        "expected_body": {
+          "pair": "USD-EUR",
+          "rate": 0.9,
+          "source": "fallback"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/fx-rate?pair=EUR-GBP&primary=ok",
+        "expected_status": 200,
+        "expected_body": {
+          "pair": "EUR-GBP",
+          "rate": 0.91,
+          "source": "primary"
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 28
+}

@@ -3,7 +3,7 @@
   "title": "Check if a Binary Tree is Height-Balanced",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Determine if A binary tree is height-balanced if for every node the heights of the left and right subtrees differ by no more than one. Determine whether a given tree is balanced. Return True if balanced, otherwise False.\n\n    \n\nConstraints:\n    - 0 ≤ nodes ≤ 10^5",
+  "description": "### Objective\nDetermine if A binary tree is height-balanced if for every node the heights of the left and right subtrees differ by no more than one. Determine whether a given tree is balanced. Return True if balanced, otherwise False.\n\n### Function Contract\nImplement `__init__(self: any, val: any, left: any, right: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `tree`: type `array` (example: `[3,9,20,null,null,15,7]`).\n- Return type: `boolean`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(h)`.\n\n### Constraints\n- 0 ≤ nodes ≤ 10^5\n",
   "leetcodeUrl": "https://leetcode.com/problems/balanced-binary-tree/",
   "complexity": {
     "time": "O(n)",

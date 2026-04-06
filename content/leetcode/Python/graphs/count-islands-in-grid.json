@@ -3,7 +3,7 @@
   "title": "Count Landmasses in a Grid",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given an m×n grid of '1' (land) and '0' (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.\n\nConstraints:\n- 1 ≤ m, n ≤ 300",
+  "description": "### Objective\nGiven an m×n grid of '1' (land) and '0' (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.\n\n### Function Contract\nImplement `num_islands(grid: List[str])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `grid`: type `array` (example: `[\"11000\",\"11000\",\"00100\",\"00011\"]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(mn)`, space `O(mn) worst-case`.\n\n### Constraints\n- 1 ≤ m, n ≤ 300\n",
   "leetcodeUrl": "https://leetcode.com/problems/number-of-islands/",
   "complexity": {
     "time": "O(mn)",

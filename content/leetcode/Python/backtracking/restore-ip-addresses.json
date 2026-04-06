@@ -3,7 +3,7 @@
   "title": "Restore Valid IP Addresses",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a string containing only digits, return all possible valid IP addresses that can be obtained by inserting three dots. Each segment must be between 0 and 255 and no leading zeros unless the segment is exactly '0'.\n\nConstraints:\n- 1 ≤ |s| ≤ 20",
+  "description": "### Objective\nGiven a string containing only digits, return all possible valid IP addresses that can be obtained by inserting three dots. Each segment must be between 0 and 255 and no leading zeros unless the segment is exactly '0'.\n\n### Function Contract\nImplement `restore_ip(s: str)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `s`: type `string` (example: `\"25525511135\"`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(1) bounded`, space `O(1) recursion`.\n\n### Constraints\n- 1 ≤ |s| ≤ 20\n",
   "leetcodeUrl": "https://leetcode.com/problems/restore-ip-addresses/",
   "complexity": {
     "time": "O(1) bounded",

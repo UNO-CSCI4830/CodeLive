@@ -3,7 +3,7 @@
   "title": "Locate Index in Sorted Array",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Given Search for a target value in a sorted array of distinct integers. Return its index if present, otherwise return -1. Use iterative binary search with careful mid computation and bounds updates.\n\n    \n\nConstraints:\n    - 0 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i], target ≤ 10^9\n- All elements are distinct",
+  "description": "### Objective\nSearch for a target value in a sorted array of distinct integers. Return its index if present, otherwise return -1. Use iterative binary search with careful mid computation and bounds updates.\n\n### Function Contract\nImplement `index_in_sorted(nums: List[int], target: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[-1,0,3,5,9,12]`).\n- Input `target`: type `number` (example: `9`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(log n)`, space `O(1)`.\n\n### Constraints\n- 0 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i], target ≤ 10^9\n- All elements are distinct\n",
   "leetcodeUrl": "https://leetcode.com/problems/binary-search/",
   "complexity": {
     "time": "O(log n)",

@@ -3,7 +3,7 @@
   "title": "First Missing Positive",
   "difficulty": "Hard",
   "language": "python",
-  "description": "Return the smallest positive integer missing from the array. The algorithm must run in O(n) time and use O(1) extra space. Values can be negative or large. The key idea is to rearrange elements so that value v resides at index v-1 whenever possible, then scan for the first mismatch.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9",
+  "description": "### Objective\nReturn the smallest positive integer missing from the array. The algorithm must run in O(n) time and use O(1) extra space. Values can be negative or large. The key idea is to rearrange elements so that value v resides at index v-1 whenever possible, then scan for the first mismatch.\n\n### Function Contract\nImplement `first_missing_positive(nums: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[1,2,0]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9\n",
   "leetcodeUrl": "https://leetcode.com/problems/first-missing-positive/",
   "complexity": {
     "time": "O(n)",

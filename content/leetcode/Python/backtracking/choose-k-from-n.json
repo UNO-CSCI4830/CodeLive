@@ -3,7 +3,7 @@
   "title": "Choose K from 1..N",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given Generate all size-k combinations drawn from numbers 1..n in ascending lexicographic order. Return a list of lists. Use backtracking with an index and early pruning when remaining numbers are insufficient to fill the current path.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 20\n- 0 ≤ k ≤ n",
+  "description": "### Objective\nGenerate all size-k combinations drawn from numbers 1..n in ascending lexicographic order. Return a list of lists. Use backtracking with an index and early pruning when remaining numbers are insufficient to fill the current path.\n\n### Function Contract\nImplement `combine(n: int, k: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `n`: type `number` (example: `4`).\n- Input `k`: type `number` (example: `2`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(C(n,k))`, space `O(k) recursion`.\n\n### Constraints\n- 1 ≤ n ≤ 20\n- 0 ≤ k ≤ n\n",
   "leetcodeUrl": "https://leetcode.com/problems/combinations/",
   "complexity": {
     "time": "O(C(n,k))",

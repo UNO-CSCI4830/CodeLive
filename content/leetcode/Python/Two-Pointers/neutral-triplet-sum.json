@@ -3,7 +3,7 @@
   "title": "Neutral Triplet Sum",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Return all unique triplets [a,b,c] with a + b + c = 0. The solution should avoid duplicates and be better than O(n^3).\n\n    \n\nConstraints:\n    - 3 ≤ len(nums) ≤ 10^4\n- -10^4 ≤ nums[i] ≤ 10^4",
+  "description": "### Objective\nReturn all unique triplets [a,b,c] with a + b + c = 0. The solution should avoid duplicates and be better than O(n^3).\n\n### Function Contract\nImplement `neutral_triplet_sum(nums: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[-1,0,1,2,-1,-4]`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n^2)`, space `O(1)`.\n\n### Constraints\n- 3 ≤ len(nums) ≤ 10^4\n- -10^4 ≤ nums[i] ≤ 10^4\n",
   "leetcodeUrl": "https://leetcode.com/problems/3sum/",
   "complexity": {
     "time": "O(n^2)",

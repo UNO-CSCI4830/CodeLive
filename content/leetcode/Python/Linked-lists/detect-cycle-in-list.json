@@ -3,7 +3,7 @@
   "title": "Detect Cycle in List",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Given the head of a linked list, determine if the list contains a cycle. A cycle means the next pointer of some node points back to a previous node. Use O(1) memory.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5\n- Values arbitrary 32-bit signed",
+  "description": "### Objective\nGiven the head of a linked list, determine if the list contains a cycle. A cycle means the next pointer of some node points back to a previous node. Use O(1) memory.\n\n### Function Contract\nImplement `__init__(self: any, val: any, next: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `list`: type `array` (example: `[3,2,0,-4]`).\n- Input `pos`: type `number` (example: `1`).\n- Return type: `boolean`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 0 ≤ n ≤ 10^5\n- Values arbitrary 32-bit signed\n",
   "leetcodeUrl": "https://leetcode.com/problems/linked-list-cycle/",
   "complexity": {
     "time": "O(n)",

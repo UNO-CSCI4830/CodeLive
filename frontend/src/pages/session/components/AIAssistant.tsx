@@ -1,31 +1,33 @@
 /**
  * AIAssistant — a sliding drawer panel for the interview session.
  *
- * Positioned absolutely on the far-right edge of the session layout.
- * A 36px tab is always visible; clicking it slides the full panel in/out.
+ * Rendered on the far-left edge of the session layout.
+ * A 36px tab is visible when collapsed; clicking it slides the panel in/out.
  *
- * Chat resets whenever `problemKey` changes (new question loaded).
- * `currentCode` is read via a ref at send-time so it never goes stale.
+ * Chat is collaborative per problem (interviewer + candidate see the same log).
+ * Only the candidate can send messages; interviewer view is read-only.
  */
 
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { Bot, Send, Loader2, Trash2, Lightbulb, Sparkles, X } from "lucide-react";
+import { Bot, Send, Loader2, Lightbulb, Sparkles, X } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { useAuth } from "@/lib/AuthContext";
+import {
+  useCollaborativeChat,
+  type CollaborativeChatMessage,
+} from "../hooks/useCollaborativeChat";
 import "./AIAssistant.css";
-
-interface Message {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  timestamp: number;
-}
 
 export interface AIAssistantHandle {
   /** Returns a snapshot of all messages in the current conversation. */
-  getMessages: () => Message[];
+  getMessages: () => CollaborativeChatMessage[];
 }
 
 interface Props {
+  sessionId: string;
+  problemId: string;
+  orderIndex: number;
+  canSend: boolean;
   /** Current problem title */
   problemTitle: string;
   /** Current problem description */
@@ -55,13 +57,26 @@ const SYSTEM_PROMPT = `You are a helpful coding interview assistant. Your role i
 You are helping with a coding interview problem.`;
 
 const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
-  { problemTitle, problemDescription, currentCode, language, locked, problemKey },
+  {
+    sessionId,
+    problemId,
+    orderIndex,
+    canSend,
+    problemTitle,
+    problemDescription,
+    currentCode,
+    language,
+    locked,
+    problemKey,
+  },
   ref,
 ) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [isOpen, setIsOpen] = useState(true);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const roomName = `session:${sessionId}:q:${orderIndex}:ai`;
+  const { messages, appendMessage } = useCollaborativeChat({ roomName });
+  const { session } = useAuth();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -80,8 +95,9 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
 
   // Reset conversation when the question changes
   useEffect(() => {
-    setMessages([]);
     setInput("");
+    setLoading(false);
+    setIsOpen(true);
   }, [problemKey]);
 
   // Auto-scroll to newest message
@@ -94,20 +110,28 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
 
   const sendMessage = useCallback(async () => {
     const trimmed = input.trim();
-    if (!trimmed || loading || locked) return;
+    if (!trimmed || loading || locked || !canSend) return;
 
-    const userMsg: Message = {
+    const userMsg: CollaborativeChatMessage = {
       id: generateId(),
       role: "user",
       content: trimmed,
       timestamp: Date.now(),
     };
 
-    setMessages((prev) => [...prev, userMsg]);
+    appendMessage(userMsg);
     setInput("");
     setLoading(true);
 
     try {
+      const conversation = [
+        ...messages.map((m) => ({
+          role: m.role as "user" | "assistant",
+          content: m.content,
+        })),
+        { role: "user" as const, content: trimmed },
+      ];
+
       const contextMessages = [
         { role: "system" as const, content: SYSTEM_PROMPT },
         {
@@ -118,52 +142,71 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
             `Language: ${language}\n\n` +
             `Candidate's current code:\n\`\`\`${language}\n${currentCodeRef.current}\n\`\`\``,
         },
-        ...messages.map((m) => ({
-          role: m.role as "user" | "assistant",
-          content: m.content,
-        })),
-        { role: "user" as const, content: trimmed },
+        ...conversation,
       ];
 
       const res = await fetch("/api/ai/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: contextMessages }),
+        headers: {
+          "Content-Type": "application/json",
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
+        },
+        body: JSON.stringify({
+          sessionId,
+          problemId,
+          orderIndex,
+          userMessage: {
+            id: userMsg.id,
+            content: userMsg.content,
+            timestamp: userMsg.timestamp,
+          },
+          messages: contextMessages,
+        }),
       });
 
-      if (!res.ok) throw new Error("AI service unavailable");
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "AI service unavailable");
+      }
 
       const data = await res.json();
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: generateId(),
-          role: "assistant",
-          content:
-            data.message || "I'm not sure how to help with that. Try rephrasing your question.",
-          timestamp: Date.now(),
-        },
-      ]);
-    } catch {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: generateId(),
-          role: "assistant",
-          content:
-            "I'm currently unable to connect to the AI service. Here are some general tips:\n\n" +
-            "- Break the problem into smaller sub-problems\n" +
-            "- Consider edge cases (empty input, single element, etc.)\n" +
-            "- Think about the time and space complexity of your approach\n" +
-            "- Try working through a small example by hand first",
-          timestamp: Date.now(),
-        },
-      ]);
+      appendMessage({
+        id: typeof data.messageId === "string" && data.messageId ? data.messageId : generateId(),
+        role: "assistant",
+        content:
+          data.message || "I'm not sure how to help with that. Try rephrasing your question.",
+        timestamp: typeof data.timestamp === "number" ? data.timestamp : Date.now(),
+      });
+    } catch (error) {
+      const fallback =
+        error instanceof Error && error.message
+          ? `${error.message}\n\nTry asking for a smaller hint or clarifying question.`
+          : "I'm currently unable to connect to the AI service. Try again in a moment.";
+      appendMessage({
+        id: generateId(),
+        role: "assistant",
+        content: fallback,
+        timestamp: Date.now(),
+      });
     } finally {
       setLoading(false);
     }
-  }, [input, loading, locked, messages, problemTitle, problemDescription, language]);
+  }, [
+    input,
+    loading,
+    locked,
+    canSend,
+    appendMessage,
+    messages,
+    problemTitle,
+    problemDescription,
+    language,
+    sessionId,
+    session?.access_token,
+    problemId,
+    orderIndex,
+  ]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -201,16 +244,7 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
             <span className="ai-header-title">AI Assistant</span>
           </div>
           <div className="ai-header-right">
-            {messages.length > 0 && (
-              <button
-                type="button"
-                className="ai-clear-btn"
-                onClick={() => setMessages([])}
-                title="Clear conversation"
-              >
-                <Trash2 className="ai-clear-icon" />
-              </button>
-            )}
+            {!canSend && <span className="ai-readonly-pill">View Only</span>}
             <button
               type="button"
               className="ai-close-btn"
@@ -238,6 +272,7 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
                     key={hint}
                     type="button"
                     className="ai-quick-btn"
+                    disabled={!canSend || locked}
                     onClick={() => {
                       setInput(hint);
                       inputRef.current?.focus();
@@ -285,22 +320,30 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
         </div>
 
         {/* Input */}
-        <div className={`ai-input-area${locked ? " ai-input-area--locked" : ""}`}>
+        <div
+          className={`ai-input-area${locked ? " ai-input-area--locked" : ""}${!canSend ? " ai-input-area--readonly" : ""}`}
+        >
           <textarea
             ref={inputRef}
             className="ai-input"
-            placeholder={locked ? "Timer expired — assistant locked" : "Ask for a hint…"}
+            placeholder={
+              locked
+                ? "Timer expired — assistant locked"
+                : canSend
+                  ? "Ask for a hint…"
+                  : "Interviewer view — candidate can send messages"
+            }
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            disabled={locked || loading}
+            disabled={locked || loading || !canSend}
             rows={1}
           />
           <button
             type="button"
             className="ai-send-btn"
             onClick={sendMessage}
-            disabled={!input.trim() || loading || locked}
+            disabled={!input.trim() || loading || locked || !canSend}
           >
             <Send className="ai-send-icon" />
           </button>

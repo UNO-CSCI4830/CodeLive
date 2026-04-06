@@ -1,0 +1,80 @@
+{
+  "id": "exponential-backoff-policy",
+  "title": "Exponential Backoff Policy",
+  "category": "backend",
+  "difficulty": "medium",
+  "description": "Generate retry delay plans using exponential backoff for transient failures.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /retry-plan`\n\n### Request Replay (Executed In Order)\n1. `POST /retry-plan`\n   Request body: `{\"attempts\":4,\"base_ms\":100}`\n   Expected status: `200`\n   Expected body: `{\"delays\":[100,200,400,800]}`\n\n2. `POST /retry-plan`\n   Request body: `{\"attempts\":2,\"base_ms\":50}`\n   Expected status: `200`\n   Expected body: `{\"delays\":[50,100]}`\n\n3. `POST /retry-plan`\n   Request body: `{\"attempts\":1,\"base_ms\":200}`\n   Expected status: `200`\n   Expected body: `{\"delays\":[200]}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Use powers of two.",
+    "Return delays in attempt order."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "retry",
+    "backoff"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Exponential Backoff Policy\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/retry-plan\")\nasync def exponential_backoff_policy_post_retry_plan(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/retry-plan",
+        "expected_status": 200,
+        "expected_body": {
+          "delays": [
+            100,
+            200,
+            400,
+            800
+          ]
+        },
+        "body": {
+          "attempts": 4,
+          "base_ms": 100
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/retry-plan",
+        "expected_status": 200,
+        "expected_body": {
+          "delays": [
+            50,
+            100
+          ]
+        },
+        "body": {
+          "attempts": 2,
+          "base_ms": 50
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/retry-plan",
+        "expected_status": 200,
+        "expected_body": {
+          "delays": [
+            200
+          ]
+        },
+        "body": {
+          "attempts": 1,
+          "base_ms": 200
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 37
+}

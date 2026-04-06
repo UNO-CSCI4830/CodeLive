@@ -1,0 +1,83 @@
+{
+  "id": "webhook-signature-verify",
+  "title": "Webhook Signature Verify",
+  "category": "backend",
+  "difficulty": "hard",
+  "description": "Verify a webhook signature using HMAC-SHA256 over the payload string.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /webhook/secure`\n\n### Request Replay (Executed In Order)\n1. `POST /webhook/secure`\n   Request body: `{\"payload\":\"hello\",\"signature\":\"sha256=cd6dff2937f02e3b44af32d4243c6fb8a4c24b88650f02e7ef5f3559a9ee9ee5\"}`\n   Expected status: `202`\n   Expected body: `{\"accepted\":true}`\n\n2. `POST /webhook/secure`\n   Request body: `{\"payload\":\"hello\",\"signature\":\"sha256=bad\"}`\n   Expected status: `401`\n   Expected body: `{\"error\":\"invalid_signature\"}`\n\n3. `POST /webhook/secure`\n   Request body: `{\"payload\":\"bye\",\"signature\":\"sha256=44ce98a95e0a9b0d7aa5d421319501e6748c0bd24171c3701b5c6c32bf308123\"}`\n   Expected status: `202`\n   Expected body: `{\"accepted\":true}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n- `app/schemas.py`\n- `app/service.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Use hmac.compare_digest for constant-time compare.",
+    "Hash exact raw payload string."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "webhooks",
+    "hmac",
+    "security"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Webhook Signature Verify\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/webhook/secure\")\nasync def webhook_signature_verify_post_webhook_secure(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    },
+    {
+      "path": "app/schemas.py",
+      "content": "from pydantic import BaseModel\nfrom typing import Any, Dict, Optional\n\n# Optional schemas for harder multi-file challenges.\nclass WebhookSignatureVerifyInput(BaseModel):\n    payload: Dict[str, Any] = {}\n    note: Optional[str] = None\n",
+      "language": "python",
+      "readonly": false
+    },
+    {
+      "path": "app/service.py",
+      "content": "from typing import Any, Dict\n\n# Optional service-layer helpers for harder multi-file challenges.\ndef apply_business_rules(state: Dict[str, Any], payload: Dict[str, Any]) -> Dict[str, Any]:\n    # TODO: Replace this stub with challenge-specific logic.\n    return {\"state_size\": len(state), \"payload_keys\": sorted(payload.keys())}\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/webhook/secure",
+        "expected_status": 202,
+        "expected_body": {
+          "accepted": true
+        },
+        "body": {
+          "payload": "hello",
+          "signature": "sha256=cd6dff2937f02e3b44af32d4243c6fb8a4c24b88650f02e7ef5f3559a9ee9ee5"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/webhook/secure",
+        "expected_status": 401,
+        "expected_body": {
+          "error": "invalid_signature"
+        },
+        "body": {
+          "payload": "hello",
+          "signature": "sha256=bad"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/webhook/secure",
+        "expected_status": 202,
+        "expected_body": {
+          "accepted": true
+        },
+        "body": {
+          "payload": "bye",
+          "signature": "sha256=44ce98a95e0a9b0d7aa5d421319501e6748c0bd24171c3701b5c6c32bf308123"
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 13
+}

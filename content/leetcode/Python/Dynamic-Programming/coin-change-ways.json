@@ -3,7 +3,7 @@
   "title": "Number of Ways to Make Amount",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Return the number of combinations that make up amount using unlimited coins. Order of coins does not matter.\n\n    \n\nConstraints:\n    - 0 ≤ amount ≤ 5000\n- 1 ≤ |coins| ≤ 30",
+  "description": "### Objective\nReturn the number of combinations that make up amount using unlimited coins. Order of coins does not matter.\n\n### Function Contract\nImplement `change(amount: int, coins: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `coins`: type `array` (example: `[1,2,5]`).\n- Input `amount`: type `number` (example: `5`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(amount·|coins|)`, space `O(amount)`.\n\n### Constraints\n- 0 ≤ amount ≤ 5000\n- 1 ≤ |coins| ≤ 30\n",
   "leetcodeUrl": "https://leetcode.com/problems/coin-change-ii/",
   "complexity": {
     "time": "O(amount·|coins|)",

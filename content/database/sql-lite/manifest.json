@@ -1,0 +1,443 @@
+{
+  "total": 60,
+  "generated_at": "2026-04-05",
+  "difficulty": {
+    "easy": 17,
+    "medium": 25,
+    "hard": 18
+  },
+  "categories": [
+    {
+      "slug": "aggregations-grouping",
+      "label": "Aggregations Grouping",
+      "count": 10,
+      "difficulty": {
+        "easy": 3,
+        "medium": 4,
+        "hard": 3
+      },
+      "problems": [
+        {
+          "id": "arpu-by-plan",
+          "title": "ARPU by Plan",
+          "difficulty": "hard",
+          "path": "aggregations-grouping/arpu-by-plan.json"
+        },
+        {
+          "id": "average-session-duration-by-plan",
+          "title": "Average Session Duration by Plan",
+          "difficulty": "easy",
+          "path": "aggregations-grouping/average-session-duration-by-plan.json"
+        },
+        {
+          "id": "countries-with-two-paying-users",
+          "title": "Countries with At Least Two Paying Users",
+          "difficulty": "medium",
+          "path": "aggregations-grouping/countries-with-two-paying-users.json"
+        },
+        {
+          "id": "monthly-revenue",
+          "title": "Monthly Revenue",
+          "difficulty": "medium",
+          "path": "aggregations-grouping/monthly-revenue.json"
+        },
+        {
+          "id": "purchase-conversion-rate-by-plan",
+          "title": "Purchase Conversion Rate by Plan",
+          "difficulty": "hard",
+          "path": "aggregations-grouping/purchase-conversion-rate-by-plan.json"
+        },
+        {
+          "id": "session-count-by-device",
+          "title": "Session Count by Device",
+          "difficulty": "easy",
+          "path": "aggregations-grouping/session-count-by-device.json"
+        },
+        {
+          "id": "top-two-countries-by-revenue-share",
+          "title": "Top Two Countries by Revenue Share",
+          "difficulty": "hard",
+          "path": "aggregations-grouping/top-two-countries-by-revenue-share.json"
+        },
+        {
+          "id": "total-revenue-by-country",
+          "title": "Total Revenue by Country",
+          "difficulty": "medium",
+          "path": "aggregations-grouping/total-revenue-by-country.json"
+        },
+        {
+          "id": "users-above-country-session-average",
+          "title": "Users Above Country Session Average",
+          "difficulty": "medium",
+          "path": "aggregations-grouping/users-above-country-session-average.json"
+        },
+        {
+          "id": "users-without-purchases",
+          "title": "Users Without Purchases",
+          "difficulty": "easy",
+          "path": "aggregations-grouping/users-without-purchases.json"
+        }
+      ]
+    },
+    {
+      "slug": "date-time-analytics",
+      "label": "Date Time Analytics",
+      "count": 10,
+      "difficulty": {
+        "easy": 3,
+        "medium": 4,
+        "hard": 3
+      },
+      "problems": [
+        {
+          "id": "avg-minutes-login-to-purchase-same-day",
+          "title": "Average Minutes from Login to Purchase (Same Day)",
+          "difficulty": "medium",
+          "path": "date-time-analytics/avg-minutes-login-to-purchase-same-day.json"
+        },
+        {
+          "id": "daily-active-users-login",
+          "title": "Daily Active Users (Login)",
+          "difficulty": "easy",
+          "path": "date-time-analytics/daily-active-users-login.json"
+        },
+        {
+          "id": "day-1-retention-by-signup-date",
+          "title": "Day-1 Retention by Signup Date",
+          "difficulty": "medium",
+          "path": "date-time-analytics/day-1-retention-by-signup-date.json"
+        },
+        {
+          "id": "first-event-per-user",
+          "title": "First Event Per User",
+          "difficulty": "easy",
+          "path": "date-time-analytics/first-event-per-user.json"
+        },
+        {
+          "id": "month-plus-one-cohort-retention",
+          "title": "Month+1 Cohort Retention",
+          "difficulty": "hard",
+          "path": "date-time-analytics/month-plus-one-cohort-retention.json"
+        },
+        {
+          "id": "rolling-7-day-active-users",
+          "title": "Rolling 7-Day Active Users",
+          "difficulty": "hard",
+          "path": "date-time-analytics/rolling-7-day-active-users.json"
+        },
+        {
+          "id": "signed-up-users-without-events",
+          "title": "Signed-up Users Without Events",
+          "difficulty": "easy",
+          "path": "date-time-analytics/signed-up-users-without-events.json"
+        },
+        {
+          "id": "top-event-type-per-day",
+          "title": "Top Event Type Per Day",
+          "difficulty": "medium",
+          "path": "date-time-analytics/top-event-type-per-day.json"
+        },
+        {
+          "id": "users-with-login-streak-at-least-3",
+          "title": "Users with Login Streak >= 3 Days",
+          "difficulty": "hard",
+          "path": "date-time-analytics/users-with-login-streak-at-least-3.json"
+        },
+        {
+          "id": "weekly-purchase-count",
+          "title": "Weekly Purchase Count",
+          "difficulty": "medium",
+          "path": "date-time-analytics/weekly-purchase-count.json"
+        }
+      ]
+    },
+    {
+      "slug": "joins-relationships",
+      "label": "Joins Relationships",
+      "count": 10,
+      "difficulty": {
+        "easy": 3,
+        "medium": 4,
+        "hard": 3
+      },
+      "problems": [
+        {
+          "id": "cancelled-orders-by-region",
+          "title": "Cancelled Orders by Region",
+          "difficulty": "easy",
+          "path": "joins-relationships/cancelled-orders-by-region.json"
+        },
+        {
+          "id": "completed-orders-over-300",
+          "title": "Completed Orders Over 300",
+          "difficulty": "medium",
+          "path": "joins-relationships/completed-orders-over-300.json"
+        },
+        {
+          "id": "customer-completed-order-revenue",
+          "title": "Customer Completed Order Revenue",
+          "difficulty": "medium",
+          "path": "joins-relationships/customer-completed-order-revenue.json"
+        },
+        {
+          "id": "customers-with-multi-category-purchases",
+          "title": "Customers Buying Multiple Categories",
+          "difficulty": "hard",
+          "path": "joins-relationships/customers-with-multi-category-purchases.json"
+        },
+        {
+          "id": "customers-with-repeat-completed-orders",
+          "title": "Customers with Repeat Completed Orders",
+          "difficulty": "hard",
+          "path": "joins-relationships/customers-with-repeat-completed-orders.json"
+        },
+        {
+          "id": "customers-without-orders",
+          "title": "Customers Without Orders",
+          "difficulty": "easy",
+          "path": "joins-relationships/customers-without-orders.json"
+        },
+        {
+          "id": "highest-revenue-order-per-region",
+          "title": "Highest Revenue Order Per Region",
+          "difficulty": "hard",
+          "path": "joins-relationships/highest-revenue-order-per-region.json"
+        },
+        {
+          "id": "order-customer-status-list",
+          "title": "Order Customer Status List",
+          "difficulty": "easy",
+          "path": "joins-relationships/order-customer-status-list.json"
+        },
+        {
+          "id": "orders-containing-electronics",
+          "title": "Orders Containing Electronics",
+          "difficulty": "medium",
+          "path": "joins-relationships/orders-containing-electronics.json"
+        },
+        {
+          "id": "top-product-by-units-sold",
+          "title": "Top Product by Units Sold",
+          "difficulty": "medium",
+          "path": "joins-relationships/top-product-by-units-sold.json"
+        }
+      ]
+    },
+    {
+      "slug": "select-filtering",
+      "label": "Select Filtering",
+      "count": 10,
+      "difficulty": {
+        "easy": 3,
+        "medium": 4,
+        "hard": 3
+      },
+      "problems": [
+        {
+          "id": "active-departments-high-average-pay",
+          "title": "Active Departments with High Average Pay",
+          "difficulty": "hard",
+          "path": "select-filtering/active-departments-high-average-pay.json"
+        },
+        {
+          "id": "active-engineers-new-york",
+          "title": "Active Engineers in New York",
+          "difficulty": "easy",
+          "path": "select-filtering/active-engineers-new-york.json"
+        },
+        {
+          "id": "active-sales-support-cities",
+          "title": "Active Sales and Support in Key Cities",
+          "difficulty": "easy",
+          "path": "select-filtering/active-sales-support-cities.json"
+        },
+        {
+          "id": "inactive-employees-with-manager-name",
+          "title": "Inactive Employees with Manager Name",
+          "difficulty": "medium",
+          "path": "select-filtering/inactive-employees-with-manager-name.json"
+        },
+        {
+          "id": "managers-with-at-least-two-reports",
+          "title": "Managers with At Least Two Reports",
+          "difficulty": "medium",
+          "path": "select-filtering/managers-with-at-least-two-reports.json"
+        },
+        {
+          "id": "recent-hires-high-salary",
+          "title": "Recent High Salary Hires",
+          "difficulty": "easy",
+          "path": "select-filtering/recent-hires-high-salary.json"
+        },
+        {
+          "id": "salary-above-department-average",
+          "title": "Salary Above Department Average",
+          "difficulty": "medium",
+          "path": "select-filtering/salary-above-department-average.json"
+        },
+        {
+          "id": "second-highest-active-salary-by-department",
+          "title": "Second Highest Active Salary by Department",
+          "difficulty": "hard",
+          "path": "select-filtering/second-highest-active-salary-by-department.json"
+        },
+        {
+          "id": "top-non-engineering-active-salaries",
+          "title": "Top Non-Engineering Active Salaries",
+          "difficulty": "medium",
+          "path": "select-filtering/top-non-engineering-active-salaries.json"
+        },
+        {
+          "id": "top-paid-active-per-city",
+          "title": "Top Paid Active Employee Per City",
+          "difficulty": "hard",
+          "path": "select-filtering/top-paid-active-per-city.json"
+        }
+      ]
+    },
+    {
+      "slug": "subqueries-cte",
+      "label": "Subqueries Cte",
+      "count": 10,
+      "difficulty": {
+        "easy": 2,
+        "medium": 5,
+        "hard": 3
+      },
+      "problems": [
+        {
+          "id": "cohorts-with-high-pass-rate",
+          "title": "Cohorts with High Pass Rate",
+          "difficulty": "medium",
+          "path": "subqueries-cte/cohorts-with-high-pass-rate.json"
+        },
+        {
+          "id": "cohorts-with-two-course-students",
+          "title": "Cohorts with Students Taking 2+ Courses",
+          "difficulty": "medium",
+          "path": "subqueries-cte/cohorts-with-two-course-students.json"
+        },
+        {
+          "id": "course-with-highest-average-score",
+          "title": "Course with Highest Average Score",
+          "difficulty": "medium",
+          "path": "subqueries-cte/course-with-highest-average-score.json"
+        },
+        {
+          "id": "students-above-cohort-average-score",
+          "title": "Students Above Cohort Average Score",
+          "difficulty": "hard",
+          "path": "subqueries-cte/students-above-cohort-average-score.json"
+        },
+        {
+          "id": "students-above-course-average",
+          "title": "Students Scoring Above Course Average",
+          "difficulty": "medium",
+          "path": "subqueries-cte/students-above-course-average.json"
+        },
+        {
+          "id": "students-enrolled-in-all-data-courses",
+          "title": "Students Enrolled in All Data Track Courses",
+          "difficulty": "medium",
+          "path": "subqueries-cte/students-enrolled-in-all-data-courses.json"
+        },
+        {
+          "id": "students-enrolled-sql-101",
+          "title": "Students Enrolled in SQL 101",
+          "difficulty": "easy",
+          "path": "subqueries-cte/students-enrolled-sql-101.json"
+        },
+        {
+          "id": "top-scorer-per-course",
+          "title": "Top Scorer Per Course",
+          "difficulty": "hard",
+          "path": "subqueries-cte/top-scorer-per-course.json"
+        },
+        {
+          "id": "top-two-students-by-cohort-average",
+          "title": "Top Two Students by Cohort Average",
+          "difficulty": "hard",
+          "path": "subqueries-cte/top-two-students-by-cohort-average.json"
+        },
+        {
+          "id": "tracks-without-enrollments",
+          "title": "Tracks Without Enrollments",
+          "difficulty": "easy",
+          "path": "subqueries-cte/tracks-without-enrollments.json"
+        }
+      ]
+    },
+    {
+      "slug": "window-functions",
+      "label": "Window Functions",
+      "count": 10,
+      "difficulty": {
+        "easy": 3,
+        "medium": 4,
+        "hard": 3
+      },
+      "problems": [
+        {
+          "id": "day-over-day-debit-delta",
+          "title": "Day-over-Day Debit Delta",
+          "difficulty": "medium",
+          "path": "window-functions/day-over-day-debit-delta.json"
+        },
+        {
+          "id": "debit-amount-quartiles",
+          "title": "Debit Amount Quartiles",
+          "difficulty": "hard",
+          "path": "window-functions/debit-amount-quartiles.json"
+        },
+        {
+          "id": "first-time-cumulative-debit-over-500",
+          "title": "First Time Cumulative Debit Exceeds 500",
+          "difficulty": "hard",
+          "path": "window-functions/first-time-cumulative-debit-over-500.json"
+        },
+        {
+          "id": "latest-transaction-per-account",
+          "title": "Latest Transaction per Account",
+          "difficulty": "easy",
+          "path": "window-functions/latest-transaction-per-account.json"
+        },
+        {
+          "id": "longest-gap-between-transactions",
+          "title": "Longest Gap Between Transactions",
+          "difficulty": "hard",
+          "path": "window-functions/longest-gap-between-transactions.json"
+        },
+        {
+          "id": "previous-transaction-amount",
+          "title": "Previous Transaction Amount",
+          "difficulty": "easy",
+          "path": "window-functions/previous-transaction-amount.json"
+        },
+        {
+          "id": "rank-accounts-by-total-debit",
+          "title": "Rank Accounts by Total Debit",
+          "difficulty": "medium",
+          "path": "window-functions/rank-accounts-by-total-debit.json"
+        },
+        {
+          "id": "running-debit-total-per-account",
+          "title": "Running Debit Total per Account",
+          "difficulty": "easy",
+          "path": "window-functions/running-debit-total-per-account.json"
+        },
+        {
+          "id": "three-transaction-moving-average-debit",
+          "title": "3-Transaction Moving Average Debit",
+          "difficulty": "medium",
+          "path": "window-functions/three-transaction-moving-average-debit.json"
+        },
+        {
+          "id": "top-two-debits-per-segment",
+          "title": "Top Two Debits per Segment",
+          "difficulty": "medium",
+          "path": "window-functions/top-two-debits-per-segment.json"
+        }
+      ]
+    }
+  ]
+}

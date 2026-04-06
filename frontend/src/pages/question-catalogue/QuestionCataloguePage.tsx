@@ -1,8 +1,10 @@
-import { categories } from "./data/catalogueData";
+import { useCatalogueCategories } from "./data/useCatalogueCategories";
 import CategoryCard from "./components/CategoryCard";
 import "./styles/QuestionCataloguePage.css";
 
 export default function QuestionCataloguePage() {
+  const { categories, loading } = useCatalogueCategories();
+
   return (
     <div className="catalogue-wrapper">
       <div className="catalogue-header">
@@ -13,9 +15,13 @@ export default function QuestionCataloguePage() {
       </div>
 
       <div className="catalogue-grid">
-        {categories.map((cat) => (
-          <CategoryCard key={cat.slug} category={cat} />
-        ))}
+        {loading ? (
+          <p>Loading catalogue…</p>
+        ) : (
+          categories.map((cat) => (
+            <CategoryCard key={cat.slug} category={cat} />
+          ))
+        )}
       </div>
     </div>
   );

@@ -3,7 +3,7 @@
   "title": "Intersection of Two Lists",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Given heads of two singly linked lists, return the node where the two lists intersect, or None if they do not intersect. Intersection is by reference, not value.\n\n    \n\nConstraints:\n    - 0 ≤ n,m ≤ 10^5",
+  "description": "### Objective\nHeads of two singly linked lists, return the node where the two lists intersect, or None if they do not intersect. Intersection is by reference, not value.\n\n### Function Contract\nImplement `__init__(self: any, val: any, next: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `A`: type `array` (example: `[4,1,8,4,5]`).\n- Input `B`: type `array` (example: `[5,6,1,8,4,5]`).\n- Input `intersectVal`: type `number` (example: `8`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n+m)`, space `O(1)`.\n\n### Constraints\n- 0 ≤ n,m ≤ 10^5\n",
   "leetcodeUrl": "https://leetcode.com/problems/intersection-of-two-linked-lists/",
   "complexity": {
     "time": "O(n+m)",

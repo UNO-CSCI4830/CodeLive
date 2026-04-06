@@ -3,7 +3,7 @@
   "title": "Minimum Edit Distance",
   "difficulty": "Hard",
   "language": "python",
-  "description": "Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2. Operations are insert, delete, and replace a character.\n\n    \n\nConstraints:\n    - 0 ≤ |word1|, |word2| ≤ 500",
+  "description": "### Objective\nGiven two strings word1 and word2, return the minimum number of operations required to convert word1 to word2. Operations are insert, delete, and replace a character.\n\n### Function Contract\nImplement `min_edit_distance(a: str, b: str)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `a`: type `string` (example: `\"horse\"`).\n- Input `b`: type `string` (example: `\"ros\"`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(nm)`, space `O(nm)`.\n\n### Constraints\n- 0 ≤ |word1|, |word2| ≤ 500\n",
   "leetcodeUrl": "https://leetcode.com/problems/edit-distance/",
   "complexity": {
     "time": "O(nm)",

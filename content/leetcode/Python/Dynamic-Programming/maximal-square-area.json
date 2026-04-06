@@ -3,7 +3,7 @@
   "title": "Largest Square of Ones",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a binary matrix of '0' and '1', find the area of the largest square containing only '1's.\n\n    \n\nConstraints:\n    - 1 ≤ m, n ≤ 300",
+  "description": "### Objective\nGiven a binary matrix of '0' and '1', find the area of the largest square containing only '1's.\n\n### Function Contract\nImplement `maximal_square(matrix: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `matrix`: type `array` (example: `[[1,0,1,0,0],[1,0,1,1,1],[1,1,1,1,1],[1,0,0,1,0]]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(mn)`, space `O(mn)`.\n\n### Constraints\n- 1 ≤ m, n ≤ 300\n",
   "leetcodeUrl": "https://leetcode.com/problems/maximal-square/",
   "complexity": {
     "time": "O(mn)",

@@ -3,7 +3,7 @@
   "title": "Shortest Transformation Ladder Length",
   "difficulty": "Hard",
   "language": "python",
-  "description": "Given beginWord, endWord, and a dictionary of words, return the length of the shortest transformation sequence from beginWord to endWord such that only one letter can be changed at a time and each transformed word must exist in the dictionary. If no sequence, return 0.\n\n    \n\nConstraints:\n    - 1 ≤ |word| ≤ 10\n- 1 ≤ |wordList| ≤ 5000",
+  "description": "### Objective\nBeginWord, endWord, and a dictionary of words, return the length of the shortest transformation sequence from beginWord to endWord such that only one letter can be changed at a time and each transformed word must exist in the dictionary. If no sequence, return 0.\n\n### Function Contract\nImplement `ladder_length(beginWord: str, endWord: str, wordList: List[str])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `beginWord`: type `string` (example: `\"hit\"`).\n- Input `endWord`: type `string` (example: `\"cog\"`).\n- Input `wordList`: type `array` (example: `[\"hot\",\"dot\",\"dog\",\"lot\",\"log\",\"cog\"]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(N·L·Σ)`, space `O(N·L)`.\n\n### Constraints\n- 1 ≤ |word| ≤ 10\n- 1 ≤ |wordList| ≤ 5000\n",
   "leetcodeUrl": "https://leetcode.com/problems/word-ladder/",
   "complexity": {
     "time": "O(N·L·Σ)",

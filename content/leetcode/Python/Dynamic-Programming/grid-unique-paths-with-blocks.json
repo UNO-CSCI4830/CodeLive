@@ -3,7 +3,7 @@
   "title": "Unique Paths in a Blocked Grid",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given an m×n grid with obstacles where 1 indicates a blocked cell and 0 indicates free, count the number of unique paths from top-left to bottom-right moving only down or right. Return 0 if the destination is blocked.\n\n    \n\nConstraints:\n    - 1 ≤ m, n ≤ 100",
+  "description": "### Objective\nGiven an m×n grid with obstacles where 1 indicates a blocked cell and 0 indicates free, count the number of unique paths from top-left to bottom-right moving only down or right. Return 0 if the destination is blocked.\n\n### Function Contract\nImplement `unique_paths_with_obstacles(grid: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `grid`: type `array` (example: `[[0,0,0],[0,1,0],[0,0,0]]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(mn)`, space `O(mn)`.\n\n### Constraints\n- 1 ≤ m, n ≤ 100\n",
   "leetcodeUrl": "https://leetcode.com/problems/unique-paths-ii/",
   "complexity": {
     "time": "O(mn)",

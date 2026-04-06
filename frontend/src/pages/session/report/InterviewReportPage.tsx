@@ -26,7 +26,7 @@ import {
 import { useAuth } from "@/lib/AuthContext";
 import { supabase } from "@/lib/supabase";
 import { useSession, SessionProvider } from "../SessionContext";
-import { fetchReport } from "../api";
+import { fetchReport, fetchAiLogs, type AiChatLogMessage } from "../api";
 import type { InterviewReport, PerQuestionAnalysis } from "../types";
 import "./InterviewReportPage.css";
 
@@ -38,18 +38,31 @@ function ReportContent() {
   const [report, setReport] = useState<InterviewReport | null>(null);
   const [pollError, setPollError] = useState<string | null>(null);
   const [candidateName, setCandidateName] = useState<string | null>(null);
+  const [aiLogsByOrder, setAiLogsByOrder] = useState<Record<number, AiChatLogMessage[]>>({});
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Fetch the candidate's display name when session loads
   useEffect(() => {
-    if (!session?.candidate_id) return;
+    if (!session?.candidate_id) {
+      setCandidateName(session?.candidate_name ?? "Candidate");
+      return;
+    }
+
+    const sessionFallback =
+      session.candidate_name?.trim() ||
+      (session.candidate_id ? `Candidate ${session.candidate_id.slice(0, 6)}` : "Candidate");
+    setCandidateName(sessionFallback);
+
     supabase
       .from("profiles")
       .select("name")
       .eq("id", session.candidate_id)
       .single()
-      .then(({ data }) => setCandidateName(data?.name ?? null));
-  }, [session?.candidate_id]);
+      .then(({ data }) => {
+        const profileName = data?.name?.trim();
+        if (profileName) setCandidateName(profileName);
+      });
+  }, [session?.candidate_id, session?.candidate_name]);
 
   const stopPolling = () => {
     if (intervalRef.current) {
@@ -79,6 +92,22 @@ function ReportContent() {
     return stopPolling;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]);
+
+  useEffect(() => {
+    if (!sessionId || report?.status !== "completed") return;
+    fetchAiLogs(sessionId)
+      .then((messages) => {
+        const grouped: Record<number, AiChatLogMessage[]> = {};
+        for (const message of messages) {
+          if (!grouped[message.orderIndex]) grouped[message.orderIndex] = [];
+          grouped[message.orderIndex].push(message);
+        }
+        setAiLogsByOrder(grouped);
+      })
+      .catch(() => {
+        setAiLogsByOrder({});
+      });
+  }, [sessionId, report?.status]);
 
   // ── Not interviewer guard ────────────────────────────────────────────
   if (session && !isInterviewer) {
@@ -160,6 +189,12 @@ function ReportContent() {
                 <span>{session.problems.length} question{session.problems.length !== 1 ? "s" : ""}</span>
                 <span className="irp-meta-dot" />
                 <span>Session {session.id.slice(0, 8)}</span>
+                {session.candidate_email && (
+                  <>
+                    <span className="irp-meta-dot" />
+                    <span>{session.candidate_email}</span>
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -174,6 +209,19 @@ function ReportContent() {
             <h2 className="irp-card-title">
               <TrendingUp className="irp-card-title-icon" /> Overall Summary
             </h2>
+            {report.overall_score != null ? (
+              <div className="irp-overall-score-row">
+                <span className="irp-overall-score-label">Overall Score</span>
+                <AIScorePill score={report.overall_score} precision={1} />
+                <span className="irp-overall-score-hint">
+                  Based on correctness, code quality, and efficiency.
+                </span>
+              </div>
+            ) : (
+              <p className="irp-overall-score-na">
+                Overall score unavailable for this report.
+              </p>
+            )}
             <p className="irp-summary-text">{report.overall_summary}</p>
 
             {(report.strengths?.length ?? 0) > 0 || (report.areas_for_improvement?.length ?? 0) > 0 ? (
@@ -243,7 +291,11 @@ function ReportContent() {
             <p className="irp-section-label">Per-Question Analysis</p>
             <div className="irp-questions-grid">
               {(report.per_question ?? []).map((q) => (
-                <QuestionCard key={q.orderIndex} analysis={q} />
+                <QuestionCard
+                  key={q.orderIndex}
+                  analysis={q}
+                  aiLogs={aiLogsByOrder[q.orderIndex] ?? []}
+                />
               ))}
             </div>
           </>
@@ -255,7 +307,13 @@ function ReportContent() {
 
 // ── Sub-components ────────────────────────────────────────────────────────
 
-function QuestionCard({ analysis }: { analysis: PerQuestionAnalysis }) {
+function QuestionCard({
+  analysis,
+  aiLogs,
+}: {
+  analysis: PerQuestionAnalysis;
+  aiLogs: AiChatLogMessage[];
+}) {
   const correctnessClass: Record<PerQuestionAnalysis["correctness"], string> = {
     correct: "irp-card--correct",
     partial: "irp-card--partial",
@@ -310,6 +368,29 @@ function QuestionCard({ analysis }: { analysis: PerQuestionAnalysis }) {
           )}
         </div>
       )}
+
+      {aiLogs.length > 0 && (
+        <details className="irp-ai-log">
+          <summary className="irp-ai-log-summary">
+            AI chat log ({aiLogs.length} message{aiLogs.length !== 1 ? "s" : ""})
+          </summary>
+          <div className="irp-ai-log-list">
+            {aiLogs.map((message) => (
+              <div key={message.messageId} className="irp-ai-log-item">
+                <div className="irp-ai-log-item-meta">
+                  <span className={`irp-ai-log-role irp-ai-log-role--${message.role}`}>
+                    {message.role}
+                  </span>
+                  <span className="irp-ai-log-time">
+                    {new Date(message.timestamp).toLocaleTimeString()}
+                  </span>
+                </div>
+                <p className="irp-ai-log-content">{message.content}</p>
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
     </section>
   );
 }
@@ -326,14 +407,14 @@ function CorrectnessBadge({ value }: { value: PerQuestionAnalysis["correctness"]
   return <span className={`irp-badge ${cfg.className}`}>{cfg.label}</span>;
 }
 
-function AIScorePill({ score }: { score: number }) {
+function AIScorePill({ score, precision = 0 }: { score: number; precision?: number }) {
   const pct = Math.min(Math.max(score / 10, 0), 1);
   const pillCls = pct >= 0.7 ? "irp-score-pill--green" : pct >= 0.4 ? "irp-score-pill--amber" : "irp-score-pill--red";
   const fillCls = pct >= 0.7 ? "irp-score-fill--green" : pct >= 0.4 ? "irp-score-fill--amber" : "irp-score-fill--red";
   return (
     <div className="irp-score-display">
       <div className={`irp-score-pill ${pillCls}`}>
-        <span className="irp-score-value">{score}</span>
+        <span className="irp-score-value">{score.toFixed(precision)}</span>
         <span className="irp-score-max">/10</span>
       </div>
       <div className="irp-score-track">

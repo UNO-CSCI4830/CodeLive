@@ -1,0 +1,67 @@
+{
+  "id": "nonce-replay-protection",
+  "title": "Nonce Replay Protection",
+  "category": "backend",
+  "difficulty": "medium",
+  "description": "Reject replayed nonces for one-time actions such as payment intents or passwordless links.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /auth/nonce`\n\n### Request Replay (Executed In Order)\n1. `POST /auth/nonce`\n   Request body: `{\"nonce\":\"n-1\"}`\n   Expected status: `200`\n   Expected body: `{\"accepted\":true}`\n\n2. `POST /auth/nonce`\n   Request body: `{\"nonce\":\"n-1\"}`\n   Expected status: `409`\n   Expected body: `{\"error\":\"replay_detected\"}`\n\n3. `POST /auth/nonce`\n   Request body: `{\"nonce\":\"n-2\"}`\n   Expected status: `200`\n   Expected body: `{\"accepted\":true}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Store seen nonce values in-memory.",
+    "Check before mutating state."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "replay-protection",
+    "security"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Nonce Replay Protection\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/auth/nonce\")\nasync def nonce_replay_protection_post_auth_nonce(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/auth/nonce",
+        "expected_status": 200,
+        "expected_body": {
+          "accepted": true
+        },
+        "body": {
+          "nonce": "n-1"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/auth/nonce",
+        "expected_status": 409,
+        "expected_body": {
+          "error": "replay_detected"
+        },
+        "body": {
+          "nonce": "n-1"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/auth/nonce",
+        "expected_status": 200,
+        "expected_body": {
+          "accepted": true
+        },
+        "body": {
+          "nonce": "n-2"
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 14
+}

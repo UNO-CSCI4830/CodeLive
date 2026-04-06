@@ -1,79 +1,84 @@
 /**
- * SessionTimer — a countdown timer that locks the current problem
- * when it reaches zero. Displays time remaining in MM:SS format.
+ * SessionTimer — shared interview countdown timer.
+ * Uses session-level start + paused state so both participants stay synced.
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Clock, Pause, Play, Lock } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { Clock, Pause, Play } from "lucide-react";
 import "./SessionTimer.css";
 
 interface Props {
-  /** Time limit in minutes */
-  timeLimitMinutes: number;
-  /** Called when the timer reaches zero */
-  onExpired: () => void;
-  /** Whether the problem is already locked */
-  locked: boolean;
-  /** Whether the timer should start immediately */
-  autoStart?: boolean;
-  /** Optional: provide a startedAt ISO timestamp for sync */
+  /** Total interview duration in minutes. */
+  totalMinutes: number;
+  /** Server session started_at timestamp. */
   startedAt?: string | null;
+  /** Shared pause state from the server session row. */
+  paused: boolean;
+  pausedAt?: string | null;
+  pausedSeconds: number;
+  /** Interviewer-only controls. */
+  canToggle?: boolean;
+  onPause?: () => Promise<void> | void;
+  onResume?: () => Promise<void> | void;
 }
 
 export default function SessionTimer({
-  timeLimitMinutes,
-  onExpired,
-  locked,
-  autoStart = true,
+  totalMinutes,
   startedAt,
+  paused,
+  pausedAt,
+  pausedSeconds,
+  canToggle = false,
+  onPause,
+  onResume,
 }: Props) {
-  const totalSeconds = timeLimitMinutes * 60;
+  const totalSeconds = Math.max(Math.floor(totalMinutes * 60), 0);
+  const [pendingToggle, setPendingToggle] = useState(false);
 
-  // Calculate remaining seconds from server start time if available
   const calcRemaining = useCallback(() => {
-    if (startedAt) {
-      const elapsed = Math.floor((Date.now() - new Date(startedAt).getTime()) / 1000);
-      return Math.max(totalSeconds - elapsed, 0);
+    if (!startedAt || totalSeconds <= 0) return totalSeconds;
+
+    const startedMs = new Date(startedAt).getTime();
+    if (Number.isNaN(startedMs)) return totalSeconds;
+
+    const nowMs = Date.now();
+    const elapsedSeconds = Math.max(Math.floor((nowMs - startedMs) / 1000), 0);
+
+    let activePausedSeconds = 0;
+    if (paused && pausedAt) {
+      const pausedAtMs = new Date(pausedAt).getTime();
+      if (!Number.isNaN(pausedAtMs)) {
+        activePausedSeconds = Math.max(Math.floor((nowMs - pausedAtMs) / 1000), 0);
+      }
     }
-    return totalSeconds;
-  }, [startedAt, totalSeconds]);
+
+    const effectiveElapsed = Math.max(
+      elapsedSeconds - Math.max(pausedSeconds, 0) - activePausedSeconds,
+      0,
+    );
+    return Math.max(totalSeconds - effectiveElapsed, 0);
+  }, [startedAt, paused, pausedAt, pausedSeconds, totalSeconds]);
 
   const [remaining, setRemaining] = useState(calcRemaining);
-  const [running, setRunning] = useState(autoStart && !locked);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const expiredRef = useRef(false);
 
-  // Resync when startedAt changes
+  // Resync from server state
   useEffect(() => {
     setRemaining(calcRemaining());
   }, [calcRemaining]);
 
-  // Main countdown loop
+  // Tick once per second; values remain stable while paused because calcRemaining
+  // subtracts active paused duration.
   useEffect(() => {
-    if (locked || !running) {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+    if (!startedAt || totalSeconds <= 0) {
       return;
     }
 
-    intervalRef.current = setInterval(() => {
-      setRemaining((prev) => {
-        const next = prev - 1;
-        if (next <= 0) {
-          clearInterval(intervalRef.current!);
-          if (!expiredRef.current) {
-            expiredRef.current = true;
-            onExpired();
-          }
-          return 0;
-        }
-        return next;
-      });
+    const intervalId = setInterval(() => {
+      setRemaining(calcRemaining());
     }, 1000);
 
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [running, locked, onExpired]);
+    return () => clearInterval(intervalId);
+  }, [startedAt, totalSeconds, calcRemaining]);
 
   const minutes = Math.floor(remaining / 60);
   const seconds = remaining % 60;
@@ -87,8 +92,20 @@ export default function SessionTimer({
         ? "timer--warning"
         : "timer--normal";
 
+  const handleToggle = async () => {
+    if (!canToggle || pendingToggle) return;
+    const action = paused ? onResume : onPause;
+    if (!action) return;
+    setPendingToggle(true);
+    try {
+      await action();
+    } finally {
+      setPendingToggle(false);
+    }
+  };
+
   return (
-    <div className={`timer ${urgency} ${locked ? "timer--locked" : ""}`}>
+    <div className={`timer ${urgency} ${paused ? "timer--paused" : ""}`}>
       {/* Circular progress ring */}
       <svg className="timer-ring" viewBox="0 0 36 36">
         <circle className="timer-ring-bg" cx="18" cy="18" r="15.5" />
@@ -103,28 +120,25 @@ export default function SessionTimer({
       </svg>
 
       <div className="timer-display">
-        {locked ? (
-          <Lock className="timer-lock-icon" />
-        ) : (
-          <Clock className="timer-clock-icon" />
-        )}
+        <Clock className="timer-clock-icon" />
         <span className="timer-digits">
           {String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")}
         </span>
+        {paused && <span className="timer-paused-label">Paused</span>}
       </div>
 
-      {/* Pause/resume only for interviewers (caller controls visibility) */}
-      {!locked && (
+      {canToggle && (
         <button
           type="button"
           className="timer-toggle"
-          onClick={() => setRunning((r) => !r)}
-          title={running ? "Pause timer" : "Resume timer"}
+          onClick={handleToggle}
+          disabled={pendingToggle || !startedAt}
+          title={paused ? "Resume timer" : "Pause timer"}
         >
-          {running ? (
-            <Pause className="timer-toggle-icon" />
-          ) : (
+          {paused ? (
             <Play className="timer-toggle-icon" />
+          ) : (
+            <Pause className="timer-toggle-icon" />
           )}
         </button>
       )}

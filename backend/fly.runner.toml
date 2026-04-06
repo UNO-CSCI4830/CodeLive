@@ -1,0 +1,56 @@
+# fly.runner.toml
+#
+# Dedicated isolated execution service for untrusted candidate code.
+# Deploy from repo root:
+#   fly deploy --config backend/fly.runner.toml .
+#
+
+app = 'codelive-runner'
+primary_region = 'ord'
+kill_signal = 'SIGTERM'
+kill_timeout = 30
+
+[build]
+  dockerfile = 'Dockerfile'
+  ignorefile = '../.dockerignore'
+
+[env]
+  NODE_ENV = 'production'
+  RUN_EXECUTION_MODE = 'direct'
+  RUNNER_REQUIRE_TOKEN = 'true'
+  RUN_RATE_LIMIT_ENABLED = 'false'
+  RUNNER_MAX_CONCURRENT_EXECUTIONS = '6'
+  JSON_BODY_LIMIT = '1mb'
+
+[processes]
+  app = 'node dist/runner.js'
+
+[http_service]
+  processes = ['app']
+  internal_port = 5000
+  force_https = true
+  auto_stop_machines = 'suspend'
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [http_service.concurrency]
+    type = 'requests'
+    hard_limit = 20
+    soft_limit = 16
+
+  [[http_service.checks]]
+    interval = '15s'
+    timeout = '5s'
+    grace_period = '20s'
+    method = 'GET'
+    path = '/health'
+    protocol = 'http'
+
+    [http_service.checks.headers]
+      X-Forwarded-Proto = 'https'
+
+[[vm]]
+  memory = '1024mb'
+  cpu_kind = 'shared'
+  cpus = 1
+  persist_rootfs = 'never'

@@ -3,7 +3,7 @@
   "title": "String Contains Scrambled Pattern",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given two strings pattern and s, return True if s contains a substring that is a permutation of pattern. Use a fixed-size sliding window of length len(pattern) and compare frequency counts.\n\n    \n\nConstraints:\n    - 1 ≤ len(pattern) ≤ 10^4\n- 1 ≤ len(s) ≤ 10^5\n- s and pattern are lowercase English letters",
+  "description": "### Objective\nGiven two strings pattern and s, return True if s contains a substring that is a permutation of pattern. Use a fixed-size sliding window of length len(pattern) and compare frequency counts.\n\n### Function Contract\nImplement `contains_permutation(pattern: str, s: str)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `pattern`: type `string` (example: `\"ab\"`).\n- Input `s`: type `string` (example: `\"eidbaooo\"`).\n- Return type: `boolean`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1) for fixed alphabet`.\n\n### Constraints\n- 1 ≤ len(pattern) ≤ 10^4\n- 1 ≤ len(s) ≤ 10^5\n- s and pattern are lowercase English letters\n",
   "leetcodeUrl": "https://leetcode.com/problems/permutation-in-string/",
   "complexity": {
     "time": "O(n)",

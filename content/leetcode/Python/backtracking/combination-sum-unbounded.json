@@ -3,7 +3,7 @@
   "title": "Combination Sum with Unlimited Picks",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given positive candidate numbers and a target, find all unique combinations where the chosen numbers sum to target. Each number may be chosen unlimited times. Return combinations in nondecreasing order.\n\n    \n\nConstraints:\n    - 1 ≤ |candidates| ≤ 30\n- 1 ≤ target ≤ 500\n- Candidates positive",
+  "description": "### Objective\nPositive candidate numbers and a target, find all unique combinations where the chosen numbers sum to target. Each number may be chosen unlimited times. Return combinations in nondecreasing order.\n\n### Function Contract\nImplement `combination_sum(candidates: List[int], target: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `candidates`: type `array` (example: `[2,3,6,7]`).\n- Input `target`: type `number` (example: `7`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(S)`, space `O(T)`.\n\n### Constraints\n- 1 ≤ |candidates| ≤ 30\n- 1 ≤ target ≤ 500\n- Candidates positive\n",
   "leetcodeUrl": "https://leetcode.com/problems/combination-sum/",
   "complexity": {
     "time": "O(S)",

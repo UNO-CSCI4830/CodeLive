@@ -3,7 +3,7 @@
   "title": "Copy List with Random Pointer",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given A linked list has nodes with next and random pointers. The random pointer may point to any node or None. Create a deep copy of the list without using extra hash maps by interleaving copies.\n\n    \n\nConstraints:\n    - 0 ≤ n ≤ 10^5",
+  "description": "### Objective\nGiven a linked list has nodes with next and random pointers. The random pointer may point to any node or None. Create a deep copy of the list without using extra hash maps by interleaving copies.\n\n### Function Contract\nImplement `__init__(self: any, x: any, next: any, random: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nodes`: type `array` (example: `[[7,null],[13,0],[11,4],[10,2],[1,0]]`).\n- Return type: `string`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1) extra`.\n\n### Constraints\n- 0 ≤ n ≤ 10^5\n",
   "leetcodeUrl": "https://leetcode.com/problems/copy-list-with-random-pointer/",
   "complexity": {
     "time": "O(n)",

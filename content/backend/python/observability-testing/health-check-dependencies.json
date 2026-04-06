@@ -1,0 +1,58 @@
+{
+  "id": "health-check-dependencies",
+  "title": "Health Check Dependencies",
+  "category": "backend",
+  "difficulty": "medium",
+  "description": "Implement deep health checks that summarize dependency status.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `GET /health/deep?cache=ok&upstream=ok`\n- `GET /health/deep?cache=ok&upstream=fail`\n- `GET /health/deep?cache=fail&upstream=fail`\n\n### Request Replay (Executed In Order)\n1. `GET /health/deep?cache=ok&upstream=ok`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"status\":\"ok\"}`\n\n2. `GET /health/deep?cache=ok&upstream=fail`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"status\":\"degraded\"}`\n\n3. `GET /health/deep?cache=fail&upstream=fail`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"status\":\"degraded\"}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Map query status tokens to booleans.",
+    "Build summary response from dependency states."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "health-checks",
+    "dependency-monitoring"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Health Check Dependencies\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.get(\"/health/deep\")\nasync def health_check_dependencies_get_health_deep():\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "GET",
+        "path": "/health/deep?cache=ok&upstream=ok",
+        "expected_status": 200,
+        "expected_body": {
+          "status": "ok"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/health/deep?cache=ok&upstream=fail",
+        "expected_status": 200,
+        "expected_body": {
+          "status": "degraded"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/health/deep?cache=fail&upstream=fail",
+        "expected_status": 200,
+        "expected_body": {
+          "status": "degraded"
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 46
+}

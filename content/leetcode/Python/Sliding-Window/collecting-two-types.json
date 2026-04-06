@@ -3,7 +3,7 @@
   "title": "Collecting Two Types",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given an array representing item types, return the length of the longest subarray that contains at most two distinct values. This captures scenarios like carrying two basket types while walking along a line of trees.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- 0 ≤ nums[i] ≤ 10^9",
+  "description": "### Objective\nGiven an array representing item types, return the length of the longest subarray that contains at most two distinct values. This captures scenarios like carrying two basket types while walking along a line of trees.\n\n### Function Contract\nImplement `collecting_two_types(nums: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[1,2,1]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1) average`.\n\n### Constraints\n- 1 ≤ len(nums) ≤ 10^5\n- 0 ≤ nums[i] ≤ 10^9\n",
   "leetcodeUrl": "https://leetcode.com/problems/fruit-into-baskets/",
   "complexity": {
     "time": "O(n)",

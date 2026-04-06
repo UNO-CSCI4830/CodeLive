@@ -3,7 +3,7 @@
   "title": "Target Quadruplets",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Return all unique quadruplets [a,b,c,d] such that they sum to target. The result should not contain duplicates. Sorting plus two pointers in the inner loop achieves an efficient solution.\n\n    \n\nConstraints:\n    - 4 ≤ len(nums) ≤ 200\n- -10^4 ≤ nums[i], target ≤ 10^4",
+  "description": "### Objective\nReturn all unique quadruplets [a,b,c,d] such that they sum to target. The result should not contain duplicates. Sorting plus two pointers in the inner loop achieves an efficient solution.\n\n### Function Contract\nImplement `target_quadruplets(nums: List[int], target: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[1,0,-1,0,-2,2]`).\n- Input `target`: type `number` (example: `0`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n^3)`, space `O(1)`.\n\n### Constraints\n- 4 ≤ len(nums) ≤ 200\n- -10^4 ≤ nums[i], target ≤ 10^4\n",
   "leetcodeUrl": "https://leetcode.com/problems/4sum/",
   "complexity": {
     "time": "O(n^3)",

@@ -3,7 +3,7 @@
   "title": "Max Value Rod Cutting",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a rod of length n and an array price where price[i] is the price for a piece of length i (1-indexed), determine the maximum obtainable value by cutting the rod and selling the pieces. You may cut in any number of segments. If a length is missing in price, treat its value as zero.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 1000\n- 1 ≤ |price| ≤ n",
+  "description": "### Objective\nGiven a rod of length n and an array price where price[i] is the price for a piece of length i (1-indexed), determine the maximum obtainable value by cutting the rod and selling the pieces. You may cut in any number of segments. If a length is missing in price, treat its value as zero.\n\n### Function Contract\nImplement `rod_cutting(n: int, price: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `n`: type `number` (example: `4`).\n- Input `price`: type `array` (example: `[1,5,8,9]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n^2)`, space `O(n)`.\n\n### Constraints\n- 1 ≤ n ≤ 1000\n- 1 ≤ |price| ≤ n\n",
   "leetcodeUrl": "https://leetcode.com/problems/integer-break/",
   "complexity": {
     "time": "O(n^2)",

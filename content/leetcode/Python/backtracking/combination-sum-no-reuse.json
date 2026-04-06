@@ -3,7 +3,7 @@
   "title": "Combination Sum Without Reuse",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Find all unique combinations where candidate numbers sum to target. Each number may be used at most once. The input may contain duplicates; sort and skip duplicates at the same depth.\n\n    \n\nConstraints:\n    - 1 ≤ |candidates| ≤ 100\n- 1 ≤ target ≤ 500",
+  "description": "### Objective\nFind all unique combinations where candidate numbers sum to target. Each number may be used at most once. The input may contain duplicates; sort and skip duplicates at the same depth.\n\n### Function Contract\nImplement `combination_sum2(candidates: List[int], target: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `candidates`: type `array` (example: `[10,1,2,7,6,1,5]`).\n- Input `target`: type `number` (example: `8`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(S)`, space `O(T)`.\n\n### Constraints\n- 1 ≤ |candidates| ≤ 100\n- 1 ≤ target ≤ 500\n",
   "leetcodeUrl": "https://leetcode.com/problems/combination-sum-ii/",
   "complexity": {
     "time": "O(S)",

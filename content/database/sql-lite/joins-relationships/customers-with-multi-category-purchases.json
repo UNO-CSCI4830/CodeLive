@@ -1,0 +1,92 @@
+{
+  "id": "customers-with-multi-category-purchases",
+  "title": "Customers Buying Multiple Categories",
+  "category": "database",
+  "difficulty": "hard",
+  "description": "Write a SQL query using joins to answer the business question.\n\n### Tables\n```sql\nCREATE TABLE customers (\n  customer_id INTEGER PRIMARY KEY,\n  customer_name TEXT NOT NULL,\n  region TEXT NOT NULL,\n  signup_date TEXT NOT NULL\n);\n\nCREATE TABLE products (\n  product_id INTEGER PRIMARY KEY,\n  product_name TEXT NOT NULL,\n  category TEXT NOT NULL\n);\n\nCREATE TABLE orders (\n  order_id INTEGER PRIMARY KEY,\n  customer_id INTEGER NOT NULL,\n  order_date TEXT NOT NULL,\n  status TEXT NOT NULL\n);\n\nCREATE TABLE order_items (\n  item_id INTEGER PRIMARY KEY,\n  order_id INTEGER NOT NULL,\n  product_id INTEGER NOT NULL,\n  quantity INTEGER NOT NULL,\n  unit_price INTEGER NOT NULL\n);\n```\n\n### Task\nReturn customers who purchased from at least 2 distinct categories in completed orders.\n\n### Return Columns\n- `customer_id`\n- `customer_name`\n- `distinct_categories`\n\n### Ordering\nSort by `customer_id` ASC.\n\n### Notes\n- Use SQLite syntax.\n- Write your answer in `solution.sql`.\n- Do not hardcode output rows; query from tables.\n- Internal hidden tests run against additional seed data.",
+  "constraints": "SQLite 3.44+\n- Single query unless the prompt explicitly asks for CTEs\n- Deterministic output",
+  "hints": [],
+  "tags": [
+    "database",
+    "sql",
+    "sqlite",
+    "joins-relationships",
+    "distinct",
+    "join-chain"
+  ],
+  "starter_files": [
+    {
+      "path": "solution.sql",
+      "content": "-- Hint: join orders -> order_items -> products and count DISTINCT category per customer.\n",
+      "language": "sql",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "schema_sql": "CREATE TABLE customers (\n  customer_id INTEGER PRIMARY KEY,\n  customer_name TEXT NOT NULL,\n  region TEXT NOT NULL,\n  signup_date TEXT NOT NULL\n);\n\nCREATE TABLE products (\n  product_id INTEGER PRIMARY KEY,\n  product_name TEXT NOT NULL,\n  category TEXT NOT NULL\n);\n\nCREATE TABLE orders (\n  order_id INTEGER PRIMARY KEY,\n  customer_id INTEGER NOT NULL,\n  order_date TEXT NOT NULL,\n  status TEXT NOT NULL\n);\n\nCREATE TABLE order_items (\n  item_id INTEGER PRIMARY KEY,\n  order_id INTEGER NOT NULL,\n  product_id INTEGER NOT NULL,\n  quantity INTEGER NOT NULL,\n  unit_price INTEGER NOT NULL\n);",
+    "seed_sql": "INSERT INTO customers (customer_id, customer_name, region, signup_date) VALUES\n  (1, 'Acme Co', 'East', '2023-01-01'),\n  (2, 'Bright LLC', 'West', '2023-01-10'),\n  (3, 'Core Inc', 'East', '2023-02-01'),\n  (4, 'Delta Group', 'South', '2023-03-01'),\n  (5, 'Eon Labs', 'North', '2023-03-15'),\n  (6, 'Flux Systems', 'West', '2023-04-01'),\n  (7, 'Giga Mart', 'South', '2023-04-15'),\n  (8, 'Helio Works', 'North', '2023-05-01');\n\nINSERT INTO products (product_id, product_name, category) VALUES\n  (1, 'Laptop', 'Electronics'),\n  (2, 'Headphones', 'Electronics'),\n  (3, 'Desk', 'Furniture'),\n  (4, 'Chair', 'Furniture'),\n  (5, 'Notebook', 'Office'),\n  (6, 'Pen', 'Office');\n\nINSERT INTO orders (order_id, customer_id, order_date, status) VALUES\n  (101, 1, '2024-01-10', 'completed'),\n  (102, 1, '2024-01-14', 'cancelled'),\n  (103, 2, '2024-01-12', 'completed'),\n  (104, 3, '2024-01-15', 'completed'),\n  (105, 4, '2024-01-18', 'completed'),\n  (106, 6, '2024-01-20', 'completed'),\n  (107, 6, '2024-01-22', 'completed'),\n  (108, 7, '2024-01-23', 'cancelled'),\n  (109, 3, '2024-01-24', 'completed'),\n  (110, 2, '2024-01-25', 'completed');\n\nINSERT INTO order_items (item_id, order_id, product_id, quantity, unit_price) VALUES\n  (1, 101, 1, 1, 1200),\n  (2, 101, 5, 3, 4),\n  (3, 102, 2, 1, 150),\n  (4, 103, 3, 2, 200),\n  (5, 103, 6, 10, 2),\n  (6, 104, 2, 2, 150),\n  (7, 104, 4, 1, 180),\n  (8, 105, 5, 20, 4),\n  (9, 106, 1, 1, 1200),\n  (10, 107, 2, 1, 150),\n  (11, 107, 5, 5, 4),\n  (12, 108, 3, 1, 200),\n  (13, 109, 6, 50, 2),\n  (14, 110, 4, 2, 180),\n  (15, 110, 2, 1, 150);",
+    "expected_output": [
+      {
+        "customer_id": 1,
+        "customer_name": "Acme Co",
+        "distinct_categories": 2
+      },
+      {
+        "customer_id": 2,
+        "customer_name": "Bright LLC",
+        "distinct_categories": 3
+      },
+      {
+        "customer_id": 3,
+        "customer_name": "Core Inc",
+        "distinct_categories": 3
+      },
+      {
+        "customer_id": 6,
+        "customer_name": "Flux Systems",
+        "distinct_categories": 2
+      }
+    ],
+    "column_names": [
+      "customer_id",
+      "customer_name",
+      "distinct_categories"
+    ],
+    "order_matters": true,
+    "check_explain": false,
+    "hidden_tests": [
+      {
+        "expected_output": [
+          {
+            "customer_id": 1,
+            "customer_name": "Acme Co",
+            "distinct_categories": 2
+          },
+          {
+            "customer_id": 2,
+            "customer_name": "Bright LLC",
+            "distinct_categories": 3
+          },
+          {
+            "customer_id": 3,
+            "customer_name": "Core Inc",
+            "distinct_categories": 3
+          },
+          {
+            "customer_id": 6,
+            "customer_name": "Flux Systems",
+            "distinct_categories": 2
+          }
+        ],
+        "column_names": [
+          "customer_id",
+          "customer_name",
+          "distinct_categories"
+        ],
+        "order_matters": true
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 16
+}

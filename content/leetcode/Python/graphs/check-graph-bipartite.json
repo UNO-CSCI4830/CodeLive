@@ -3,7 +3,7 @@
   "title": "Check if a Graph is Bipartite",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given an undirected graph represented as adjacency lists, determine whether it is bipartite. Return True if possible to color nodes using two colors so that no edge connects nodes of the same color.\n\n    \n\nConstraints:\n    - 1 ≤ V ≤ 10^5\n- 0 ≤ E ≤ 2·10^5",
+  "description": "### Objective\nGiven an undirected graph represented as adjacency lists, determine whether it is bipartite. Return True if possible to color nodes using two colors so that no edge connects nodes of the same color.\n\n### Function Contract\nImplement `is_bipartite(graph: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `graph`: type `array` (example: `[[1,3],[0,2],[1,3],[0,2]]`).\n- Return type: `boolean`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(V+E)`, space `O(V)`.\n\n### Constraints\n- 1 ≤ V ≤ 10^5\n- 0 ≤ E ≤ 2·10^5\n",
   "leetcodeUrl": "https://leetcode.com/problems/is-graph-bipartite/",
   "complexity": {
     "time": "O(V+E)",

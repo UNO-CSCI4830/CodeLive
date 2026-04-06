@@ -1,0 +1,79 @@
+{
+  "id": "cursor-feed-pagination",
+  "title": "Cursor Feed Pagination",
+  "category": "backend",
+  "difficulty": "medium",
+  "description": "Implement cursor-based pagination for a feed endpoint with stable next cursor semantics.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `GET /feed?limit=2`\n- `GET /feed?limit=2&cursor=e2`\n- `GET /feed?limit=2&cursor=e4`\n\n### Request Replay (Executed In Order)\n1. `GET /feed?limit=2`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"items\":[{\"id\":\"e1\"},{\"id\":\"e2\"}],\"next_cursor\":\"e2\"}`\n\n2. `GET /feed?limit=2&cursor=e2`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"items\":[{\"id\":\"e3\"},{\"id\":\"e4\"}],\"next_cursor\":\"e4\"}`\n\n3. `GET /feed?limit=2&cursor=e4`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"items\":[{\"id\":\"e5\"}],\"next_cursor\":null}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Treat cursor as exclusive.",
+    "Derive page start index from cursor lookup."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "cursor-pagination",
+    "api-contracts"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Cursor Feed Pagination\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.get(\"/feed\")\nasync def cursor_feed_pagination_get_feed():\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "GET",
+        "path": "/feed?limit=2",
+        "expected_status": 200,
+        "expected_body": {
+          "items": [
+            {
+              "id": "e1"
+            },
+            {
+              "id": "e2"
+            }
+          ],
+          "next_cursor": "e2"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/feed?limit=2&cursor=e2",
+        "expected_status": 200,
+        "expected_body": {
+          "items": [
+            {
+              "id": "e3"
+            },
+            {
+              "id": "e4"
+            }
+          ],
+          "next_cursor": "e4"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/feed?limit=2&cursor=e4",
+        "expected_status": 200,
+        "expected_body": {
+          "items": [
+            {
+              "id": "e5"
+            }
+          ],
+          "next_cursor": null
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 5
+}

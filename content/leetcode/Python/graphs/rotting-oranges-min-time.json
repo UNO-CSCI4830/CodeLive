@@ -3,7 +3,7 @@
   "title": "Minimum Time to Rot All Oranges",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given In a grid, 0 is empty, 1 is fresh orange, 2 is rotten. Every minute, a rotten orange rots adjacent fresh ones. Return the minimum minutes to rot all oranges, or -1 if impossible.\n\nConstraints:\n- 1 ≤ m, n ≤ 200",
+  "description": "### Objective\nIn a grid, 0 is empty, 1 is fresh orange, 2 is rotten. Every minute, a rotten orange rots adjacent fresh ones. Return the minimum minutes to rot all oranges, or -1 if impossible.\n\n### Function Contract\nImplement `oranges_rotting(grid: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `grid`: type `array` (example: `[[2,1,1],[1,1,0],[0,1,1]]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(mn)`, space `O(mn)`.\n\n### Constraints\n- 1 ≤ m, n ≤ 200\n",
   "leetcodeUrl": "https://leetcode.com/problems/rotting-oranges/",
   "complexity": {
     "time": "O(mn)",

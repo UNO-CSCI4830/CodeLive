@@ -3,7 +3,7 @@
   "title": "Zigzag Level Order Traversal",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Return level order traversal of a binary tree, but reverse the node order on every other level to produce a zigzag pattern. The root level is left-to-right, the next is right-to-left, and so on. Use a queue and avoid extra per-node allocations to keep it fast for typing practice.\n\n    \n\nConstraints:\n    - 0 ≤ nodes ≤ 10^5\n- Node values are 32-bit signed",
+  "description": "### Objective\nReturn level order traversal of a binary tree, but reverse the node order on every other level to produce a zigzag pattern. The root level is left-to-right, the next is right-to-left, and so on. Use a queue and avoid extra per-node allocations to keep it fast for typing practice.\n\n### Function Contract\nImplement `__init__(self: any, val: any, left: any, right: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `tree`: type `array` (example: `[3,9,20,null,null,15,7]`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(w)`.\n\n### Constraints\n- 0 ≤ nodes ≤ 10^5\n- Node values are 32-bit signed\n",
   "leetcodeUrl": "https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/",
   "complexity": {
     "time": "O(n)",

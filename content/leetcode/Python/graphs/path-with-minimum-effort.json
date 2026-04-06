@@ -3,7 +3,7 @@
   "title": "Path with Minimum Effort in a Grid",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a matrix heights, the cost of a path is the maximum absolute difference in heights between adjacent cells along the path. Return the minimal possible cost from top-left to bottom-right. Use Dijkstra on edges weighted by height differences, combining the path's cost via max aggregation.\n\n    \n\nConstraints:\n    - 1 ≤ m, n ≤ 100",
+  "description": "### Objective\nGiven a matrix heights, the cost of a path is the maximum absolute difference in heights between adjacent cells along the path. Return the minimal possible cost from top-left to bottom-right. Use Dijkstra on edges weighted by height differences, combining the path's cost via max aggregation.\n\n### Function Contract\nImplement `minimum_effort_path(heights: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `heights`: type `array` (example: `[[1,2,2],[3,8,2],[5,3,5]]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(mn log mn)`, space `O(mn)`.\n\n### Constraints\n- 1 ≤ m, n ≤ 100\n",
   "leetcodeUrl": "https://leetcode.com/problems/path-with-minimum-effort/",
   "complexity": {
     "time": "O(mn log mn)",

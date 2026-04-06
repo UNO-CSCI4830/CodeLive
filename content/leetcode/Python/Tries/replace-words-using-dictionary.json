@@ -3,7 +3,7 @@
   "title": "Replace Words Using a Dictionary of Roots",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a dictionary of root words and a sentence, replace each word in the sentence with the shortest root from the dictionary that is a prefix of the word. If no root applies, leave the word unchanged. Use a trie to find the minimum-length matching root in O(L) time per word where L is the word length.\n\n    \n\nConstraints:\n    - 1 ≤ |dictionary| ≤ 10^5\n- Total characters in dictionary ≤ 2·10^6\n- Sentence length ≤ 10^5 characters",
+  "description": "### Objective\nGiven a dictionary of root words and a sentence, replace each word in the sentence with the shortest root from the dictionary that is a prefix of the word. If no root applies, leave the word unchanged. Use a trie to find the minimum-length matching root in O(L) time per word where L is the word length.\n\n### Function Contract\nImplement `__init__(self: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `dictionary`: type `array` (example: `[\"cat\",\"bat\",\"rat\"]`).\n- Input `sentence`: type `string` (example: `\"the cattle was rattled by the battery\"`).\n- Return type: `string`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(T + S)`, space `O(T)`.\n\n### Constraints\n- 1 ≤ |dictionary| ≤ 10^5\n- Total characters in dictionary ≤ 2·10^6\n- Sentence length ≤ 10^5 characters\n",
   "leetcodeUrl": "https://leetcode.com/problems/replace-words/",
   "complexity": {
     "time": "O(T + S)",

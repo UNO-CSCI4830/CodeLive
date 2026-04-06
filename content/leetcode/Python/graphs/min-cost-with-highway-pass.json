@@ -3,7 +3,7 @@
   "title": "Minimum Toll with Freeways and Tolls",
   "difficulty": "Hard",
   "language": "python",
-  "description": "Given You have a directed road network with edges of two types: freeways (cost 0) and toll roads (positive cost). Given source s and target t, return the minimum total cost. Use 0-1 BFS when costs are 0 or 1; otherwise use Dijkstra that handles 0-cost edges correctly.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 10^5\n- 0 ≤ |edges| ≤ 2·10^5\n- Edge costs ≥ 0",
+  "description": "### Objective\nYou have a directed road network with edges of two types: freeways (cost 0) and toll roads (positive cost). Given source s and target t, return the minimum total cost. Use 0-1 BFS when costs are 0 or 1; otherwise use Dijkstra that handles 0-cost edges correctly.\n\n### Function Contract\nImplement `min_toll(n: int, edges: List[List[int]], s: int, t: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `n`: type `number` (example: `3`).\n- Input `edges`: type `array` (example: `[[0,1,0],[1,2,5],[0,2,10]]`).\n- Input `s`: type `number` (example: `0`).\n- Input `t`: type `number` (example: `2`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O((V+E) log V)`, space `O(V+E)`.\n\n### Constraints\n- 1 ≤ n ≤ 10^5\n- 0 ≤ |edges| ≤ 2·10^5\n- Edge costs ≥ 0\n",
   "leetcodeUrl": "https://leetcode.com/problems/minimum-cost-to-make-at-least-one-valid-path-in-a-grid/",
   "complexity": {
     "time": "O((V+E) log V)",

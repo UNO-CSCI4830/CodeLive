@@ -1,0 +1,58 @@
+{
+  "id": "structured-request-logs",
+  "title": "Structured Request Logs",
+  "category": "backend",
+  "difficulty": "easy",
+  "description": "Capture structured request logs and expose a debug read endpoint.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `GET /echo-log?value=hi`\n- `GET /_debug/logs`\n- `GET /echo-log?value=again`\n\n### Request Replay (Executed In Order)\n1. `GET /echo-log?value=hi`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"echo\":\"hi\"}`\n\n2. `GET /_debug/logs`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"count\":1}`\n\n3. `GET /echo-log?value=again`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"echo\":\"again\"}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Store logs as dict entries in a list.",
+    "Include method and path in each record."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "logging",
+    "observability"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Structured Request Logs\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.get(\"/echo-log\")\nasync def structured_request_logs_get_echo_log():\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n\n@app.get(\"/_debug/logs\")\nasync def structured_request_logs_get_debug_logs():\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "GET",
+        "path": "/echo-log?value=hi",
+        "expected_status": 200,
+        "expected_body": {
+          "echo": "hi"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/_debug/logs",
+        "expected_status": 200,
+        "expected_body": {
+          "count": 1
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/echo-log?value=again",
+        "expected_status": 200,
+        "expected_body": {
+          "echo": "again"
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 45
+}

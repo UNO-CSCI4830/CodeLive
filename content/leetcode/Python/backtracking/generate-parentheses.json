@@ -3,7 +3,7 @@
   "title": "Generate Balanced Parentheses",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given Generate all combinations of n pairs of balanced parentheses. Track how many opens and closes have been placed. Close only if closes < opens to maintain validity at every step.\n\nConstraints:\n- 1 ≤ n ≤ 10",
+  "description": "### Objective\nGenerate all combinations of n pairs of balanced parentheses. Track how many opens and closes have been placed. Close only if closes < opens to maintain validity at every step.\n\n### Function Contract\nImplement `generate_parentheses(n: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `n`: type `number` (example: `1`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(Catalan(n))`, space `O(n)`.\n\n### Constraints\n- 1 ≤ n ≤ 10\n",
   "leetcodeUrl": "https://leetcode.com/problems/generate-parentheses/",
   "complexity": {
     "time": "O(Catalan(n))",

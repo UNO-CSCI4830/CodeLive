@@ -41,7 +41,7 @@
   animation: timer-pulse 1s ease-in-out infinite;
 }
 
-.timer--locked .timer-ring-fg {
+.timer--paused .timer-ring-fg {
   stroke: var(--muted-fg);
 }
 
@@ -68,7 +68,7 @@
   color: var(--accent);
 }
 
-.timer--locked .timer-lock-icon {
+.timer--paused .timer-lock-icon {
   color: var(--muted-fg);
 }
 
@@ -88,9 +88,15 @@
   color: var(--accent);
 }
 
-.timer--locked .timer-digits {
+.timer--paused .timer-digits {
   color: var(--muted-fg);
-  text-decoration: line-through;
+}
+
+.timer-paused-label {
+  font-size: 0.625rem;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--muted-fg);
 }
 
 /* ── Pause/Play toggle ───────────────────────────── */
@@ -110,6 +116,11 @@
 .timer-toggle:hover {
   background: var(--border);
   color: var(--fg);
+}
+
+.timer-toggle:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .timer-toggle-icon {

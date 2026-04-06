@@ -1,9 +1,9 @@
 {
-  "id": "top-k-frequent-elements",
+  "id": "top-k-frequent-elements-heap",
   "title": "Top-K Frequent Elements",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given an integer array, return the k most frequent elements in any order. Use a counter to compute frequencies, then maintain a size-k min-heap keyed by frequency. This teaches combining hash maps with priority queues to keep the best k items while streaming.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- k ≥ 1",
+  "description": "### Objective\nGiven an integer array, return the k most frequent elements in any order. Use a counter to compute frequencies, then maintain a size-k min-heap keyed by frequency. This teaches combining hash maps with priority queues to keep the best k items while streaming.\n\n### Function Contract\nImplement `top_k_frequent(nums: List[int], k: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[1,1,1,2,2,3]`).\n- Input `k`: type `number` (example: `2`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n log k)`, space `O(n)`.\n\n### Constraints\n- 1 ≤ len(nums) ≤ 10^5\n- k ≥ 1\n",
   "leetcodeUrl": "https://leetcode.com/problems/top-k-frequent-elements/",
   "complexity": {
     "time": "O(n log k)",

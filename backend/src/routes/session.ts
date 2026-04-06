@@ -9,16 +9,45 @@ function generateJoinCode(): string {
   return uuidv4().replace(/-/g, "").slice(0, 6).toUpperCase();
 }
 
+function safeTimeLimit(raw: unknown): number {
+  const parsed = Number(raw);
+  if (!Number.isFinite(parsed) || parsed <= 0) return 30;
+  return Math.floor(parsed);
+}
+
+function extractLastName(fullName: string): string | null {
+  const parts = fullName
+    .split(/\s+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+  if (parts.length === 0) return null;
+  if (parts.length === 1) return null;
+  return parts[parts.length - 1];
+}
+
 // ─── Create a new session ────────────────────────────────────────────
 // POST /api/sessions
-// Body: { interviewerId, problems: [{ problemId, category, timeLimit }] }
+// Body: { interviewerId, aiEnabled, totalInterviewMinutes, problems: [{ problemId, category, timeLimit }] }
 router.post(
   "/api/sessions",
   async (req: Request, res: Response): Promise<void> => {
-    const { interviewerId, problems } = req.body;
+    const { interviewerId, problems, aiEnabled, totalInterviewMinutes, groupId } = req.body;
 
     if (!interviewerId || !problems || !Array.isArray(problems) || problems.length === 0) {
       res.status(400).json({ error: "interviewerId and problems[] are required" });
+      return;
+    }
+
+    if (aiEnabled != null && typeof aiEnabled !== "boolean") {
+      res.status(400).json({ error: "aiEnabled must be a boolean when provided" });
+      return;
+    }
+
+    if (
+      totalInterviewMinutes != null
+      && (!Number.isFinite(Number(totalInterviewMinutes)) || Number(totalInterviewMinutes) <= 0)
+    ) {
+      res.status(400).json({ error: "totalInterviewMinutes must be a positive number when provided" });
       return;
     }
 
@@ -37,12 +66,46 @@ router.post(
       attempts++;
     }
 
+    const totalTimeLimitMinutes = problems.reduce(
+      (sum: number, p: { timeLimit?: number }) => sum + safeTimeLimit(p?.timeLimit),
+      0,
+    );
+    const explicitTotalMinutes = totalInterviewMinutes != null
+      ? Math.floor(Number(totalInterviewMinutes))
+      : null;
+
+    let validatedGroupId: string | null = null;
+    if (groupId != null) {
+      const groupIdValue = String(groupId).trim();
+      if (groupIdValue.length > 0) {
+        const { data: group, error: groupError } = await supabaseAdmin
+          .from("interviewer_groups")
+          .select("id, interviewer_id")
+          .eq("id", groupIdValue)
+          .maybeSingle();
+
+        if (groupError || !group || group.interviewer_id !== interviewerId) {
+          res.status(400).json({ error: "Invalid group selection for interviewer." });
+          return;
+        }
+
+        validatedGroupId = group.id;
+      }
+    }
+
     // Create the session
     const { data: session, error: sessionError } = await supabaseAdmin
       .from("sessions")
       .insert({
         interviewer_id: interviewerId,
         join_code: joinCode,
+        ai_enabled: aiEnabled ?? true,
+        group_id: validatedGroupId,
+        total_time_limit_minutes: explicitTotalMinutes ?? totalTimeLimitMinutes,
+        timer_paused: false,
+        timer_paused_seconds: 0,
+        timer_paused_at: null,
+        current_question_started_at: new Date().toISOString(),
         status: "waiting",
         current_index: 0,
       })
@@ -60,7 +123,7 @@ router.post(
         session_id: session.id,
         problem_id: p.problemId,
         category: p.category,
-        time_limit: p.timeLimit ?? 30,
+        time_limit: safeTimeLimit(p.timeLimit),
         order_index: i,
       }),
     );
@@ -121,13 +184,31 @@ router.post(
       return;
     }
 
+    const { data: candidateProfile } = await supabaseAdmin
+      .from("profiles")
+      .select("name")
+      .eq("id", candidateId)
+      .maybeSingle();
+    const candidateName = candidateProfile?.name?.trim() || "Candidate";
+    const candidateLastName = extractLastName(candidateName);
+
+    const { data: authUserData } = await supabaseAdmin.auth.admin.getUserById(candidateId);
+    const candidateEmail = authUserData?.user?.email?.trim() || null;
+
     // Assign candidate and activate
     const { data: updated, error: updateError } = await supabaseAdmin
       .from("sessions")
       .update({
         candidate_id: candidateId,
+        candidate_name: candidateName,
+        candidate_last_name: candidateLastName,
+        candidate_email: candidateEmail,
         status: "active",
         started_at: new Date().toISOString(),
+        current_question_started_at: new Date().toISOString(),
+        timer_paused: false,
+        timer_paused_seconds: 0,
+        timer_paused_at: null,
       })
       .eq("id", session.id)
       .select()
@@ -197,12 +278,24 @@ router.post(
     const nextIndex = session.current_index + 1;
 
     if (nextIndex >= totalProblems) {
+      const nowMs = Date.now();
+      const pausedAtMs = session.timer_paused_at
+        ? new Date(session.timer_paused_at).getTime()
+        : nowMs;
+      const elapsedPausedSeconds = session.timer_paused
+        ? Math.max(Math.floor((nowMs - pausedAtMs) / 1000), 0)
+        : 0;
+      const finalPausedSeconds = (session.timer_paused_seconds ?? 0) + elapsedPausedSeconds;
+
       // All questions done — mark session complete
       await supabaseAdmin
         .from("sessions")
         .update({
           status: "completed",
           ended_at: new Date().toISOString(),
+          timer_paused: false,
+          timer_paused_at: null,
+          timer_paused_seconds: finalPausedSeconds,
         })
         .eq("id", sessionId);
 
@@ -210,17 +303,12 @@ router.post(
       return;
     }
 
-    // Lock the current problem
-    await supabaseAdmin
-      .from("session_problems")
-      .update({ locked: true })
-      .eq("session_id", sessionId)
-      .eq("order_index", session.current_index);
-
     // Advance
     const { data: updated } = await supabaseAdmin
       .from("sessions")
-      .update({ current_index: nextIndex })
+      .update({
+        current_index: nextIndex,
+      })
       .eq("id", sessionId)
       .select()
       .single();
@@ -232,25 +320,172 @@ router.post(
   },
 );
 
-// ─── Lock a problem (timer expired) ─────────────────────────────────
-// POST /api/sessions/:sessionId/lock/:orderIndex
+// ─── Jump to a specific question index (shared between both users) ───────
+// POST /api/sessions/:sessionId/select
+// Body: { index: number }
 router.post(
-  "/api/sessions/:sessionId/lock/:orderIndex",
+  "/api/sessions/:sessionId/select",
   async (req: Request, res: Response): Promise<void> => {
-    const { sessionId, orderIndex } = req.params;
+    const { sessionId } = req.params;
+    const index = Number(req.body?.index);
 
-    const { error } = await supabaseAdmin
-      .from("session_problems")
-      .update({ locked: true })
-      .eq("session_id", sessionId)
-      .eq("order_index", parseInt(orderIndex, 10));
-
-    if (error) {
-      res.status(500).json({ error: error.message });
+    if (!Number.isInteger(index) || index < 0) {
+      res.status(400).json({ error: "index must be a non-negative integer" });
       return;
     }
 
-    res.json({ locked: true });
+    const { data: session } = await supabaseAdmin
+      .from("sessions")
+      .select("id, status, problems:session_problems(id)")
+      .eq("id", sessionId)
+      .maybeSingle();
+
+    if (!session) {
+      res.status(404).json({ error: "Session not found" });
+      return;
+    }
+
+    const totalProblems = session.problems?.length ?? 0;
+    if (index >= totalProblems) {
+      res.status(400).json({ error: "index out of range" });
+      return;
+    }
+
+    if (session.status !== "active" && session.status !== "waiting") {
+      res.status(400).json({ error: "Session is not editable" });
+      return;
+    }
+
+    const { data: updated, error } = await supabaseAdmin
+      .from("sessions")
+      .update({ current_index: index })
+      .eq("id", sessionId)
+      .select("current_index")
+      .single();
+
+    if (error || !updated) {
+      res.status(500).json({ error: error?.message ?? "Failed to switch question" });
+      return;
+    }
+
+    res.json({ currentIndex: updated.current_index });
+  },
+);
+
+// ─── Pause shared interview timer ─────────────────────────────────────────
+// POST /api/sessions/:sessionId/timer/pause
+router.post(
+  "/api/sessions/:sessionId/timer/pause",
+  async (req: Request, res: Response): Promise<void> => {
+    const { sessionId } = req.params;
+
+    const { data: session } = await supabaseAdmin
+      .from("sessions")
+      .select("id, status, timer_paused, timer_paused_seconds, timer_paused_at")
+      .eq("id", sessionId)
+      .maybeSingle();
+
+    if (!session) {
+      res.status(404).json({ error: "Session not found" });
+      return;
+    }
+
+    if (session.status !== "active") {
+      res.status(400).json({ error: "Only active sessions can pause the timer" });
+      return;
+    }
+
+    if (session.timer_paused) {
+      res.json({
+        timerPaused: true,
+        timerPausedAt: session.timer_paused_at,
+        timerPausedSeconds: session.timer_paused_seconds ?? 0,
+      });
+      return;
+    }
+
+    const nowIso = new Date().toISOString();
+    const { data: updated, error } = await supabaseAdmin
+      .from("sessions")
+      .update({
+        timer_paused: true,
+        timer_paused_at: nowIso,
+      })
+      .eq("id", sessionId)
+      .select("timer_paused, timer_paused_at, timer_paused_seconds")
+      .single();
+
+    if (error || !updated) {
+      res.status(500).json({ error: error?.message ?? "Failed to pause timer" });
+      return;
+    }
+
+    res.json({
+      timerPaused: updated.timer_paused,
+      timerPausedAt: updated.timer_paused_at,
+      timerPausedSeconds: updated.timer_paused_seconds ?? 0,
+    });
+  },
+);
+
+// ─── Resume shared interview timer ────────────────────────────────────────
+// POST /api/sessions/:sessionId/timer/resume
+router.post(
+  "/api/sessions/:sessionId/timer/resume",
+  async (req: Request, res: Response): Promise<void> => {
+    const { sessionId } = req.params;
+
+    const { data: session } = await supabaseAdmin
+      .from("sessions")
+      .select("id, status, timer_paused, timer_paused_seconds, timer_paused_at")
+      .eq("id", sessionId)
+      .maybeSingle();
+
+    if (!session) {
+      res.status(404).json({ error: "Session not found" });
+      return;
+    }
+
+    if (session.status !== "active") {
+      res.status(400).json({ error: "Only active sessions can resume the timer" });
+      return;
+    }
+
+    if (!session.timer_paused) {
+      res.json({
+        timerPaused: false,
+        timerPausedAt: null,
+        timerPausedSeconds: session.timer_paused_seconds ?? 0,
+      });
+      return;
+    }
+
+    const nowMs = Date.now();
+    const pausedAtMs = session.timer_paused_at ? new Date(session.timer_paused_at).getTime() : nowMs;
+    const elapsedPausedSeconds = Math.max(Math.floor((nowMs - pausedAtMs) / 1000), 0);
+    const nextPausedSeconds = (session.timer_paused_seconds ?? 0) + elapsedPausedSeconds;
+
+    const { data: updated, error } = await supabaseAdmin
+      .from("sessions")
+      .update({
+        timer_paused: false,
+        timer_paused_at: null,
+        timer_paused_seconds: nextPausedSeconds,
+      })
+      .eq("id", sessionId)
+      .select("timer_paused, timer_paused_at, timer_paused_seconds")
+      .single();
+
+    if (error || !updated) {
+      res.status(500).json({ error: error?.message ?? "Failed to resume timer" });
+      return;
+    }
+
+    res.json({
+      timerPaused: updated.timer_paused,
+      timerPausedAt: updated.timer_paused_at,
+      timerPausedSeconds: updated.timer_paused_seconds ?? nextPausedSeconds,
+    });
   },
 );
 
@@ -260,12 +495,31 @@ router.post(
   "/api/sessions/:sessionId/end",
   async (req: Request, res: Response): Promise<void> => {
     const { sessionId } = req.params;
+    const { data: session } = await supabaseAdmin
+      .from("sessions")
+      .select("timer_paused, timer_paused_at, timer_paused_seconds")
+      .eq("id", sessionId)
+      .maybeSingle();
+
+    if (!session) {
+      res.status(404).json({ error: "Session not found" });
+      return;
+    }
+
+    const nowMs = Date.now();
+    const pausedAtMs = session.timer_paused_at ? new Date(session.timer_paused_at).getTime() : nowMs;
+    const elapsedPausedSeconds =
+      session.timer_paused ? Math.max(Math.floor((nowMs - pausedAtMs) / 1000), 0) : 0;
+    const finalPausedSeconds = (session.timer_paused_seconds ?? 0) + elapsedPausedSeconds;
 
     const { error } = await supabaseAdmin
       .from("sessions")
       .update({
         status: "completed",
         ended_at: new Date().toISOString(),
+        timer_paused: false,
+        timer_paused_at: null,
+        timer_paused_seconds: finalPausedSeconds,
       })
       .eq("id", sessionId);
 

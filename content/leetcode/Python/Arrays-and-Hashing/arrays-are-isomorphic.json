@@ -3,7 +3,7 @@
   "title": "Arrays Are Isomorphic",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Given Two arrays a and b are isomorphic if we can replace each distinct value in a with a unique value so that a becomes b. Determine whether the two arrays are isomorphic. This requires a one-to-one mapping in both directions to avoid collisions.\n\n    \n\nConstraints:\n    - 1 ≤ len(a), len(b) ≤ 10^5\n- Arrays can contain any integers in 32-bit range",
+  "description": "### Objective\nGiven two arrays a and b are isomorphic if we can replace each distinct value in a with a unique value so that a becomes b. Determine whether the two arrays are isomorphic. This requires a one-to-one mapping in both directions to avoid collisions.\n\n### Function Contract\nImplement `arrays_isomorphic(a: List[int], b: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `a`: type `array` (example: `[1,2,1]`).\n- Input `b`: type `array` (example: `[9,8,9]`).\n- Return type: `boolean`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(n)`.\n\n### Constraints\n- 1 ≤ len(a), len(b) ≤ 10^5\n- Arrays can contain any integers in 32-bit range\n",
   "leetcodeUrl": "https://leetcode.com/problems/isomorphic-strings/",
   "complexity": {
     "time": "O(n)",

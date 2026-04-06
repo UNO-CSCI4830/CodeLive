@@ -1,0 +1,64 @@
+{
+  "id": "maintenance-mode-switch",
+  "title": "Maintenance Mode Switch",
+  "category": "backend",
+  "difficulty": "easy",
+  "description": "Implement a maintenance gate that can be toggled by admins and blocks normal traffic.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /admin/maintenance`\n- `GET /status`\n\n### Request Replay (Executed In Order)\n1. `POST /admin/maintenance`\n   Request body: `{\"enabled\":true}`\n   Expected status: `200`\n   Expected body: `{\"enabled\":true}`\n\n2. `GET /status`\n   Request body: `(not provided)`\n   Expected status: `503`\n   Expected body: `{\"error\":\"maintenance_mode\"}`\n\n3. `POST /admin/maintenance`\n   Request body: `{\"enabled\":false}`\n   Expected status: `200`\n   Expected body: `{\"enabled\":false}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Use a module-level boolean state.",
+    "Short-circuit requests when enabled."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "feature-flags",
+    "operations"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Maintenance Mode Switch\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/admin/maintenance\")\nasync def maintenance_mode_switch_post_admin_maintenance(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n\n@app.get(\"/status\")\nasync def maintenance_mode_switch_get_status():\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/admin/maintenance",
+        "expected_status": 200,
+        "expected_body": {
+          "enabled": true
+        },
+        "body": {
+          "enabled": true
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/status",
+        "expected_status": 503,
+        "expected_body": {
+          "error": "maintenance_mode"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/admin/maintenance",
+        "expected_status": 200,
+        "expected_body": {
+          "enabled": false
+        },
+        "body": {
+          "enabled": false
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 16
+}

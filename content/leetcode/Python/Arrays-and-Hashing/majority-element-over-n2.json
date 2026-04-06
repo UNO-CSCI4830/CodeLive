@@ -3,7 +3,7 @@
   "title": "Majority Element over n/2",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Return the element that appears more than n/2 times in the array. You may assume such an element always exists. Use the Boyer–Moore voting algorithm to achieve O(n) time and O(1) space.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9",
+  "description": "### Objective\nReturn the element that appears more than n/2 times in the array. You may assume such an element always exists. Use the Boyer–Moore voting algorithm to achieve O(n) time and O(1) space.\n\n### Function Contract\nImplement `majority_elements_n_over_2(nums: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[3,2,3]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9\n",
   "leetcodeUrl": "https://leetcode.com/problems/majority-element/",
   "complexity": {
     "time": "O(n)",

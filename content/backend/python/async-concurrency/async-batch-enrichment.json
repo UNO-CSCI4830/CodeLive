@@ -1,0 +1,86 @@
+{
+  "id": "async-batch-enrichment",
+  "title": "Async Batch Enrichment",
+  "category": "backend",
+  "difficulty": "easy",
+  "description": "Process batched IDs asynchronously and return enriched records in order.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /enrich`\n\n### Request Replay (Executed In Order)\n1. `POST /enrich`\n   Request body: `{\"ids\":[\"a\",\"bb\"]}`\n   Expected status: `200`\n   Expected body: `{\"items\":[{\"id\":\"a\",\"score\":1},{\"id\":\"bb\",\"score\":2}]}`\n\n2. `POST /enrich`\n   Request body: `{\"ids\":[\"xyz\"]}`\n   Expected status: `200`\n   Expected body: `{\"items\":[{\"id\":\"xyz\",\"score\":3}]}`\n\n3. `POST /enrich`\n   Request body: `{\"ids\":[]}`\n   Expected status: `200`\n   Expected body: `{\"items\":[]}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Use async helpers with gather.",
+    "Map results back to original order."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "asyncio",
+    "batch-processing"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Async Batch Enrichment\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/enrich\")\nasync def async_batch_enrichment_post_enrich(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/enrich",
+        "expected_status": 200,
+        "expected_body": {
+          "items": [
+            {
+              "id": "a",
+              "score": 1
+            },
+            {
+              "id": "bb",
+              "score": 2
+            }
+          ]
+        },
+        "body": {
+          "ids": [
+            "a",
+            "bb"
+          ]
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/enrich",
+        "expected_status": 200,
+        "expected_body": {
+          "items": [
+            {
+              "id": "xyz",
+              "score": 3
+            }
+          ]
+        },
+        "body": {
+          "ids": [
+            "xyz"
+          ]
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/enrich",
+        "expected_status": 200,
+        "expected_body": {
+          "items": []
+        },
+        "body": {
+          "ids": []
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 19
+}

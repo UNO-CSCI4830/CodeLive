@@ -1,0 +1,73 @@
+{
+  "id": "webhook-event-ordering",
+  "title": "Webhook Event Ordering",
+  "category": "backend",
+  "difficulty": "medium",
+  "description": "Enforce per-stream ordering for webhook events by sequence number.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /webhook/ordered`\n\n### Request Replay (Executed In Order)\n1. `POST /webhook/ordered`\n   Request body: `{\"stream_id\":\"s1\",\"sequence\":1}`\n   Expected status: `202`\n   Expected body: `{\"accepted\":true,\"next_sequence\":2}`\n\n2. `POST /webhook/ordered`\n   Request body: `{\"stream_id\":\"s1\",\"sequence\":3}`\n   Expected status: `409`\n   Expected body: `{\"error\":\"out_of_order\",\"expected\":2}`\n\n3. `POST /webhook/ordered`\n   Request body: `{\"stream_id\":\"s1\",\"sequence\":2}`\n   Expected status: `202`\n   Expected body: `{\"accepted\":true,\"next_sequence\":3}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Track next expected sequence by stream.",
+    "Acknowledge only exact expected sequence."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "ordering",
+    "event-streams"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Webhook Event Ordering\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/webhook/ordered\")\nasync def webhook_event_ordering_post_webhook_ordered(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/webhook/ordered",
+        "expected_status": 202,
+        "expected_body": {
+          "accepted": true,
+          "next_sequence": 2
+        },
+        "body": {
+          "stream_id": "s1",
+          "sequence": 1
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/webhook/ordered",
+        "expected_status": 409,
+        "expected_body": {
+          "error": "out_of_order",
+          "expected": 2
+        },
+        "body": {
+          "stream_id": "s1",
+          "sequence": 3
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/webhook/ordered",
+        "expected_status": 202,
+        "expected_body": {
+          "accepted": true,
+          "next_sequence": 3
+        },
+        "body": {
+          "stream_id": "s1",
+          "sequence": 2
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 31
+}

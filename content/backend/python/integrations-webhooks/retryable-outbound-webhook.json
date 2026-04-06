@@ -1,0 +1,80 @@
+{
+  "id": "retryable-outbound-webhook",
+  "title": "Retryable Outbound Webhook",
+  "category": "backend",
+  "difficulty": "hard",
+  "description": "Implement bounded retry behavior for outbound webhook deliveries.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /notify`\n\n### Request Replay (Executed In Order)\n1. `POST /notify`\n   Request body: `{\"attempt_outcomes\":[500,502,200]}`\n   Expected status: `200`\n   Expected body: `{\"delivered\":true,\"attempts\":3}`\n\n2. `POST /notify`\n   Request body: `{\"attempt_outcomes\":[500,500,500]}`\n   Expected status: `502`\n   Expected body: `{\"delivered\":false,\"attempts\":3}`\n\n3. `POST /notify`\n   Request body: `{\"attempt_outcomes\":[204]}`\n   Expected status: `200`\n   Expected body: `{\"delivered\":true,\"attempts\":1}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Iterate outcomes in order.",
+    "Stop retries immediately on success."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "webhooks",
+    "retries"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Retryable Outbound Webhook\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/notify\")\nasync def retryable_outbound_webhook_post_notify(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/notify",
+        "expected_status": 200,
+        "expected_body": {
+          "delivered": true,
+          "attempts": 3
+        },
+        "body": {
+          "attempt_outcomes": [
+            500,
+            502,
+            200
+          ]
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/notify",
+        "expected_status": 502,
+        "expected_body": {
+          "delivered": false,
+          "attempts": 3
+        },
+        "body": {
+          "attempt_outcomes": [
+            500,
+            500,
+            500
+          ]
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/notify",
+        "expected_status": 200,
+        "expected_body": {
+          "delivered": true,
+          "attempts": 1
+        },
+        "body": {
+          "attempt_outcomes": [
+            204
+          ]
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 29
+}

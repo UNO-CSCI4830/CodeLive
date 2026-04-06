@@ -3,7 +3,7 @@
   "title": "Minimum Spanning Tree by Kruskal",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given an undirected connected graph with n nodes (0..n-1) and a list of edges [u,v,w], compute the total weight of the minimum spanning tree using Kruskal's algorithm.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 2·10^5\n- n-1 ≤ |edges| ≤ 3·10^5",
+  "description": "### Objective\nGiven an undirected connected graph with n nodes (0..n-1) and a list of edges [u,v,w], compute the total weight of the minimum spanning tree using Kruskal's algorithm.\n\n### Function Contract\nImplement `kruskal_mst(n: int, edges: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `n`: type `number` (example: `3`).\n- Input `edges`: type `array` (example: `[[0,1,1],[1,2,2],[0,2,3]]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(E log E)`, space `O(n)`.\n\n### Constraints\n- 1 ≤ n ≤ 2·10^5\n- n-1 ≤ |edges| ≤ 3·10^5\n",
   "leetcodeUrl": "https://leetcode.com/problems/minimum-cost-to-connect-sticks/",
   "complexity": {
     "time": "O(E log E)",

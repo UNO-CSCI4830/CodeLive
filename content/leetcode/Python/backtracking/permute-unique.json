@@ -3,7 +3,7 @@
   "title": "Unique Permutations with Duplicates",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Return all unique permutations of a list that may contain duplicates. Sort the list and use a used[] array. Skip choosing the same value at the same depth when its previous copy has not been used.\n\nConstraints:\n- 0 ≤ n ≤ 9",
+  "description": "### Objective\nReturn all unique permutations of a list that may contain duplicates. Sort the list and use a used[] array. Skip choosing the same value at the same depth when its previous copy has not been used.\n\n### Function Contract\nImplement `permute_unique(nums: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[1,1,2]`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n·n!)`, space `O(n)`.\n\n### Constraints\n- 0 ≤ n ≤ 9\n",
   "leetcodeUrl": "https://leetcode.com/problems/permutations-ii/",
   "complexity": {
     "time": "O(n·n!)",

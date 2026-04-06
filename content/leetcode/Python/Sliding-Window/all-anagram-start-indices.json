@@ -3,7 +3,7 @@
   "title": "All Anagram Start Indices",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Return all starting indices of substrings in s that are anagrams of pattern. Use a sliding window of length len(pattern) and record index whenever the window frequency matches the pattern frequency.\n\n    \n\nConstraints:\n    - 1 ≤ len(pattern) ≤ 10^4\n- 1 ≤ len(s) ≤ 10^5",
+  "description": "### Objective\nReturn all starting indices of substrings in s that are anagrams of pattern. Use a sliding window of length len(pattern) and record index whenever the window frequency matches the pattern frequency.\n\n### Function Contract\nImplement `all_anagram_start_indices(pattern: str, s: str)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `pattern`: type `string` (example: `\"ab\"`).\n- Input `s`: type `string` (example: `\"cbaebabacd\"`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1) for fixed alphabet`.\n\n### Constraints\n- 1 ≤ len(pattern) ≤ 10^4\n- 1 ≤ len(s) ≤ 10^5\n",
   "leetcodeUrl": "https://leetcode.com/problems/find-all-anagrams-in-a-string/",
   "complexity": {
     "time": "O(n)",

@@ -3,7 +3,7 @@
   "title": "Find the K-th Largest Value in an Array",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given an unsorted integer array nums and an integer k (1-indexed), return the k-th largest element in the array. Solve it in O(n log k) using a size-k min-heap so the heap always stores the current k largest elements. This reinforces priority queue maintenance and the idea that the root of a min-heap tracks the smallest among the kept candidates.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9\n- 1 ≤ k ≤ len(nums)",
+  "description": "### Objective\nGiven an unsorted integer array nums and an integer k (1-indexed), return the k-th largest element in the array. Solve it in O(n log k) using a size-k min-heap so the heap always stores the current k largest elements. This reinforces priority queue maintenance and the idea that the root of a min-heap tracks the smallest among the kept candidates.\n\n### Function Contract\nImplement `kth_largest(nums: List[int], k: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[3,2,1,5,6,4]`).\n- Input `k`: type `number` (example: `2`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n log k)`, space `O(k)`.\n\n### Constraints\n- 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9\n- 1 ≤ k ≤ len(nums)\n",
   "leetcodeUrl": "https://leetcode.com/problems/kth-largest-element-in-an-array/",
   "complexity": {
     "time": "O(n log k)",
@@ -88,7 +88,7 @@
     "Heap root equals the answer at the end"
   ],
   "relatedProblems": [
-    "top-k-frequent-elements",
+    "top-k-frequent-elements-heap",
     "k-closest-points"
   ],
   "difficulty_metrics": {

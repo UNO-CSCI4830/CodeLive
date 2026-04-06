@@ -1,0 +1,71 @@
+{
+  "id": "chunked-upload-assembler",
+  "title": "Chunked Upload Assembler",
+  "category": "backend",
+  "difficulty": "medium",
+  "description": "Assemble chunked uploads in memory and finalize into complete content.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /upload/chunk`\n- `POST /upload/complete`\n\n### Request Replay (Executed In Order)\n1. `POST /upload/chunk`\n   Request body: `{\"upload_id\":\"u1\",\"index\":0,\"chunk\":\"Hel\"}`\n   Expected status: `200`\n   Expected body: `{\"stored\":true}`\n\n2. `POST /upload/chunk`\n   Request body: `{\"upload_id\":\"u1\",\"index\":1,\"chunk\":\"lo\"}`\n   Expected status: `200`\n   Expected body: `{\"stored\":true}`\n\n3. `POST /upload/complete`\n   Request body: `{\"upload_id\":\"u1\"}`\n   Expected status: `200`\n   Expected body: `{\"content\":\"Hello\"}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Use nested dict: upload_id -> index -> chunk.",
+    "Sort chunk indexes when joining."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "uploads",
+    "chunking"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Chunked Upload Assembler\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/upload/chunk\")\nasync def chunked_upload_assembler_post_upload_chunk(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n\n@app.post(\"/upload/complete\")\nasync def chunked_upload_assembler_post_upload_complete(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/upload/chunk",
+        "expected_status": 200,
+        "expected_body": {
+          "stored": true
+        },
+        "body": {
+          "upload_id": "u1",
+          "index": 0,
+          "chunk": "Hel"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/upload/chunk",
+        "expected_status": 200,
+        "expected_body": {
+          "stored": true
+        },
+        "body": {
+          "upload_id": "u1",
+          "index": 1,
+          "chunk": "lo"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/upload/complete",
+        "expected_status": 200,
+        "expected_body": {
+          "content": "Hello"
+        },
+        "body": {
+          "upload_id": "u1"
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 36
+}

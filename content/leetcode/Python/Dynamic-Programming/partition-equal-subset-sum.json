@@ -3,7 +3,7 @@
   "title": "Can Partition into Equal Sum Subsets",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Determine if you can partition nums into two subsets such that the sums are equal. Return True or False.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 200\n- 1 ≤ nums[i] ≤ 100",
+  "description": "### Objective\nDetermine if you can partition nums into two subsets such that the sums are equal. Return True or False.\n\n### Function Contract\nImplement `can_partition(nums: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[1,5,11,5]`).\n- Return type: `boolean`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n·target)`, space `O(target)`.\n\n### Constraints\n- 1 ≤ n ≤ 200\n- 1 ≤ nums[i] ≤ 100\n",
   "leetcodeUrl": "https://leetcode.com/problems/partition-equal-subset-sum/",
   "complexity": {
     "time": "O(n·target)",

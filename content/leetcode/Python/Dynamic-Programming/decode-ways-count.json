@@ -3,7 +3,7 @@
   "title": "Number of Ways to Decode",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given A string s containing only digits maps '1'→'A' ... '26'→'Z'. Return how many ways to decode s. Leading zeros are invalid and '0' can only appear as part of '10' or '20'.\n\n    \n\nConstraints:\n    - 1 ≤ |s| ≤ 100",
+  "description": "### Objective\nGiven a string s containing only digits maps '1'→'A' ... '26'→'Z'. Return how many ways to decode s. Leading zeros are invalid and '0' can only appear as part of '10' or '20'.\n\n### Function Contract\nImplement `num_decodings(s: str)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `s`: type `string` (example: `\"12\"`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 1 ≤ |s| ≤ 100\n",
   "leetcodeUrl": "https://leetcode.com/problems/decode-ways/",
   "complexity": {
     "time": "O(n)",

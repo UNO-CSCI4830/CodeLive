@@ -1,0 +1,59 @@
+{
+  "id": "safe-file-download",
+  "title": "Safe File Download",
+  "category": "backend",
+  "difficulty": "easy",
+  "description": "Prevent path traversal in file download routes by strict path sanitization.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `GET /download/readme.txt`\n- `GET /download/../secret.txt`\n- `GET /download/nested/secret.txt`\n\n### Request Replay (Executed In Order)\n1. `GET /download/readme.txt`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"filename\":\"readme.txt\",\"safe\":true}`\n\n2. `GET /download/../secret.txt`\n   Request body: `(not provided)`\n   Expected status: `400`\n   Expected body: `{\"error\":\"invalid_path\"}`\n\n3. `GET /download/nested/secret.txt`\n   Request body: `(not provided)`\n   Expected status: `400`\n   Expected body: `{\"error\":\"invalid_path\"}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Reject path separators and dot-dot segments.",
+    "Prefer allowlist character checks."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "file-security",
+    "path-validation"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Safe File Download\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.get(\"/download/{name:path}\")\nasync def safe_file_download_get_download(name: str):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "GET",
+        "path": "/download/readme.txt",
+        "expected_status": 200,
+        "expected_body": {
+          "filename": "readme.txt",
+          "safe": true
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/download/../secret.txt",
+        "expected_status": 400,
+        "expected_body": {
+          "error": "invalid_path"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/download/nested/secret.txt",
+        "expected_status": 400,
+        "expected_body": {
+          "error": "invalid_path"
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 33
+}

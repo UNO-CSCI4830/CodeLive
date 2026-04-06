@@ -3,7 +3,7 @@
   "title": "Minimum Cost to Reach the Top",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Given an array cost where cost[i] is the cost of step i, once paid you can climb one or two steps. You may start at step 0 or 1. Return the minimum cost to reach beyond the last step (the top).\n\n    \n\nConstraints:\n    - 2 ≤ n ≤ 1000\n- 0 ≤ cost[i] ≤ 1000",
+  "description": "### Objective\nGiven an array cost where cost[i] is the cost of step i, once paid you can climb one or two steps. You may start at step 0 or 1. Return the minimum cost to reach beyond the last step (the top).\n\n### Function Contract\nImplement `min_cost_climbing_stairs(cost: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `cost`: type `array` (example: `[10,15,20]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 2 ≤ n ≤ 1000\n- 0 ≤ cost[i] ≤ 1000\n",
   "leetcodeUrl": "https://leetcode.com/problems/min-cost-climbing-stairs/",
   "complexity": {
     "time": "O(n)",

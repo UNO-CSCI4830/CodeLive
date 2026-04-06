@@ -1,0 +1,79 @@
+{
+  "id": "priority-queue-worker",
+  "title": "Priority Queue Worker",
+  "category": "backend",
+  "difficulty": "hard",
+  "description": "Execute queued jobs by priority where lower numeric values run first.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /jobs/enqueue`\n- `POST /jobs/run-next`\n\n### Request Replay (Executed In Order)\n1. `POST /jobs/enqueue`\n   Request body: `{\"id\":\"a\",\"priority\":5}`\n   Expected status: `200`\n   Expected body: `{\"queued\":true}`\n\n2. `POST /jobs/enqueue`\n   Request body: `{\"id\":\"b\",\"priority\":1}`\n   Expected status: `200`\n   Expected body: `{\"queued\":true}`\n\n3. `POST /jobs/run-next`\n   Request body: `{}`\n   Expected status: `200`\n   Expected body: `{\"ran\":\"b\"}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n- `app/schemas.py`\n- `app/service.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Use heapq with tie-break sequence numbers.",
+    "Return job id that ran."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "priority-queues",
+    "workers"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Priority Queue Worker\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/jobs/enqueue\")\nasync def priority_queue_worker_post_jobs_enqueue(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n\n@app.post(\"/jobs/run-next\")\nasync def priority_queue_worker_post_jobs_run_next(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    },
+    {
+      "path": "app/schemas.py",
+      "content": "from pydantic import BaseModel\nfrom typing import Any, Dict, Optional\n\n# Optional schemas for harder multi-file challenges.\nclass PriorityQueueWorkerInput(BaseModel):\n    payload: Dict[str, Any] = {}\n    note: Optional[str] = None\n",
+      "language": "python",
+      "readonly": false
+    },
+    {
+      "path": "app/service.py",
+      "content": "from typing import Any, Dict\n\n# Optional service-layer helpers for harder multi-file challenges.\ndef apply_business_rules(state: Dict[str, Any], payload: Dict[str, Any]) -> Dict[str, Any]:\n    # TODO: Replace this stub with challenge-specific logic.\n    return {\"state_size\": len(state), \"payload_keys\": sorted(payload.keys())}\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/jobs/enqueue",
+        "expected_status": 200,
+        "expected_body": {
+          "queued": true
+        },
+        "body": {
+          "id": "a",
+          "priority": 5
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/jobs/enqueue",
+        "expected_status": 200,
+        "expected_body": {
+          "queued": true
+        },
+        "body": {
+          "id": "b",
+          "priority": 1
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/jobs/run-next",
+        "expected_status": 200,
+        "expected_body": {
+          "ran": "b"
+        },
+        "body": {}
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 42
+}

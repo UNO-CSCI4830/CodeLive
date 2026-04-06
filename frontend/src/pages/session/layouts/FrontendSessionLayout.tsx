@@ -25,6 +25,8 @@ interface Props {
   locked: boolean;
   userName: string;
   userColor: string;
+  aiEnabled: boolean;
+  canSendAi: boolean;
 }
 
 export interface SessionLayoutHandle {
@@ -39,7 +41,16 @@ export interface SessionLayoutHandle {
 }
 
 const FrontendSessionLayout = forwardRef<SessionLayoutHandle, Props>(function FrontendSessionLayout(
-  { sessionId, problemId, orderIndex, locked, userName, userColor },
+  {
+    sessionId,
+    problemId,
+    orderIndex,
+    locked,
+    userName,
+    userColor,
+    aiEnabled,
+    canSendAi,
+  },
   ref,
 ) {
   /* ── Problem data ─────────────────────────────────── */
@@ -265,6 +276,22 @@ const FrontendSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Fr
 
   return (
     <div className={`fsl-body ${isDragging ? "fsl-body--resizing" : ""}`}>
+      {aiEnabled && (
+        <AIAssistant
+          ref={aiRef}
+          sessionId={sessionId}
+          problemId={problemId}
+          orderIndex={orderIndex}
+          canSend={canSendAi}
+          problemTitle={problem.title}
+          problemDescription={problem.description ?? ""}
+          currentCode={fileContents[activeFilePath] ?? ""}
+          language={fileLanguage}
+          locked={locked}
+          problemKey={`${orderIndex}:${problemId}`}
+        />
+      )}
+
       {/* ── File tree ── */}
       <FileTree
         files={problem.starter_files}
@@ -351,16 +378,6 @@ const FrontendSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Fr
         </div>
       </section>
 
-      {/* ── AI assistant — sliding drawer on the far right ── */}
-      <AIAssistant
-        ref={aiRef}
-        problemTitle={problem.title}
-        problemDescription={problem.description ?? ""}
-        currentCode={fileContents[activeFilePath] ?? ""}
-        language={fileLanguage}
-        locked={locked}
-        problemKey={`${orderIndex}:${problemId}`}
-      />
     </div>
   );
 });

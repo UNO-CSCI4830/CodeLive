@@ -3,7 +3,7 @@
   "title": "Phone Keypad Letter Combinations",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a string of digits 2..9, return all possible letter combinations that the number could represent using the telephone keypad mapping. Use backtracking to append letters for each digit in order.\n\nConstraints:\n- 0 ≤ |digits| ≤ 10",
+  "description": "### Objective\nGiven a string of digits 2..9, return all possible letter combinations that the number could represent using the telephone keypad mapping. Use backtracking to append letters for each digit in order.\n\n### Function Contract\nImplement `letter_combinations(digits: str)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `digits`: type `string` (example: `\"23\"`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(3^m·4^n)`, space `O(L)`.\n\n### Constraints\n- 0 ≤ |digits| ≤ 10\n",
   "leetcodeUrl": "https://leetcode.com/problems/letter-combinations-of-a-phone-number/",
   "complexity": {
     "time": "O(3^m·4^n)",

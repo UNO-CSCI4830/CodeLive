@@ -3,7 +3,7 @@
   "title": "House Robber on a Ring",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given Like House Robber, but houses are in a circle. Adjacent houses and the first and last are adjacent. Return the maximum amount.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 1000\n- 0 ≤ nums[i] ≤ 10^4",
+  "description": "### Objective\nLike House Robber, but houses are in a circle. Adjacent houses and the first and last are adjacent. Return the maximum amount.\n\n### Function Contract\nImplement `rob_ring(nums: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[2,3,2]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 1 ≤ n ≤ 1000\n- 0 ≤ nums[i] ≤ 10^4\n",
   "leetcodeUrl": "https://leetcode.com/problems/house-robber-ii/",
   "complexity": {
     "time": "O(n)",

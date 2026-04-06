@@ -3,7 +3,7 @@
   "title": "Frequency Sort Array",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given Rearrange an array so that elements appear in ascending order of frequency. If two numbers share the same frequency, place the larger value first among those ties. Return the sorted array.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9",
+  "description": "### Objective\nRearrange an array so that elements appear in ascending order of frequency. If two numbers share the same frequency, place the larger value first among those ties. Return the sorted array.\n\n### Function Contract\nImplement `frequency_sort_array(nums: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[1,1,2,2,2,3]`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n log n)`, space `O(n)`.\n\n### Constraints\n- 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9\n",
   "leetcodeUrl": "https://leetcode.com/problems/sort-array-by-increasing-frequency/",
   "complexity": {
     "time": "O(n log n)",

@@ -3,7 +3,7 @@
   "title": "Right Side View",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Return the values of the nodes visible from the right side of a binary tree when looking from top to bottom.\n\nConstraints:\n- 0 ≤ nodes ≤ 10^5",
+  "description": "### Objective\nReturn the values of the nodes visible from the right side of a binary tree when looking from top to bottom.\n\n### Function Contract\nImplement `__init__(self: any, val: any, left: any, right: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `tree`: type `array` (example: `[1,2,3,null,5,null,4]`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(w)`.\n\n### Constraints\n- 0 ≤ nodes ≤ 10^5\n",
   "leetcodeUrl": "https://leetcode.com/problems/binary-tree-right-side-view/",
   "complexity": {
     "time": "O(n)",

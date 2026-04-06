@@ -3,7 +3,7 @@
   "title": "Min Subarray to Make Sum Divisible",
   "difficulty": "Hard",
   "language": "python",
-  "description": "Given an array nums and an integer p, remove the smallest length contiguous subarray so that the sum of the remaining elements is divisible by p. Return that minimal length, or -1 if impossible. The entire array cannot be removed.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- 1 ≤ p ≤ 10^9\n- -10^9 ≤ nums[i] ≤ 10^9",
+  "description": "### Objective\nGiven an array nums and an integer p, remove the smallest length contiguous subarray so that the sum of the remaining elements is divisible by p. Return that minimal length, or -1 if impossible. The entire array cannot be removed.\n\n### Function Contract\nImplement `min_subarray_to_make_sum_divisible(nums: List[int], p: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[3,1,4,2]`).\n- Input `p`: type `number` (example: `6`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(n)`.\n\n### Constraints\n- 1 ≤ len(nums) ≤ 10^5\n- 1 ≤ p ≤ 10^9\n- -10^9 ≤ nums[i] ≤ 10^9\n",
   "leetcodeUrl": "https://leetcode.com/problems/make-sum-divisible-by-p/",
   "complexity": {
     "time": "O(n)",

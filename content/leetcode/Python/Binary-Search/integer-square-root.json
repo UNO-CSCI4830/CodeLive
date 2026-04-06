@@ -3,7 +3,7 @@
   "title": "Integer Square Root",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Given Compute and return the integer square root of a nonnegative integer x. The integer square root is the greatest integer r such that r*r ≤ x. Avoid floating point arithmetic and use binary search.\n\n    \n\nConstraints:\n    - 0 ≤ x ≤ 2*10^31-1",
+  "description": "### Objective\nCompute and return the integer square root of a nonnegative integer x. The integer square root is the greatest integer r such that r*r ≤ x. Avoid floating point arithmetic and use binary search.\n\n### Function Contract\nImplement `integer_square_root(x: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `x`: type `number` (example: `4`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(log x)`, space `O(1)`.\n\n### Constraints\n- 0 ≤ x ≤ 2*10^31-1\n",
   "leetcodeUrl": "https://leetcode.com/problems/sqrtx/",
   "complexity": {
     "time": "O(log x)",

@@ -3,7 +3,7 @@
   "title": "Find Balance Pivot",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Return the index where the sum of elements to the left equals the sum to the right. If multiple pivots exist, return the leftmost. If no pivot exists, return -1.\n\n    \n\nConstraints:\n    - 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9",
+  "description": "### Objective\nReturn the index where the sum of elements to the left equals the sum to the right. If multiple pivots exist, return the leftmost. If no pivot exists, return -1.\n\n### Function Contract\nImplement `find_balance_pivot(nums: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[1,7,3,6,5,6]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 1 ≤ len(nums) ≤ 10^5\n- -10^9 ≤ nums[i] ≤ 10^9\n",
   "leetcodeUrl": "https://leetcode.com/problems/find-pivot-index/",
   "complexity": {
     "time": "O(n)",

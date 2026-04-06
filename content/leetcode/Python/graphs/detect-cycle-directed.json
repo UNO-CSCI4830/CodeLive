@@ -3,7 +3,7 @@
   "title": "Detect a Cycle in a Directed Graph",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a directed graph with V nodes (0..V-1) and edges, determine whether it contains a directed cycle.\n\n    \n\nConstraints:\n    - 1 ≤ V ≤ 10^5\n- 0 ≤ E ≤ 2·10^5",
+  "description": "### Objective\nGiven a directed graph with V nodes (0..V-1) and edges, determine whether it contains a directed cycle.\n\n### Function Contract\nImplement `has_cycle_directed(n: int, edges: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `n`: type `number` (example: `3`).\n- Input `edges`: type `array` (example: `[[0,1],[1,2],[2,0]]`).\n- Return type: `boolean`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(V+E)`, space `O(V)`.\n\n### Constraints\n- 1 ≤ V ≤ 10^5\n- 0 ≤ E ≤ 2·10^5\n",
   "leetcodeUrl": "https://leetcode.com/problems/course-schedule/",
   "complexity": {
     "time": "O(V+E)",

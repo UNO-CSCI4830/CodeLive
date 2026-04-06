@@ -1,0 +1,61 @@
+{
+  "id": "request-id-middleware",
+  "title": "Request ID Middleware",
+  "category": "backend",
+  "difficulty": "easy",
+  "description": "Implement request-id propagation so every response includes a request correlation value.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `GET /echo?request_id=req-123`\n- `GET /echo?request_id=req-xyz`\n- `GET /echo?request_id=req-abc`\n\n### Request Replay (Executed In Order)\n1. `GET /echo?request_id=req-123`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"message\":\"ok\",\"request_id\":\"req-123\"}`\n\n2. `GET /echo?request_id=req-xyz`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"message\":\"ok\",\"request_id\":\"req-xyz\"}`\n\n3. `GET /echo?request_id=req-abc`\n   Request body: `(not provided)`\n   Expected status: `200`\n   Expected body: `{\"message\":\"ok\",\"request_id\":\"req-abc\"}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Store request id on request.state.",
+    "Include request id in every success response."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "middleware",
+    "observability"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Request ID Middleware\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.get(\"/echo\")\nasync def request_id_middleware_get_echo():\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "GET",
+        "path": "/echo?request_id=req-123",
+        "expected_status": 200,
+        "expected_body": {
+          "message": "ok",
+          "request_id": "req-123"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/echo?request_id=req-xyz",
+        "expected_status": 200,
+        "expected_body": {
+          "message": "ok",
+          "request_id": "req-xyz"
+        }
+      },
+      {
+        "method": "GET",
+        "path": "/echo?request_id=req-abc",
+        "expected_status": 200,
+        "expected_body": {
+          "message": "ok",
+          "request_id": "req-abc"
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 15
+}

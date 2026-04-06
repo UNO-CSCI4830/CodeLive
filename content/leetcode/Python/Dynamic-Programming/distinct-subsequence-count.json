@@ -3,7 +3,7 @@
   "title": "Count Distinct Subsequences",
   "difficulty": "Hard",
   "language": "python",
-  "description": "Given strings s and t, return the number of distinct subsequences of s which equals t. Empty string t is always one subsequence of any s.\n\n    \n\nConstraints:\n    - 1 ≤ |s| ≤ 1000\n- 1 ≤ |t| ≤ 1000",
+  "description": "### Objective\nGiven strings s and t, return the number of distinct subsequences of s which equals t. Empty string t is always one subsequence of any s.\n\n### Function Contract\nImplement `num_distinct(s: str, t: str)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `s`: type `string` (example: `\"rabbbit\"`).\n- Input `t`: type `string` (example: `\"rabbit\"`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(nm)`, space `O(nm)`.\n\n### Constraints\n- 1 ≤ |s| ≤ 1000\n- 1 ≤ |t| ≤ 1000\n",
   "leetcodeUrl": "https://leetcode.com/problems/distinct-subsequences/",
   "complexity": {
     "time": "O(nm)",

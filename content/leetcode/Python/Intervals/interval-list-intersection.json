@@ -3,7 +3,7 @@
   "title": "Intersect Two Schedules",
   "difficulty": "Medium",
   "language": "python",
-  "description": "You are given two lists of disjoint, sorted closed intervals. Return their intersection as a list of closed intervals. If no overlap exists for a pair, skip it.\n\n    \n\nConstraints:\n    - 0 ≤ n,m ≤ 10^5\n- -10^9 ≤ start ≤ end ≤ 10^9",
+  "description": "### Objective\nYou are given two lists of disjoint, sorted closed intervals. Return their intersection as a list of closed intervals. If no overlap exists for a pair, skip it.\n\n### Function Contract\nImplement `interval_intersection(A: List[List[int]], B: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `A`: type `array` (example: `[[0,2],[5,10],[13,23],[24,25]]`).\n- Input `B`: type `array` (example: `[[1,5],[8,12],[15,24],[25,26]]`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n+m)`, space `O(1) extra`.\n\n### Constraints\n- 0 ≤ n,m ≤ 10^5\n- -10^9 ≤ start ≤ end ≤ 10^9\n",
   "leetcodeUrl": "https://leetcode.com/problems/interval-list-intersections/",
   "complexity": {
     "time": "O(n+m)",

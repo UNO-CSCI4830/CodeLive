@@ -12,6 +12,9 @@
  *
  * GET /api/sessions/:sessionId/report
  *   Returns the current report row (status + data once complete).
+ *
+ * GET /api/sessions/:sessionId/ai-log
+ *   Returns persisted AI chat messages grouped by problem order.
  */
 
 import { Router, type Request, type Response } from "express";
@@ -43,6 +46,39 @@ interface SessionProblemMeta {
 
 interface GenerateReportBody {
   problems: SessionProblemMeta[];
+}
+
+interface AiLogRow {
+  order_index: number;
+  problem_id: string;
+  message_id: string;
+  role: "user" | "assistant";
+  content: string;
+  occurred_at: string;
+  created_at?: string;
+}
+
+type Correctness = "correct" | "partial" | "incorrect" | "not_attempted";
+
+interface PerQuestionReport {
+  orderIndex: number;
+  title: string;
+  correctness: Correctness;
+  codeAnalysis: string;
+  approachQuality: string;
+  strengths: string[];
+  improvements: string[];
+}
+
+interface GeneratedReport {
+  overallSummary: string;
+  overallScore: number; // 1.0–10.0, one decimal place
+  strengths: string[];
+  areasForImprovement: string[];
+  problemSolvingProgression: string;
+  perQuestion: PerQuestionReport[];
+  aiUseScore: number | null;
+  aiUseNotes: string;
 }
 
 // ── POST /api/sessions/:sessionId/snapshots ───────────────────────────────
@@ -146,6 +182,40 @@ router.get(
   },
 );
 
+// ── GET /api/sessions/:sessionId/ai-log ──────────────────────────────────
+
+router.get(
+  "/api/sessions/:sessionId/ai-log",
+  async (req: Request, res: Response): Promise<void> => {
+    const { sessionId } = req.params;
+
+    const { data, error } = await supabaseAdmin
+      .from("session_ai_messages")
+      .select("order_index, problem_id, message_id, role, content, occurred_at, created_at")
+      .eq("session_id", sessionId)
+      .order("order_index", { ascending: true })
+      .order("occurred_at", { ascending: true })
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      res.status(500).json({ error: error.message });
+      return;
+    }
+
+    const rows = (data ?? []) as AiLogRow[];
+    const messages = rows.map((row) => ({
+      orderIndex: row.order_index,
+      problemId: row.problem_id,
+      messageId: row.message_id,
+      role: row.role,
+      content: row.content,
+      timestamp: new Date(row.occurred_at).getTime(),
+    }));
+
+    res.json({ messages });
+  },
+);
+
 // ── Background generation helper ─────────────────────────────────────────
 
 async function generateReportInBackground(
@@ -173,6 +243,7 @@ async function generateReportInBackground(
   const snapshotMap = new Map(
     (snapshots ?? []).map((s: { order_index: number; [key: string]: unknown }) => [s.order_index, s]),
   );
+  const aiLogMap = await loadAiLogMap(sessionId);
 
   const apiKey = process.env.ANTHROPIC_API_KEY?.trim();
   if (!apiKey) {
@@ -183,7 +254,7 @@ async function generateReportInBackground(
   }
 
   try {
-    const prompt = buildPrompt(problems, snapshotMap);
+    const prompt = buildPrompt(problems, snapshotMap, aiLogMap);
     const client = new Anthropic({ apiKey });
 
     const response = await client.messages.create({
@@ -196,7 +267,7 @@ async function generateReportInBackground(
     const raw =
       response.content[0]?.type === "text" ? response.content[0].text : "";
 
-    const parsed = extractJSON(raw);
+    const parsed = extractJSON(raw, problems);
     await persistReport(sessionId, parsed);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
@@ -212,11 +283,18 @@ async function generateReportInBackground(
 
 const SYSTEM_PROMPT = `You are an expert technical interviewer reviewing a live coding interview.
 Analyse the candidate's performance objectively. Do NOT recommend hiring or not hiring.
-Only score AI-assistant usage (penalise requesting direct solutions, reward good debugging questions).
+Score strictly from the submitted code and problem context.
+For overallScore, weight:
+- 60%: correctness/completeness across all problems
+- 25%: code quality, robustness, and edge-case handling
+- 15%: efficiency/optimality
+Use one decimal place (x.x), between 1.0 and 10.0.
+Only score AI-assistant usage separately (penalise requesting direct solutions, reward good debugging questions).
 
 Respond ONLY with valid JSON matching exactly this schema – no markdown, no explanation:
 {
   "overallSummary": "string",
+  "overallScore": 7.4,
   "strengths": ["string"],
   "areasForImprovement": ["string"],
   "problemSolvingProgression": "string",
@@ -238,6 +316,7 @@ Respond ONLY with valid JSON matching exactly this schema – no markdown, no ex
 function buildPrompt(
   problems: SessionProblemMeta[],
   snapshotMap: Map<number, Record<string, unknown>>,
+  aiLogMap: Map<number, Array<{ role: "user" | "assistant"; content: string }>>,
 ): string {
   const sections = problems.map((p) => {
     const snap = snapshotMap.get(p.orderIndex) as
@@ -250,7 +329,14 @@ function buildPrompt(
 
     const code = (snap?.code ?? "(no code submitted)").slice(0, 900);
     const hintsUsed = snap?.hints_used ?? 0;
-    const rawMessages: Array<{ role: string; content: string }> = snap?.ai_messages ?? [];
+    const snapshotMessages = (snap?.ai_messages ?? []).filter(
+      (m): m is { role: "user" | "assistant"; content: string } =>
+        (m.role === "user" || m.role === "assistant") && typeof m.content === "string",
+    );
+    const rawMessages: Array<{ role: "user" | "assistant"; content: string }> =
+      snapshotMessages.length > 0
+        ? snapshotMessages
+        : aiLogMap.get(p.orderIndex) ?? [];
 
     // Summarise AI messages: count totals + flag solution requests
     const userMsgs = rawMessages.filter((m) => m.role === "user");
@@ -283,39 +369,169 @@ ${code}
   return (
     `Analyse this ${problems.length}-problem coding interview.\n\n` +
     sections.join("\n\n") +
-    "\n\nReturn the JSON analysis now."
+    "\n\nReturn the JSON analysis now. overallScore must reflect actual submitted code quality and correctness."
   );
+}
+
+async function loadAiLogMap(
+  sessionId: string,
+): Promise<Map<number, Array<{ role: "user" | "assistant"; content: string }>>> {
+  const { data, error } = await supabaseAdmin
+    .from("session_ai_messages")
+    .select("order_index, role, content, occurred_at, created_at")
+    .eq("session_id", sessionId)
+    .order("order_index", { ascending: true })
+    .order("occurred_at", { ascending: true })
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error("[report] failed to load AI logs:", error.message);
+    return new Map();
+  }
+
+  const map = new Map<number, Array<{ role: "user" | "assistant"; content: string }>>();
+  for (const row of (data ?? []) as Array<{
+    order_index: number;
+    role: string;
+    content: string;
+  }>) {
+    if (!(row.role === "user" || row.role === "assistant")) continue;
+    const existing = map.get(row.order_index) ?? [];
+    existing.push({ role: row.role, content: row.content });
+    map.set(row.order_index, existing);
+  }
+  return map;
+}
+
+function toOneDecimal(value: number): number {
+  return Math.round(value * 10) / 10;
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+
+function normaliseCorrectness(input: unknown): Correctness {
+  if (
+    input === "correct"
+    || input === "partial"
+    || input === "incorrect"
+    || input === "not_attempted"
+  ) {
+    return input;
+  }
+  return "not_attempted";
+}
+
+function normaliseStringArray(input: unknown): string[] {
+  if (!Array.isArray(input)) return [];
+  return input
+    .map((item) => String(item ?? "").trim())
+    .filter(Boolean)
+    .slice(0, 10);
+}
+
+function scoreFromPerQuestion(perQuestion: PerQuestionReport[]): number {
+  if (perQuestion.length === 0) return 1.0;
+
+  const perItem: number[] = perQuestion.map((q) => {
+    if (q.correctness === "correct") return 1.0;
+    if (q.correctness === "partial") return 0.6;
+    if (q.correctness === "incorrect") return 0.25;
+    return 0;
+  });
+  const avg = perItem.reduce((sum, item) => sum + item, 0) / perItem.length;
+  return toOneDecimal(clamp(avg * 10, 1, 10));
+}
+
+function normaliseReport(input: unknown, problems: SessionProblemMeta[]): GeneratedReport {
+  const value = (input && typeof input === "object" ? input : {}) as Record<string, unknown>;
+  const rawPerQuestion = Array.isArray(value.perQuestion) ? value.perQuestion : [];
+
+  const perQuestion: PerQuestionReport[] = problems.map((problem, idx) => {
+    const row =
+      rawPerQuestion.find((candidate) => {
+        const candidateObj = candidate as Record<string, unknown>;
+        return Number(candidateObj.orderIndex) === problem.orderIndex;
+      }) ?? rawPerQuestion[idx] ?? {};
+    const rowObj = row as Record<string, unknown>;
+
+    return {
+      orderIndex: problem.orderIndex,
+      title: String(rowObj.title ?? problem.title).trim() || problem.title,
+      correctness: normaliseCorrectness(rowObj.correctness),
+      codeAnalysis:
+        String(rowObj.codeAnalysis ?? "No detailed analysis available.").trim()
+        || "No detailed analysis available.",
+      approachQuality:
+        String(rowObj.approachQuality ?? "No approach notes available.").trim()
+        || "No approach notes available.",
+      strengths: normaliseStringArray(rowObj.strengths),
+      improvements: normaliseStringArray(rowObj.improvements),
+    };
+  });
+
+  const derivedOverall = scoreFromPerQuestion(perQuestion);
+  const parsedOverall = Number(value.overallScore);
+  const overallScore = Number.isFinite(parsedOverall)
+    ? toOneDecimal(clamp(parsedOverall, 1, 10))
+    : derivedOverall;
+
+  const parsedAiUse = Number(value.aiUseScore);
+  const aiUseScore = Number.isFinite(parsedAiUse)
+    ? Math.round(clamp(parsedAiUse, 1, 10))
+    : null;
+
+  return {
+    overallSummary:
+      String(value.overallSummary ?? "").trim()
+      || "No summary was generated for this session.",
+    overallScore,
+    strengths: normaliseStringArray(value.strengths),
+    areasForImprovement: normaliseStringArray(value.areasForImprovement),
+    problemSolvingProgression:
+      String(value.problemSolvingProgression ?? "").trim()
+      || "No progression notes were generated.",
+    perQuestion,
+    aiUseScore,
+    aiUseNotes:
+      String(value.aiUseNotes ?? "").trim()
+      || "No AI usage notes were generated.",
+  };
 }
 
 function buildFallbackReport(
   problems: SessionProblemMeta[],
   snapshotMap: Map<number, Record<string, unknown>>,
-) {
+): GeneratedReport {
+  const perQuestion: PerQuestionReport[] = problems.map((p) => {
+    const snap = snapshotMap.get(p.orderIndex) as
+      | { code?: string; hints_used?: number }
+      | undefined;
+    const hasCode = typeof snap?.code === "string" && snap.code.trim().length > 0;
+    return {
+      orderIndex: p.orderIndex,
+      title: p.title,
+      correctness: hasCode ? "partial" : "not_attempted",
+      codeAnalysis: hasCode
+        ? "Code was submitted but AI analysis is unavailable."
+        : "No code was submitted for this problem.",
+      approachQuality: "N/A — AI analysis unavailable",
+      strengths: [],
+      improvements: [],
+    };
+  });
+
   return {
     overallSummary:
       "AI analysis is unavailable (no API key configured). " +
       "Code snapshots have been saved and are shown below.",
+    overallScore: scoreFromPerQuestion(perQuestion),
     strengths: ["Session completed successfully"],
     areasForImprovement: ["Configure ANTHROPIC_API_KEY for AI analysis"],
     problemSolvingProgression: "Unable to determine without AI analysis.",
-    perQuestion: problems.map((p) => {
-      const snap = snapshotMap.get(p.orderIndex) as
-        | { code?: string; hints_used?: number }
-        | undefined;
-      return {
-        orderIndex: p.orderIndex,
-        title: p.title,
-        correctness: "not_attempted" as const,
-        codeAnalysis:
-          snap?.code
-            ? "Code was submitted but AI analysis is unavailable."
-            : "No code was submitted for this problem.",
-        approachQuality: "N/A — AI analysis unavailable",
-        strengths: [],
-        improvements: [],
-      };
-    }),
-    aiUseScore: null as unknown as number,
+    perQuestion,
+    aiUseScore: null,
     aiUseNotes: "AI analysis unavailable.",
   };
 }
@@ -324,13 +540,14 @@ function buildFallbackReport(
 
 async function persistReport(
   sessionId: string,
-  report: ReturnType<typeof buildFallbackReport>,
+  report: GeneratedReport,
 ): Promise<void> {
   const { error } = await supabaseAdmin
     .from("interview_reports")
     .update({
       status: "completed",
       overall_summary: report.overallSummary,
+      overall_score: report.overallScore,
       strengths: report.strengths,
       areas_for_improvement: report.areasForImprovement,
       per_question: report.perQuestion,
@@ -354,7 +571,10 @@ async function markFailed(sessionId: string, message: string): Promise<void> {
 
 // ── JSON extraction ───────────────────────────────────────────────────────
 
-function extractJSON(raw: string): ReturnType<typeof buildFallbackReport> {
+function extractJSON(
+  raw: string,
+  problems: SessionProblemMeta[],
+): GeneratedReport {
   // Strip any markdown fences the model may have added
   const cleaned = raw
     .replace(/^```json\s*/i, "")
@@ -363,13 +583,13 @@ function extractJSON(raw: string): ReturnType<typeof buildFallbackReport> {
     .trim();
 
   try {
-    return JSON.parse(cleaned);
+    return normaliseReport(JSON.parse(cleaned), problems);
   } catch {
     // If the model wrapped it, try to find the first { ... }
     const match = cleaned.match(/\{[\s\S]*\}/);
     if (match) {
       try {
-        return JSON.parse(match[0]);
+        return normaliseReport(JSON.parse(match[0]), problems);
       } catch {
         /* fall through */
       }

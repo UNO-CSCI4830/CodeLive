@@ -3,7 +3,7 @@
   "title": "Clone an Undirected Graph",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a reference to a node in a connected undirected graph, return a deep copy of the graph. Each node contains a value and a list of neighbors. Node values are unique.\n\nConstraints:\n- 1 ≤ nodes ≤ 100",
+  "description": "### Objective\nGiven a reference to a node in a connected undirected graph, return a deep copy of the graph. Each node contains a value and a list of neighbors. Node values are unique.\n\n### Function Contract\nImplement `__init__(self: any, val: any, neighbors: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `graph`: type `string` (example: `\"triangle 1-2-3-1\"`).\n- Return type: `string`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(V+E)`, space `O(V)`.\n\n### Constraints\n- 1 ≤ nodes ≤ 100\n",
   "leetcodeUrl": "https://leetcode.com/problems/clone-graph/",
   "complexity": {
     "time": "O(V+E)",

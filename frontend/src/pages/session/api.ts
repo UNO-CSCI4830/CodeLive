@@ -56,17 +56,48 @@ export async function advanceQuestion(
   return res.json();
 }
 
-export async function lockProblem(
+export async function selectQuestion(
   sessionId: string,
-  orderIndex: number,
-): Promise<void> {
-  await fetch(`/api/sessions/${sessionId}/lock/${orderIndex}`, {
+  index: number,
+): Promise<{ currentIndex: number }> {
+  const res = await fetch(`/api/sessions/${sessionId}/select`, {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ index }),
   });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || "Failed to switch question");
+  }
+  return res.json();
 }
 
 export async function endSession(sessionId: string): Promise<void> {
   await fetch(`/api/sessions/${sessionId}/end`, { method: "POST" });
+}
+
+export interface TimerState {
+  timerPaused: boolean;
+  timerPausedAt: string | null;
+  timerPausedSeconds: number;
+}
+
+export async function pauseTimer(sessionId: string): Promise<TimerState> {
+  const res = await fetch(`/api/sessions/${sessionId}/timer/pause`, { method: "POST" });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || "Failed to pause timer");
+  }
+  return res.json();
+}
+
+export async function resumeTimer(sessionId: string): Promise<TimerState> {
+  const res = await fetch(`/api/sessions/${sessionId}/timer/resume`, { method: "POST" });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || "Failed to resume timer");
+  }
+  return res.json();
 }
 
 // ── Report helpers ─────────────────────────────────────────────────────
@@ -90,6 +121,15 @@ export interface GenerateReportPayload {
     description: string;
     timeLimit: number;
   }>;
+}
+
+export interface AiChatLogMessage {
+  orderIndex: number;
+  problemId: string;
+  messageId: string;
+  role: "user" | "assistant";
+  content: string;
+  timestamp: number;
 }
 
 /** Save code snapshots for all completed questions. */
@@ -132,4 +172,14 @@ export async function fetchReport(sessionId: string): Promise<InterviewReport> {
     throw new Error(`Failed to fetch report (${res.status})`);
   }
   return res.json();
+}
+
+/** Fetch persisted per-question AI chat logs for a session. */
+export async function fetchAiLogs(sessionId: string): Promise<AiChatLogMessage[]> {
+  const res = await fetch(`/api/sessions/${sessionId}/ai-log`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch AI logs (${res.status})`);
+  }
+  const data = await res.json();
+  return Array.isArray(data?.messages) ? data.messages : [];
 }

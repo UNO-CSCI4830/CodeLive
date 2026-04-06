@@ -3,7 +3,7 @@
   "title": "Maximum Subarray Sum",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Given an integer array nums, find the contiguous subarray with the largest sum and return the sum. This classic problem emphasizes prefix-based 1-D dynamic programming (Kadane's algorithm).\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 10^5\n- -10^4 ≤ nums[i] ≤ 10^4",
+  "description": "### Objective\nGiven an integer array nums, find the contiguous subarray with the largest sum and return the sum. This classic problem emphasizes prefix-based 1-D dynamic programming (Kadane's algorithm).\n\n### Function Contract\nImplement `max_sub_array(nums: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[-2,1,-3,4,-1,2,1,-5,4]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 1 ≤ n ≤ 10^5\n- -10^4 ≤ nums[i] ≤ 10^4\n",
   "leetcodeUrl": "https://leetcode.com/problems/maximum-subarray/",
   "complexity": {
     "time": "O(n)",

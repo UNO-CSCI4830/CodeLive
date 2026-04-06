@@ -3,7 +3,7 @@
   "title": "Area of Union of Two Rectangles",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given On a 2D plane, compute the total area covered by two axis-aligned rectangles A and B. Each rectangle is defined by its bottom-left and top-right corners (ax1, ay1, ax2, ay2) and (bx1, by1, bx2, by2).\n\n    \n\nConstraints:\n    - -10^4 ≤ coordinates ≤ 10^4\n- ax1 < ax2, ay1 < ay2, likewise for B",
+  "description": "### Objective\nOn a 2D plane, compute the total area covered by two axis-aligned rectangles A and B. Each rectangle is defined by its bottom-left and top-right corners (ax1, ay1, ax2, ay2) and (bx1, by1, bx2, by2).\n\n### Function Contract\nImplement `compute_area(ax1: int, ay1: int, ax2: int, ay2: int, bx1: int, by1: int, bx2: int, by2: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `ax1`: type `number` (example: `0`).\n- Input `ay1`: type `number` (example: `0`).\n- Input `ax2`: type `number` (example: `2`).\n- Input `ay2`: type `number` (example: `2`).\n- Input `bx1`: type `number` (example: `1`).\n- Input `by1`: type `number` (example: `1`).\n- Input `bx2`: type `number` (example: `3`).\n- Input `by2`: type `number` (example: `3`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(1)`, space `O(1)`.\n\n### Constraints\n- -10^4 ≤ coordinates ≤ 10^4\n- ax1 < ax2, ay1 < ay2, likewise for B\n",
   "leetcodeUrl": "https://leetcode.com/problems/rectangle-area/",
   "complexity": {
     "time": "O(1)",

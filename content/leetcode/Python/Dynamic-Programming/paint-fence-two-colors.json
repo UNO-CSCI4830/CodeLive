@@ -3,7 +3,7 @@
   "title": "Ways to Paint Fence with No 3 Adjacent Same",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given There are n posts and k colors. You must paint each post so that no three adjacent posts have the same color. Return the number of ways. Answer fits in 64-bit integer for given constraints.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 50\n- 1 ≤ k ≤ 50",
+  "description": "### Objective\nThere are n posts and k colors. You must paint each post so that no three adjacent posts have the same color. Return the number of ways. Answer fits in 64-bit integer for given constraints.\n\n### Function Contract\nImplement `num_ways_paint_fence(n: int, k: int)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `n`: type `number` (example: `1`).\n- Input `k`: type `number` (example: `2`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 1 ≤ n ≤ 50\n- 1 ≤ k ≤ 50\n",
   "leetcodeUrl": "https://leetcode.com/problems/paint-fence/",
   "complexity": {
     "time": "O(n)",

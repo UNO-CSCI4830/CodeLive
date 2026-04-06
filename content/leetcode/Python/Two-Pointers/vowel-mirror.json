@@ -3,7 +3,7 @@
   "title": "Vowel Mirror",
   "difficulty": "Easy",
   "language": "python",
-  "description": "Given Reverse only the vowels in a string and return the resulting string. Use two pointers that move inward and swap vowels when both sides are on a vowel.\n\n    \n\nConstraints:\n    - 1 ≤ len(s) ≤ 10^5\n- s contains printable ASCII characters",
+  "description": "### Objective\nReverse only the vowels in a string and return the resulting string. Use two pointers that move inward and swap vowels when both sides are on a vowel.\n\n### Function Contract\nImplement `vowel_mirror(s: str)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `s`: type `string` (example: `\"hello\"`).\n- Return type: `string`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(n)`.\n\n### Constraints\n- 1 ≤ len(s) ≤ 10^5\n- s contains printable ASCII characters\n",
   "leetcodeUrl": "https://leetcode.com/problems/reverse-vowels-of-a-string/",
   "complexity": {
     "time": "O(n)",

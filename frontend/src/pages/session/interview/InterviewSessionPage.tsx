@@ -3,7 +3,7 @@
  *
  * Wraps everything in SessionProvider for real-time state. Renders:
  * - A header bar with timer, question navigation, and session controls
- * - The correct layout based on the current problem type (leetcode vs frontend)
+ * - The correct layout based on the current problem type
  * - Session completed screen when done
  *
  * On session end (interviewer only):
@@ -24,6 +24,8 @@ import LeetcodeSessionLayout, {
   type SessionLayoutHandle,
 } from "../layouts/LeetcodeSessionLayout";
 import FrontendSessionLayout from "../layouts/FrontendSessionLayout";
+import BackendSessionLayout from "../layouts/BackendSessionLayout";
+import DatabaseSessionLayout from "../layouts/DatabaseSessionLayout";
 import { saveSnapshots, generateReport, type SnapshotPayload } from "../api";
 import "./InterviewSessionPage.css";
 
@@ -36,7 +38,9 @@ function InterviewRoom() {
     currentProblem,
     isInterviewer,
     advance,
-    lockCurrent,
+    setCurrentIndex,
+    pauseSharedTimer,
+    resumeSharedTimer,
     end,
   } = useSession();
 
@@ -46,11 +50,11 @@ function InterviewRoom() {
   const userName = profile?.name ?? (isInterviewer ? "Interviewer" : "Candidate");
   const userColor = isInterviewer ? "#f97316" : "#3b82f6"; // orange / blue
 
-  // Ref to the active layout (Leetcode or Frontend — both share the same handle shape)
+  // Ref to the active layout (all problem layouts share the same handle shape)
   const layoutRef = useRef<SessionLayoutHandle>(null);
 
-  // Accumulates snapshots as the interviewer advances through questions
-  const snapshotsRef = useRef<SnapshotPayload[]>([]);
+  // Track latest snapshot per question so navigation can move freely.
+  const snapshotsRef = useRef<Map<number, SnapshotPayload>>(new Map());
 
   // End-session confirmation modal
   const [showEndModal, setShowEndModal] = useState(false);
@@ -61,7 +65,7 @@ function InterviewRoom() {
   const captureCurrentSnapshot = useCallback(() => {
     if (!currentProblem || !layoutRef.current) return;
     const snap = layoutRef.current.captureSnapshot();
-    snapshotsRef.current.push({
+    snapshotsRef.current.set(currentProblem.order_index, {
       orderIndex: currentProblem.order_index,
       problemId: currentProblem.problem_id,
       category: currentProblem.category,
@@ -87,7 +91,9 @@ function InterviewRoom() {
     await end();
 
     const sessionId = session.id;
-    const snapshots = [...snapshotsRef.current];
+    const snapshots = [...snapshotsRef.current.values()].sort(
+      (a, b) => a.orderIndex - b.orderIndex,
+    );
 
     // Build problem metadata for the report request
     const problems = snapshots.map((s) => {
@@ -113,10 +119,6 @@ function InterviewRoom() {
     navigate(`/session/${sessionId}/report`);
   }, [session, captureCurrentSnapshot, end, navigate]);
 
-  const handleTimerExpired = useCallback(() => {
-    lockCurrent();
-  }, [lockCurrent]);
-
   const handleAdvance = useCallback(async () => {
     if (!session) return;
     const isLast = session.current_index >= session.problems.length - 1;
@@ -132,6 +134,15 @@ function InterviewRoom() {
   const handleEndSession = useCallback(() => {
     setShowEndModal(true);
   }, []);
+
+  const handleSelectQuestion = useCallback(
+    async (nextIndex: number) => {
+      if (!session || nextIndex === session.current_index) return;
+      captureCurrentSnapshot();
+      await setCurrentIndex(nextIndex);
+    },
+    [session, captureCurrentSnapshot, setCurrentIndex],
+  );
 
   /** Modal: generate report */
   const handleModalReport = useCallback(async () => {
@@ -151,8 +162,10 @@ function InterviewRoom() {
 
   const canAdvance = useMemo(() => {
     if (!currentProblem) return false;
-    return currentProblem.locked || isInterviewer;
+    return isInterviewer;
   }, [currentProblem, isInterviewer]);
+
+  const locked = false;
 
   /* ── Loading ──────────────────────────────────────── */
   if (loading) {
@@ -219,19 +232,28 @@ function InterviewRoom() {
           <QuestionNav
             problems={session.problems}
             currentIndex={session.current_index}
+            onSelect={handleSelectQuestion}
             onAdvance={handleAdvance}
             canAdvance={canAdvance}
             disabled={session.status !== "active"}
+            showAdvance={isInterviewer}
           />
         </div>
 
         <div className="isp-header-center">
           <SessionTimer
-            timeLimitMinutes={currentProblem.time_limit}
-            onExpired={handleTimerExpired}
-            locked={currentProblem.locked}
-            autoStart
+            totalMinutes={
+              session.total_time_limit_minutes > 0
+                ? session.total_time_limit_minutes
+                : session.problems.reduce((sum, p) => sum + (p.time_limit ?? 0), 0)
+            }
             startedAt={session.started_at}
+            paused={session.timer_paused}
+            pausedAt={session.timer_paused_at}
+            pausedSeconds={session.timer_paused_seconds}
+            canToggle={isInterviewer}
+            onPause={pauseSharedTimer}
+            onResume={resumeSharedTimer}
           />
         </div>
 
@@ -269,9 +291,35 @@ function InterviewRoom() {
             sessionId={session.id}
             problemId={currentProblem.problem_id}
             orderIndex={currentProblem.order_index}
-            locked={currentProblem.locked}
+            locked={locked}
             userName={userName}
             userColor={userColor}
+            aiEnabled={session.ai_enabled !== false}
+            canSendAi={!isInterviewer}
+          />
+        ) : currentProblem.category === "backend" ? (
+          <BackendSessionLayout
+            ref={layoutRef}
+            sessionId={session.id}
+            problemId={currentProblem.problem_id}
+            orderIndex={currentProblem.order_index}
+            locked={locked}
+            userName={userName}
+            userColor={userColor}
+            aiEnabled={session.ai_enabled !== false}
+            canSendAi={!isInterviewer}
+          />
+        ) : currentProblem.category === "database" ? (
+          <DatabaseSessionLayout
+            ref={layoutRef}
+            sessionId={session.id}
+            problemId={currentProblem.problem_id}
+            orderIndex={currentProblem.order_index}
+            locked={locked}
+            userName={userName}
+            userColor={userColor}
+            aiEnabled={session.ai_enabled !== false}
+            canSendAi={!isInterviewer}
           />
         ) : (
           <FrontendSessionLayout
@@ -279,9 +327,11 @@ function InterviewRoom() {
             sessionId={session.id}
             problemId={currentProblem.problem_id}
             orderIndex={currentProblem.order_index}
-            locked={currentProblem.locked}
+            locked={locked}
             userName={userName}
             userColor={userColor}
+            aiEnabled={session.ai_enabled !== false}
+            canSendAi={!isInterviewer}
           />
         )}
       </div>

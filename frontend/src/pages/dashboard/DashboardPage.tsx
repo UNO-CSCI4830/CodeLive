@@ -48,6 +48,7 @@ interface ReportRow {
   session: {
     join_code: string;
     candidate_id: string | null;
+    candidate_name?: string | null;
   } | null;
   _candidateName?: string | null;
 }
@@ -128,7 +129,7 @@ export default function DashboardPage() {
             .from("interview_reports")
             .select(
               `id, session_id, status, overall_summary, ai_use_score, generated_at, created_at,
-               session:sessions!inner(join_code, candidate_id, interviewer_id)`,
+               session:sessions!inner(join_code, candidate_id, candidate_name, interviewer_id)`,
             )
             .eq("session.interviewer_id", user!.id)
             .order("created_at", { ascending: false })
@@ -159,11 +160,18 @@ export default function DashboardPage() {
       }
 
       for (const s of upRows) {
-        s._candidateName = s.candidate_id ? nameMap.get(s.candidate_id) ?? null : null;
+        const profileName = s.candidate_id ? nameMap.get(s.candidate_id) ?? null : null;
+        s._candidateName = profileName ?? (s.candidate_id ? `Candidate ${s.candidate_id.slice(0, 6)}` : null);
       }
       for (const r of rptRows) {
-        const cid = (r.session as any)?.candidate_id;
-        r._candidateName = cid ? nameMap.get(cid) ?? null : null;
+        const session = r.session as any;
+        const cid = session?.candidate_id as string | null;
+        const profileName = cid ? nameMap.get(cid) ?? null : null;
+        const sessionName =
+          typeof session?.candidate_name === "string" && session.candidate_name.trim() !== ""
+            ? session.candidate_name.trim()
+            : null;
+        r._candidateName = profileName ?? sessionName ?? (cid ? `Candidate ${cid.slice(0, 6)}` : "Candidate");
       }
 
       setCache("dashboard", { upcoming: upRows, reports: rptRows });

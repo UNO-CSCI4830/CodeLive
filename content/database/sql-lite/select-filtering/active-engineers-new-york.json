@@ -1,0 +1,68 @@
+{
+  "id": "active-engineers-new-york",
+  "title": "Active Engineers in New York",
+  "category": "database",
+  "difficulty": "easy",
+  "description": "Write a SQL query to answer the hiring-team analytics question.\n\n### Tables\n```sql\nCREATE TABLE employees (\n  emp_id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL,\n  department TEXT NOT NULL,\n  city TEXT NOT NULL,\n  salary INTEGER NOT NULL,\n  hire_date TEXT NOT NULL,\n  manager_id INTEGER,\n  is_active INTEGER NOT NULL\n);\n```\n\n### Task\nReturn active employees in the Engineering department who are based in New York.\n\n### Return Columns\n- `emp_id`\n- `name`\n- `salary`\n\n### Ordering\nSort by `salary` DESC, then `emp_id` ASC.\n\n### Notes\n- Use SQLite syntax.\n- Write your answer in `solution.sql`.\n- Do not hardcode output rows; query from tables.\n- Internal hidden tests run against additional seed data.",
+  "constraints": "SQLite 3.44+\n- Single query unless the prompt explicitly asks for CTEs\n- Deterministic output",
+  "hints": [],
+  "tags": [
+    "database",
+    "sql",
+    "sqlite",
+    "select-filtering",
+    "select",
+    "where",
+    "ordering"
+  ],
+  "starter_files": [
+    {
+      "path": "solution.sql",
+      "content": "",
+      "language": "sql",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "schema_sql": "CREATE TABLE employees (\n  emp_id INTEGER PRIMARY KEY,\n  name TEXT NOT NULL,\n  department TEXT NOT NULL,\n  city TEXT NOT NULL,\n  salary INTEGER NOT NULL,\n  hire_date TEXT NOT NULL,\n  manager_id INTEGER,\n  is_active INTEGER NOT NULL\n);",
+    "seed_sql": "INSERT INTO employees (emp_id, name, department, city, salary, hire_date, manager_id, is_active) VALUES\n  (1, 'Ava', 'Engineering', 'New York', 145000, '2020-01-15', 2, 1),\n  (2, 'Ben', 'Engineering', 'Boston', 120000, '2021-06-10', 1, 1),\n  (3, 'Chloe', 'Sales', 'Chicago', 98000, '2019-03-02', 6, 1),\n  (4, 'Diego', 'Engineering', 'New York', 132000, '2022-02-20', 1, 0),\n  (5, 'Elena', 'HR', 'Boston', 88000, '2018-11-12', 7, 1),\n  (6, 'Farah', 'Sales', 'New York', 125000, '2017-07-30', 3, 1),\n  (7, 'Gabe', 'HR', 'Chicago', 110000, '2016-05-18', 5, 1),\n  (8, 'Hana', 'Engineering', 'Chicago', 117000, '2023-09-01', 1, 1),\n  (9, 'Ivan', 'Support', 'New York', 76000, '2021-01-09', 10, 1),\n  (10, 'Jia', 'Support', 'Boston', 83000, '2019-12-01', 9, 0);",
+    "expected_output": [
+      {
+        "emp_id": 1,
+        "name": "Ava",
+        "salary": 145000
+      }
+    ],
+    "column_names": [
+      "emp_id",
+      "name",
+      "salary"
+    ],
+    "order_matters": true,
+    "check_explain": false,
+    "hidden_tests": [
+      {
+        "expected_output": [
+          {
+            "emp_id": 1,
+            "name": "Ava",
+            "salary": 145000
+          },
+          {
+            "emp_id": 11,
+            "name": "Kora",
+            "salary": 128000
+          }
+        ],
+        "column_names": [
+          "emp_id",
+          "name",
+          "salary"
+        ],
+        "order_matters": true
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 1
+}

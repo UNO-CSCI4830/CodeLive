@@ -3,7 +3,7 @@
   "title": "Widest Water Reservoir",
   "difficulty": "Medium",
   "language": "python",
-  "description": "You are given an array heights where heights[i] is the height of a vertical wall at position i. Choose two walls to hold water between them. The amount of water is the area formed by the width between the walls and the smaller height. Return the maximum area possible.\n\n    \n\nConstraints:\n    - 2 ≤ len(heights) ≤ 10^5\n- 0 ≤ heights[i] ≤ 10^4",
+  "description": "### Objective\nYou are given an array heights where heights[i] is the height of a vertical wall at position i. Choose two walls to hold water between them. The amount of water is the area formed by the width between the walls and the smaller height. Return the maximum area possible.\n\n### Function Contract\nImplement `widest_water_reservoir(heights: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `heights`: type `array` (example: `[1,8,6,2,5,4,8,3,7]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n)`, space `O(1)`.\n\n### Constraints\n- 2 ≤ len(heights) ≤ 10^5\n- 0 ≤ heights[i] ≤ 10^4\n",
   "leetcodeUrl": "https://leetcode.com/problems/container-with-most-water/",
   "complexity": {
     "time": "O(n)",

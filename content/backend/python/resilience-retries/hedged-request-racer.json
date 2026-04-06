@@ -1,0 +1,73 @@
+{
+  "id": "hedged-request-racer",
+  "title": "Hedged Request Racer",
+  "category": "backend",
+  "difficulty": "hard",
+  "description": "Choose the winning result between primary and hedged requests based on simulated latencies.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /hedged/choose`\n\n### Request Replay (Executed In Order)\n1. `POST /hedged/choose`\n   Request body: `{\"primary_ms\":120,\"secondary_ms\":80,\"hedge_after_ms\":50}`\n   Expected status: `200`\n   Expected body: `{\"winner\":\"secondary\"}`\n\n2. `POST /hedged/choose`\n   Request body: `{\"primary_ms\":40,\"secondary_ms\":80,\"hedge_after_ms\":50}`\n   Expected status: `200`\n   Expected body: `{\"winner\":\"primary\"}`\n\n3. `POST /hedged/choose`\n   Request body: `{\"primary_ms\":120,\"secondary_ms\":200,\"hedge_after_ms\":50}`\n   Expected status: `200`\n   Expected body: `{\"winner\":\"primary\"}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Model completion times mathematically.",
+    "You do not need real sleeps to solve this."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "hedging",
+    "latency"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Hedged Request Racer\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/hedged/choose\")\nasync def hedged_request_racer_post_hedged_choose(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/hedged/choose",
+        "expected_status": 200,
+        "expected_body": {
+          "winner": "secondary"
+        },
+        "body": {
+          "primary_ms": 120,
+          "secondary_ms": 80,
+          "hedge_after_ms": 50
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/hedged/choose",
+        "expected_status": 200,
+        "expected_body": {
+          "winner": "primary"
+        },
+        "body": {
+          "primary_ms": 40,
+          "secondary_ms": 80,
+          "hedge_after_ms": 50
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/hedged/choose",
+        "expected_status": 200,
+        "expected_body": {
+          "winner": "primary"
+        },
+        "body": {
+          "primary_ms": 120,
+          "secondary_ms": 200,
+          "hedge_after_ms": 50
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 39
+}

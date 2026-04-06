@@ -3,7 +3,7 @@
   "title": "Compute Convex Hull of Points",
   "difficulty": "Hard",
   "language": "python",
-  "description": "Given a set of points in the plane, return the points on the boundary of their convex hull in counterclockwise order starting from the left-most point. Collinear boundary points must be included.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 300\n- -10^4 ≤ x,y ≤ 10^4",
+  "description": "### Objective\nGiven a set of points in the plane, return the points on the boundary of their convex hull in counterclockwise order starting from the left-most point. Collinear boundary points must be included.\n\n### Function Contract\nImplement `outer_trees(points: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `points`: type `array` (example: `[[1,1],[2,2],[2,0],[2,4],[3,3],[4,2]]`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n log n)`, space `O(n)`.\n\n### Constraints\n- 1 ≤ n ≤ 300\n- -10^4 ≤ x,y ≤ 10^4\n",
   "leetcodeUrl": "https://leetcode.com/problems/erect-the-fence/",
   "complexity": {
     "time": "O(n log n)",

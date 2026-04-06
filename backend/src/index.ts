@@ -13,6 +13,8 @@ import { attachYjsWebSocket } from "./lib/websocket";
 
 const app = express();
 const PORT = process.env.PORT ?? 5000;
+app.disable("x-powered-by");
+app.set("trust proxy", true);
 
 // ---------------------------------------------------------------------------
 // Middleware
@@ -33,7 +35,7 @@ app.use(
     },
   }),
 );
-app.use(express.json());
+app.use(express.json({ limit: process.env.JSON_BODY_LIMIT ?? "1mb" }));
 
 // ---------------------------------------------------------------------------
 // Routes

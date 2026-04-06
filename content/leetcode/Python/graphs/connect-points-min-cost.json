@@ -3,7 +3,7 @@
   "title": "Connect All Points with Minimum Cost",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given n points in the plane, connect all points with edges of cost = Manhattan distance so that the total cost is minimized. Return the total cost. Use Prim's algorithm over the implicit complete graph.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 1000",
+  "description": "### Objective\nN points in the plane, connect all points with edges of cost = Manhattan distance so that the total cost is minimized. Return the total cost. Use Prim's algorithm over the implicit complete graph.\n\n### Function Contract\nImplement `min_cost_connect_points(points: List[List[int]])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `points`: type `array` (example: `[[0,0],[2,2],[3,10],[5,2],[7,0]]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n^2)`, space `O(n)`.\n\n### Constraints\n- 1 ≤ n ≤ 1000\n",
   "leetcodeUrl": "https://leetcode.com/problems/min-cost-to-connect-all-points/",
   "complexity": {
     "time": "O(n^2)",

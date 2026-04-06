@@ -3,7 +3,7 @@
   "title": "Maintain the Median of a Data Stream",
   "difficulty": "Hard",
   "language": "python",
-  "description": "Given Design a structure that supports adding integers and querying the median at any time. Maintain two heaps: a max-heap for the lower half and a min-heap for the upper half, rebalancing so their sizes differ by at most one. This is a canonical two-heap pattern.\n\n    \n\nConstraints:\n    - Up to 2·10^5 operations\n- Values fit 32-bit signed",
+  "description": "### Objective\nDesign a structure that supports adding integers and querying the median at any time. Maintain two heaps: a max-heap for the lower half and a min-heap for the upper half, rebalancing so their sizes differ by at most one. This is a canonical two-heap pattern.\n\n### Function Contract\nImplement `__init__(self: any)` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `ops`: type `array` (example: `[\"addNum\",\"addNum\",\"findMedian\",\"addNum\",\"findMedian\"]`).\n- Input `args`: type `array` (example: `[[1],[2],[],[3],[]]`).\n- Return type: `array`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(log n) per op`, space `O(n)`.\n\n### Constraints\n- Up to 2·10^5 operations\n- Values fit 32-bit signed\n",
   "leetcodeUrl": "https://leetcode.com/problems/find-median-from-data-stream/",
   "complexity": {
     "time": "O(log n) per op",

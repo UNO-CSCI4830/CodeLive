@@ -1,0 +1,76 @@
+{
+  "id": "nested-config-validator",
+  "title": "Nested Config Validator",
+  "category": "backend",
+  "difficulty": "medium",
+  "description": "Validate nested runtime config payloads with cross-field constraints.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /runtime/config`\n\n### Request Replay (Executed In Order)\n1. `POST /runtime/config`\n   Request body: `{\"feature\":{\"enabled\":true,\"rollout\":25}}`\n   Expected status: `200`\n   Expected body: `{\"accepted\":true}`\n\n2. `POST /runtime/config`\n   Request body: `{\"feature\":{\"enabled\":false,\"rollout\":10}}`\n   Expected status: `400`\n   Expected body: `{\"error\":\"invalid_config\"}`\n\n3. `POST /runtime/config`\n   Request body: `{\"feature\":{\"enabled\":true,\"rollout\":101}}`\n   Expected status: `400`\n   Expected body: `{\"error\":\"invalid_config\"}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Perform schema checks then cross-field checks.",
+    "Return concise stable errors."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "nested-validation",
+    "config-management"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Nested Config Validator\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/runtime/config\")\nasync def nested_config_validator_post_runtime_config(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/runtime/config",
+        "expected_status": 200,
+        "expected_body": {
+          "accepted": true
+        },
+        "body": {
+          "feature": {
+            "enabled": true,
+            "rollout": 25
+          }
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/runtime/config",
+        "expected_status": 400,
+        "expected_body": {
+          "error": "invalid_config"
+        },
+        "body": {
+          "feature": {
+            "enabled": false,
+            "rollout": 10
+          }
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/runtime/config",
+        "expected_status": 400,
+        "expected_body": {
+          "error": "invalid_config"
+        },
+        "body": {
+          "feature": {
+            "enabled": true,
+            "rollout": 101
+          }
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 9
+}

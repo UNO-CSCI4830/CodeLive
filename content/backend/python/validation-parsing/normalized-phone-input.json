@@ -1,0 +1,67 @@
+{
+  "id": "normalized-phone-input",
+  "title": "Normalized Phone Input",
+  "category": "backend",
+  "difficulty": "easy",
+  "description": "Normalize a user-supplied phone number into canonical +1 format or reject it.\n\n### Objective\nImplement the FastAPI service so the replayed evaluator requests pass exactly as specified.\n\n### Implement These Routes\n- `POST /contact/normalize`\n\n### Request Replay (Executed In Order)\n1. `POST /contact/normalize`\n   Request body: `{\"phone\":\"(555) 123-4567\"}`\n   Expected status: `200`\n   Expected body: `{\"normalized\":\"+15551234567\"}`\n\n2. `POST /contact/normalize`\n   Request body: `{\"phone\":\"12-34\"}`\n   Expected status: `400`\n   Expected body: `{\"error\":\"invalid_phone\"}`\n\n3. `POST /contact/normalize`\n   Request body: `{\"phone\":\"+1-555-123-4567\"}`\n   Expected status: `200`\n   Expected body: `{\"normalized\":\"+15551234567\"}`\n\n### Candidate Expectations\n- Complete the TODOs in starter code and keep behavior deterministic across sequential requests.\n- Keep state in memory for this challenge; do not use SQL or external databases.\n- Return exact status codes and JSON response shapes expected by the replay tests.\n- Handle invalid or missing input defensively with stable JSON errors instead of crashes.\n\n### Starter Files You Can Edit\n- `app/main.py`\n\n### Done Criteria\n- All replayed request tests pass in order.\n- API behavior matches the required contracts exactly.",
+  "constraints": "- Python 3.11+\n- No SQL or external database usage\n- Deterministic outputs for graded requests",
+  "hints": [
+    "Use digit filtering.",
+    "Handle 10-digit and 11-digit US formats."
+  ],
+  "tags": [
+    "backend",
+    "python",
+    "fastapi",
+    "normalization",
+    "input-sanitization"
+  ],
+  "starter_files": [
+    {
+      "path": "app/main.py",
+      "content": "from fastapi import FastAPI, HTTPException\nfrom typing import Any, Dict\n\napp = FastAPI(title=\"Normalized Phone Input\")\n\n# In-memory state for this challenge.\nSTATE: Dict[str, Any] = {}\n\n# TODO: Implement all required endpoints from the prompt.\n\n@app.post(\"/contact/normalize\")\nasync def normalized_phone_input_post_contact_normalize(payload: Dict[str, Any]):\n    raise HTTPException(status_code=501, detail=\"Not implemented\")\n",
+      "language": "python",
+      "readonly": false
+    }
+  ],
+  "test_config": {
+    "language": "python",
+    "test_requests": [
+      {
+        "method": "POST",
+        "path": "/contact/normalize",
+        "expected_status": 200,
+        "expected_body": {
+          "normalized": "+15551234567"
+        },
+        "body": {
+          "phone": "(555) 123-4567"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/contact/normalize",
+        "expected_status": 400,
+        "expected_body": {
+          "error": "invalid_phone"
+        },
+        "body": {
+          "phone": "12-34"
+        }
+      },
+      {
+        "method": "POST",
+        "path": "/contact/normalize",
+        "expected_status": 200,
+        "expected_body": {
+          "normalized": "+15551234567"
+        },
+        "body": {
+          "phone": "+1-555-123-4567"
+        }
+      }
+    ]
+  },
+  "solution_files": [],
+  "sort_order": 7
+}

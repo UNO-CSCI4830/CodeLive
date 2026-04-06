@@ -3,7 +3,7 @@
   "title": "Segment String into Dictionary Words",
   "difficulty": "Medium",
   "language": "python",
-  "description": "Given a string s and a dictionary wordDict, determine if s can be segmented into a space-separated sequence of one or more dictionary words.\n\n    \n\nConstraints:\n    - 1 ≤ |s| ≤ 300\n- 1 ≤ |wordDict| ≤ 10^3\n- 1 ≤ word length ≤ 20",
+  "description": "### Objective\nGiven a string s and a dictionary wordDict, determine if s can be segmented into a space-separated sequence of one or more dictionary words.\n\n### Function Contract\nImplement `word_break(s: str, wordDict: List[str])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `s`: type `string` (example: `\"leetcode\"`).\n- Input `wordDict`: type `array` (example: `[\"leet\",\"code\"]`).\n- Return type: `boolean`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(n·L)`, space `O(n)`.\n\n### Constraints\n- 1 ≤ |s| ≤ 300\n- 1 ≤ |wordDict| ≤ 10^3\n- 1 ≤ word length ≤ 20\n",
   "leetcodeUrl": "https://leetcode.com/problems/word-break/",
   "complexity": {
     "time": "O(n·L)",

@@ -3,7 +3,7 @@
   "title": "Delete and Earn Points",
   "difficulty": "Medium",
   "language": "python",
-  "description": "You are given an array nums. When you pick a number x you earn x points for each occurrence and then all numbers x-1 and x+1 disappear. Return the maximum points you can earn.\n\n    \n\nConstraints:\n    - 1 ≤ n ≤ 2*10^4\n- 1 ≤ nums[i] ≤ 10^4",
+  "description": "### Objective\nYou are given an array nums. When you pick a number x you earn x points for each occurrence and then all numbers x-1 and x+1 disappear. Return the maximum points you can earn.\n\n### Function Contract\nImplement `delete_and_earn(nums: List[int])` in Python.\nDo not change input/output semantics expected by the tests.\n\n### Input and Output\n- Input `nums`: type `array` (example: `[3,4,2]`).\n- Return type: `number`.\n\n### Requirements\n- Return the exact expected output for every test case.\n- Handle edge cases (empty input, duplicates, boundary values) without raising exceptions.\n- Target complexity: time `O(U)`, space `O(U)`.\n\n### Constraints\n- 1 ≤ n ≤ 2*10^4\n- 1 ≤ nums[i] ≤ 10^4\n",
   "leetcodeUrl": "https://leetcode.com/problems/delete-and-earn/",
   "complexity": {
     "time": "O(U)",
