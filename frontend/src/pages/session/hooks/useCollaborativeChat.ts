@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
+import { resolveWsBaseUrl } from "./wsBaseUrl";
 
 export interface CollaborativeChatMessage {
   id: string;
@@ -36,8 +37,7 @@ export function useCollaborativeChat(options: Options): CollaborativeChatState {
     }
 
     const ydoc = new Y.Doc();
-    const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const wsUrl = `${wsProtocol}//${window.location.host}/ws`;
+    const wsUrl = `${resolveWsBaseUrl()}/ws`;
     const provider = new WebsocketProvider(wsUrl, roomName, ydoc);
     provider.awareness.setLocalStateField("user", {
       name: userName ?? "User",

@@ -26,6 +26,7 @@ import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
 import { MonacoBinding } from "y-monaco";
 import type { editor as MonacoEditor } from "monaco-editor";
+import { resolveWsBaseUrl } from "./wsBaseUrl";
 
 interface Options {
   /** Room name: session:<id>:q:<index>:file:<path> — pass "" to skip connecting */
@@ -64,8 +65,7 @@ export function useCollaborativeEditor(options: Options): CollaborativeEditorSta
     if (!roomName) return;
 
     const ydoc = new Y.Doc();
-    const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const wsUrl = `${wsProtocol}//${window.location.host}/ws`;
+    const wsUrl = `${resolveWsBaseUrl()}/ws`;
     const provider = new WebsocketProvider(wsUrl, roomName, ydoc);
 
     ydocRef.current    = ydoc;
