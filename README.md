@@ -12,10 +12,8 @@ This monorepo contains the **frontend** (React / Vite / TypeScript) and **backen
 
 | Tool | Required | Install |
 |------|----------|---------|
-| **Node.js** ≥ 20 | ✅ | [nodejs.org](https://nodejs.org) |
-| **npm** | ✅ | Comes with Node.js |
-| **Python 3** | ✅ | `sudo apt install python3` / `brew install python3` |
-| **Infisical CLI** | ✅ | See [SECRETS.md](SECRETS.md#1-install-the-infisical-cli) |
+| **Docker Desktop** | ✅ | [docs.docker.com/get-started/get-docker](https://docs.docker.com/get-started/get-docker/) |
+| **Infisical CLI** | ✅ | See [local-dev.md](local-dev.md) |
 | **Fly CLI** | Deploy only | `curl -L https://fly.io/install.sh \| sh` |
 
 ---
@@ -29,27 +27,21 @@ git clone <repo-url> && cd CodeLive
 # 2. Log in to Infisical (one-time — ask project owner for an invite)
 infisical login
 
-# 3. Run setup (installs deps, verifies tools)
-./scripts/setup.sh
-
-# 4. Start developing
-./scripts/dev.sh
+# 3. Start developing (Docker handles all dependencies automatically)
+./scripts/dev-local.sh
 ```
 
-That's it. Secrets are pulled from Infisical automatically — no `.env` files needed.
+No `npm install`, no Python setup. Docker builds everything on first run (~1–2 min), then it's instant. See [local-dev.md](local-dev.md) for full setup instructions.
 
 ---
 
 ## Scripts
 
-All scripts live in the `scripts/` directory and can be run from the project root.
-
 | Script | Description |
 |--------|-------------|
-| `./scripts/setup.sh` | Install all dependencies, verify tooling, check Infisical auth |
-| `./scripts/dev.sh` | Start frontend locally with **Fly.io backend** — for cross-machine sessions |
-| `./scripts/dev-local.sh` | Start backend (`:5000`) + frontend (`:3000`) both locally — Ctrl+C stops both |
-| `./scripts/deploy.sh` | Pre-deploy checks + deploy backend to Fly.io |
+| `./scripts/dev-local.sh` | Start backend (`:5000`) + frontend (`:3000`) locally via Docker |
+| `./scripts/dev.sh` | Start frontend locally pointing at the Fly.io production backend |
+| `./scripts/deploy.sh` | Deploy backend to Fly.io |
 | `./scripts/secrets.sh list` | List current production secrets on Fly.io |
 | `./scripts/secrets.sh set` | Interactively set all Fly.io production secrets |
 | `./scripts/secrets.sh rotate` | Show key rotation checklist |
@@ -61,13 +53,18 @@ All scripts live in the `scripts/` directory and can be run from the project roo
 ```
 CodeLive/
 ├── frontend/          React 19 + Vite + Tailwind CSS
-│   └── src/
+│   ├── src/
+│   └── Dockerfile.dev Dev container
 ├── backend/           Express + TypeScript + Yjs WebSocket
 │   ├── src/
 │   ├── Dockerfile     Production container
+│   ├── Dockerfile.dev Dev container
 │   └── fly.toml       Fly.io config
 ├── content/           Question bank (JSON + seed scripts)
+├── docker-compose.yml Local dev orchestration
 ├── scripts/           Dev & deploy scripts
+├── local-dev.md       Local dev setup guide
+├── prod-dev.md        Fly.io deploy guide
 ├── SECRETS.md         Secret management docs
 └── README.md          ← you are here
 ```
@@ -158,51 +155,27 @@ The deploy script runs pre-flight checks (Fly auth, TypeScript build, secrets co
 
 ## Local Development
 
-### With Fly.io backend (recommended for team sessions)
-
-```bash
-./scripts/dev.sh
-```
-
-Runs only the **frontend** locally at `http://localhost:3000`, proxying all API and WebSocket requests to the deployed Fly.io backend (`codelive-backend.fly.dev`). Both you and your teammate run this — you share the same backend, so collaborative sessions work across machines.
-
-### Fully local (solo development)
+### Fully local (backend + frontend)
 
 ```bash
 ./scripts/dev-local.sh
 ```
 
-Runs **both** servers on your machine:
-- **Backend** at `http://localhost:5000`
+Runs both servers via Docker:
 - **Frontend** at `http://localhost:3000`
+- **Backend** at `http://localhost:5000`
 
-Press **Ctrl+C** to stop both. Good for solo development and testing without internet.
+Press **Ctrl+C** to stop.
 
-### Running individually
-
-```bash
-# Backend only
-cd backend && npm run dev
-
-# Frontend only
-cd frontend && npm run dev
-```
-
-### Without Infisical (offline fallback)
-
-If you need to work offline, create `.env` files manually:
+### Frontend only, against Fly.io backend
 
 ```bash
-cp backend/.env.example backend/.env   # fill in values
-# Create frontend/.env with VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY
+./scripts/dev.sh
 ```
 
-Then run without the `infisical run` wrapper:
+Runs only the frontend locally. API and WebSocket requests proxy to the deployed Fly.io backend. Both you and a teammate can run this simultaneously and share the same backend for collaborative sessions.
 
-```bash
-cd backend  && tsx watch src/index.ts
-cd frontend && vite
-```
+See [local-dev.md](local-dev.md) for full setup instructions.
 
 ---
 
@@ -223,10 +196,11 @@ For cross-machine sessions, both users must connect to the **same backend** (eit
 
 | Problem | Fix |
 |---------|-----|
-| `infisical: command not found` | Run the install for your OS — see [SECRETS.md](SECRETS.md) |
+| `infisical: command not found` | See install instructions in [local-dev.md](local-dev.md) |
 | `You must be logged in` | `infisical login` |
 | `SUPABASE_URL is undefined` | Check secrets exist in Infisical Dev environment |
 | Frontend env vars not loading | Must be prefixed with `VITE_` |
-| TypeScript build errors | `cd backend && npx tsc --noEmit` to see details |
+| Module not found after `git pull` | `docker compose build` then `./scripts/dev-local.sh` |
+| node_modules errors persist | `docker compose down -v` then `./scripts/dev-local.sh` |
 | Fly deploy fails | Check `fly auth whoami` and `fly status` |
 | WebSocket not connecting | Ensure backend is running and Vite proxy is configured |

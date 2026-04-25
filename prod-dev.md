@@ -4,15 +4,16 @@ Use this to deploy backend services to Fly, then run frontend locally.
 
 ## 1. One-time setup
 
+Install **Docker Desktop**, **Infisical CLI**, and **Fly CLI** — see [local-dev.md](local-dev.md) for Docker and Infisical install instructions.
+
 ```bash
-git clone <your-repo-url>
-cd CodeLive
-./scripts/setup.sh
+# Install Fly CLI
+curl -L https://fly.io/install.sh | sh
+
+# Log in
 infisical login
 fly auth login
 ```
-
-`./scripts/setup.sh` handles required `npm install` steps.
 
 ## 2. Create Fly apps (only first time)
 
@@ -57,9 +58,10 @@ Expected:
 ./scripts/dev.sh
 ```
 
-Open:
-- Frontend: `http://localhost:3000`
-- Backend (prod): `https://codelive-backend.fly.dev`
+- Frontend: http://localhost:3000
+- Backend (prod): https://codelive-backend.fly.dev
+
+> **First run only:** Docker builds the frontend image (~1 minute). Every run after that is instant.
 
 ---
 

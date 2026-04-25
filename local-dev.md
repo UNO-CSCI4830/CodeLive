@@ -1,50 +1,78 @@
-# Local Dev (Simple)
-
-Use this when you want the full app running on your machine.
+# Local Dev
 
 ## 1. One-time setup
 
+Install two tools:
+
+**Docker Desktop** — manages all project dependencies automatically
+https://docs.docker.com/get-started/get-docker/
+
+**Infisical CLI** — injects secrets at runtime (no `.env` files needed)
+
 ```bash
-git clone <your-repo-url>
-cd CodeLive
-./scripts/setup.sh
+# Ubuntu / Debian
+curl -1sLf 'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.deb.sh' | sudo bash
+sudo apt-get install infisical
+
+# macOS
+brew install infisical/get-cli/infisical
+
+# Windows (Scoop)
+scoop bucket add infisical https://github.com/Infisical/scoop-infisical.git
+scoop install infisical
+```
+
+Then log in to Infisical (ask the project owner to invite you first):
+
+```bash
 infisical login
 ```
 
-`./scripts/setup.sh` checks tools and runs all required installs (`npm install` in root, backend, and frontend).
+That's it. No `npm install`, no Python setup — Docker handles everything.
 
-## 2. Start project (backend + frontend, fully local)
+> The repo already contains `.infisical.json` linking to the project. You only need to log in — no `infisical init` required.
+
+---
+
+## 2. Run the full app (backend + frontend)
 
 ```bash
 ./scripts/dev-local.sh
 ```
 
-That starts:
-- Frontend: `http://localhost:3000`
-- Backend: `http://localhost:5000`
+- Frontend: http://localhost:3000
+- Backend: http://localhost:5000
 
-## 3. Stop project
+Press `Ctrl+C` to stop.
 
-Press `Ctrl + C` in the terminal running `./scripts/dev-local.sh`.
+> **First run only:** Docker builds the images (~1–2 minutes). Every run after that is instant.
 
 ---
 
-## Optional: frontend local + production backend
+## 3. Run frontend against the production backend
+
+Use this when you want to develop UI without running the backend locally.
 
 ```bash
 ./scripts/dev.sh
 ```
 
-This runs frontend locally and points API/WebSocket traffic at Fly production backend.
+- Frontend: http://localhost:3000
+- Backend: https://codelive-backend.fly.dev
 
 ---
 
-## If you do not want to use setup.sh
+## After a `git pull`
 
-Run installs manually:
+If `package.json` or a `Dockerfile.dev` changed, rebuild the images:
 
 ```bash
-npm install
-cd backend && npm install && cd ..
-cd frontend && npm install && cd ..
+docker compose build
+```
+
+Then run as normal. If you see "module not found" errors after a rebuild, the node_modules volume is stale — reset it:
+
+```bash
+docker compose down -v
+./scripts/dev-local.sh
 ```

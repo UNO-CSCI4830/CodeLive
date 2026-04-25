@@ -1,0 +1,14 @@
+FROM node:20-slim
+WORKDIR /app
+
+# Install Node dependencies into the image layer.
+# The named volume in docker-compose.yml is initialized from this layer.
+COPY package.json package-lock.json ./
+RUN npm ci
+
+ENV NODE_ENV=development
+EXPOSE 3000
+
+# src/ and config files are bind-mounted at runtime for hot reload.
+# --host binds Vite to 0.0.0.0 so the port is reachable from the host machine.
+CMD ["npx", "vite", "--host"]

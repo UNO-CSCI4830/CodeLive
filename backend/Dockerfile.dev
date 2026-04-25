@@ -1,0 +1,24 @@
+FROM node:20-slim
+WORKDIR /app
+
+# Python is required for the code-execution runner (/api/run/backend/python)
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends python3 python3-venv \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements-runner.txt ./
+RUN python3 -m venv /opt/codelive-venv \
+    && /opt/codelive-venv/bin/pip install --no-cache-dir -r requirements-runner.txt
+
+# Install Node dependencies into the image layer.
+# The named volume in docker-compose.yml is initialized from this layer,
+# keeping node_modules container-managed and isolated from the host.
+COPY package.json package-lock.json ./
+RUN npm ci
+
+ENV PYTHON_BIN=/opt/codelive-venv/bin/python
+ENV NODE_ENV=development
+EXPOSE 5000
+
+# src/ is bind-mounted at runtime for hot reload.
+CMD ["npx", "tsx", "watch", "src/index.ts"]
