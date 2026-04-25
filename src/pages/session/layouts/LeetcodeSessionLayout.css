@@ -1,0 +1,266 @@
+/* ═══════════════════════════════════════════════════
+ *  LeetcodeSessionLayout — Bold Typography theme
+ * ═══════════════════════════════════════════════════ */
+
+/* ── Loading / error ──────────────────────────────── */
+.lsl-loading,
+.lsl-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2.5rem;
+  color: var(--muted-fg);
+  height: 100%;
+}
+
+.lsl-loading-spinner {
+  width: 2rem;
+  height: 2rem;
+  animation: spin 1s linear infinite;
+  color: var(--muted-fg);
+}
+
+/* ── Body (two-column) ────────────────────────────── */
+.lsl-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+  height: 100%;
+}
+
+.lsl-body--resizing * {
+  pointer-events: none;
+}
+
+/* ── Description column ──────────────────────────── */
+.lsl-desc-col {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 240px;
+}
+
+/* ── Resize handles ──────────────────────────────── */
+.lsl-resize-col {
+  flex-shrink: 0;
+  cursor: col-resize;
+  width: 5px;
+  background: var(--border);
+  transition: background var(--duration-fast) var(--ease);
+}
+
+.lsl-resize-col:hover {
+  background: var(--accent);
+}
+
+.lsl-resize-row {
+  flex-shrink: 0;
+  cursor: row-resize;
+  height: 5px;
+  background: var(--border);
+  transition: background var(--duration-fast) var(--ease);
+}
+
+.lsl-resize-row:hover {
+  background: var(--accent);
+}
+
+/* ── Editor column (right) ───────────────────────── */
+.lsl-editor-col {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 300px;
+}
+
+/* ── Editor toolbar ──────────────────────────────── */
+.lsl-editor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding-inline: 0.75rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  background: var(--card);
+}
+
+.lsl-editor-toolbar-left,
+.lsl-editor-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lsl-lang-badge {
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--muted-fg);
+  background: var(--border);
+}
+
+.lsl-collab-status {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--muted-fg);
+}
+
+.lsl-collab-status--connected {
+  color: #4ade80;
+}
+
+.lsl-collab-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.lsl-run-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: #fff;
+  background: #22c55e;
+  border: none;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease);
+}
+
+.lsl-run-btn:hover:not(:disabled) {
+  background: #16a34a;
+}
+
+.lsl-run-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.lsl-btn-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.lsl-btn-icon--spin {
+  animation: spin 1s linear infinite;
+}
+
+/* ── Editor pane ─────────────────────────────────── */
+.lsl-editor-pane {
+  flex-shrink: 0;
+  overflow: hidden;
+  min-height: 120px;
+}
+
+/* ── Bottom pane (tabs + content) ────────────────── */
+.lsl-bottom-pane {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 100px;
+}
+
+.lsl-bottom-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  flex-shrink: 0;
+}
+
+.lsl-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--muted-fg);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.lsl-tab:hover {
+  color: var(--fg);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.lsl-tab--active {
+  color: var(--fg);
+  border-bottom-color: var(--accent);
+}
+
+.lsl-tab-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.lsl-tab-badge {
+  border-radius: 9999px;
+  padding: 0 0.375rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  background: var(--border);
+}
+
+.lsl-tab--active .lsl-tab-badge {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+/* ── Bottom content ──────────────────────────────── */
+.lsl-bottom-content {
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.lsl-tests-wrapper {
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* ── Stdout ──────────────────────────────────────── */
+.lsl-stdout {
+  border-top: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+}
+
+.lsl-stdout-label {
+  display: block;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--muted-fg);
+  margin-bottom: 0.25rem;
+}
+
+.lsl-stdout-content {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--fg);
+  white-space: pre-wrap;
+  font-family: var(--font-mono);
+  max-height: 100px;
+  overflow-y: auto;
+}

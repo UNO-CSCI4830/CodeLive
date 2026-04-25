@@ -1,0 +1,226 @@
+/* ═══════════════════════════════════════════════════════
+ *  CalendarPage  –  monthly grid + event sidebar
+ * ═══════════════════════════════════════════════════════ */
+
+.cal-wrapper {
+  @apply mx-auto max-w-5xl px-4 py-10;
+}
+
+.cal-container {
+  @apply flex flex-col gap-6;
+}
+
+/* ── Header ───────────────────────────────────────── */
+.cal-header {
+  @apply flex items-center justify-between;
+}
+
+.cal-header-left {
+  @apply flex items-center gap-3;
+}
+
+.cal-header-icon {
+  @apply h-7 w-7 text-blue-600;
+}
+
+.cal-heading {
+  @apply text-3xl font-bold tracking-tight text-neutral-900;
+}
+
+/* ── Invite button (interviewer only) ─────────────── */
+.cal-invite-btn {
+  @apply flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2
+         text-sm font-semibold text-white shadow-sm
+         transition-colors hover:bg-blue-700 active:bg-blue-800;
+  border: none;
+  cursor: pointer;
+}
+
+.cal-invite-icon {
+  @apply h-4 w-4;
+}
+
+/* ── Body: grid + events ──────────────────────────── */
+.cal-body {
+  @apply flex gap-6;
+}
+
+/* ── Calendar grid section ────────────────────────── */
+.cal-grid-section {
+  @apply flex-1 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm;
+}
+
+/* Month navigation */
+.cal-month-nav {
+  @apply mb-4 flex items-center gap-2;
+}
+
+.cal-nav-btn {
+  @apply flex h-8 w-8 items-center justify-center rounded-lg
+         text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-800;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.cal-nav-icon {
+  @apply h-4 w-4;
+}
+
+.cal-month-label {
+  @apply flex-1 text-center text-lg font-semibold text-neutral-900;
+}
+
+.cal-today-btn {
+  @apply rounded-lg border border-neutral-200 px-3 py-1 text-xs font-medium
+         text-neutral-600 transition-colors hover:bg-neutral-100;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Day headers */
+.cal-day-headers {
+  @apply mb-1 grid grid-cols-7 text-center;
+}
+
+.cal-day-header {
+  @apply py-1.5 text-xs font-semibold uppercase tracking-wide text-neutral-400;
+}
+
+/* Day grid */
+.cal-days {
+  @apply grid grid-cols-7;
+}
+
+.cal-cell {
+  @apply relative flex h-10 w-full items-center justify-center rounded-lg
+         text-sm text-neutral-700 transition-colors hover:bg-neutral-100;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.cal-cell--empty {
+  cursor: default;
+}
+
+.cal-cell--today {
+  @apply font-bold text-blue-600;
+}
+
+.cal-cell--selected {
+  @apply bg-blue-600 font-semibold text-white hover:bg-blue-700;
+}
+
+.cal-cell-dot {
+  @apply absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-blue-500;
+}
+
+.cal-cell--selected .cal-cell-dot {
+  @apply bg-white;
+}
+
+/* ── Events sidebar ───────────────────────────────── */
+.cal-events-section {
+  @apply w-72 shrink-0 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm;
+}
+
+.cal-events-heading {
+  @apply mb-4 text-base font-semibold text-neutral-900;
+}
+
+.cal-events-empty {
+  @apply text-sm text-neutral-400;
+}
+
+.cal-events-list {
+  @apply flex flex-col gap-3;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cal-event {
+  @apply flex items-start gap-3 rounded-lg border border-neutral-100 p-3;
+}
+
+.cal-event-dot {
+  @apply mt-1.5 h-2 w-2 shrink-0 rounded-full;
+}
+
+.cal-event--interview .cal-event-dot { @apply bg-blue-500; }
+.cal-event--review .cal-event-dot    { @apply bg-emerald-500; }
+.cal-event--meeting .cal-event-dot   { @apply bg-amber-500; }
+
+.cal-event-info {
+  @apply flex flex-col;
+}
+
+.cal-event-title {
+  @apply text-sm font-medium text-neutral-800;
+}
+
+.cal-event-time {
+  @apply text-xs text-neutral-400;
+}
+
+/* ── Modal overlay ────────────────────────────────── */
+.cal-modal-overlay {
+  @apply fixed inset-0 z-50 flex items-center justify-center bg-black/40;
+}
+
+.cal-modal {
+  @apply w-full max-w-md rounded-xl bg-white p-6 shadow-xl;
+}
+
+.cal-modal-title {
+  @apply mb-5 text-lg font-bold text-neutral-900;
+}
+
+.cal-modal-success {
+  @apply text-center text-sm font-medium text-emerald-600;
+}
+
+.cal-modal-form {
+  @apply flex flex-col gap-4;
+}
+
+.cal-modal-label {
+  @apply flex flex-col gap-1.5 text-sm font-medium text-neutral-700;
+}
+
+.cal-modal-label--half {
+  @apply flex-1;
+}
+
+.cal-modal-input {
+  @apply rounded-lg border border-neutral-300 px-3 py-2 text-sm text-neutral-900
+         outline-none transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20;
+}
+
+.cal-modal-row {
+  @apply flex gap-4;
+}
+
+.cal-modal-actions {
+  @apply mt-2 flex items-center justify-end gap-3;
+}
+
+.cal-modal-cancel {
+  @apply rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium
+         text-neutral-600 transition-colors hover:bg-neutral-50;
+  background: transparent;
+  cursor: pointer;
+}
+
+.cal-modal-send {
+  @apply flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2
+         text-sm font-semibold text-white transition-colors
+         hover:bg-blue-700 active:bg-blue-800;
+  border: none;
+  cursor: pointer;
+}
+
+.cal-modal-send-icon {
+  @apply h-4 w-4;
+}

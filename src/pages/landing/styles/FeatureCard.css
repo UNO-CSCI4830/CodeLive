@@ -1,0 +1,24 @@
+/* ── Feature card (used inside 1px-gap grid) ──────── */
+.feature-card {
+  padding: 2rem;
+  background: var(--bg);
+  transition: background var(--duration-fast) var(--ease);
+}
+
+.feature-card:hover {
+  background: var(--muted);
+}
+
+.feature-card-title {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--fg);
+  letter-spacing: var(--tracking-tight);
+}
+
+.feature-card-description {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--muted-fg);
+}

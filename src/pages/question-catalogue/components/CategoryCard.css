@@ -1,0 +1,72 @@
+/* CategoryCard — Bold Typography */
+
+.cat-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  background: transparent;
+  padding: 1.5rem;
+  text-decoration: none;
+  transition: border-color var(--duration-fast) var(--ease);
+}
+.cat-card:hover { border-color: var(--border-hover); }
+
+.cat-card--empty {
+  cursor: default;
+  opacity: 0.5;
+}
+.cat-card--empty:hover { border-color: var(--border); }
+
+.cat-card-icon-wrapper {
+  margin-bottom: 1rem;
+  display: flex;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  background: var(--muted);
+}
+
+.cat-card-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--muted-fg);
+}
+
+.cat-card-body { flex: 1; }
+
+.cat-card-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--fg);
+  letter-spacing: var(--tracking-tight);
+}
+
+.cat-card-desc {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--muted-fg);
+}
+
+.cat-card-footer {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.cat-card-count {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--fg);
+}
+
+.cat-card-badge--soon {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  padding: 0.2rem 0.6rem;
+  background: var(--muted);
+  color: var(--muted-fg);
+}

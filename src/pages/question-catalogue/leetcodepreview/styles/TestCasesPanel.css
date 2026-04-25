@@ -1,0 +1,176 @@
+/* ── Test Cases Panel — Bold Typography theme ────── */
+
+.tcp-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+  height: 100%;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Header ───────────────────────────────────────── */
+.tcp-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+  padding: 0.5rem 0.75rem;
+}
+
+.tcp-header-icon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--muted-fg);
+}
+
+.tcp-header-title {
+  flex: 1;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--muted-fg);
+}
+
+.tcp-summary {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.tcp-spinner {
+  width: 1rem;
+  height: 1rem;
+  animation: spin 1s linear infinite;
+  color: var(--accent);
+}
+
+/* ── Scrollable list ──────────────────────────────── */
+.tcp-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ── Individual test case ─────────────────────────── */
+.tcp-case {
+  border-bottom: 1px solid var(--border);
+}
+
+.tcp-case-header {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-size: 0.875rem;
+  color: var(--fg);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  transition: background var(--duration-fast) var(--ease);
+}
+
+.tcp-case-header:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.tcp-case-header--pass {
+  border-left: 2px solid #10b981;
+}
+
+.tcp-case-header--fail {
+  border-left: 2px solid var(--accent);
+}
+
+/* ── Status icons ─────────────────────────────────── */
+.tcp-case-status {
+  display: flex;
+  align-items: center;
+}
+
+.tcp-icon-pass {
+  width: 1rem;
+  height: 1rem;
+  color: #10b981;
+}
+
+.tcp-icon-fail {
+  width: 1rem;
+  height: 1rem;
+  color: var(--accent);
+}
+
+.tcp-icon-pending {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+}
+
+.tcp-case-label {
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.tcp-case-desc {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: var(--muted-fg);
+}
+
+.tcp-chevron {
+  width: 0.875rem;
+  height: 0.875rem;
+  color: var(--muted-fg);
+  flex-shrink: 0;
+}
+
+/* ── Expanded body ────────────────────────────────── */
+.tcp-case-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--card);
+  padding: 0.75rem 1rem;
+}
+
+.tcp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tcp-field-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--muted-fg);
+}
+
+.tcp-field-value {
+  border-radius: 0.25rem;
+  background: var(--bg);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--fg);
+  white-space: pre-wrap;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.tcp-field-value--pass {
+  color: #6ee7b7;
+}
+
+.tcp-field-value--fail {
+  color: #fca5a5;
+}

@@ -1,0 +1,23 @@
+/* SettingsPage — Bold Typography */
+
+.settings-wrapper {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.settings-heading {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg);
+}
+
+.settings-placeholder {
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  color: var(--muted-fg);
+  font-size: 0.875rem;
+  background: transparent;
+}

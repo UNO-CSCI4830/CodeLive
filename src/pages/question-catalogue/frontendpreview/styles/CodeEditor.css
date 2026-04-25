@@ -1,0 +1,7 @@
+/* ── Code editor wrapper — Bold Typography theme ── */
+.code-editor-wrapper {
+  flex: 1;
+  overflow: hidden;
+  background: var(--muted);
+  min-height: 0;
+}

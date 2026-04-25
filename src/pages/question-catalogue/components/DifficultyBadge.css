@@ -1,0 +1,14 @@
+/* DifficultyBadge — Bold Typography */
+
+.diff-badge {
+  display: inline-flex;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+.diff-badge--easy   { background: rgba(74,222,128,0.1);  color: #4ade80; }
+.diff-badge--medium { background: rgba(251,191,36,0.1);  color: #fbbf24; }
+.diff-badge--hard   { background: rgba(248,113,113,0.1); color: #f87171; }
