@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import RoleCard from "./components/RoleCard";
 import { useAuth, type Role } from "@/lib/AuthContext";
-import { supabase } from "@/lib/supabase";
+import { apiFetch } from "@/lib/apiClient";
 import "./styles/RolePage.css";
 
 const roles: { value: Role; label: string; description: string }[] = [
@@ -23,6 +23,8 @@ const roles: { value: Role; label: string; description: string }[] = [
 export default function RolePage() {
   const { user, profile, loading, refreshProfile } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => { document.title = "Choose your role — Code Live"; }, []);
 
   const [selected, setSelected] = useState<Role | null>(null);
   const [saving, setSaving] = useState(false);
@@ -48,13 +50,19 @@ export default function RolePage() {
     setError(null);
     setSaving(true);
 
-    const { error: updateErr } = await supabase
-      .from("profiles")
-      .update({ role })
-      .eq("id", user.id);
+    try {
+      const res = await apiFetch("/api/profile", {
+        method: "PATCH",
+        body: JSON.stringify({ role }),
+      });
 
-    if (updateErr) {
-      setError(updateErr.message);
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to update role");
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to update role";
+      setError(message);
       setSaving(false);
       return;
     }

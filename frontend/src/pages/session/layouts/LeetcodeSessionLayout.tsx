@@ -15,6 +15,7 @@ import type { LeetcodeProblem, TestResult } from "@/pages/question-catalogue/lee
 import LeetcodeProblemDescription from "@/pages/question-catalogue/leetcodepreview/components/LeetcodeProblemDescription";
 import TestCasesPanel from "@/pages/question-catalogue/leetcodepreview/components/TestCasesPanel";
 import AIAssistant, { type AIAssistantHandle } from "../components/AIAssistant";
+import { apiFetch } from "@/lib/apiClient";
 import "./LeetcodeSessionLayout.css";
 
 interface Props {
@@ -142,9 +143,8 @@ const LeetcodeSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Le
     const code = getText();
 
     try {
-      const res = await fetch("/api/run/python", {
+      const res = await apiFetch("/api/run/python", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code, testCases: problem.testCases }),
       });
 

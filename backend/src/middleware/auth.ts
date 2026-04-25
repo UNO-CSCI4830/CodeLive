@@ -1,13 +1,19 @@
 import { Request, Response, NextFunction } from "express";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseAdmin } from "../lib/supabase";
+import type { User } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.SUPABASE_URL!;
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY!;
+/** Augmented request type — available after requireAuth. */
+export interface AuthRequest extends Request {
+  user: User;
+}
 
 /**
  * Express middleware that validates the Supabase JWT from the
  * `Authorization: Bearer <token>` header and attaches the
  * authenticated user to `req.user`.
+ *
+ * Uses the service-role admin client so we don't create a new
+ * Supabase client on every single request.
  */
 export async function requireAuth(
   req: Request,
@@ -23,15 +29,10 @@ export async function requireAuth(
 
   const token = authHeader.slice(7);
 
-  /* Create a per-request client so getUser uses this specific JWT. */
-  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-    global: { headers: { Authorization: `Bearer ${token}` } },
-  });
-
   const {
     data: { user },
     error,
-  } = await supabase.auth.getUser(token);
+  } = await supabaseAdmin.auth.getUser(token);
 
   if (error || !user) {
     res.status(401).json({ error: "Invalid or expired token" });
@@ -39,6 +40,6 @@ export async function requireAuth(
   }
 
   /* Attach user to the request so downstream handlers can access it. */
-  (req as Request & { user: typeof user }).user = user;
+  (req as AuthRequest).user = user;
   next();
 }

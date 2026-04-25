@@ -2,6 +2,7 @@ import { Router, type NextFunction, type Request, type Response } from "express"
 import { runLeetcodePython } from "./handlers/runLeetcodePython";
 import { runBackendPython } from "./handlers/runBackendPython";
 import { runDatabaseSqlite } from "./handlers/runDatabaseSqlite";
+import { requireAuth } from "../../middleware/auth";
 
 const router = Router();
 const RUN_EXECUTION_MODE = resolveExecutionMode();
@@ -208,18 +209,21 @@ async function proxyToRunner(
 
 router.post(
   "/api/run/python",
+  requireAuth,
   requireRunnerToken,
   maybeRateLimit,
   proxyOrRun("/api/run/python", runLeetcodePython),
 );
 router.post(
   "/api/run/backend/python",
+  requireAuth,
   requireRunnerToken,
   maybeRateLimit,
   proxyOrRun("/api/run/backend/python", runBackendPython),
 );
 router.post(
   "/api/run/database/sql-lite",
+  requireAuth,
   requireRunnerToken,
   maybeRateLimit,
   proxyOrRun("/api/run/database/sql-lite", runDatabaseSqlite),

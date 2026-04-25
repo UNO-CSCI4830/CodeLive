@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import { supabaseAdmin } from "../lib/supabase";
+import { requireAuth, type AuthRequest } from "../middleware/auth";
 
 const router = Router();
 
@@ -30,11 +31,19 @@ function extractLastName(fullName: string): string | null {
 // Body: { interviewerId, aiEnabled, totalInterviewMinutes, problems: [{ problemId, category, timeLimit }] }
 router.post(
   "/api/sessions",
+  requireAuth,
   async (req: Request, res: Response): Promise<void> => {
+    const { user } = req as AuthRequest;
     const { interviewerId, problems, aiEnabled, totalInterviewMinutes, groupId } = req.body;
 
     if (!interviewerId || !problems || !Array.isArray(problems) || problems.length === 0) {
       res.status(400).json({ error: "interviewerId and problems[] are required" });
+      return;
+    }
+
+    // Prevent impersonation — interviewerId must match the authenticated user
+    if (interviewerId !== user.id) {
+      res.status(403).json({ error: "interviewerId does not match authenticated user" });
       return;
     }
 
@@ -152,11 +161,19 @@ router.post(
 // Body: { joinCode, candidateId }
 router.post(
   "/api/sessions/join",
+  requireAuth,
   async (req: Request, res: Response): Promise<void> => {
+    const { user } = req as AuthRequest;
     const { joinCode, candidateId } = req.body;
 
     if (!joinCode || !candidateId) {
       res.status(400).json({ error: "joinCode and candidateId are required" });
+      return;
+    }
+
+    // Prevent impersonation — candidateId must match the authenticated user
+    if (candidateId !== user.id) {
+      res.status(403).json({ error: "candidateId does not match authenticated user" });
       return;
     }
 
@@ -230,7 +247,9 @@ router.post(
 // GET /api/sessions/:sessionId
 router.get(
   "/api/sessions/:sessionId",
+  requireAuth,
   async (req: Request, res: Response): Promise<void> => {
+    const { user } = req as AuthRequest;
     const { sessionId } = req.params;
 
     const { data: session, error } = await supabaseAdmin
@@ -241,6 +260,12 @@ router.get(
 
     if (error || !session) {
       res.status(404).json({ error: "Session not found" });
+      return;
+    }
+
+    // Only participants can view session details
+    if (session.interviewer_id !== user.id && session.candidate_id !== user.id) {
+      res.status(403).json({ error: "You are not a participant in this session" });
       return;
     }
 
@@ -259,7 +284,9 @@ router.get(
 // POST /api/sessions/:sessionId/advance
 router.post(
   "/api/sessions/:sessionId/advance",
+  requireAuth,
   async (req: Request, res: Response): Promise<void> => {
+    const { user } = req as AuthRequest;
     const { sessionId } = req.params;
 
     // Get current session
@@ -271,6 +298,12 @@ router.post(
 
     if (!session) {
       res.status(404).json({ error: "Session not found" });
+      return;
+    }
+
+    // Only the interviewer can advance questions
+    if (session.interviewer_id !== user.id) {
+      res.status(403).json({ error: "Only the interviewer can advance questions" });
       return;
     }
 
@@ -325,7 +358,9 @@ router.post(
 // Body: { index: number }
 router.post(
   "/api/sessions/:sessionId/select",
+  requireAuth,
   async (req: Request, res: Response): Promise<void> => {
+    const { user } = req as AuthRequest;
     const { sessionId } = req.params;
     const index = Number(req.body?.index);
 
@@ -336,12 +371,18 @@ router.post(
 
     const { data: session } = await supabaseAdmin
       .from("sessions")
-      .select("id, status, problems:session_problems(id)")
+      .select("id, status, interviewer_id, problems:session_problems(id)")
       .eq("id", sessionId)
       .maybeSingle();
 
     if (!session) {
       res.status(404).json({ error: "Session not found" });
+      return;
+    }
+
+    // Only the interviewer can switch questions
+    if (session.interviewer_id !== user.id) {
+      res.status(403).json({ error: "Only the interviewer can switch questions" });
       return;
     }
 
@@ -376,17 +417,25 @@ router.post(
 // POST /api/sessions/:sessionId/timer/pause
 router.post(
   "/api/sessions/:sessionId/timer/pause",
+  requireAuth,
   async (req: Request, res: Response): Promise<void> => {
+    const { user } = req as AuthRequest;
     const { sessionId } = req.params;
 
     const { data: session } = await supabaseAdmin
       .from("sessions")
-      .select("id, status, timer_paused, timer_paused_seconds, timer_paused_at")
+      .select("id, status, interviewer_id, timer_paused, timer_paused_seconds, timer_paused_at")
       .eq("id", sessionId)
       .maybeSingle();
 
     if (!session) {
       res.status(404).json({ error: "Session not found" });
+      return;
+    }
+
+    // Only the interviewer can pause the timer
+    if (session.interviewer_id !== user.id) {
+      res.status(403).json({ error: "Only the interviewer can pause the timer" });
       return;
     }
 
@@ -432,17 +481,25 @@ router.post(
 // POST /api/sessions/:sessionId/timer/resume
 router.post(
   "/api/sessions/:sessionId/timer/resume",
+  requireAuth,
   async (req: Request, res: Response): Promise<void> => {
+    const { user } = req as AuthRequest;
     const { sessionId } = req.params;
 
     const { data: session } = await supabaseAdmin
       .from("sessions")
-      .select("id, status, timer_paused, timer_paused_seconds, timer_paused_at")
+      .select("id, status, interviewer_id, timer_paused, timer_paused_seconds, timer_paused_at")
       .eq("id", sessionId)
       .maybeSingle();
 
     if (!session) {
       res.status(404).json({ error: "Session not found" });
+      return;
+    }
+
+    // Only the interviewer can resume the timer
+    if (session.interviewer_id !== user.id) {
+      res.status(403).json({ error: "Only the interviewer can resume the timer" });
       return;
     }
 
@@ -493,16 +550,24 @@ router.post(
 // POST /api/sessions/:sessionId/end
 router.post(
   "/api/sessions/:sessionId/end",
+  requireAuth,
   async (req: Request, res: Response): Promise<void> => {
+    const { user } = req as AuthRequest;
     const { sessionId } = req.params;
     const { data: session } = await supabaseAdmin
       .from("sessions")
-      .select("timer_paused, timer_paused_at, timer_paused_seconds")
+      .select("interviewer_id, timer_paused, timer_paused_at, timer_paused_seconds")
       .eq("id", sessionId)
       .maybeSingle();
 
     if (!session) {
       res.status(404).json({ error: "Session not found" });
+      return;
+    }
+
+    // Only the interviewer can end the session
+    if (session.interviewer_id !== user.id) {
+      res.status(403).json({ error: "Only the interviewer can end the session" });
       return;
     }
 

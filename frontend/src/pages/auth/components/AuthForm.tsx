@@ -45,6 +45,7 @@ export default function AuthForm({ mode, onSubmit, error, busy }: AuthFormProps)
             onChange={(e) => setName(e.target.value)}
             className="auth-form-input"
             placeholder="Your name"
+            autoComplete="name"
             disabled={busy}
           />
         </div>
@@ -62,6 +63,7 @@ export default function AuthForm({ mode, onSubmit, error, busy }: AuthFormProps)
           onChange={(e) => setEmail(e.target.value)}
           className="auth-form-input"
           placeholder="you@example.com"
+          autoComplete="email"
           disabled={busy}
         />
       </div>
@@ -79,6 +81,7 @@ export default function AuthForm({ mode, onSubmit, error, busy }: AuthFormProps)
           onChange={(e) => setPassword(e.target.value)}
           className="auth-form-input"
           placeholder="••••••••"
+          autoComplete={mode === "login" ? "current-password" : "new-password"}
           disabled={busy}
         />
       </div>

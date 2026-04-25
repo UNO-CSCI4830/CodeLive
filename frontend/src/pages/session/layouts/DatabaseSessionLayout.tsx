@@ -20,6 +20,7 @@ import DatabaseProblemDescription from "@/pages/question-catalogue/databaseprevi
 import SqlResultsPanel from "@/pages/question-catalogue/databasepreview/components/SqlResultsPanel";
 import AIAssistant, { type AIAssistantHandle } from "../components/AIAssistant";
 import type { SessionLayoutHandle } from "./LeetcodeSessionLayout";
+import { apiFetch } from "@/lib/apiClient";
 import "./DatabaseSessionLayout.css";
 
 interface Props {
@@ -128,9 +129,8 @@ const DatabaseSessionLayout = forwardRef<SessionLayoutHandle, Props>(
 
       try {
         const sql = getText();
-        const res = await fetch("/api/run/database/sql-lite", {
+        const res = await apiFetch("/api/run/database/sql-lite", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             problemId: problem.id,
             sql,

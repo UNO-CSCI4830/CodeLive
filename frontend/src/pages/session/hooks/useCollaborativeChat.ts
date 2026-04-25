@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
 import { resolveWsBaseUrl } from "./wsBaseUrl";
+import { supabase } from "@/lib/supabase";
 
 export interface CollaborativeChatMessage {
   id: string;
@@ -20,6 +21,7 @@ interface CollaborativeChatState {
   connected: boolean;
   messages: CollaborativeChatMessage[];
   appendMessage: (message: CollaborativeChatMessage) => void;
+  updateLastMessage: (updater: (prev: CollaborativeChatMessage) => CollaborativeChatMessage) => void;
 }
 
 export function useCollaborativeChat(options: Options): CollaborativeChatState {
@@ -36,33 +38,50 @@ export function useCollaborativeChat(options: Options): CollaborativeChatState {
       return;
     }
 
-    const ydoc = new Y.Doc();
-    const wsUrl = `${resolveWsBaseUrl()}/ws`;
-    const provider = new WebsocketProvider(wsUrl, roomName, ydoc);
-    provider.awareness.setLocalStateField("user", {
-      name: userName ?? "User",
-      color: userColor ?? "#2563eb",
-    });
-
-    provider.on("status", ({ status }: { status: string }) => {
-      setConnected(status === "connected");
-    });
-
-    const yMessages = ydoc.getArray<CollaborativeChatMessage>("messages");
-    yArrayRef.current = yMessages;
+    let cancelled = false;
+    let ydoc: Y.Doc | null = null;
+    let provider: WebsocketProvider | null = null;
+    let yMessages: Y.Array<CollaborativeChatMessage> | null = null;
 
     const syncMessages = () => {
-      setMessages(yMessages.toArray());
+      if (yMessages) setMessages(yMessages.toArray());
     };
 
-    syncMessages();
-    yMessages.observe(syncMessages);
+    async function connect() {
+      const { data: { session: authSession } } = await supabase.auth.getSession();
+      const token = authSession?.access_token ?? "";
+
+      if (cancelled) return;
+
+      ydoc = new Y.Doc();
+      const wsUrl = `${resolveWsBaseUrl()}/ws`;
+      provider = new WebsocketProvider(wsUrl, roomName, ydoc, {
+        params: { token },
+      });
+      provider.awareness.setLocalStateField("user", {
+        name: userName ?? "User",
+        color: userColor ?? "#2563eb",
+      });
+
+      provider.on("status", ({ status }: { status: string }) => {
+        setConnected(status === "connected");
+      });
+
+      yMessages = ydoc.getArray<CollaborativeChatMessage>("messages");
+      yArrayRef.current = yMessages;
+
+      syncMessages();
+      yMessages.observe(syncMessages);
+    }
+
+    connect();
 
     return () => {
-      yMessages.unobserve(syncMessages);
+      cancelled = true;
+      if (yMessages) yMessages.unobserve(syncMessages);
       yArrayRef.current = null;
-      provider.destroy();
-      ydoc.destroy();
+      if (provider) provider.destroy();
+      if (ydoc) ydoc.destroy();
       setConnected(false);
       setMessages([]);
     };
@@ -74,5 +93,18 @@ export function useCollaborativeChat(options: Options): CollaborativeChatState {
     yMessages.push([message]);
   }, []);
 
-  return { connected, messages, appendMessage };
+  const updateLastMessage = useCallback(
+    (updater: (prev: CollaborativeChatMessage) => CollaborativeChatMessage) => {
+      const yMessages = yArrayRef.current;
+      if (!yMessages || yMessages.length === 0) return;
+      const lastIndex = yMessages.length - 1;
+      const current = yMessages.get(lastIndex);
+      const updated = updater(current);
+      yMessages.delete(lastIndex, 1);
+      yMessages.push([updated]);
+    },
+    [],
+  );
+
+  return { connected, messages, appendMessage, updateLastMessage };
 }

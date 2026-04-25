@@ -24,7 +24,6 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
-import { supabase } from "@/lib/supabase";
 import { useSession, SessionProvider } from "../SessionContext";
 import { fetchReport, fetchAiLogs, type AiChatLogMessage } from "../api";
 import type { InterviewReport, PerQuestionAnalysis } from "../types";
@@ -41,27 +40,18 @@ function ReportContent() {
   const [aiLogsByOrder, setAiLogsByOrder] = useState<Record<number, AiChatLogMessage[]>>({});
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Fetch the candidate's display name when session loads
+  // Page title
   useEffect(() => {
-    if (!session?.candidate_id) {
-      setCandidateName(session?.candidate_name ?? "Candidate");
-      return;
-    }
+    document.title = "Interview Report – CodeLive";
+    return () => { document.title = "CodeLive"; };
+  }, []);
 
-    const sessionFallback =
-      session.candidate_name?.trim() ||
-      (session.candidate_id ? `Candidate ${session.candidate_id.slice(0, 6)}` : "Candidate");
-    setCandidateName(sessionFallback);
-
-    supabase
-      .from("profiles")
-      .select("name")
-      .eq("id", session.candidate_id)
-      .single()
-      .then(({ data }) => {
-        const profileName = data?.name?.trim();
-        if (profileName) setCandidateName(profileName);
-      });
+  // Derive candidate name from session data (already includes name from join)
+  useEffect(() => {
+    const name =
+      session?.candidate_name?.trim() ||
+      (session?.candidate_id ? `Candidate ${session.candidate_id.slice(0, 6)}` : "Candidate");
+    setCandidateName(name);
   }, [session?.candidate_id, session?.candidate_name]);
 
   const stopPolling = () => {
@@ -159,7 +149,7 @@ function ReportContent() {
           {report.error_message ?? "The AI analysis could not be completed."}
         </p>
         <p className="irp-error-sub">
-          Code snapshots were saved. You can access them via Supabase if needed.
+          Code snapshots were saved and can be reviewed later.
         </p>
         <Link to="/dashboard" className="irp-btn irp-btn--primary">
           Back to Dashboard

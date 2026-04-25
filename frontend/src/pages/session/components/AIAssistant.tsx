@@ -11,7 +11,7 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { Bot, Send, Loader2, Lightbulb, Sparkles, X } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import { useAuth } from "@/lib/AuthContext";
+import { apiFetch } from "@/lib/apiClient";
 import {
   useCollaborativeChat,
   type CollaborativeChatMessage,
@@ -71,12 +71,17 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
   },
   ref,
 ) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  // Track whether we're actively streaming (show cursor) vs just loading
+  const [streaming, setStreaming] = useState(false);
+  // Local buffer for streaming content — avoids hammering Yjs on every token
+  const [streamingContent, setStreamingContent] = useState("");
+  const streamingIdRef = useRef<string | null>(null);
+
   const roomName = `session:${sessionId}:q:${orderIndex}:ai`;
   const { messages, appendMessage } = useCollaborativeChat({ roomName });
-  const { session } = useAuth();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -93,17 +98,19 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
     currentCodeRef.current = currentCode;
   }, [currentCode]);
 
-  // Reset conversation when the question changes
+  // Reset conversation when the question changes — keep drawer closed
   useEffect(() => {
     setInput("");
     setLoading(false);
-    setIsOpen(true);
+    setStreaming(false);
+    setStreamingContent("");
+    setIsOpen(false);
   }, [problemKey]);
 
-  // Auto-scroll to newest message
+  // Auto-scroll to newest message (including during streaming)
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, streamingContent]);
 
   const generateId = () =>
     `msg_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -122,6 +129,9 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
     appendMessage(userMsg);
     setInput("");
     setLoading(true);
+    setStreaming(false);
+    setStreamingContent("");
+    streamingIdRef.current = null;
 
     try {
       const conversation = [
@@ -145,12 +155,8 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
         ...conversation,
       ];
 
-      const res = await fetch("/api/ai/chat", {
+      const res = await apiFetch("/api/ai/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
-        },
         body: JSON.stringify({
           sessionId,
           problemId,
@@ -169,15 +175,102 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
         throw new Error(err.error || "AI service unavailable");
       }
 
-      const data = await res.json();
+      const contentType = res.headers.get("content-type") ?? "";
 
-      appendMessage({
-        id: typeof data.messageId === "string" && data.messageId ? data.messageId : generateId(),
-        role: "assistant",
-        content:
-          data.message || "I'm not sure how to help with that. Try rephrasing your question.",
-        timestamp: typeof data.timestamp === "number" ? data.timestamp : Date.now(),
-      });
+      // ── SSE streaming path ──
+      if (contentType.includes("text/event-stream") && res.body) {
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        let assistantId = generateId();
+        let assistantTimestamp = Date.now();
+        let accumulated = "";
+
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          // Keep the last partial line in the buffer
+          buffer = lines.pop() ?? "";
+
+          for (const line of lines) {
+            if (!line.startsWith("data: ")) continue;
+            const jsonStr = line.slice(6);
+            let parsed: { type: string; text?: string; messageId?: string; timestamp?: number; error?: string };
+            try {
+              parsed = JSON.parse(jsonStr);
+            } catch {
+              continue;
+            }
+
+            if (parsed.type === "meta") {
+              assistantId = parsed.messageId ?? assistantId;
+              assistantTimestamp = parsed.timestamp ?? assistantTimestamp;
+            } else if (parsed.type === "delta") {
+              accumulated += parsed.text ?? "";
+              if (!streaming) {
+                streamingIdRef.current = assistantId;
+                setStreaming(true);
+              }
+              // Update local state only — fast, no Yjs overhead per token
+              setStreamingContent(accumulated);
+            } else if (parsed.type === "done") {
+              // Commit the final message to Yjs so the interviewer sees it
+              appendMessage({
+                id: assistantId,
+                role: "assistant",
+                content: accumulated,
+                timestamp: assistantTimestamp,
+              });
+              streamingIdRef.current = null;
+              setStreamingContent("");
+            } else if (parsed.type === "error") {
+              appendMessage({
+                id: assistantId,
+                role: "assistant",
+                content: accumulated || parsed.error || "An error occurred.",
+                timestamp: assistantTimestamp,
+              });
+              streamingIdRef.current = null;
+              setStreamingContent("");
+            }
+          }
+        }
+
+        // Safety net — if we never got a "done" event, commit what we have
+        if (streamingIdRef.current && accumulated) {
+          appendMessage({
+            id: assistantId,
+            role: "assistant",
+            content: accumulated,
+            timestamp: assistantTimestamp,
+          });
+          streamingIdRef.current = null;
+          setStreamingContent("");
+        }
+
+        if (!accumulated) {
+          appendMessage({
+            id: assistantId,
+            role: "assistant",
+            content: "I couldn't generate a response. Try again.",
+            timestamp: assistantTimestamp,
+          });
+        }
+      } else {
+        // ── Non-streaming JSON fallback (e.g. offline mode) ──
+        const data = await res.json();
+        appendMessage({
+          id: typeof data.messageId === "string" && data.messageId ? data.messageId : generateId(),
+          role: "assistant",
+          content:
+            data.message || "I'm not sure how to help with that. Try rephrasing your question.",
+          timestamp: typeof data.timestamp === "number" ? data.timestamp : Date.now(),
+        });
+      }
     } catch (error) {
       const fallback =
         error instanceof Error && error.message
@@ -189,8 +282,11 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
         content: fallback,
         timestamp: Date.now(),
       });
+      streamingIdRef.current = null;
+      setStreamingContent("");
     } finally {
       setLoading(false);
+      setStreaming(false);
     }
   }, [
     input,
@@ -203,7 +299,6 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
     problemDescription,
     language,
     sessionId,
-    session?.access_token,
     problemId,
     orderIndex,
   ]);
@@ -263,8 +358,9 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
             <div className="ai-empty">
               <Lightbulb className="ai-empty-icon" />
               <p className="ai-empty-text">
-                Ask me for hints, explanations, or help debugging your approach.
-                I'll guide you without giving away the solution.
+                Try working through the problem on your own first.
+                When you're ready, ask for hints, explanations, or help
+                debugging your approach.
               </p>
               <div className="ai-quick-hints">
                 {quickHints.map((hint) => (
@@ -304,7 +400,19 @@ const AIAssistant = forwardRef<AIAssistantHandle, Props>(function AIAssistant(
             </div>
           ))}
 
-          {loading && (
+          {/* Live streaming bubble — rendered from local state, not Yjs */}
+          {streaming && streamingContent && (
+            <div className="ai-msg ai-msg--assistant ai-msg--streaming">
+              <div className="ai-msg-avatar">
+                <Bot className="ai-msg-avatar-icon" />
+              </div>
+              <div className="ai-msg-content">
+                <ReactMarkdown>{streamingContent}</ReactMarkdown>
+              </div>
+            </div>
+          )}
+
+          {loading && !streaming && (
             <div className="ai-msg ai-msg--assistant ai-msg--loading">
               <div className="ai-msg-avatar">
                 <Bot className="ai-msg-avatar-icon" />

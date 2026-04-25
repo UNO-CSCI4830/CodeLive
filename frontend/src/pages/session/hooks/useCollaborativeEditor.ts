@@ -27,6 +27,7 @@ import { WebsocketProvider } from "y-websocket";
 import { MonacoBinding } from "y-monaco";
 import type { editor as MonacoEditor } from "monaco-editor";
 import { resolveWsBaseUrl } from "./wsBaseUrl";
+import { supabase } from "@/lib/supabase";
 
 interface Options {
   /** Room name: session:<id>:q:<index>:file:<path> — pass "" to skip connecting */
@@ -64,31 +65,47 @@ export function useCollaborativeEditor(options: Options): CollaborativeEditorSta
   useEffect(() => {
     if (!roomName) return;
 
-    const ydoc = new Y.Doc();
-    const wsUrl = `${resolveWsBaseUrl()}/ws`;
-    const provider = new WebsocketProvider(wsUrl, roomName, ydoc);
+    let cancelled = false;
+    let ydoc: Y.Doc | null = null;
+    let provider: WebsocketProvider | null = null;
 
-    ydocRef.current    = ydoc;
-    providerRef.current = provider;
+    async function connect() {
+      // Fetch the current JWT to authenticate the WebSocket connection
+      const { data: { session: authSession } } = await supabase.auth.getSession();
+      const token = authSession?.access_token ?? "";
 
-    provider.awareness.setLocalStateField("user", {
-      name:  userName  ?? "User",
-      color: userColor ?? "#2563eb",
-    });
+      if (cancelled) return;
 
-    provider.on("status", ({ status }: { status: string }) => {
-      setConnected(status === "connected");
-    });
+      ydoc = new Y.Doc();
+      const wsUrl = `${resolveWsBaseUrl()}/ws`;
+      provider = new WebsocketProvider(wsUrl, roomName, ydoc, {
+        params: { token },
+      });
 
-    const ytext = ydoc.getText("monaco");
-    ytextRef.current = ytext;
+      ydocRef.current    = ydoc;
+      providerRef.current = provider;
 
-    // Seed with starter code on first sync if the doc is empty
-    provider.on("sync", (isSynced: boolean) => {
-      if (isSynced && ytext.length === 0 && initialCode) {
-        ytext.insert(0, initialCode);
-      }
-    });
+      provider.awareness.setLocalStateField("user", {
+        name:  userName  ?? "User",
+        color: userColor ?? "#2563eb",
+      });
+
+      provider.on("status", ({ status }: { status: string }) => {
+        setConnected(status === "connected");
+      });
+
+      const ytext = ydoc.getText("monaco");
+      ytextRef.current = ytext;
+
+      // Seed with starter code on first sync if the doc is empty
+      provider.on("sync", (isSynced: boolean) => {
+        if (isSynced && ytext.length === 0 && initialCode) {
+          ytext.insert(0, initialCode);
+        }
+      });
+    }
+
+    connect();
 
     // Cleanup: MUST clear editorRef first.
     // When key={activeFilePath} changes, React disposes the old Monaco editor
@@ -102,10 +119,11 @@ export function useCollaborativeEditor(options: Options): CollaborativeEditorSta
     // released without triggering the lib0 "[yjs] Tried to remove event handler"
     // warning that fires when the observer was already cleared.
     return () => {
+      cancelled = true;
       editorRef.current = null;          // ← prevents null-model crash on next setup
       bindingRef.current = null;         // drop ref; GC'd after ydoc.destroy() clears observers
-      provider.destroy();
-      ydoc.destroy();
+      if (provider) provider.destroy();
+      if (ydoc) ydoc.destroy();
       ydocRef.current    = null;
       providerRef.current = null;
       ytextRef.current   = null;

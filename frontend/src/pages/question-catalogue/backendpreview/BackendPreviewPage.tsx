@@ -6,6 +6,7 @@ import BackendRequestsPanel from "./components/BackendRequestsPanel";
 import { loadBackendProblem } from "./loadProblem";
 import type { BackendProblem, BackendRunResult } from "./types";
 import CodeEditor from "../frontendpreview/components/CodeEditor";
+import { apiFetch } from "@/lib/apiClient";
 import "./styles/BackendPreviewPage.css";
 
 export default function BackendPreviewPage() {
@@ -82,9 +83,8 @@ export default function BackendPreviewPage() {
     setFatalError(null);
 
     try {
-      const res = await fetch("/api/run/backend/python", {
+      const res = await apiFetch("/api/run/backend/python", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           problemId: problem.id,
           fileContents,

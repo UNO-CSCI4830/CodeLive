@@ -1,4 +1,5 @@
 import type { Category, Difficulty, SubCategory } from "./catalogueData";
+import { apiFetch } from "@/lib/apiClient";
 
 interface BackendManifestProblem {
   id: string;
@@ -26,7 +27,7 @@ function titleCaseSlug(slug: string): string {
 }
 
 async function fetchBackendManifest(): Promise<BackendManifest> {
-  const res = await fetch("/api/content/backend/manifest");
+  const res = await apiFetch("/api/content/backend/manifest");
   if (!res.ok) throw new Error(`Failed to load backend manifest (${res.status})`);
   return res.json() as Promise<BackendManifest>;
 }
@@ -37,7 +38,7 @@ export async function fetchBackendSubCategories(): Promise<SubCategory[]> {
 }
 
 async function fetchDatabaseManifest(): Promise<BackendManifest> {
-  const res = await fetch("/api/content/database/manifest");
+  const res = await apiFetch("/api/content/database/manifest");
   if (!res.ok) throw new Error(`Failed to load database manifest (${res.status})`);
   return res.json() as Promise<BackendManifest>;
 }

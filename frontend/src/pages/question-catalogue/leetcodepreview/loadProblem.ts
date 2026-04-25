@@ -6,12 +6,13 @@
  */
 
 import type { LeetcodeProblem } from "./types";
+import { apiFetch } from "@/lib/apiClient";
 
 export async function loadLeetcodeProblem(
   problemId: string,
 ): Promise<LeetcodeProblem> {
   const url = `/api/content/leetcode/${encodeURIComponent(problemId)}`;
-  const res = await fetch(url);
+  const res = await apiFetch(url);
 
   if (!res.ok) {
     throw new Error(`Failed to load problem "${problemId}" (${res.status})`);

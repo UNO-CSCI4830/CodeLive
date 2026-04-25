@@ -19,14 +19,16 @@ export default function DashboardLayout() {
     }
   }, [loading, user, navigate]);
 
-  /* If the user hasn't chosen a role yet, send them to /role. */
+  /* If we have the profile loaded and there's no role, go to /role. */
   useEffect(() => {
     if (!loading && user && profile && !profile.role) {
       navigate("/role", { replace: true });
     }
   }, [loading, user, profile, navigate]);
 
-  if (loading) {
+  /* Still resolving auth, or user is set but profile hasn't loaded yet.
+     Show a loading state — never render the dashboard without a profile. */
+  if (loading || (user && !profile)) {
     return (
       <div className="layout-loading">
         <p>Loading…</p>

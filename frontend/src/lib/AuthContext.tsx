@@ -69,11 +69,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   /* Bootstrap: get the current session and subscribe to auth changes. */
   useEffect(() => {
+    let mounted = true;
+
     /* 1️⃣  Resolve the existing session (persisted in localStorage by Supabase). */
     supabase.auth.getSession().then(({ data: { session: s } }) => {
+      if (!mounted) return;
       setSession(s);
       if (s?.user) {
-        fetchProfile(s.user.id).finally(() => setLoading(false));
+        fetchProfile(s.user.id).finally(() => {
+          if (mounted) setLoading(false);
+        });
       } else {
         setLoading(false);
       }
@@ -82,16 +87,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     /* 2️⃣  Listen for future auth events (login, logout, token refresh). */
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, s) => {
+    } = supabase.auth.onAuthStateChange((event, s) => {
+      if (!mounted) return;
+
+      const prevUserId = session?.user?.id;
       setSession(s);
+
       if (s?.user) {
-        fetchProfile(s.user.id);
+        // A genuinely new sign-in (not a background token refresh for the
+        // same user). Set loading so downstream guards (DashboardLayout)
+        // don't render until we know the profile & role.
+        const isNewSignIn = event === "SIGNED_IN" && s.user.id !== prevUserId;
+
+        if (isNewSignIn) {
+          setLoading(true);
+        }
+
+        fetchProfile(s.user.id).finally(() => {
+          if (mounted) setLoading(false);
+        });
       } else {
         setProfile(null);
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

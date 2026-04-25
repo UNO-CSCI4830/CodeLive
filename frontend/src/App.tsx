@@ -9,6 +9,7 @@ import DashboardPage from "@/pages/dashboard/DashboardPage";
 import AccountPage from "@/pages/account/AccountPage";
 import QuestionCataloguePage from "@/pages/question-catalogue/QuestionCataloguePage";
 import CategoryDetailPage from "@/pages/question-catalogue/CategoryDetailPage";
+import NotFoundPage from "@/pages/NotFoundPage";
 
 /* Lazy-load the heavy editor pages so Monaco doesn't bloat the initial bundle. */
 const FrontendPreviewPage = lazy(
@@ -74,6 +75,9 @@ export default function App() {
           {/* Session pages — full-screen, no sidebar */}
           <Route path="/session/:sessionId/lobby" element={<SessionLobbyPage />} />
           <Route path="/session/:sessionId" element={<InterviewSessionPage />} />
+
+          {/* Catch-all 404 */}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
         </Suspense>
       </AuthProvider>

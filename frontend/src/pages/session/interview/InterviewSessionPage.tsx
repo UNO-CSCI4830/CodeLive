@@ -13,7 +13,7 @@
  *  4. Navigates to the report loading page
  */
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useNavigate, Link, Navigate } from "react-router-dom";
 import { Loader2, LogOut, Trophy, ChevronLeft } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
@@ -77,7 +77,8 @@ function InterviewRoom() {
       language: snap.language,
       hintsUsed: snap.hintsUsed,
       aiMessages: snap.aiMessages,
-    });
+      problemDescription: snap.problemDescription,
+    } as SnapshotPayload & { problemDescription: string });
   }, [currentProblem]);
 
   /**
@@ -112,7 +113,7 @@ function InterviewRoom() {
           problemId: s.problemId,
           category: s.category,
           title: s.problemId.replace(/-/g, " "),
-          description: "",
+          description: (s as SnapshotPayload & { problemDescription?: string }).problemDescription ?? "",
           timeLimit: sessionProblem?.time_limit ?? 30,
         };
       });
@@ -208,7 +209,26 @@ function InterviewRoom() {
     return isInterviewer;
   }, [currentProblem, isInterviewer]);
 
-  const locked = false;
+  // Interviewer observes in read-only mode; candidate edits
+  const locked = session?.status === "completed" || false;
+
+  // Set page title
+  useEffect(() => {
+    document.title = session
+      ? `Interview – CodeLive`
+      : "Interview – CodeLive";
+    return () => { document.title = "CodeLive"; };
+  }, [session?.id]);
+
+  // Warn before leaving during an active session (M8)
+  useEffect(() => {
+    if (session?.status !== "active") return;
+    const handler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+    };
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [session?.status]);
 
   /* ── Loading ──────────────────────────────────────── */
   if (loading) {

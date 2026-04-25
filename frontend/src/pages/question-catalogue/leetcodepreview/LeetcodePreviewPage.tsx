@@ -6,6 +6,7 @@ import type { LeetcodeProblem, TestResult } from "./types";
 import LeetcodeProblemDescription from "./components/LeetcodeProblemDescription";
 import LeetcodeCodeEditor from "./components/LeetcodeCodeEditor";
 import TestCasesPanel from "./components/TestCasesPanel";
+import { apiFetch } from "@/lib/apiClient";
 import "./styles/LeetcodePreviewPage.css";
 
 export default function LeetcodePreviewPage() {
@@ -53,9 +54,8 @@ export default function LeetcodePreviewPage() {
     setStdout("");
 
     try {
-      const res = await fetch("/api/run/python", {
+      const res = await apiFetch("/api/run/python", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           code,
           testCases: problem.testCases,

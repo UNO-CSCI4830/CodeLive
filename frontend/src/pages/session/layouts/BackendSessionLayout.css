@@ -33,9 +33,16 @@
 .bsl-editor-col {
   display: flex;
   flex-direction: column;
-  flex: 1;
   overflow: hidden;
   min-width: 300px;
+}
+
+/* ── Description column (left) ───────────────────── */
+.bsl-desc-col {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 240px;
 }
 
 .bsl-editor-toolbar {
@@ -167,25 +174,76 @@
   background: var(--accent);
 }
 
-.bsl-right-col {
+/* ── Editor pane (top of right column) ───────────── */
+.bsl-editor-pane {
+  flex-shrink: 0;
+  overflow: hidden;
+  min-height: 120px;
+}
+
+/* ── Bottom pane (results, below editor) ─────────── */
+.bsl-bottom-pane {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-width: 280px;
+  min-height: 100px;
 }
 
-.bsl-tests-pane,
-.bsl-desc-pane {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  min-height: 90px;
-}
-
-.bsl-tests-pane > *,
-.bsl-desc-pane > * {
+.bsl-bottom-pane > * {
   flex: 1;
   min-height: 0;
+}
+
+/* ── File chips (multi-file toolbar) ─────────────── */
+.bsl-file-chips {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.25rem;
+}
+
+.bsl-file-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.675rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  letter-spacing: var(--tracking-normal);
+  color: var(--muted-fg);
+  background: transparent;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease);
+}
+
+.bsl-file-chip:hover {
+  background: var(--border);
+  color: var(--fg);
+}
+
+.bsl-file-chip--active {
+  color: var(--fg);
+  background: var(--border);
+  border-color: var(--accent);
+}
+
+.bsl-file-chip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 10rem;
+}
+
+.bsl-file-chip-ro {
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--muted-fg);
+  opacity: 0.7;
 }
 
 @keyframes spin {

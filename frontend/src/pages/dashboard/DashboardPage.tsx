@@ -14,7 +14,7 @@ import {
   Send,
 } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
-import { supabase } from "@/lib/supabase";
+import { apiFetch } from "@/lib/apiClient";
 import { getCached, setCache } from "@/lib/queryCache";
 import "./styles/DashboardPage.css";
 
@@ -93,6 +93,8 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const isInterviewer = profile?.role === "interviewer";
 
+  useEffect(() => { document.title = "Dashboard — Code Live"; }, []);
+
   /* ── state (hydrated from cache for instant revisit) ── */
   const cached = getCached<DashboardCache>("dashboard");
   const [upcoming, setUpcoming] = useState<UpcomingSession[]>(cached?.upcoming ?? []);
@@ -114,70 +116,22 @@ export default function DashboardPage() {
     async function load() {
       if (!getCached("dashboard")) setLoading(true);
 
-      /* 1 — Upcoming sessions (waiting / active) */
-      const upcomingPromise = supabase
-        .from("sessions")
-        .select("id, join_code, status, candidate_id, created_at, problems:session_problems(category)")
-        .or("status.eq.waiting,status.eq.active")
-        .eq("interviewer_id", user!.id)
-        .order("created_at", { ascending: false })
-        .limit(6);
+      try {
+        const res = await apiFetch("/api/dashboard");
+        if (!res.ok) throw new Error("Failed to load dashboard");
+        const data = await res.json();
 
-      /* 2 — Recent reports (top 5) */
-      const reportsPromise = isInterviewer
-        ? supabase
-            .from("interview_reports")
-            .select(
-              `id, session_id, status, overall_summary, ai_use_score, generated_at, created_at,
-               session:sessions!inner(join_code, candidate_id, candidate_name, interviewer_id)`,
-            )
-            .eq("session.interviewer_id", user!.id)
-            .order("created_at", { ascending: false })
-            .limit(5)
-        : null;
+        const upRows = data.upcoming ?? [];
+        const rptRows = data.reports ?? [];
 
-      const [upRes, rptRes] = await Promise.all([
-        upcomingPromise,
-        reportsPromise ?? Promise.resolve({ data: null, error: null }),
-      ]);
-
-      const upRows = (upRes.data ?? []) as unknown as UpcomingSession[];
-      const rptRows = (rptRes.data ?? []) as unknown as ReportRow[];
-
-      /* Batch-fetch candidate names */
-      const allCandidateIds = [
-        ...new Set([
-          ...upRows.map((s) => s.candidate_id).filter(Boolean),
-          ...rptRows.map((r) => (r.session as any)?.candidate_id).filter(Boolean),
-        ] as string[]),
-      ];
-
-      let nameMap = new Map<string, string>();
-      if (allCandidateIds.length > 0) {
-        const { data: profiles } = await supabase
-          .from("profiles").select("id, name").in("id", allCandidateIds);
-        nameMap = new Map((profiles ?? []).map((p: any) => [p.id, p.name]));
+        setCache("dashboard", { upcoming: upRows, reports: rptRows });
+        setUpcoming(upRows);
+        setReports(rptRows);
+      } catch (err) {
+        console.error("Dashboard load error:", err);
+      } finally {
+        setLoading(false);
       }
-
-      for (const s of upRows) {
-        const profileName = s.candidate_id ? nameMap.get(s.candidate_id) ?? null : null;
-        s._candidateName = profileName ?? (s.candidate_id ? `Candidate ${s.candidate_id.slice(0, 6)}` : null);
-      }
-      for (const r of rptRows) {
-        const session = r.session as any;
-        const cid = session?.candidate_id as string | null;
-        const profileName = cid ? nameMap.get(cid) ?? null : null;
-        const sessionName =
-          typeof session?.candidate_name === "string" && session.candidate_name.trim() !== ""
-            ? session.candidate_name.trim()
-            : null;
-        r._candidateName = profileName ?? sessionName ?? (cid ? `Candidate ${cid.slice(0, 6)}` : "Candidate");
-      }
-
-      setCache("dashboard", { upcoming: upRows, reports: rptRows });
-      setUpcoming(upRows);
-      setReports(rptRows);
-      setLoading(false);
     }
 
     load();

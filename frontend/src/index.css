@@ -11,14 +11,14 @@
   --fg:            #FAFAFA;
   --muted:         #1A1A1A;
   --muted-fg:      #737373;
-  --accent:        #FF3D00;
-  --accent-fg:     #0A0A0A;
+  --accent:        #D4503A;
+  --accent-fg:     #FAFAFA;
   --border:        #262626;
   --border-hover:  #404040;
   --input:         #1A1A1A;
   --card:          #0F0F0F;
   --card-fg:       #FAFAFA;
-  --ring:          #FF3D00;
+  --ring:          #D4503A;
 
   --font-sans:    "Inter Tight", "Inter", system-ui, sans-serif;
   --font-display: "Playfair Display", Georgia, serif;

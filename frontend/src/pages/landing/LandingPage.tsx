@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FeatureCard from "./components/FeatureCard";
 import "./styles/LandingPage.css";
 
@@ -8,12 +8,12 @@ const features = [
   {
     title: "Realistic workflows",
     description:
-      "Candidates work in an environment that mirrors real engineering — browsing docs, using tools, and writing production-style code.",
+      "Candidates work in an environment that mirrors real engineering \u2014 browsing docs, using tools, and writing production-style code.",
   },
   {
     title: "Live interviewer visibility",
     description:
-      "Interviewers observe a candidate's thought process, navigation patterns, and problem-solving approach in real time.",
+      "Interviewers observe a candidate\u2019s thought process, navigation patterns, and problem-solving approach in real time.",
   },
   {
     title: "AI-friendly evaluation (coming soon)",
@@ -23,10 +23,11 @@ const features = [
 ] as const;
 
 export default function LandingPage() {
-  // “future hooks” 
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => { document.title = "Code Live \u2014 Interviews that look like real work"; }, []);
 
   const scrollToId = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -46,8 +47,7 @@ export default function LandingPage() {
     }
 
     try {
-      // TODO later: replace with real API call
-      // await fetch("/api/waitlist", { method: "POST", headers: {"Content-Type":"application/json"}, body: JSON.stringify({ email: trimmed }) })
+      // TODO: replace with real API call
       await new Promise((r) => setTimeout(r, 500));
       setStatus("success");
       setEmail("");
@@ -89,12 +89,6 @@ export default function LandingPage() {
                   See features
                 </button>
               </div>
-
-              <div className="hero-meta">
-                <span className="pill">React + TS</span>
-                <span className="pill">Vite</span>
-                <span className="pill">Router</span>
-              </div>
             </div>
 
             <div className="hero-right">
@@ -122,9 +116,9 @@ export default function LandingPage() {
 
           <div className="hero-strip">
             <button className="strip-link" onClick={() => scrollToId("features")}>Features</button>
-            <span className="strip-sep">•</span>
+            <span className="strip-sep">{"\u2022"}</span>
             <button className="strip-link" onClick={() => scrollToId("waitlist")}>Waitlist</button>
-            <span className="strip-sep">•</span>
+            <span className="strip-sep">{"\u2022"}</span>
             <Link className="strip-link as-link" to="/auth">Sign in</Link>
           </div>
         </section>
@@ -133,7 +127,7 @@ export default function LandingPage() {
         <section id="features" className="section">
           <div className="section-head">
             <h2>Features</h2>
-            <p>.</p>
+            <p>What makes Code Live different.</p>
           </div>
 
           <div className="feature-grid">
@@ -143,12 +137,12 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* WAITLIST (future-ready) */}
+        {/* WAITLIST */}
         <section id="waitlist" className="section">
           <div className="cta">
             <div className="cta-left">
               <h2>Get updates</h2>
-              <p>Join the waitlist. (This is wired to a placeholder function you’ll connect later.)</p>
+              <p>Join the waitlist to be notified when new features launch.</p>
 
               <div className="waitlist">
                 <input
@@ -163,24 +157,24 @@ export default function LandingPage() {
                 </button>
               </div>
 
-              {status === "success" && <p className="msg success">✅ You’re on the list.</p>}
-              {status === "error" && <p className="msg error">⚠️ {errorMsg}</p>}
+              {status === "success" && <p className="msg success">{"\u2705"} You're on the list.</p>}
+              {status === "error" && <p className="msg error">{"\u26A0\uFE0F"} {errorMsg}</p>}
               {status === "idle" && <p className="msg muted">No spam. Just updates.</p>}
             </div>
 
             <div className="cta-right">
               <div className="cta-card">
-                <div className="cta-card-title">What you’ll add later</div>
+                <div className="cta-card-title">Ready to get started?</div>
                 <ul className="cta-list">
-                  <li>API integration</li>
-                  <li>Protected routes</li>
+                  <li>Realistic coding environment</li>
+                  <li>Live collaboration</li>
+                  <li>AI-assisted evaluation</li>
+                  <li>Detailed interview reports</li>
                   <li>Role-based dashboards</li>
-                  <li>Session invites</li>
-                  <li>Scoring + rubric</li>
                 </ul>
 
-                <Link to="/dashboard" className="btn btn-ghost">
-                  Go to dashboard
+                <Link to="/auth" className="btn btn-ghost">
+                  Sign in
                 </Link>
               </div>
             </div>

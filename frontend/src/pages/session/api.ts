@@ -1,5 +1,6 @@
 /** API helpers for session management. */
 
+import { apiFetch } from "@/lib/apiClient";
 import type { CreateSessionPayload, Session, InterviewReport } from "./types";
 
 // ── Session helpers (existing) ─────────────────────────────────────────
@@ -7,9 +8,8 @@ import type { CreateSessionPayload, Session, InterviewReport } from "./types";
 export async function createSession(
   payload: CreateSessionPayload,
 ): Promise<{ sessionId: string; joinCode: string }> {
-  const res = await fetch("/api/sessions", {
+  const res = await apiFetch("/api/sessions", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
   if (!res.ok) {
@@ -23,9 +23,8 @@ export async function joinSession(
   joinCode: string,
   candidateId: string,
 ): Promise<{ sessionId: string }> {
-  const res = await fetch("/api/sessions/join", {
+  const res = await apiFetch("/api/sessions/join", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ joinCode, candidateId }),
   });
   if (!res.ok) {
@@ -41,7 +40,7 @@ export async function fetchSession(sessionId: string): Promise<Session> {
 
   while (attempt < maxAttempts) {
     attempt += 1;
-    const res = await fetch(`/api/sessions/${sessionId}`);
+    const res = await apiFetch(`/api/sessions/${sessionId}`);
     if (res.ok) {
       return res.json();
     }
@@ -74,7 +73,7 @@ export async function fetchSession(sessionId: string): Promise<Session> {
 export async function advanceQuestion(
   sessionId: string,
 ): Promise<{ status: string; currentIndex: number }> {
-  const res = await fetch(`/api/sessions/${sessionId}/advance`, {
+  const res = await apiFetch(`/api/sessions/${sessionId}/advance`, {
     method: "POST",
   });
   if (!res.ok) {
@@ -88,9 +87,8 @@ export async function selectQuestion(
   sessionId: string,
   index: number,
 ): Promise<{ currentIndex: number }> {
-  const res = await fetch(`/api/sessions/${sessionId}/select`, {
+  const res = await apiFetch(`/api/sessions/${sessionId}/select`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ index }),
   });
   if (!res.ok) {
@@ -101,7 +99,7 @@ export async function selectQuestion(
 }
 
 export async function endSession(sessionId: string): Promise<void> {
-  const res = await fetch(`/api/sessions/${sessionId}/end`, { method: "POST" });
+  const res = await apiFetch(`/api/sessions/${sessionId}/end`, { method: "POST" });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.error || `Failed to end session (${res.status})`);
@@ -115,7 +113,7 @@ export interface TimerState {
 }
 
 export async function pauseTimer(sessionId: string): Promise<TimerState> {
-  const res = await fetch(`/api/sessions/${sessionId}/timer/pause`, { method: "POST" });
+  const res = await apiFetch(`/api/sessions/${sessionId}/timer/pause`, { method: "POST" });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.error || "Failed to pause timer");
@@ -124,7 +122,7 @@ export async function pauseTimer(sessionId: string): Promise<TimerState> {
 }
 
 export async function resumeTimer(sessionId: string): Promise<TimerState> {
-  const res = await fetch(`/api/sessions/${sessionId}/timer/resume`, { method: "POST" });
+  const res = await apiFetch(`/api/sessions/${sessionId}/timer/resume`, { method: "POST" });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.error || "Failed to resume timer");
@@ -169,9 +167,8 @@ export async function saveSnapshots(
   sessionId: string,
   snapshots: SnapshotPayload[],
 ): Promise<void> {
-  const res = await fetch(`/api/sessions/${sessionId}/snapshots`, {
+  const res = await apiFetch(`/api/sessions/${sessionId}/snapshots`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(snapshots),
   });
   if (!res.ok) {
@@ -185,9 +182,8 @@ export async function generateReport(
   sessionId: string,
   payload: GenerateReportPayload,
 ): Promise<{ reportId: string }> {
-  const res = await fetch(`/api/sessions/${sessionId}/report/generate`, {
+  const res = await apiFetch(`/api/sessions/${sessionId}/report/generate`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
   if (!res.ok) {
@@ -199,7 +195,7 @@ export async function generateReport(
 
 /** Fetch the current report row (poll until status === 'completed'). */
 export async function fetchReport(sessionId: string): Promise<InterviewReport> {
-  const res = await fetch(`/api/sessions/${sessionId}/report`);
+  const res = await apiFetch(`/api/sessions/${sessionId}/report`);
   if (!res.ok) {
     throw new Error(`Failed to fetch report (${res.status})`);
   }
@@ -208,7 +204,7 @@ export async function fetchReport(sessionId: string): Promise<InterviewReport> {
 
 /** Fetch persisted per-question AI chat logs for a session. */
 export async function fetchAiLogs(sessionId: string): Promise<AiChatLogMessage[]> {
-  const res = await fetch(`/api/sessions/${sessionId}/ai-log`);
+  const res = await apiFetch(`/api/sessions/${sessionId}/ai-log`);
   if (!res.ok) {
     throw new Error(`Failed to fetch AI logs (${res.status})`);
   }

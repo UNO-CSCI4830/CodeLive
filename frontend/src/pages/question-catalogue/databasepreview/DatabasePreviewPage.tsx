@@ -6,6 +6,7 @@ import { loadDatabaseProblem } from "./loadProblem";
 import DatabaseProblemDescription from "./components/DatabaseProblemDescription";
 import SqlResultsPanel from "./components/SqlResultsPanel";
 import type { DatabaseProblem, DatabaseRunOutput } from "./types";
+import { apiFetch } from "@/lib/apiClient";
 import "./styles/DatabasePreviewPage.css";
 
 const SCHEMA_TAB_ID = "__schema__";
@@ -90,9 +91,8 @@ export default function DatabasePreviewPage() {
     setRunResult(null);
 
     try {
-      const res = await fetch("/api/run/database/sql-lite", {
+      const res = await apiFetch("/api/run/database/sql-lite", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           problemId: problem.id,
           fileContents,

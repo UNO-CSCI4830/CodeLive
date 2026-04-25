@@ -19,6 +19,7 @@ import * as syncProtocol from "y-protocols/sync";
 import * as awarenessProtocol from "y-protocols/awareness";
 import * as encoding from "lib0/encoding";
 import * as decoding from "lib0/decoding";
+import { supabaseAdmin } from "./supabase";
 
 // ── Message types (matches y-websocket protocol) ────────────────────
 const MSG_SYNC = 0;
@@ -169,18 +170,92 @@ function sendInitialSync(room: Room, ws: WebSocket) {
 // ── Public API ──────────────────────────────────────────────────────
 
 /**
+ * Authenticate a WebSocket upgrade request.
+ * Accepts the JWT as either:
+ *  - A query parameter: /ws/<room>?token=<jwt>
+ *  - The Sec-WebSocket-Protocol header value
+ * Returns the authenticated user ID, or null if auth fails.
+ */
+async function authenticateWsRequest(
+  url: URL,
+  request: IncomingMessage,
+): Promise<string | null> {
+  // Try query param first, then Sec-WebSocket-Protocol header
+  const token =
+    url.searchParams.get("token") ??
+    request.headers["sec-websocket-protocol"] ??
+    null;
+
+  if (!token || typeof token !== "string") return null;
+
+  try {
+    const {
+      data: { user },
+      error,
+    } = await supabaseAdmin.auth.getUser(token);
+
+    if (error || !user) return null;
+    return user.id;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Verify the user is a participant in the session referenced by the room name.
+ * Room names follow the pattern: session:<sessionId>:q:<index>[:file:<path>]
+ */
+async function verifySessionParticipant(
+  roomName: string,
+  userId: string,
+): Promise<boolean> {
+  // Extract sessionId from room name
+  const match = roomName.match(/^session:([^:]+):/);
+  if (!match) return false;
+
+  const sessionId = match[1];
+  const { data: session } = await supabaseAdmin
+    .from("sessions")
+    .select("interviewer_id, candidate_id")
+    .eq("id", sessionId)
+    .maybeSingle();
+
+  if (!session) return false;
+  return session.interviewer_id === userId || session.candidate_id === userId;
+}
+
+/**
  * Attach the Yjs WebSocket server to an existing HTTP server.
  * Listens on the /ws path for upgrade requests.
  */
 export function attachYjsWebSocket(server: Server): WebSocketServer {
   const wss = new WebSocketServer({ noServer: true });
 
-  server.on("upgrade", (request: IncomingMessage, socket, head) => {
+  server.on("upgrade", async (request: IncomingMessage, socket, head) => {
     const url = new URL(request.url ?? "/", `http://${request.headers.host}`);
 
     // Only handle /ws path prefix
     // y-websocket WebsocketProvider connects to: /ws/<roomName>
     if (!url.pathname.startsWith("/ws")) {
+      socket.destroy();
+      return;
+    }
+
+    // Authenticate the user via JWT
+    const userId = await authenticateWsRequest(url, request);
+    if (!userId) {
+      console.warn("[yjs] WebSocket auth failed — rejecting upgrade");
+      socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n");
+      socket.destroy();
+      return;
+    }
+
+    // Verify the user is a participant in the target session
+    const roomName = decodeURIComponent(url.pathname.replace(/^\/ws\//, "")) || "default";
+    const isParticipant = await verifySessionParticipant(roomName, userId);
+    if (!isParticipant) {
+      console.warn("[yjs] WebSocket participant check failed — rejecting upgrade");
+      socket.write("HTTP/1.1 403 Forbidden\r\n\r\n");
       socket.destroy();
       return;
     }

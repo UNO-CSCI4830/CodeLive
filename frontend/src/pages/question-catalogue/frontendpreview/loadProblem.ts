@@ -6,12 +6,13 @@
  */
 
 import type { FrontendProblem } from "./types";
+import { apiFetch } from "@/lib/apiClient";
 
 export async function loadFrontendProblem(
   problemId: string,
 ): Promise<FrontendProblem> {
   const url = `/api/content/frontend/${encodeURIComponent(problemId)}`;
-  const res = await fetch(url);
+  const res = await apiFetch(url);
 
   if (!res.ok) {
     throw new Error(`Failed to load problem "${problemId}" (${res.status})`);

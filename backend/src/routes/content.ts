@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import path from "path";
 import fs from "fs/promises";
+import { requireAuth } from "../middleware/auth";
 
 const router = Router();
 
@@ -30,6 +31,7 @@ const LEETCODE_CONTENT_DIR = path.join(CONTENT_DIR, "leetcode", "Python");
  */
 router.get(
   "/api/content/:category",
+  requireAuth,
   async (req: Request, res: Response): Promise<void> => {
     const { category } = req.params;
 
@@ -79,6 +81,7 @@ router.get(
  */
 router.get(
   "/api/content/backend/manifest",
+  requireAuth,
   async (_req: Request, res: Response): Promise<void> => {
     try {
       const manifestPath = path.join(BACKEND_CONTENT_DIR, "python", "manifest.json");
@@ -97,6 +100,7 @@ router.get(
  */
 router.get(
   "/api/content/database/manifest",
+  requireAuth,
   async (_req: Request, res: Response): Promise<void> => {
     try {
       const manifestPath = path.join(DATABASE_SQLITE_CONTENT_DIR, "manifest.json");
@@ -122,6 +126,7 @@ router.get(
  */
 router.get(
   "/api/content/:category/:problemId",
+  requireAuth,
   async (req: Request, res: Response): Promise<void> => {
     const { category, problemId } = req.params;
 

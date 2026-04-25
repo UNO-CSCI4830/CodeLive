@@ -20,8 +20,37 @@
 import { Router, type Request, type Response } from "express";
 import Anthropic from "@anthropic-ai/sdk";
 import { supabaseAdmin } from "../lib/supabase";
+import { requireAuth, type AuthRequest } from "../middleware/auth";
 
 const router = Router();
+
+// ── Shared helper: verify the caller is a session participant ─────────────
+
+async function requireSessionParticipant(
+  req: Request,
+  res: Response,
+): Promise<boolean> {
+  const { user } = req as AuthRequest;
+  const { sessionId } = req.params;
+
+  const { data: session } = await supabaseAdmin
+    .from("sessions")
+    .select("interviewer_id, candidate_id")
+    .eq("id", sessionId)
+    .maybeSingle();
+
+  if (!session) {
+    res.status(404).json({ error: "Session not found" });
+    return false;
+  }
+
+  if (session.interviewer_id !== user.id && session.candidate_id !== user.id) {
+    res.status(403).json({ error: "You are not a participant in this session" });
+    return false;
+  }
+
+  return true;
+}
 
 // ── Types ─────────────────────────────────────────────────────────────────
 
@@ -85,7 +114,10 @@ interface GeneratedReport {
 
 router.post(
   "/api/sessions/:sessionId/snapshots",
+  requireAuth,
   async (req: Request, res: Response): Promise<void> => {
+    if (!(await requireSessionParticipant(req, res))) return;
+
     const { sessionId } = req.params;
     const snapshots: SnapshotPayload[] = req.body;
 
@@ -123,7 +155,10 @@ router.post(
 
 router.post(
   "/api/sessions/:sessionId/report/generate",
+  requireAuth,
   async (req: Request, res: Response): Promise<void> => {
+    if (!(await requireSessionParticipant(req, res))) return;
+
     const { sessionId } = req.params;
     const { problems } = req.body as GenerateReportBody;
 
@@ -159,7 +194,10 @@ router.post(
 
 router.get(
   "/api/sessions/:sessionId/report",
+  requireAuth,
   async (req: Request, res: Response): Promise<void> => {
+    if (!(await requireSessionParticipant(req, res))) return;
+
     const { sessionId } = req.params;
 
     const { data, error } = await supabaseAdmin
@@ -186,7 +224,10 @@ router.get(
 
 router.get(
   "/api/sessions/:sessionId/ai-log",
+  requireAuth,
   async (req: Request, res: Response): Promise<void> => {
+    if (!(await requireSessionParticipant(req, res))) return;
+
     const { sessionId } = req.params;
 
     const { data, error } = await supabaseAdmin

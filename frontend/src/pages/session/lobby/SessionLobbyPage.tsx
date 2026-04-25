@@ -14,6 +14,12 @@ function LobbyContent() {
       ? ((location.state as { joinCode?: string }).joinCode ?? "").trim().toUpperCase()
       : "";
 
+  // Page title
+  useEffect(() => {
+    document.title = "Session Lobby – CodeLive";
+    return () => { document.title = "CodeLive"; };
+  }, []);
+
   // When session becomes active (candidate joined), redirect to interview
   useEffect(() => {
     if (session?.status === "active") {
@@ -109,36 +115,40 @@ function LobbyContent() {
         <p className="lobby-subtext">
           {isInterviewer
             ? "Share this code with the candidate to let them join."
-            : "You're about to join the interview session."}
+            : "Waiting for the interviewer to start the session."}
         </p>
 
-        {/* Join Code Display */}
-        <div className="lobby-code-box">
-          <span className="lobby-code-label">Session Code</span>
-          <div className="lobby-code-display">
-            <span className="lobby-code">{session.join_code}</span>
-            <button type="button" className="lobby-copy-btn" onClick={copyCode} title="Copy code">
-              <Copy className="lobby-copy-icon" />
-            </button>
+        {/* Join Code Display — only the interviewer needs to see/share this */}
+        {isInterviewer && (
+          <div className="lobby-code-box">
+            <span className="lobby-code-label">Session Code</span>
+            <div className="lobby-code-display">
+              <span className="lobby-code">{session.join_code}</span>
+              <button type="button" className="lobby-copy-btn" onClick={copyCode} title="Copy code">
+                <Copy className="lobby-copy-icon" />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Problem list summary */}
-        <div className="lobby-problems">
-          <span className="lobby-problems-label">
-            {session.problems.length} problem{session.problems.length !== 1 && "s"} queued
-          </span>
-          <ul className="lobby-problems-list">
-            {session.problems.map((p, i) => (
-              <li key={p.id} className="lobby-problem-item">
-                <span className="lobby-problem-idx">{i + 1}</span>
-                <span className="lobby-problem-id">{p.problem_id.replace(/-/g, " ")}</span>
-                <span className="lobby-problem-cat">{p.category}</span>
-                <span className="lobby-problem-time">{p.time_limit} min</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {/* Problem list summary — interviewer only to prevent candidate preview */}
+        {isInterviewer && (
+          <div className="lobby-problems">
+            <span className="lobby-problems-label">
+              {session.problems.length} problem{session.problems.length !== 1 && "s"} queued
+            </span>
+            <ul className="lobby-problems-list">
+              {session.problems.map((p, i) => (
+                <li key={p.id} className="lobby-problem-item">
+                  <span className="lobby-problem-idx">{i + 1}</span>
+                  <span className="lobby-problem-id">{p.problem_id.replace(/-/g, " ")}</span>
+                  <span className="lobby-problem-cat">{p.category}</span>
+                  <span className="lobby-problem-time">{p.time_limit} min</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {/* Waiting indicator */}
         <div className="lobby-waiting">

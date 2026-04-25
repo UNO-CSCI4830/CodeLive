@@ -1,14 +1,8 @@
 import { Router, Request, Response } from "express";
-import { requireAuth } from "../middleware/auth";
+import { requireAuth, type AuthRequest } from "../middleware/auth";
 import { supabaseAdmin } from "../lib/supabase";
-import type { User } from "@supabase/supabase-js";
 
 const router = Router();
-
-/** Extend Request to include the authenticated user. */
-interface AuthRequest extends Request {
-  user: User;
-}
 
 /* ------------------------------------------------------------------ */
 /*  GET /api/profile — return the current user's profile              */

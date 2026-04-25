@@ -200,13 +200,14 @@ export function SessionProvider({ sessionId, userId, children }: Props) {
     }
   }, [sessionId]);
 
-  // Polling fallback for active/waiting sessions so interviewer-driven state
-  // changes (advance/end/timer) always propagate even if a realtime event is missed.
-  // Also keep retrying when session is temporarily unavailable (null) so the
-  // lobby can self-heal after transient network/cold-start failures.
+  // Polling fallback for waiting/null sessions so interviewer-driven state
+  // changes always propagate even if a realtime event is missed.
+  // Active sessions rely on Supabase Realtime to reduce DB load.
+  // Completed/cancelled sessions don't need polling.
   useEffect(() => {
     const status = session?.status;
-    if (status === "completed" || status === "cancelled") {
+    // Only poll while waiting for a candidate or when session hasn't loaded yet
+    if (status === "completed" || status === "cancelled" || status === "active") {
       return;
     }
     const pollMs = session ? 2000 : 1500;

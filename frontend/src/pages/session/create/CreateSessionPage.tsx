@@ -13,7 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
-import { supabase } from "@/lib/supabase";
+import { apiFetch } from "@/lib/apiClient";
 import { useCatalogueCategories } from "@/pages/question-catalogue/data/useCatalogueCategories";
 import DifficultyBadge from "@/pages/question-catalogue/components/DifficultyBadge";
 import { createSession, joinSession } from "../api";
@@ -32,6 +32,12 @@ export default function CreateSessionPage() {
   const { categories } = useCatalogueCategories();
   const navigate = useNavigate();
   const isInterviewer = profile?.role === "interviewer";
+
+  useEffect(() => {
+    document.title = isInterviewer ? "Create Session – CodeLive" : "Join Session – CodeLive";
+    return () => { document.title = "CodeLive"; };
+  }, [isInterviewer]);
+
   const availableCategories = useMemo(
     () =>
       categories.filter(
@@ -158,23 +164,23 @@ export default function CreateSessionPage() {
 
   useEffect(() => {
     if (!isInterviewer || !user) return;
-    const interviewerId = user.id;
     let cancelled = false;
 
     async function loadGroups() {
-      const { data } = await supabase
-        .from("interviewer_groups")
-        .select("id, job_role, job_number, created_at")
-        .eq("interviewer_id", interviewerId)
-        .order("created_at", { ascending: false });
-      if (cancelled) return;
+      try {
+        const res = await apiFetch("/api/groups");
+        if (!res.ok) return;
+        const rows = (await res.json()) as InterviewGroup[];
+        if (cancelled) return;
 
-      const rows = (data ?? []) as InterviewGroup[];
-      setGroups(rows);
-      setSelectedGroupId((prev) => {
-        if (prev && rows.some((g) => g.id === prev)) return prev;
-        return rows[0]?.id ?? null;
-      });
+        setGroups(rows);
+        setSelectedGroupId((prev) => {
+          if (prev && rows.some((g) => g.id === prev)) return prev;
+          return rows[0]?.id ?? null;
+        });
+      } catch {
+        // Swallow — groups are optional
+      }
     }
 
     loadGroups();
@@ -241,8 +247,7 @@ export default function CreateSessionPage() {
   }, [user, selected, aiEnabled, totalInterviewMinutes, selectedGroupId, navigate]);
 
   const handleCreateGroup = useCallback(async () => {
-    const interviewerId = user?.id;
-    if (!interviewerId) return;
+    if (!user?.id) return;
     const trimmedRole = newGroupRole.trim();
     const trimmedNumber = newGroupNumber.trim();
     if (!trimmedRole) {
@@ -253,28 +258,29 @@ export default function CreateSessionPage() {
     setAddingGroup(true);
     setGroupError(null);
     try {
-      const { data, error: insertError } = await supabase
-        .from("interviewer_groups")
-        .insert({
-          interviewer_id: interviewerId,
-          job_role: trimmedRole,
-          job_number: trimmedNumber || null,
-        })
-        .select("id, job_role, job_number, created_at")
-        .single();
+      const res = await apiFetch("/api/groups", {
+        method: "POST",
+        body: JSON.stringify({
+          jobRole: trimmedRole,
+          jobNumber: trimmedNumber || null,
+        }),
+      });
 
-      if (insertError || !data) {
-        setGroupError(insertError?.message ?? "Failed to create group.");
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        setGroupError(err.error ?? "Failed to create group.");
         return;
       }
 
-      const created = data as InterviewGroup;
+      const created = (await res.json()) as InterviewGroup;
       setGroups((prev) => [created, ...prev]);
       setSelectedGroupId(created.id);
       setShowAddGroupModal(false);
       setGroupMenuOpen(false);
       setNewGroupRole("");
       setNewGroupNumber("");
+    } catch (e) {
+      setGroupError(e instanceof Error ? e.message : "Failed to create group.");
     } finally {
       setAddingGroup(false);
     }

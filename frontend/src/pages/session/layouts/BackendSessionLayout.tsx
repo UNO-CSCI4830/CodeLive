@@ -9,11 +9,11 @@ import type {
   BackendRunResult,
   BackendStarterFile,
 } from "@/pages/question-catalogue/backendpreview/types";
-import FileTree from "@/pages/question-catalogue/frontendpreview/components/FileTree";
-import BackendRequestsPanel from "@/pages/question-catalogue/backendpreview/components/BackendRequestsPanel";
 import BackendProblemDescription from "@/pages/question-catalogue/backendpreview/components/BackendProblemDescription";
+import BackendRequestsPanel from "@/pages/question-catalogue/backendpreview/components/BackendRequestsPanel";
 import AIAssistant, { type AIAssistantHandle } from "../components/AIAssistant";
 import type { SessionLayoutHandle } from "./LeetcodeSessionLayout";
+import { apiFetch } from "@/lib/apiClient";
 import "./BackendSessionLayout.css";
 
 interface Props {
@@ -84,6 +84,9 @@ const BackendSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Bac
   const [fileContents, setFileContents] = useState<Record<string, string>>({});
   const [activeFilePath, setActiveFilePath] = useState("");
   const [treeCollapsed, setTreeCollapsed] = useState(false);
+
+  // Hide the file tree entirely when there's only one file
+  const hasSingleFile = (problem?.starter_files.length ?? 0) <= 1;
 
   useEffect(() => {
     if (!problem) return;
@@ -162,9 +165,8 @@ const BackendSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Bac
     setFatalError(null);
 
     try {
-      const res = await fetch("/api/run/backend/python", {
+      const res = await apiFetch("/api/run/backend/python", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           problemId: problem.id,
           fileContents,
@@ -200,23 +202,22 @@ const BackendSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Bac
     }
   }, [problem, isRunning, locked, fileContents]);
 
-  const [rightColWidth, setRightColWidth] = useState(430);
-  const [panelRatio, setPanelRatio] = useState(0.5);
+  /* ── Resizable panels (leetcode-style: desc left, editor+results right) ── */
+  const [leftWidth, setLeftWidth] = useState(0.38);
+  const [editorRatio, setEditorRatio] = useState(0.55);
   const [isDragging, setIsDragging] = useState(false);
-  const rightColRef = useRef<HTMLElement>(null);
   const dragging = useRef<"col" | "row" | null>(null);
-  const dragStartRef = useRef({ x: 0, startW: 0 });
+  const rightColRef = useRef<HTMLElement>(null);
 
   const onResizeStart = useCallback(
     (axis: "col" | "row") => (e: React.MouseEvent) => {
       e.preventDefault();
       dragging.current = axis;
       setIsDragging(true);
-      dragStartRef.current = { x: e.clientX, startW: rightColWidth };
       document.body.style.cursor = axis === "col" ? "col-resize" : "row-resize";
       document.body.style.userSelect = "none";
     },
-    [rightColWidth],
+    [],
   );
 
   useEffect(() => {
@@ -224,25 +225,25 @@ const BackendSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Bac
       if (!dragging.current) return;
 
       if (dragging.current === "col") {
-        const delta = dragStartRef.current.x - e.clientX;
-        const nextWidth = Math.min(Math.max(dragStartRef.current.startW + delta, 280), window.innerWidth * 0.65);
-        setRightColWidth(nextWidth);
+        const newRatio = e.clientX / window.innerWidth;
+        setLeftWidth(Math.min(Math.max(newRatio, 0.2), 0.55));
       } else {
         const colEl = rightColRef.current;
         if (!colEl) return;
         const rect = colEl.getBoundingClientRect();
         const offsetY = e.clientY - rect.top;
-        const nextRatio = Math.min(Math.max(offsetY / rect.height, 0.2), 0.8);
-        setPanelRatio(nextRatio);
+        const ratio = offsetY / rect.height;
+        setEditorRatio(Math.min(Math.max(ratio, 0.25), 0.85));
       }
     };
 
     const onUp = () => {
-      if (!dragging.current) return;
-      dragging.current = null;
-      setIsDragging(false);
-      document.body.style.cursor = "";
-      document.body.style.userSelect = "";
+      if (dragging.current) {
+        dragging.current = null;
+        setIsDragging(false);
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+      }
     };
 
     window.addEventListener("mousemove", onMove);
@@ -288,29 +289,55 @@ const BackendSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Bac
         />
       )}
 
-      <FileTree
-        files={problem.starter_files}
-        activeFile={activeFilePath}
-        onSelect={setActiveFilePath}
-        collapsed={treeCollapsed}
-        onToggleCollapse={() => setTreeCollapsed((v) => !v)}
-      />
+      {/* ── Left: problem description ── */}
+      <section className="bsl-desc-col" style={{ width: `${leftWidth * 100}%` }}>
+        <BackendProblemDescription
+          problem={problem}
+          onHintReveal={setHintsUsed}
+        />
+      </section>
 
-      <section className="bsl-editor-col">
+      {/* Vertical resize */}
+      <div className="bsl-resize-col" onMouseDown={onResizeStart("col")} />
+
+      {/* ── Right: editor (top) + results (bottom) ── */}
+      <section
+        className="bsl-editor-col"
+        ref={rightColRef}
+        style={{ width: `${(1 - leftWidth) * 100}%` }}
+      >
+        {/* Editor toolbar */}
         <div className="bsl-editor-toolbar">
           <div className="bsl-editor-toolbar-left">
-            {treeCollapsed && (
+            {!hasSingleFile && (
               <button
                 type="button"
                 className="bsl-tree-toggle"
-                onClick={() => setTreeCollapsed(false)}
-                title="Expand file tree"
+                onClick={() => setTreeCollapsed((v) => !v)}
+                title={treeCollapsed ? "Expand file tree" : "Collapse file tree"}
               >
                 <ChevronRight className="bsl-tree-toggle-icon" />
               </button>
             )}
 
             <span className="bsl-active-file">{activeFilePath}</span>
+
+            {!hasSingleFile && !treeCollapsed && (
+              <div className="bsl-file-chips">
+                {problem.starter_files.map((f) => (
+                  <button
+                    key={f.path}
+                    type="button"
+                    className={`bsl-file-chip${activeFilePath === f.path ? " bsl-file-chip--active" : ""}`}
+                    onClick={() => setActiveFilePath(f.path)}
+                    title={f.readonly ? `${f.path} (read-only)` : f.path}
+                  >
+                    <span className="bsl-file-chip-name">{f.path}</span>
+                    {f.readonly && <span className="bsl-file-chip-ro">RO</span>}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="bsl-editor-toolbar-right">
@@ -342,40 +369,39 @@ const BackendSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Bac
           </div>
         </div>
 
-        <Editor
-          key={activeFilePath}
-          height="100%"
-          language={toMonacoLang(activeFileObj?.language ?? "python")}
-          theme="vs-dark"
-          beforeMount={handleBeforeMount}
-          onMount={handleEditorMount}
-          onChange={handleCodeChange}
-          options={{
-            minimap: { enabled: false },
-            fontSize: 14,
-            lineNumbers: "on",
-            scrollBeyondLastLine: false,
-            wordWrap: "on",
-            tabSize: 4,
-            automaticLayout: true,
-            padding: { top: 12 },
-            renderLineHighlight: "line",
-            cursorBlinking: "smooth",
-            smoothScrolling: true,
-            readOnly: locked || (activeFileObj?.readonly ?? false),
-            bracketPairColorization: { enabled: true },
-          }}
-        />
-      </section>
+        {/* Editor pane (top) */}
+        <div className="bsl-editor-pane" style={{ height: `${editorRatio * 100}%` }}>
+          <Editor
+            key={activeFilePath}
+            height="100%"
+            language={toMonacoLang(activeFileObj?.language ?? "python")}
+            theme="vs-dark"
+            beforeMount={handleBeforeMount}
+            onMount={handleEditorMount}
+            onChange={handleCodeChange}
+            options={{
+              minimap: { enabled: false },
+              fontSize: 14,
+              lineNumbers: "on",
+              scrollBeyondLastLine: false,
+              wordWrap: "on",
+              tabSize: 4,
+              automaticLayout: true,
+              padding: { top: 12 },
+              renderLineHighlight: "line",
+              cursorBlinking: "smooth",
+              smoothScrolling: true,
+              readOnly: locked || (activeFileObj?.readonly ?? false),
+              bracketPairColorization: { enabled: true },
+            }}
+          />
+        </div>
 
-      <div className="bsl-resize-col" onMouseDown={onResizeStart("col")} />
+        {/* Horizontal resize */}
+        <div className="bsl-resize-row" onMouseDown={onResizeStart("row")} />
 
-      <section
-        className="bsl-right-col"
-        ref={rightColRef}
-        style={{ width: rightColWidth, minWidth: 280 }}
-      >
-        <div className="bsl-tests-pane" style={{ height: `${panelRatio * 100}%` }}>
+        {/* Results pane (bottom) */}
+        <div className="bsl-bottom-pane" style={{ height: `${(1 - editorRatio) * 100}%` }}>
           <BackendRequestsPanel
             testRequests={problem.test_config.test_requests}
             results={runResults}
@@ -383,17 +409,7 @@ const BackendSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Bac
             fatalError={fatalError}
           />
         </div>
-
-        <div className="bsl-resize-row" onMouseDown={onResizeStart("row")} />
-
-        <div className="bsl-desc-pane" style={{ height: `${(1 - panelRatio) * 100}%` }}>
-          <BackendProblemDescription
-            problem={problem}
-            onHintReveal={setHintsUsed}
-          />
-        </div>
       </section>
-
     </div>
   );
 });
