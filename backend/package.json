@@ -8,7 +8,10 @@
     "dev:runner": "tsx watch src/runner.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "start:runner": "node dist/runner.js"
+    "start:runner": "node dist/runner.js",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
@@ -27,7 +30,9 @@
     "@types/node": "^22.12.0",
     "@types/uuid": "^10.0.0",
     "@types/ws": "^8.18.1",
+    "@vitest/ui": "^1.0.0",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "^1.0.0"
   }
 }
