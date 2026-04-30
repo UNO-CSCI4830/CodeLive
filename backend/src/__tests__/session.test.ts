@@ -14,13 +14,42 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import express from "express";
 import request from "supertest";
 
+const mockMaybeSingle = vi.hoisted(() => vi.fn());
+const mockUpdate = vi.hoisted(() => vi.fn());
+const mockEq = vi.hoisted(() => vi.fn());
+const mockIs = vi.hoisted(() => vi.fn());
+const mockGetUserById = vi.hoisted(() => vi.fn());
+const mockFrom = vi.hoisted(() =>
+  vi.fn((table: string) => {
+    const builder: Record<string, any> = {};
+
+    builder.select = vi.fn(() => builder);
+    builder.eq = vi.fn((...args: any[]) => {
+      mockEq(table, ...args);
+      return builder;
+    });
+    builder.is = vi.fn((...args: any[]) => {
+      mockIs(table, ...args);
+      return builder;
+    });
+    builder.update = vi.fn((...args: any[]) => {
+      mockUpdate(table, ...args);
+      return builder;
+    });
+    builder.maybeSingle = mockMaybeSingle;
+
+    return builder;
+  }),
+);
+
 vi.mock("../lib/supabase", () => ({
   supabaseAdmin: {
-    from: vi.fn(() => ({
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
-    })),
+    from: mockFrom,
+    auth: {
+      admin: {
+        getUserById: mockGetUserById,
+      },
+    },
   },
 }));
 
@@ -43,6 +72,7 @@ describe("POST /api/sessions — input validation", () => {
   beforeEach(() => {
     // ISOLATED: reset all mocks so no call history bleeds between tests
     vi.clearAllMocks();
+    mockMaybeSingle.mockResolvedValue({ data: null, error: null });
   });
 
   it("returns 400 when interviewerId is missing", async () => {
@@ -129,5 +159,47 @@ describe("POST /api/sessions — input validation", () => {
 
     expect(res.status).toBe(400);
     expect(res.body.error).toMatch(/positive number/);
+  });
+});
+
+describe("POST /api/sessions/join — atomic candidate claim", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockMaybeSingle.mockReset();
+    mockGetUserById.mockResolvedValue({
+      data: { user: { email: "candidate@example.test" } },
+      error: null,
+    });
+  });
+
+  it("returns 409 when another candidate claims the waiting session before update completes", async () => {
+    mockMaybeSingle
+      .mockResolvedValueOnce({
+        data: {
+          id: "session-abc",
+          join_code: "ABC123",
+          interviewer_id: "interviewer-user-id",
+          candidate_id: null,
+          status: "waiting",
+        },
+        error: null,
+      })
+      .mockResolvedValueOnce({
+        data: { name: "Test Candidate" },
+        error: null,
+      })
+      .mockResolvedValueOnce({
+        data: null,
+        error: null,
+      });
+
+    const res = await request(app)
+      .post("/api/sessions/join")
+      .send({ joinCode: "abc123", candidateId: "test-user-id" });
+
+    expect(res.status).toBe(409);
+    expect(res.body.error).toMatch(/claimed by another candidate/i);
+    expect(mockEq).toHaveBeenCalledWith("sessions", "status", "waiting");
+    expect(mockIs).toHaveBeenCalledWith("sessions", "candidate_id", null);
   });
 });

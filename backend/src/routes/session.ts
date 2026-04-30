@@ -228,11 +228,20 @@ router.post(
         timer_paused_at: null,
       })
       .eq("id", session.id)
+      .eq("status", "waiting")
+      .is("candidate_id", null)
       .select()
-      .single();
+      .maybeSingle();
 
-    if (updateError || !updated) {
-      res.status(500).json({ error: updateError?.message ?? "Failed to join session" });
+    if (updateError) {
+      res.status(500).json({ error: updateError.message });
+      return;
+    }
+
+    if (!updated) {
+      res.status(409).json({
+        error: "This session was just claimed by another candidate. Ask the interviewer for a new session code.",
+      });
       return;
     }
 
