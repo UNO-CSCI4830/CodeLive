@@ -103,21 +103,6 @@ function InterviewRoom() {
         (a, b) => a.orderIndex - b.orderIndex,
       );
 
-      // Build problem metadata for the report request
-      const problems = snapshots.map((s) => {
-        const sessionProblem = session.problems.find(
-          (p) => p.order_index === s.orderIndex,
-        );
-        return {
-          orderIndex: s.orderIndex,
-          problemId: s.problemId,
-          category: s.category,
-          title: s.problemId.replace(/-/g, " "),
-          description: (s as SnapshotPayload & { problemDescription?: string }).problemDescription ?? "",
-          timeLimit: sessionProblem?.time_limit ?? 30,
-        };
-      });
-
       // Best effort snapshots, but always attempt report generation.
       try {
         await saveSnapshots(sessionId, snapshots);
@@ -131,7 +116,7 @@ function InterviewRoom() {
       let lastError: unknown = null;
       for (let attempt = 1; attempt <= 3; attempt += 1) {
         try {
-          await generateReport(sessionId, { problems });
+          await generateReport(sessionId);
           generated = true;
           break;
         } catch (err) {

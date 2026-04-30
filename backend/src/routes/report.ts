@@ -8,7 +8,7 @@
  * POST /api/sessions/:sessionId/report/generate
  *   Triggers async AI analysis. Creates a 'pending' report row immediately,
  *   fires off the Anthropic call in the background, and returns { reportId }.
- *   Body: { problems: SessionProblemMeta[] }
+ *   Problem metadata is loaded from the session server-side.
  *
  * GET /api/sessions/:sessionId/report
  *   Returns the current report row (status + data once complete).
@@ -17,6 +17,8 @@
  *   Returns persisted AI chat messages grouped by problem order.
  */
 
+import fs from "fs/promises";
+import path from "path";
 import { Router, type Request, type Response } from "express";
 import Anthropic from "@anthropic-ai/sdk";
 import { supabaseAdmin } from "../lib/supabase";
@@ -24,9 +26,21 @@ import { requireAuth, type AuthRequest } from "../middleware/auth";
 
 const router = Router();
 
-// ── Shared helper: verify the caller is a session participant ─────────────
+const CONTENT_DIR = path.resolve(__dirname, "..", "..", "..", "content");
+const BACKEND_CONTENT_DIR = path.join(CONTENT_DIR, "backend", "python");
+const DATABASE_CONTENT_DIR = path.join(CONTENT_DIR, "database");
+const FRONTEND_CONTENT_DIR = path.join(CONTENT_DIR, "frontend");
+const LEETCODE_CONTENT_DIR = path.join(CONTENT_DIR, "leetcode", "Python");
+const ALLOWED_CONTENT_CATEGORIES = new Set([
+  "frontend",
+  "backend",
+  "database",
+  "leetcode",
+]);
 
-async function requireSessionParticipant(
+// ── Shared helper: report data is interviewer-only ────────────────────────
+
+async function requireSessionInterviewer(
   req: Request,
   res: Response,
 ): Promise<boolean> {
@@ -35,7 +49,7 @@ async function requireSessionParticipant(
 
   const { data: session } = await supabaseAdmin
     .from("sessions")
-    .select("interviewer_id, candidate_id")
+    .select("interviewer_id")
     .eq("id", sessionId)
     .maybeSingle();
 
@@ -44,8 +58,8 @@ async function requireSessionParticipant(
     return false;
   }
 
-  if (session.interviewer_id !== user.id && session.candidate_id !== user.id) {
-    res.status(403).json({ error: "You are not a participant in this session" });
+  if (session.interviewer_id !== user.id) {
+    res.status(403).json({ error: "Only the interviewer can access interview reports for this session" });
     return false;
   }
 
@@ -73,8 +87,11 @@ interface SessionProblemMeta {
   timeLimit: number; // minutes
 }
 
-interface GenerateReportBody {
-  problems: SessionProblemMeta[];
+interface SessionProblemRow {
+  order_index: number;
+  problem_id: string;
+  category: string;
+  time_limit: number;
 }
 
 interface AiLogRow {
@@ -116,7 +133,7 @@ router.post(
   "/api/sessions/:sessionId/snapshots",
   requireAuth,
   async (req: Request, res: Response): Promise<void> => {
-    if (!(await requireSessionParticipant(req, res))) return;
+    if (!(await requireSessionInterviewer(req, res))) return;
 
     const { sessionId } = req.params;
     const snapshots: SnapshotPayload[] = req.body;
@@ -157,20 +174,33 @@ router.post(
   "/api/sessions/:sessionId/report/generate",
   requireAuth,
   async (req: Request, res: Response): Promise<void> => {
-    if (!(await requireSessionParticipant(req, res))) return;
+    if (!(await requireSessionInterviewer(req, res))) return;
 
     const { sessionId } = req.params;
-    const { problems } = req.body as GenerateReportBody;
+    const { problems, error: problemError } = await loadSessionProblemMeta(sessionId);
 
-    if (!problems || !Array.isArray(problems)) {
-      res.status(400).json({ error: "problems[] is required" });
+    if (problemError) {
+      console.error("[report/generate] session problem load error:", problemError);
+      res.status(500).json({ error: problemError });
+      return;
+    }
+
+    if (problems.length === 0) {
+      res.status(400).json({ error: "Session has no problems to report on" });
       return;
     }
 
     // Upsert a 'pending' row so the frontend can poll immediately
     const { data: report, error: insertError } = await supabaseAdmin
       .from("interview_reports")
-      .upsert({ session_id: sessionId, status: "pending" }, { onConflict: "session_id" })
+      .upsert(
+        {
+          session_id: sessionId,
+          status: "pending",
+          error_message: null,
+        },
+        { onConflict: "session_id" },
+      )
       .select()
       .single();
 
@@ -196,7 +226,7 @@ router.get(
   "/api/sessions/:sessionId/report",
   requireAuth,
   async (req: Request, res: Response): Promise<void> => {
-    if (!(await requireSessionParticipant(req, res))) return;
+    if (!(await requireSessionInterviewer(req, res))) return;
 
     const { sessionId } = req.params;
 
@@ -226,7 +256,7 @@ router.get(
   "/api/sessions/:sessionId/ai-log",
   requireAuth,
   async (req: Request, res: Response): Promise<void> => {
-    if (!(await requireSessionParticipant(req, res))) return;
+    if (!(await requireSessionInterviewer(req, res))) return;
 
     const { sessionId } = req.params;
 
@@ -256,6 +286,111 @@ router.get(
     res.json({ messages });
   },
 );
+
+async function loadSessionProblemMeta(
+  sessionId: string,
+): Promise<{ problems: SessionProblemMeta[]; error: string | null }> {
+  const { data, error } = await supabaseAdmin
+    .from("session_problems")
+    .select("order_index, problem_id, category, time_limit")
+    .eq("session_id", sessionId)
+    .order("order_index", { ascending: true });
+
+  if (error) {
+    return { problems: [], error: error.message };
+  }
+
+  const rows = (data ?? []) as SessionProblemRow[];
+  const problems = await Promise.all(
+    rows.map(async (row) => {
+      const content = await loadProblemContent(row.category, row.problem_id);
+      return {
+        orderIndex: row.order_index,
+        problemId: row.problem_id,
+        category: row.category,
+        title: content?.title ?? titleFromSlug(row.problem_id),
+        description:
+          content?.description
+          ?? "Problem description was not found in the content catalog.",
+        timeLimit: row.time_limit,
+      };
+    }),
+  );
+
+  return { problems, error: null };
+}
+
+async function loadProblemContent(
+  category: string,
+  problemId: string,
+): Promise<{ title?: string; description?: string } | null> {
+  if (!ALLOWED_CONTENT_CATEGORIES.has(category) || !/^[\w-]+$/.test(problemId)) {
+    return null;
+  }
+
+  const rootDir = contentRootForCategory(category);
+  if (!rootDir) return null;
+
+  try {
+    const raw = await findProblemInNestedDir(rootDir, problemId);
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    return {
+      title:
+        typeof parsed.title === "string" && parsed.title.trim()
+          ? parsed.title.trim()
+          : undefined,
+      description:
+        typeof parsed.description === "string" && parsed.description.trim()
+          ? parsed.description.trim()
+          : undefined,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function contentRootForCategory(category: string): string | null {
+  if (category === "backend") return BACKEND_CONTENT_DIR;
+  if (category === "database") return DATABASE_CONTENT_DIR;
+  if (category === "frontend") return FRONTEND_CONTENT_DIR;
+  if (category === "leetcode") return LEETCODE_CONTENT_DIR;
+  return null;
+}
+
+async function findProblemInNestedDir(
+  rootDir: string,
+  problemId: string,
+): Promise<string> {
+  const target = `${problemId}.json`;
+
+  async function walk(currentDir: string): Promise<string | null> {
+    const entries = await fs.readdir(currentDir, { withFileTypes: true });
+
+    for (const entry of entries) {
+      const fullPath = path.join(currentDir, entry.name);
+      if (entry.isDirectory()) {
+        const nested = await walk(fullPath);
+        if (nested) return nested;
+        continue;
+      }
+      if (entry.isFile() && entry.name === target) {
+        return fs.readFile(fullPath, "utf-8");
+      }
+    }
+
+    return null;
+  }
+
+  const found = await walk(rootDir);
+  if (found) return found;
+  throw new Error(`Problem "${problemId}" not found`);
+}
+
+function titleFromSlug(slug: string): string {
+  return slug
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
 
 // ── Background generation helper ─────────────────────────────────────────
 

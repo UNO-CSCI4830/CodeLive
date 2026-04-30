@@ -142,17 +142,6 @@ export interface SnapshotPayload {
   aiMessages: Array<{ role: string; content: string; timestamp: number }>;
 }
 
-export interface GenerateReportPayload {
-  problems: Array<{
-    orderIndex: number;
-    problemId: string;
-    category: string;
-    title: string;
-    description: string;
-    timeLimit: number;
-  }>;
-}
-
 export interface AiChatLogMessage {
   orderIndex: number;
   problemId: string;
@@ -180,11 +169,9 @@ export async function saveSnapshots(
 /** Trigger async AI report generation. Returns immediately with reportId. */
 export async function generateReport(
   sessionId: string,
-  payload: GenerateReportPayload,
 ): Promise<{ reportId: string }> {
   const res = await apiFetch(`/api/sessions/${sessionId}/report/generate`, {
     method: "POST",
-    body: JSON.stringify(payload),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));

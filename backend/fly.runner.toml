@@ -17,7 +17,6 @@ kill_timeout = 30
 [env]
   NODE_ENV = 'production'
   RUN_EXECUTION_MODE = 'direct'
-  RUNNER_REQUIRE_TOKEN = 'true'
   RUN_RATE_LIMIT_ENABLED = 'false'
   RUNNER_MAX_CONCURRENT_EXECUTIONS = '6'
   JSON_BODY_LIMIT = '1mb'

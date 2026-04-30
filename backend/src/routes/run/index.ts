@@ -4,11 +4,18 @@ import { runBackendPython } from "./handlers/runBackendPython";
 import { runDatabaseSqlite } from "./handlers/runDatabaseSqlite";
 import { requireAuth } from "../../middleware/auth";
 
-const router = Router();
+type RunPath =
+  | "/api/run/python"
+  | "/api/run/backend/python"
+  | "/api/run/database/sql-lite";
+
+type AsyncRunHandler = (req: Request, res: Response) => Promise<void>;
+
+const apiRunRouter = Router();
+const runnerRunRouter = Router();
 const RUN_EXECUTION_MODE = resolveExecutionMode();
 const RUNNER_BASE_URL = process.env.RUNNER_BASE_URL?.trim();
 const RUNNER_SHARED_TOKEN = process.env.RUNNER_SHARED_TOKEN;
-const RUNNER_REQUIRE_TOKEN = process.env.RUNNER_REQUIRE_TOKEN === "true";
 const RUNNER_REQUEST_TIMEOUT_MS = Number(process.env.RUNNER_REQUEST_TIMEOUT_MS ?? 30_000);
 const RUN_RATE_LIMIT_ENABLED = process.env.RUN_RATE_LIMIT_ENABLED !== "false";
 const RUN_RATE_LIMIT_WINDOW_MS = Number(process.env.RUN_RATE_LIMIT_WINDOW_MS ?? 60_000);
@@ -24,8 +31,6 @@ function resolveExecutionMode(): "direct" | "proxy" {
   if (mode === "direct") return "direct";
   return process.env.RUNNER_BASE_URL ? "proxy" : "direct";
 }
-
-type AsyncRunHandler = (req: Request, res: Response) => Promise<void>;
 
 function getClientKey(req: Request): string {
   const originalIp = req.header("x-original-client-ip");
@@ -77,14 +82,9 @@ function runRateLimit(req: Request, res: Response, next: NextFunction): void {
 }
 
 function requireRunnerToken(req: Request, res: Response, next: NextFunction): void {
-  if (!RUNNER_REQUIRE_TOKEN) {
-    next();
-    return;
-  }
-
   if (!RUNNER_SHARED_TOKEN) {
     res.status(500).json({
-      error: "Runner misconfigured: RUNNER_REQUIRE_TOKEN=true but RUNNER_SHARED_TOKEN is missing.",
+      error: "Runner misconfigured: RUNNER_SHARED_TOKEN is missing.",
     });
     return;
   }
@@ -137,7 +137,7 @@ function withExecutionSlot(handler: AsyncRunHandler): AsyncRunHandler {
 }
 
 function proxyOrRun(
-  path: "/api/run/python" | "/api/run/backend/python" | "/api/run/database/sql-lite",
+  path: RunPath,
   directHandler: AsyncRunHandler,
 ) {
   return async (req: Request, res: Response): Promise<void> => {
@@ -153,7 +153,7 @@ function proxyOrRun(
 async function proxyToRunner(
   req: Request,
   res: Response,
-  path: "/api/run/python" | "/api/run/backend/python" | "/api/run/database/sql-lite",
+  path: RunPath,
 ): Promise<void> {
   if (!RUNNER_BASE_URL) {
     res.status(503).json({
@@ -207,26 +207,31 @@ async function proxyToRunner(
   }
 }
 
-router.post(
-  "/api/run/python",
-  requireAuth,
-  requireRunnerToken,
-  maybeRateLimit,
-  proxyOrRun("/api/run/python", runLeetcodePython),
-);
-router.post(
-  "/api/run/backend/python",
-  requireAuth,
-  requireRunnerToken,
-  maybeRateLimit,
-  proxyOrRun("/api/run/backend/python", runBackendPython),
-);
-router.post(
-  "/api/run/database/sql-lite",
-  requireAuth,
-  requireRunnerToken,
-  maybeRateLimit,
-  proxyOrRun("/api/run/database/sql-lite", runDatabaseSqlite),
-);
+const runRoutes: Array<{ path: RunPath; handler: AsyncRunHandler }> = [
+  { path: "/api/run/python", handler: runLeetcodePython },
+  { path: "/api/run/backend/python", handler: runBackendPython },
+  { path: "/api/run/database/sql-lite", handler: runDatabaseSqlite },
+];
 
-export default router;
+for (const { path, handler } of runRoutes) {
+  // Public API boundary: browser requests prove user identity with Supabase auth.
+  // In proxy mode, the API then calls the private runner with x-runner-token.
+  apiRunRouter.post(
+    path,
+    requireAuth,
+    maybeRateLimit,
+    proxyOrRun(path, handler),
+  );
+
+  // Internal runner boundary: API-to-runner requests prove service identity with
+  // the shared runner token. They intentionally do not require user JWT auth.
+  runnerRunRouter.post(
+    path,
+    requireRunnerToken,
+    maybeRateLimit,
+    withExecutionSlot(handler),
+  );
+}
+
+export { apiRunRouter, runnerRunRouter };
+export default apiRunRouter;

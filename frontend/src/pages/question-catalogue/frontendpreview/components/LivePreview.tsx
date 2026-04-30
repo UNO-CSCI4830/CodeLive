@@ -89,8 +89,8 @@ function buildSrcdoc(files: FileMap): string {
 </head>
 <body>
   <div id="root"></div>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"><\/script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"><\/script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script>
   (function() {
     // ── tiny module system ──
@@ -135,7 +135,7 @@ function buildSrcdoc(files: FileMap): string {
       } catch(e) {
         document.getElementById('root').innerHTML =
           '<pre style="color:#ef4444;padding:1rem;font-size:13px;white-space:pre-wrap;">' +
-          e.toString() + '<\/pre>';
+          e.toString() + '</pre>';
       }
       return mod.exports;
     }
@@ -152,10 +152,10 @@ function buildSrcdoc(files: FileMap): string {
     } catch(e) {
       document.getElementById('root').innerHTML =
         '<pre style="color:#ef4444;padding:1rem;font-size:13px;white-space:pre-wrap;">' +
-        e.toString() + '<\/pre>';
+        e.toString() + '</pre>';
     }
   })();
-  <\/script>
+  </script>
 </body>
 </html>`;
 }

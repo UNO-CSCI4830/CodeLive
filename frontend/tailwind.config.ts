@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: ["./index.html", "./src/**/*.{ts,tsx,css}"],
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     fontFamily: {
       sans: ['"Inter Tight"', '"Inter"', "system-ui", "sans-serif"],

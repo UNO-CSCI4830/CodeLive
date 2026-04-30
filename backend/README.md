@@ -56,7 +56,6 @@ Terminal 1 (runner):
 cd backend
 RUN_EXECUTION_MODE=direct \
 PORT=5001 \
-RUNNER_REQUIRE_TOKEN=true \
 RUNNER_SHARED_TOKEN=dev-runner-token \
 RUN_RATE_LIMIT_ENABLED=false \
 npm run dev:runner
