@@ -110,7 +110,24 @@ export function SessionProvider({ sessionId, userId, children }: Props) {
               setTimeout(load, 0);
               return prev;
             }
-            return { ...prev, ...payload.new } as Session;
+            const next = { ...prev, ...payload.new } as Session;
+            const nextIndex = Number((payload.new as Partial<Session>).current_index);
+            const nextStatus = (payload.new as Partial<Session>).status;
+            const hasVisibleCurrentProblem =
+              Number.isInteger(nextIndex)
+              && next.problems.some((problem) => problem.order_index === nextIndex);
+
+            if (
+              Number.isInteger(nextIndex)
+              && !hasVisibleCurrentProblem
+              && nextStatus !== "completed"
+              && nextStatus !== "cancelled"
+            ) {
+              setTimeout(load, 0);
+              return prev;
+            }
+
+            return next;
           });
         },
       )

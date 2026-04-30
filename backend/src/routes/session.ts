@@ -278,14 +278,34 @@ router.get(
       return;
     }
 
-    // Fetch problems for this session
-    const { data: problems } = await supabaseAdmin
+    const isInterviewer = session.interviewer_id === user.id;
+
+    // Interviewers can see the whole queue. Candidates only receive questions
+    // that have been reached, so future interview prompts are not exposed.
+    let problemsQuery = supabaseAdmin
       .from("session_problems")
       .select("*")
-      .eq("session_id", sessionId)
+      .eq("session_id", sessionId);
+
+    if (!isInterviewer) {
+      problemsQuery = problemsQuery.lte("order_index", session.current_index);
+    }
+
+    const { data: problems, error: problemsError } = await problemsQuery
       .order("order_index", { ascending: true });
 
-    res.json({ ...session, problems: problems ?? [] });
+    if (problemsError) {
+      res.status(500).json({ error: problemsError.message });
+      return;
+    }
+
+    const visibleProblems = isInterviewer
+      ? problems ?? []
+      : (problems ?? []).filter((problem: { order_index: number }) =>
+          problem.order_index <= session.current_index,
+        );
+
+    res.json({ ...session, problems: visibleProblems });
   },
 );
 

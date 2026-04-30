@@ -3,14 +3,17 @@
  * via WebSocket. Both interviewer and candidate edit the same document in
  * real time with cursor awareness.
  *
- * Lifecycle contract (React guarantees parent effects before child effects):
- *  1. Yjs effect cleanup: clears editorRef so the new effect never touches
- *     the old, disposed Monaco model.
- *  2. Yjs new effect: sets up doc/provider/ytext. editorRef is null here.
- *  3. Monaco onMount: calls bindEditor → provider is ready → binding created.
+ * Lifecycle contract:
+ *  1. Yjs effect cleanup clears editorRef so the new effect never touches the
+ *     old, disposed Monaco model.
+ *  2. Monaco onMount stores the current editor. This can happen before the
+ *     async auth/session lookup finishes.
+ *  3. Once the provider has synced, the hook seeds starter code if the shared
+ *     document is empty, then binds the current editor.
  *
- * This means MonacoBinding is ONLY ever created inside bindEditor, never
- * inside the Yjs effect, which avoids the null-model crash entirely.
+ * This means MonacoBinding is created only after both Monaco and Yjs are ready.
+ * It also avoids clearing the visible starter code while the WebSocket is still
+ * connecting.
  *
  * NOTE: We intentionally do NOT call binding.destroy() in cleanup.
  * lib0 (Yjs's utility layer) captures console.warn at module initialisation
@@ -61,6 +64,37 @@ export function useCollaborativeEditor(options: Options): CollaborativeEditorSta
   const providerRef = useRef<WebsocketProvider | null>(null);
   const bindingRef  = useRef<MonacoBinding | null>(null);
   const ytextRef   = useRef<Y.Text | null>(null);
+  const initialCodeRef = useRef(initialCode ?? "");
+  const hasSyncedRef = useRef(false);
+
+  useEffect(() => {
+    initialCodeRef.current = initialCode ?? "";
+  }, [initialCode]);
+
+  const bindCurrentEditor = useCallback(() => {
+    const editor = editorRef.current;
+    const model = editor?.getModel();
+    const ytext = ytextRef.current;
+    const provider = providerRef.current;
+
+    if (
+      !editor ||
+      !model ||
+      !ytext ||
+      !provider ||
+      !hasSyncedRef.current ||
+      bindingRef.current
+    ) {
+      return;
+    }
+
+    bindingRef.current = new MonacoBinding(
+      ytext,
+      model,
+      new Set([editor]),
+      provider.awareness,
+    );
+  }, []);
 
   useEffect(() => {
     if (!roomName) return;
@@ -99,9 +133,16 @@ export function useCollaborativeEditor(options: Options): CollaborativeEditorSta
 
       // Seed with starter code on first sync if the doc is empty
       provider.on("sync", (isSynced: boolean) => {
-        if (isSynced && ytext.length === 0 && initialCode) {
-          ytext.insert(0, initialCode);
+        if (!isSynced) return;
+
+        hasSyncedRef.current = true;
+
+        const starterCode = initialCodeRef.current;
+        if (ytext.length === 0 && starterCode) {
+          ytext.insert(0, starterCode);
         }
+
+        bindCurrentEditor();
       });
     }
 
@@ -127,38 +168,28 @@ export function useCollaborativeEditor(options: Options): CollaborativeEditorSta
       ydocRef.current    = null;
       providerRef.current = null;
       ytextRef.current   = null;
+      hasSyncedRef.current = false;
       setConnected(false);
     };
-  }, [roomName]); // Recreate on room change (file switch or question advance)
+  }, [roomName, bindCurrentEditor, userColor, userName]); // Recreate on room change (file switch or question advance)
 
-  // Called from Monaco's onMount. This is the ONLY place we create a binding.
-  // React guarantees this fires AFTER the parent's Yjs effect, so
-  // providerRef and ytextRef are always set by the time this runs.
-  // bindingRef.current is always null here because effect cleanup nulls it
-  // before a new Monaco instance can mount and call onMount.
+  // Called from Monaco's onMount. This stores the editor immediately; the hook
+  // binds it once the WebSocket provider has synced.
   const bindEditor = useCallback(
     (editor: MonacoEditor.IStandaloneCodeEditor) => {
       editorRef.current = editor;
 
-      const model    = editor.getModel();
-      const ytext    = ytextRef.current;
-      const provider = providerRef.current;
-
-      // Guard: model can be null if Monaco is still initialising
-      if (!model || !ytext || !provider) return;
-
-      bindingRef.current = new MonacoBinding(
-        ytext,
-        model,
-        new Set([editor]),
-        provider.awareness,
-      );
+      bindCurrentEditor();
     },
-    [], // Stable — only touches refs
+    [bindCurrentEditor],
   );
 
   const getText = useCallback(
-    (): string => ytextRef.current?.toString() ?? "",
+    (): string => {
+      const ytextValue = ytextRef.current?.toString();
+      if (ytextValue) return ytextValue;
+      return editorRef.current?.getModel()?.getValue() ?? initialCodeRef.current;
+    },
     [],
   );
 

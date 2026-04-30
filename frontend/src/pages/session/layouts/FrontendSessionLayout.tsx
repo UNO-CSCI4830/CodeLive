@@ -331,10 +331,11 @@ const FrontendSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Fr
         </div>
 
         <Editor
-          key={activeFilePath}
+          key={`${problemId}:${activeFilePath}`}
           height="100%"
           language={fileLanguage}
           theme="vs-dark"
+          defaultValue={initialCode}
           beforeMount={handleBeforeMount}
           onMount={handleEditorMount}
           onChange={handleCodeChange}

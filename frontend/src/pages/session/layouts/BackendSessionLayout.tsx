@@ -372,10 +372,11 @@ const BackendSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Bac
         {/* Editor pane (top) */}
         <div className="bsl-editor-pane" style={{ height: `${editorRatio * 100}%` }}>
           <Editor
-            key={activeFilePath}
+            key={`${problemId}:${activeFilePath}`}
             height="100%"
             language={toMonacoLang(activeFileObj?.language ?? "python")}
             theme="vs-dark"
+            defaultValue={fileContents[activeFilePath] ?? ""}
             beforeMount={handleBeforeMount}
             onMount={handleEditorMount}
             onChange={handleCodeChange}

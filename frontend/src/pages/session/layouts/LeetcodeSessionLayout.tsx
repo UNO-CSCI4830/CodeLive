@@ -311,9 +311,11 @@ const LeetcodeSessionLayout = forwardRef<SessionLayoutHandle, Props>(function Le
         {/* Editor pane */}
         <div className="lsl-editor-pane" style={{ height: `${editorRatio * 100}%` }}>
           <Editor
+            key={`${problemId}:solution`}
             height="100%"
             language="python"
             theme="vs-dark"
+            defaultValue={initialCode}
             beforeMount={handleBeforeMount}
             onMount={handleEditorMount}
             options={{

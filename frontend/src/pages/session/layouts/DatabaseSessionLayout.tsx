@@ -309,6 +309,7 @@ const DatabaseSessionLayout = forwardRef<SessionLayoutHandle, Props>(
                 height="100%"
                 language="sql"
                 theme="vs-dark"
+                defaultValue={solutionCode}
                 onMount={handleSolutionMount}
                 onChange={handleSolutionChange}
                 options={{

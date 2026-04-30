@@ -18,12 +18,15 @@ const mockMaybeSingle = vi.hoisted(() => vi.fn());
 const mockUpdate = vi.hoisted(() => vi.fn());
 const mockEq = vi.hoisted(() => vi.fn());
 const mockIs = vi.hoisted(() => vi.fn());
+const mockLte = vi.hoisted(() => vi.fn());
+const mockSessionProblemsResult = vi.hoisted(() => vi.fn());
 const mockGetUserById = vi.hoisted(() => vi.fn());
 const mockFrom = vi.hoisted(() =>
   vi.fn((table: string) => {
     const builder: Record<string, any> = {};
 
     builder.select = vi.fn(() => builder);
+    builder.order = vi.fn(() => builder);
     builder.eq = vi.fn((...args: any[]) => {
       mockEq(table, ...args);
       return builder;
@@ -32,11 +35,22 @@ const mockFrom = vi.hoisted(() =>
       mockIs(table, ...args);
       return builder;
     });
+    builder.lte = vi.fn((...args: any[]) => {
+      mockLte(table, ...args);
+      return builder;
+    });
     builder.update = vi.fn((...args: any[]) => {
       mockUpdate(table, ...args);
       return builder;
     });
     builder.maybeSingle = mockMaybeSingle;
+    builder.then = (resolve: any, reject: any) => {
+      const result =
+        table === "session_problems"
+          ? mockSessionProblemsResult()
+          : { data: null, error: null };
+      return Promise.resolve(result).then(resolve, reject);
+    };
 
     return builder;
   }),
@@ -73,6 +87,7 @@ describe("POST /api/sessions — input validation", () => {
     // ISOLATED: reset all mocks so no call history bleeds between tests
     vi.clearAllMocks();
     mockMaybeSingle.mockResolvedValue({ data: null, error: null });
+    mockSessionProblemsResult.mockResolvedValue({ data: [], error: null });
   });
 
   it("returns 400 when interviewerId is missing", async () => {
@@ -159,6 +174,68 @@ describe("POST /api/sessions — input validation", () => {
 
     expect(res.status).toBe(400);
     expect(res.body.error).toMatch(/positive number/);
+  });
+});
+
+describe("GET /api/sessions/:sessionId — role-shaped problem visibility", () => {
+  const PROBLEMS = [
+    { id: "sp-0", order_index: 0, problem_id: "p0", category: "frontend" },
+    { id: "sp-1", order_index: 1, problem_id: "p1", category: "backend" },
+    { id: "sp-2", order_index: 2, problem_id: "p2", category: "database" },
+  ];
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockMaybeSingle.mockReset();
+    mockSessionProblemsResult.mockReset();
+  });
+
+  it("hides future problems from candidates", async () => {
+    mockMaybeSingle.mockResolvedValueOnce({
+      data: {
+        id: "session-abc",
+        interviewer_id: "interviewer-user-id",
+        candidate_id: "test-user-id",
+        current_index: 1,
+        status: "active",
+      },
+      error: null,
+    });
+    mockSessionProblemsResult.mockResolvedValueOnce({
+      data: PROBLEMS,
+      error: null,
+    });
+
+    const res = await request(app).get("/api/sessions/session-abc");
+
+    expect(res.status).toBe(200);
+    expect(res.body.problems.map((problem: { problem_id: string }) => problem.problem_id))
+      .toEqual(["p0", "p1"]);
+    expect(mockLte).toHaveBeenCalledWith("session_problems", "order_index", 1);
+  });
+
+  it("returns the full problem queue to interviewers", async () => {
+    mockMaybeSingle.mockResolvedValueOnce({
+      data: {
+        id: "session-abc",
+        interviewer_id: "test-user-id",
+        candidate_id: "candidate-user-id",
+        current_index: 1,
+        status: "active",
+      },
+      error: null,
+    });
+    mockSessionProblemsResult.mockResolvedValueOnce({
+      data: PROBLEMS,
+      error: null,
+    });
+
+    const res = await request(app).get("/api/sessions/session-abc");
+
+    expect(res.status).toBe(200);
+    expect(res.body.problems.map((problem: { problem_id: string }) => problem.problem_id))
+      .toEqual(["p0", "p1", "p2"]);
+    expect(mockLte).not.toHaveBeenCalled();
   });
 });
 
