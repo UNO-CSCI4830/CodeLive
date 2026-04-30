@@ -2,7 +2,9 @@ import http from "http";
 import express from "express";
 import healthRouter from "./routes/health";
 import versionRouter from "./routes/version";
-import { runnerRunRouter } from "./routes/run";
+import { runnerRunRouter, assertRunnerRunConfiguration } from "./routes/run";
+
+assertRunnerRunConfiguration();
 
 const app = express();
 const PORT = process.env.PORT ?? 5000;

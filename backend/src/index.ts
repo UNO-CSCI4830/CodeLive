@@ -8,12 +8,14 @@ import versionRouter from "./routes/version";
 import profileRouter from "./routes/profile";
 import dashboardRouter from "./routes/dashboard";
 import contentRouter from "./routes/content";
-import { apiRunRouter } from "./routes/run";
+import { apiRunRouter, assertApiRunConfiguration } from "./routes/run";
 import sessionRouter from "./routes/session";
 import aiRouter from "./routes/ai";
 import reportRouter from "./routes/report";
 import groupsRouter from "./routes/groups";
 import { attachYjsWebSocket } from "./lib/websocket";
+
+assertApiRunConfiguration();
 
 const app = express();
 const PORT = process.env.PORT ?? 5000;

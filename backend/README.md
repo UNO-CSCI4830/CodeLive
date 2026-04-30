@@ -41,12 +41,32 @@ Then fill in the values in `backend/.env`. You can find the Supabase keys in the
 - **Domain APIs** — endpoints for interview sessions, code execution, AI evaluation
 - Authentication is handled via **Supabase Auth**; the backend validates JWTs via auth middleware
 
-## Isolated Runner Split (Recommended)
+## Isolated Runner Split
 
-The backend now supports a strong split:
+Production run execution is fail-closed: the public API refuses to start unless
+it is configured to proxy run requests to the private runner service.
+
+The backend supports this split:
 
 - **API app** (`dist/index.js`): profiles/sessions/content/reporting + run request proxy.
 - **Runner app** (`dist/runner.js`): only execution routes (`/api/run/*`) in a dedicated service.
+
+Required production API configuration:
+
+```bash
+NODE_ENV=production
+RUN_EXECUTION_MODE=proxy
+RUNNER_BASE_URL=http://codelive-runner.internal:5000
+RUNNER_SHARED_TOKEN=<same-long-random-token-as-runner>
+```
+
+Required production runner configuration:
+
+```bash
+NODE_ENV=production
+RUN_EXECUTION_MODE=direct
+RUNNER_SHARED_TOKEN=<same-long-random-token-as-api>
+```
 
 ### Local split setup
 

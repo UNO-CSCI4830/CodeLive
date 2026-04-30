@@ -102,6 +102,9 @@ Secrets are **never committed** to the repo. Two systems are used:
 | `SUPABASE_SERVICE_ROLE_KEY` | ✅ | Supabase service role key (bypasses RLS) |
 | `ANTHROPIC_API_KEY` | ⚠️ | Anthropic key — AI features degrade gracefully without it |
 | `CORS_ORIGINS` | ❌ | Comma-separated origins (defaults to `http://localhost:3000`) |
+| `RUN_EXECUTION_MODE` | Production API ✅ | Use `proxy` in production API, `direct` only for the private runner/local dev |
+| `RUNNER_BASE_URL` | Production API ✅ | Private runner URL, e.g. `http://codelive-runner.internal:5000` |
+| `RUNNER_SHARED_TOKEN` | Production API + runner ✅ | Shared secret proving API-to-runner requests |
 
 **Frontend:**
 

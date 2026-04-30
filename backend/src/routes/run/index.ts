@@ -25,11 +25,59 @@ const runRateBuckets = new Map<string, { count: number; resetAt: number }>();
 const executionWaiters: Array<() => void> = [];
 let activeExecutions = 0;
 
+function isProduction(): boolean {
+  return process.env.NODE_ENV === "production";
+}
+
 function resolveExecutionMode(): "direct" | "proxy" {
   const mode = process.env.RUN_EXECUTION_MODE?.trim().toLowerCase();
   if (mode === "proxy") return "proxy";
   if (mode === "direct") return "direct";
   return process.env.RUNNER_BASE_URL ? "proxy" : "direct";
+}
+
+function buildRunConfigError(serviceName: "API" | "runner", problems: string[]): Error {
+  return new Error(
+    [
+      `Unsafe production run configuration for ${serviceName}.`,
+      ...problems.map((problem) => `- ${problem}`),
+    ].join("\n"),
+  );
+}
+
+function assertApiRunConfiguration(): void {
+  if (!isProduction()) return;
+
+  const problems: string[] = [];
+  if (RUN_EXECUTION_MODE !== "proxy") {
+    problems.push("Set RUN_EXECUTION_MODE=proxy so the API never executes candidate code directly.");
+  }
+  if (!RUNNER_BASE_URL) {
+    problems.push("Set RUNNER_BASE_URL to the private runner service URL.");
+  }
+  if (!RUNNER_SHARED_TOKEN) {
+    problems.push("Set RUNNER_SHARED_TOKEN on both the API and runner services.");
+  }
+
+  if (problems.length > 0) {
+    throw buildRunConfigError("API", problems);
+  }
+}
+
+function assertRunnerRunConfiguration(): void {
+  if (!isProduction()) return;
+
+  const problems: string[] = [];
+  if (RUN_EXECUTION_MODE !== "direct") {
+    problems.push("Set RUN_EXECUTION_MODE=direct for the dedicated runner service.");
+  }
+  if (!RUNNER_SHARED_TOKEN) {
+    problems.push("Set RUNNER_SHARED_TOKEN so only the API can call runner execution routes.");
+  }
+
+  if (problems.length > 0) {
+    throw buildRunConfigError("runner", problems);
+  }
 }
 
 function getClientKey(req: Request): string {
@@ -142,6 +190,13 @@ function proxyOrRun(
 ) {
   return async (req: Request, res: Response): Promise<void> => {
     if (RUN_EXECUTION_MODE === "direct") {
+      if (isProduction()) {
+        res.status(503).json({
+          error: "Run service unavailable: production API direct execution is disabled.",
+        });
+        return;
+      }
+
       const guarded = withExecutionSlot(directHandler);
       await guarded(req, res);
       return;
@@ -233,5 +288,10 @@ for (const { path, handler } of runRoutes) {
   );
 }
 
-export { apiRunRouter, runnerRunRouter };
+export {
+  apiRunRouter,
+  runnerRunRouter,
+  assertApiRunConfiguration,
+  assertRunnerRunConfiguration,
+};
 export default apiRunRouter;
