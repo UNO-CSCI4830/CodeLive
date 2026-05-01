@@ -1,209 +1,164 @@
-# Code Live
+# CodeLive
 
-**Live technical interviews that reflect real engineering work.**
+**CodeLive is a collaborative technical interview platform.** Interviewers create live sessions from a curated question bank, candidates join with a short code, both sides share an interview workspace, and the interviewer can generate an AI-assisted report after the session.
 
-Code Live modernises technical interviews to match how engineers actually work — with collaboration, documentation, and AI-assisted reasoning. Instead of contrived algorithm puzzles, Code Live provides a live interview environment where interviewers observe a candidate's real workflow and thinking in real time.
+This repo is a monorepo:
 
-This monorepo contains the **frontend** (React / Vite / TypeScript) and **backend** (Express / TypeScript) for the platform.
+- `frontend/` - React, Vite, TypeScript, Tailwind, Monaco editor
+- `backend/` - Express, TypeScript, Supabase, Yjs WebSocket, code execution routes
+- `content/` - JSON question bank for leetcode, frontend, backend, and database tasks
+- `backend/supabase/migrations/` - Supabase schema migrations
 
----
+## Quick Start
 
-## Prerequisites
-
-| Tool | Required | Install |
-|------|----------|---------|
-| **Docker Desktop** | ✅ | [docs.docker.com/get-started/get-docker](https://docs.docker.com/get-started/get-docker/) |
-| **Infisical CLI** | ✅ | See [local-dev.md](local-dev.md) |
-| **Fly CLI** | Deploy only | `curl -L https://fly.io/install.sh \| sh` |
-
----
-
-## Getting Started (New Team Member)
+Install Docker Desktop and the Infisical CLI, then log in:
 
 ```bash
-# 1. Clone the repo
-git clone <repo-url> && cd CodeLive
-
-# 2. Log in to Infisical (one-time — ask project owner for an invite)
 infisical login
+```
 
-# 3. Start developing (Docker handles all dependencies automatically)
+Start the full local app:
+
+```bash
 ./scripts/dev-local.sh
 ```
 
-No `npm install`, no Python setup. Docker builds everything on first run (~1–2 min), then it's instant. See [local-dev.md](local-dev.md) for full setup instructions.
+Open:
 
----
+- Frontend: `http://localhost:3000`
+- Backend health: `http://localhost:5000/health`
 
-## Scripts
+Docker installs dependencies inside containers. You do not need to run `npm install` for normal local development.
 
-| Script | Description |
-|--------|-------------|
-| `./scripts/dev-local.sh` | Start backend (`:5000`) + frontend (`:3000`) locally via Docker |
-| `./scripts/dev.sh` | Start frontend locally pointing at the Fly.io production backend |
-| `./scripts/deploy.sh` | Deploy backend to Fly.io |
-| `./scripts/secrets.sh list` | List current production secrets on Fly.io |
-| `./scripts/secrets.sh set` | Interactively set all Fly.io production secrets |
-| `./scripts/secrets.sh rotate` | Show key rotation checklist |
+## Current Feature Scope
 
----
+Demo-ready:
+
+- Supabase email auth and role selection
+- Interviewer session creation with selected problem queue
+- Candidate join by six-character session code
+- Real-time session state: lobby, current question, timer pause/resume, completion
+- Collaborative code editor via Yjs WebSocket
+- AI assistant for candidates, visible read-only to interviewers
+- Code execution for leetcode, backend Python, and database SQL tasks
+- AI report generation with code snapshots and AI usage logs
+- Interviewer reports list and report detail page
+- Docker-based local development and Fly.io backend deployment
+
+Partial or intentionally lightweight:
+
+- Calendar UI is present, but calendar invite sending is not a real Google Calendar integration.
+- Post-interview messaging, feedback surveys, and rich private rubric notes are not primary demo paths.
+- Audio/video transcription is not implemented; reports focus on code snapshots and AI chat logs.
+
+## Common Commands
+
+| Command | Purpose |
+| --- | --- |
+| `./scripts/dev-local.sh` | Run frontend and backend locally with Docker |
+| `./scripts/dev.sh` | Run local frontend against the Fly.io backend |
+| `npm --prefix frontend run build` | Type-check and build frontend |
+| `npm --prefix frontend run lint` | Run frontend ESLint |
+| `npm --prefix frontend test` | Run frontend tests |
+| `npm --prefix backend run build` | Type-check backend |
+| `npm --prefix backend test` | Run backend tests |
+| `./scripts/deploy.sh` | Deploy runner and backend to Fly.io |
 
 ## Architecture
 
-```
-CodeLive/
-├── frontend/          React 19 + Vite + Tailwind CSS
-│   ├── src/
-│   └── Dockerfile.dev Dev container
-├── backend/           Express + TypeScript + Yjs WebSocket
-│   ├── src/
-│   ├── Dockerfile     Production container
-│   ├── Dockerfile.dev Dev container
-│   └── fly.toml       Fly.io config
-├── content/           Question bank (JSON + seed scripts)
-├── docker-compose.yml Local dev orchestration
-├── scripts/           Dev & deploy scripts
-├── local-dev.md       Local dev setup guide
-├── prod-dev.md        Fly.io deploy guide
-├── SECRETS.md         Secret management docs
-└── README.md          ← you are here
+```text
+Browser
+  -> Vite frontend (:3000)
+  -> Express API (:5000)
+  -> Supabase Auth/Postgres/Realtime
+  -> Yjs WebSocket at /ws
+  -> Code runner path for execution requests
+  -> Anthropic API for assistant/report features
 ```
 
-### Tech Stack
+Key backend areas:
 
-| Layer | Technology |
-|-------|-----------|
-| **Frontend** | React 19, Vite, TypeScript, Tailwind CSS, Monaco Editor |
-| **Backend** | Express, TypeScript, Yjs + WebSocket (collaborative editing) |
-| **Database** | Supabase (PostgreSQL + Auth + Realtime) |
-| **AI** | Anthropic Claude (chat assistant + report generation) |
-| **Hosting** | Fly.io (backend) |
-| **Secrets** | Infisical (local dev) · Fly.io secrets (production) |
+- `backend/src/routes/session.ts` - session creation, join, state changes, timer control
+- `backend/src/routes/run/` - code execution API and runner proxy/direct modes
+- `backend/src/routes/ai.ts` - candidate AI assistant and AI chat persistence
+- `backend/src/routes/report.ts` - snapshots, AI report generation, report reads
+- `backend/src/lib/websocket.ts` - authenticated Yjs WebSocket server
 
----
+Key frontend areas:
 
-## Secret Management
+- `frontend/src/pages/session/` - lobby, interview room, layouts, report page
+- `frontend/src/pages/question-catalogue/` - browsable question bank and previews
+- `frontend/src/lib/AuthContext.tsx` - Supabase auth/profile bootstrapping
 
-Secrets are **never committed** to the repo. Two systems are used:
+## Code Execution Model
 
-| Environment | Secrets Source | How |
-|-------------|---------------|-----|
-| **Local dev** | Infisical | `npm run dev` calls `infisical run` automatically |
-| **Production** | Fly.io | Set via `fly secrets set` or `./scripts/secrets.sh set` |
+Local development uses direct execution inside the backend container for convenience.
 
-### Required Secrets
-
-**Backend:**
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `SUPABASE_URL` | ✅ | Supabase project URL |
-| `SUPABASE_ANON_KEY` | ✅ | Supabase public anon key |
-| `SUPABASE_SERVICE_ROLE_KEY` | ✅ | Supabase service role key (bypasses RLS) |
-| `ANTHROPIC_API_KEY` | ⚠️ | Anthropic key — AI features degrade gracefully without it |
-| `CORS_ORIGINS` | ❌ | Comma-separated origins (defaults to `http://localhost:3000`) |
-| `RUN_EXECUTION_MODE` | Production API ✅ | Use `proxy` in production API, `direct` only for the private runner/local dev |
-| `RUNNER_BASE_URL` | Production API ✅ | Private runner URL, e.g. `http://codelive-runner.internal:5000` |
-| `RUNNER_SHARED_TOKEN` | Production API + runner ✅ | Shared secret proving API-to-runner requests |
-
-**Frontend:**
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `VITE_SUPABASE_URL` | ✅ | Same Supabase project URL |
-| `VITE_SUPABASE_ANON_KEY` | ✅ | Same Supabase public anon key |
-
-> Full docs: **[SECRETS.md](SECRETS.md)**
-
----
-
-## Deployment
-
-The backend is deployed to **[Fly.io](https://fly.io)** via Docker.
-
-### First-time deploy
+Production is configured to fail closed unless the public API proxies execution to a private runner:
 
 ```bash
-# 1. Log in to Fly
-fly auth login
-
-# 2. Create the app (from backend/)
-cd backend && fly launch --no-deploy
-
-# 3. Set production secrets
-./scripts/secrets.sh set
-
-# 4. Deploy
-./scripts/deploy.sh
+RUN_EXECUTION_MODE=proxy
+RUNNER_BASE_URL=http://codelive-runner.internal:5000
+RUNNER_SHARED_TOKEN=<shared-secret>
 ```
 
-### Subsequent deploys
+The private runner uses:
 
 ```bash
-./scripts/deploy.sh
+RUN_EXECUTION_MODE=direct
+RUNNER_SHARED_TOKEN=<same-shared-secret>
 ```
 
-The deploy script runs pre-flight checks (Fly auth, TypeScript build, secrets count) before deploying.
+This keeps the main API process separate from untrusted code execution. See [backend/README.md](backend/README.md) for the local split-runner commands.
 
-### Production URLs
+## Environment Variables
 
-| Resource | URL |
-|----------|-----|
-| App | `https://codelive-backend.fly.dev` |
-| Health | `https://codelive-backend.fly.dev/health` |
-| Logs | `fly logs --app codelive-backend` |
-| Status | `fly status --app codelive-backend` |
+Secrets are injected by Infisical for local development and Fly secrets for production.
 
----
+Backend:
 
-## Local Development
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `ANTHROPIC_API_KEY` optional; AI features degrade if missing
+- `CORS_ORIGINS`
+- `RUN_EXECUTION_MODE`
+- `RUNNER_BASE_URL` for proxy mode
+- `RUNNER_SHARED_TOKEN` for production runner mode
 
-### Fully local (backend + frontend)
+Frontend:
 
-```bash
-./scripts/dev-local.sh
-```
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+- `VITE_BACKEND_URL` optional; defaults through Docker/Vite proxy locally
 
-Runs both servers via Docker:
-- **Frontend** at `http://localhost:3000`
-- **Backend** at `http://localhost:5000`
+See [SECRETS.md](SECRETS.md) for secret management details.
 
-Press **Ctrl+C** to stop.
+## Local Demo Flow
 
-### Frontend only, against Fly.io backend
-
-```bash
-./scripts/dev.sh
-```
-
-Runs only the frontend locally. API and WebSocket requests proxy to the deployed Fly.io backend. Both you and a teammate can run this simultaneously and share the same backend for collaborative sessions.
-
-See [local-dev.md](local-dev.md) for full setup instructions.
-
----
-
-## Collaborative Sessions
-
-Sessions use **two real-time systems**:
-
-1. **Yjs + WebSocket** — Collaborative code editing (runs in the backend)
-2. **Supabase Realtime** — Session state sync (question advances, locks, completion)
-
-For local testing, open **two browser tabs** — one as interviewer, one as candidate. Both connect to your local backend's WebSocket server.
-
-For cross-machine sessions, both users must connect to the **same backend** (either a deployed Fly.io instance, or via a tunnel like `ngrok http 5000`).
-
----
+1. Run `./scripts/dev-local.sh`.
+2. Open `http://localhost:3000` in two browser profiles or one normal and one private window.
+3. Sign in as an interviewer in one window and candidate in the other.
+4. Interviewer creates a session and shares the lobby code.
+5. Candidate joins with the code.
+6. Verify starter code, collaborative edits, AI assistant, run buttons, timer controls, and report generation.
 
 ## Troubleshooting
 
 | Problem | Fix |
-|---------|-----|
-| `infisical: command not found` | See install instructions in [local-dev.md](local-dev.md) |
-| `You must be logged in` | `infisical login` |
-| `SUPABASE_URL is undefined` | Check secrets exist in Infisical Dev environment |
-| Frontend env vars not loading | Must be prefixed with `VITE_` |
-| Module not found after `git pull` | `docker compose build` then `./scripts/dev-local.sh` |
-| node_modules errors persist | `docker compose down -v` then `./scripts/dev-local.sh` |
-| Fly deploy fails | Check `fly auth whoami` and `fly status` |
-| WebSocket not connecting | Ensure backend is running and Vite proxy is configured |
+| --- | --- |
+| `infisical: command not found` | Install the Infisical CLI; see [local-dev.md](local-dev.md) |
+| `You must be logged in` | Run `infisical login` |
+| Frontend env vars missing | Ensure they use the `VITE_` prefix |
+| Module errors after pulling | Run `docker compose build` |
+| Stale dependency volume | Run `docker compose down -v`, then `./scripts/dev-local.sh` |
+| WebSocket fails locally | Use `http://localhost:3000`; the browser should connect through Vite's `/ws` proxy |
+| Backend tests fail with `EPERM listen` in a sandboxed shell | Run tests in a normal local terminal; Supertest needs to bind a local test server |
+
+## More Docs
+
+- [local-dev.md](local-dev.md) - local setup and daily workflow
+- [prod-dev.md](prod-dev.md) - Fly.io deployment workflow
+- [backend/README.md](backend/README.md) - backend routes, scripts, and runner setup
+- [frontend/README.md](frontend/README.md) - frontend routes and scripts
+- [SECRETS.md](SECRETS.md) - Infisical and Fly secret management

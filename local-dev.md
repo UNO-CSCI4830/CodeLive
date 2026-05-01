@@ -1,78 +1,98 @@
-# Local Dev
+# Local Development
 
-## 1. One-time setup
+Use this guide to run CodeLive on your machine.
 
-Install two tools:
+## One-Time Setup
 
-**Docker Desktop** — manages all project dependencies automatically
-https://docs.docker.com/get-started/get-docker/
+Install:
 
-**Infisical CLI** — injects secrets at runtime (no `.env` files needed)
+- Docker Desktop: https://docs.docker.com/get-started/get-docker/
+- Infisical CLI:
 
 ```bash
+# macOS
+brew install infisical/get-cli/infisical
+
 # Ubuntu / Debian
 curl -1sLf 'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.deb.sh' | sudo bash
 sudo apt-get install infisical
 
-# macOS
-brew install infisical/get-cli/infisical
-
-# Windows (Scoop)
+# Windows with Scoop
 scoop bucket add infisical https://github.com/Infisical/scoop-infisical.git
 scoop install infisical
 ```
 
-Then log in to Infisical (ask the project owner to invite you first):
+Then log in:
 
 ```bash
 infisical login
 ```
 
-That's it. No `npm install`, no Python setup — Docker handles everything.
+Ask the project owner for access to the CodeLive Infisical project. The repo already contains the Infisical project config, so you should not need to run `infisical init`.
 
-> The repo already contains `.infisical.json` linking to the project. You only need to log in — no `infisical init` required.
-
----
-
-## 2. Run the full app (backend + frontend)
+## Run the Full App Locally
 
 ```bash
 ./scripts/dev-local.sh
 ```
 
-- Frontend: http://localhost:3000
-- Backend: http://localhost:5000
+URLs:
 
-Press `Ctrl+C` to stop.
+- Frontend: `http://localhost:3000`
+- Backend: `http://localhost:5000`
 
-> **First run only:** Docker builds the images (~1–2 minutes). Every run after that is instant.
+The first run builds Docker images. Later runs reuse the images and container-managed `node_modules` volumes.
 
----
+## Run Frontend Against Fly Backend
 
-## 3. Run frontend against the production backend
-
-Use this when you want to develop UI without running the backend locally.
+Use this when the deployed backend is healthy and you only want to work on UI:
 
 ```bash
 ./scripts/dev.sh
 ```
 
-- Frontend: http://localhost:3000
-- Backend: https://codelive-backend.fly.dev
+URLs:
 
----
+- Frontend: `http://localhost:3000`
+- Backend: `https://codelive-backend.fly.dev`
 
-## After a `git pull`
+## Testing a Session Locally
 
-If `package.json` or a `Dockerfile.dev` changed, rebuild the images:
+Use two browser profiles or one normal window and one private window:
+
+1. Sign in as an interviewer.
+2. Create a session and copy the six-character code.
+3. Sign in as a candidate in the second window.
+4. Join with the code.
+5. Confirm editor sync, AI assistant, run buttons, timer controls, and report generation.
+
+For local Docker runs, the frontend may receive `VITE_BACKEND_URL=http://backend:5000`, but the browser should still connect through `localhost:3000` for API and WebSocket proxying. Do not manually open `http://backend:5000` in the browser; that hostname only exists inside Docker.
+
+## After Pulling Changes
+
+If dependency files or Dockerfiles changed:
 
 ```bash
 docker compose build
 ```
 
-Then run as normal. If you see "module not found" errors after a rebuild, the node_modules volume is stale — reset it:
+If dependency errors persist:
 
 ```bash
 docker compose down -v
 ./scripts/dev-local.sh
 ```
+
+## Quality Checks
+
+Run these before presenting or submitting:
+
+```bash
+npm --prefix backend run build
+npm --prefix backend test
+npm --prefix frontend run build
+npm --prefix frontend test
+npm --prefix frontend run lint
+```
+
+The frontend build currently emits a large chunk warning for the interview/editor bundle. That is expected and does not fail the build.

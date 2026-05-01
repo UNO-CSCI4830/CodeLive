@@ -1,188 +1,83 @@
-# Secret Management — Infisical
+# Secrets
 
-Code Live uses **[Infisical](https://infisical.com)** for secret management. Secrets are never committed to the repo — they're injected at runtime via the Infisical CLI.
+CodeLive uses Infisical for local development secrets and Fly.io secrets for deployed services. Do not commit `.env` files or secret values.
 
-> **No `.env` files need to be shared.** Once set up, `npm run dev` pulls secrets automatically.
+## Local Development
 
----
-
-## First-Time Setup (New Team Member)
-
-### 1. Install the Infisical CLI
-
-```bash
-# Ubuntu / Debian
-curl -1sLf 'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.deb.sh' | sudo bash
-sudo apt-get install infisical
-
-# macOS
-brew install infisical/get-cli/infisical
-
-# Windows (via Scoop)
-scoop bucket add infisical https://github.com/Infisical/scoop-infisical.git
-scoop install infisical
-```
-
-Verify it works:
-
-```bash
-infisical --version
-```
-
-### 2. Log in
+Install and log in:
 
 ```bash
 infisical login
 ```
 
-This opens a browser window. Sign in with your Infisical account. If you don't have one yet, ask the project owner to invite you to the **CodeLive** organization.
-
-### 3. Initialize both directories
-
-The `.infisical.json` files are already committed to the repo, so this step is only needed if they're missing:
+Run the app from the repo root:
 
 ```bash
-cd backend  && infisical init   # select the CodeLive project
-cd ../frontend && infisical init
+./scripts/dev-local.sh
 ```
 
-### 4. Run the app
-
-```bash
-# Terminal 1 — Backend (http://localhost:5000)
-cd backend && npm install && npm run dev
-
-# Terminal 2 — Frontend (http://localhost:3000)
-cd frontend && npm install && npm run dev
-```
-
-That's it — `npm run dev` wraps the start command with `infisical run`, which injects all secrets from the **Development** environment as environment variables.
-
----
-
-## How It Works
-
-The `dev` scripts in each `package.json` are prefixed with `infisical run --`:
-
-```
-backend/package.json  → "dev": "infisical run -- tsx watch src/index.ts"
-frontend/package.json → "dev": "infisical run -- vite"
-```
-
-`infisical run` fetches secrets from the Infisical cloud, sets them as `process.env` / `import.meta.env` variables, then executes the command that follows `--`.
-
----
+The script injects both backend and frontend secrets into Docker Compose. Team members only need access to the CodeLive Infisical project.
 
 ## Required Secrets
 
-### Backend
+Backend:
 
-| Variable                     | Required | Description                                                |
-| ---------------------------- | -------- | ---------------------------------------------------------- |
-| `SUPABASE_URL`               | ✅       | Supabase project URL (Dashboard → Settings → API)          |
-| `SUPABASE_ANON_KEY`          | ✅       | Supabase public anon key                                   |
-| `SUPABASE_SERVICE_ROLE_KEY`  | ✅       | Supabase service role key (bypasses RLS — keep secret)     |
-| `ANTHROPIC_API_KEY`          | ⚠️       | Anthropic API key — AI features degrade gracefully without |
-| `PORT`                       | ❌       | Server port (defaults to `5000`)                           |
-| `CORS_ORIGINS`               | ❌       | Comma-separated allowed origins (defaults to `http://localhost:3000`) |
+| Variable | Purpose |
+| --- | --- |
+| `SUPABASE_URL` | Supabase project URL |
+| `SUPABASE_ANON_KEY` | Supabase public anon key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server-side Supabase key; keep private |
+| `ANTHROPIC_API_KEY` | Optional AI assistant/report key |
+| `CORS_ORIGINS` | Allowed browser origins |
+| `RUN_EXECUTION_MODE` | `direct` locally/private runner, `proxy` for production API |
+| `RUNNER_BASE_URL` | Private runner URL when proxying |
+| `RUNNER_SHARED_TOKEN` | Shared API-to-runner secret |
 
-### Frontend
+Frontend:
 
-| Variable                 | Required | Description                       |
-| ------------------------ | -------- | --------------------------------- |
-| `VITE_SUPABASE_URL`     | ✅       | Same Supabase project URL         |
-| `VITE_SUPABASE_ANON_KEY`| ✅       | Same Supabase public anon key     |
+| Variable | Purpose |
+| --- | --- |
+| `VITE_SUPABASE_URL` | Supabase project URL exposed to browser |
+| `VITE_SUPABASE_ANON_KEY` | Supabase anon key exposed to browser |
+| `VITE_BACKEND_URL` | Optional backend origin override |
 
-> **Note:** Frontend variables must be prefixed with `VITE_` so Vite exposes them to the browser.
+Frontend variables must start with `VITE_` or Vite will not expose them.
 
----
+## Production
 
-## Managing Secrets
-
-### Via the Dashboard (recommended)
-
-1. Go to [app.infisical.com](https://app.infisical.com)
-2. Open the **CodeLive** project
-3. Select the environment (**Development**, **Staging**, or **Production**)
-4. Add, edit, or remove secrets
-
-### Via the CLI
+Fly.io services use Fly secrets, not runtime Infisical.
 
 ```bash
-# List all secrets for the current environment
-infisical secrets
-
-# Set a secret
-infisical secrets set MY_KEY="my_value"
-
-# Delete a secret
-infisical secrets delete MY_KEY
+./scripts/secrets.sh set-from-infisical dev /Backend
 ```
 
----
-
-## Environments
-
-| Environment   | Used by                            |
-| ------------- | ---------------------------------- |
-| **Development** | Local development (`npm run dev`) |
-| **Staging**     | Preview / testing deployments     |
-| **Production**  | Fly.io / production deployment    |
-
-To run with a specific environment:
+Then deploy:
 
 ```bash
-infisical run --env=staging -- npm run dev
+./scripts/deploy.sh
 ```
 
----
-
-## Production (Fly.io)
-
-For production deployments on Fly.io, secrets are set via `fly secrets set` (not Infisical) since the CLI isn't available inside the Docker container:
+Production API should use:
 
 ```bash
-cd backend
-fly secrets set \
-  SUPABASE_URL="..." \
-  SUPABASE_ANON_KEY="..." \
-  SUPABASE_SERVICE_ROLE_KEY="..." \
-  ANTHROPIC_API_KEY="..." \
-  CORS_ORIGINS="https://your-frontend-domain.com"
+RUN_EXECUTION_MODE=proxy
+RUNNER_BASE_URL=http://codelive-runner.internal:5000
+RUNNER_SHARED_TOKEN=<long-random-token>
 ```
 
-Alternatively, you can use Infisical's [native integrations](https://infisical.com/docs/integrations/overview) to sync secrets directly to Fly.io.
-
----
-
-## Local `.env` Fallback
-
-If you need to work offline or without the Infisical CLI, you can create local `.env` files. They're gitignored and won't be committed:
+Production runner should use:
 
 ```bash
-# backend/.env
-cp backend/.env.example backend/.env
-# Fill in the values
-
-# frontend/.env
-# Create manually with VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY
+RUN_EXECUTION_MODE=direct
+RUNNER_SHARED_TOKEN=<same-token>
 ```
-
-Then run the underlying commands directly (without `infisical run`):
-
-```bash
-cd backend  && tsx watch src/index.ts
-cd frontend && vite
-```
-
----
 
 ## Troubleshooting
 
 | Problem | Fix |
-| ------- | --- |
-| `infisical: command not found` | Re-run the install step for your OS |
+| --- | --- |
+| `infisical: command not found` | Install the Infisical CLI; see `local-dev.md` |
 | `You must be logged in` | Run `infisical login` |
-| `Failed to fetch secrets` | Check your internet connection; verify you have access to the project in the Infisical dashboard |
-| `SUPABASE_URL is undefined` | Ensure the secret exists in the correct environment (Development) |
-| Frontend env vars not loading | Ensure they're prefixed with `VITE_` |
+| Secrets are empty in Docker | Confirm you have access to both `/Backend` and `/Frontend` paths |
+| Frontend env missing | Check the variable name starts with `VITE_` |
+| AI unavailable | Verify `ANTHROPIC_API_KEY`; the app can still run without it |

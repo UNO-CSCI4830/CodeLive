@@ -1,76 +1,86 @@
-# Code Live — Backend
+# CodeLive Backend
 
-Minimal Express + TypeScript server scaffold for Code Live.
+Express + TypeScript backend for auth-aware sessions, collaboration, code execution, AI assistance, and interview reports.
 
-## Quick Start
-
-```bash
-npm install
-npm run dev      # starts dev server with hot reload (tsx watch)
-```
-
-## Environment Setup
+For normal local development, run the full Docker setup from the repo root:
 
 ```bash
-cp backend/.env.example backend/.env
+./scripts/dev-local.sh
 ```
-
-Then fill in the values in `backend/.env`. You can find the Supabase keys in the Supabase Dashboard under **Settings → API**.
 
 ## Scripts
 
-| Script          | Description                          |
-| --------------- | ------------------------------------ |
-| `npm run dev`   | Start dev server with hot reload     |
-| `npm run dev:runner` | Start isolated runner service locally |
-| `npm run build` | Compile TypeScript to `dist/`        |
-| `npm run start` | Run compiled output from `dist/`     |
-| `npm run start:runner` | Run compiled isolated runner from `dist/` |
+From `backend/`:
 
-## Endpoints (Assignment 1)
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start API with Infisical secrets and hot reload |
+| `npm run dev:runner` | Start the runner service locally |
+| `npm run build` | Compile TypeScript |
+| `npm run start` | Run compiled API |
+| `npm run start:runner` | Run compiled runner |
+| `npm test` | Run Vitest backend tests |
 
-| Method | Path           | Response                                          |
-| ------ | -------------- | ------------------------------------------------- |
-| GET    | `/health`      | `{ "status": "ok" }`                              |
-| GET    | `/api/version` | `{ "name": "code-live-backend", "version": "0.1.0" }` |
+## Main Routes
 
-## Planned Integrations
+| Area | Routes |
+| --- | --- |
+| Health/version | `GET /health`, `GET /api/version` |
+| Sessions | `POST /api/sessions`, `POST /api/sessions/join`, `GET /api/sessions/:id`, session state/timer routes |
+| Content | `/api/content/*` |
+| Code execution | `/api/run/*` |
+| AI assistant | `POST /api/ai/chat` |
+| Reports | `/api/sessions/:sessionId/report`, snapshots, AI logs |
+| Groups/profile/dashboard | `/api/groups`, `/api/profile`, `/api/dashboard` |
 
-- **Supabase PostgreSQL** — persistent data store (profiles, sessions)
-- **WebSockets** — live collaboration between candidate & interviewer
-- **Domain APIs** — endpoints for interview sessions, code execution, AI evaluation
-- Authentication is handled via **Supabase Auth**; the backend validates JWTs via auth middleware
+HTTP requests use Supabase JWT auth where required. WebSocket collaboration is attached at `/ws`.
 
-## Isolated Runner Split
+## Environment Variables
 
-Production run execution is fail-closed: the public API refuses to start unless
-it is configured to proxy run requests to the private runner service.
+Backend basics:
 
-The backend supports this split:
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `ANTHROPIC_API_KEY` optional for AI features
+- `PORT` defaults to `5000`
+- `CORS_ORIGINS` defaults to `http://localhost:3000`
 
-- **API app** (`dist/index.js`): profiles/sessions/content/reporting + run request proxy.
-- **Runner app** (`dist/runner.js`): only execution routes (`/api/run/*`) in a dedicated service.
+Runner/proxy mode:
 
-Required production API configuration:
+- `RUN_EXECUTION_MODE` - `direct` for local/private runner, `proxy` for production API
+- `RUNNER_BASE_URL` - required when API is in `proxy` mode
+- `RUNNER_SHARED_TOKEN` - required in production for API-to-runner trust
+
+## Code Execution Modes
+
+Local Docker development runs execution directly inside the backend container.
+
+Production should split execution:
+
+- API app: sessions, reports, content, AI, and `/api/run/*` proxying
+- Runner app: private service that directly runs code
+
+Production API:
 
 ```bash
 NODE_ENV=production
 RUN_EXECUTION_MODE=proxy
 RUNNER_BASE_URL=http://codelive-runner.internal:5000
-RUNNER_SHARED_TOKEN=<same-long-random-token-as-runner>
+RUNNER_SHARED_TOKEN=<long-random-token>
 ```
 
-Required production runner configuration:
+Production runner:
 
 ```bash
 NODE_ENV=production
 RUN_EXECUTION_MODE=direct
-RUNNER_SHARED_TOKEN=<same-long-random-token-as-api>
+RUNNER_SHARED_TOKEN=<same-token>
 ```
 
-### Local split setup
+## Local Split Runner
 
-Terminal 1 (runner):
+Terminal 1:
 
 ```bash
 cd backend
@@ -81,7 +91,7 @@ RUN_RATE_LIMIT_ENABLED=false \
 npm run dev:runner
 ```
 
-Terminal 2 (api):
+Terminal 2:
 
 ```bash
 cd backend
@@ -92,24 +102,13 @@ RUNNER_SHARED_TOKEN=dev-runner-token \
 npm run dev
 ```
 
-### Fly deployment split
+## Fly Deployment Notes
 
-Deploy from repo root so `/content` is included in the image:
+Deploy from the repo root so the Docker build includes `/content`:
 
 ```bash
 fly deploy --config backend/fly.runner.toml .
 fly deploy --config backend/fly.toml .
 ```
 
-Set the same strong `RUNNER_SHARED_TOKEN` secret on both apps:
-
-```bash
-fly secrets set RUNNER_SHARED_TOKEN='replace-with-long-random-token' -a codelive-runner
-fly secrets set RUNNER_SHARED_TOKEN='replace-with-long-random-token' -a codelive-backend
-```
-
-For runner hardening, keep it private-only:
-
-1. Do not attach a public IPv4 to `codelive-runner`.
-2. If one exists, release it with `fly ips release <ip> -a codelive-runner`.
-3. API reaches runner over private DNS (`http://codelive-runner.internal:5000`).
+Keep the runner private-only. The public backend should reach it through Fly private DNS.

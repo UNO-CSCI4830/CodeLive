@@ -1,72 +1,65 @@
-# Code Live — Frontend
+# CodeLive Frontend
 
-React + Vite + TypeScript + Tailwind CSS frontend for Code Live.
+React + Vite + TypeScript frontend for the CodeLive interview experience.
 
-## Quick Start
-
-```bash
-npm install
-npm run dev      # starts dev server at http://localhost:3000
-```
-
-## Environment Setup
+For normal local development, run the full Docker setup from the repo root:
 
 ```bash
-cp frontend/.env.example frontend/.env
+./scripts/dev-local.sh
 ```
-
-Then fill in the values in `frontend/.env`. You can find the Supabase keys in the Supabase Dashboard under **Settings → API**.
 
 ## Scripts
 
-| Script            | Description                     |
-| ----------------- | ------------------------------- |
-| `npm run dev`     | Start Vite dev server           |
-| `npm run build`   | Production build to `dist/`     |
-| `npm run preview` | Preview production build        |
-| `npm run lint`    | Run ESLint                      |
+From `frontend/`:
 
-## Pages (Assignment 1)
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start Vite with Infisical secrets |
+| `npm run build` | Type-check and build production assets |
+| `npm run preview` | Preview the built app |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run Vitest frontend tests |
 
-| Route   | Description                                     |
-| ------- | ----------------------------------------------- |
-| `/`     | Landing page — project intro & feature cards    |
-| `/auth` | Login / Signup UI (placeholder, no real auth)   |
-| `/role` | Role selection — Candidate or Interviewer       |
+## Environment Variables
 
-## Project Structure
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+- `VITE_BACKEND_URL` optional backend origin
 
-```
-src/
-├── App.tsx                     # Routes defined here (React Router)
-├── main.tsx                    # Entry point
-├── index.css                   # Global styles + Tailwind directives
-├── components/                 # Shared components
-│   └── Navbar/
-├── lib/                        # Shared utilities
-│   └── role.ts
-└── pages/                      # Page modules
-    ├── landing/
-    │   ├── LandingPage.tsx
-    │   ├── components/
-    │   ├── styles/
-    │   └── tests/
-    ├── auth/
-    │   ├── AuthPage.tsx
-    │   ├── components/
-    │   ├── styles/
-    │   └── tests/
-    └── role/
-        ├── RolePage.tsx
-        ├── components/
-        ├── styles/
-        └── tests/
-```
+When running with Docker Compose, `VITE_BACKEND_URL` may be `http://backend:5000`. That hostname is only valid inside Docker; browser API and WebSocket traffic should go through the Vite dev server at `http://localhost:3000`.
 
-## Planned Integrations
+## Main Routes
 
-- **Supabase Auth** — authentication with email/password
-- **Supabase PostgreSQL** — user persistence (profiles, sessions)
-- **WebSockets** — live collaboration in interview rooms
-- **AI Assistant** — AI-friendly evaluation mode
-- **Multi-domain modes** — frontend, backend, database, system design interviews
+| Route | Purpose |
+| --- | --- |
+| `/` | Landing page |
+| `/auth` | Login/signup |
+| `/role` | Role selection |
+| `/dashboard` | Dashboard with recent reports and session entry |
+| `/session/create` | Interviewer create flow and candidate join flow |
+| `/session/:sessionId/lobby` | Waiting room |
+| `/session/:sessionId` | Full-screen interview workspace |
+| `/session/:sessionId/report` | Generated report detail |
+| `/reports` | Interviewer report list |
+| `/questions` | Question catalogue |
+| `/questions/:categorySlug` | Category detail |
+| `/questions/:category/:problemId` | Problem preview for supported categories |
+
+## Important Feature Areas
+
+- `src/pages/session/` - session state, lobby, interview room, layouts, reports
+- `src/pages/question-catalogue/` - question browsing and previews
+- `src/pages/reports/` - report list
+- `src/lib/AuthContext.tsx` - Supabase auth and profile loading
+- `src/lib/apiClient.ts` - authenticated backend fetch helper
+
+## Session UI Notes
+
+- Candidate edits code; interviewer observes and controls session flow.
+- Monaco editors are synchronized through Yjs WebSocket.
+- The AI assistant is send-enabled for candidates and read-only for interviewers.
+- Starter code is rendered immediately and then synchronized after the WebSocket room connects.
+
+## Build Note
+
+`npm run build` currently warns about a large interview/editor bundle. This is expected because Monaco/Yjs-heavy session routes are still large, but the build passes.
